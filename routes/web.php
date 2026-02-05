@@ -38,7 +38,7 @@ Route::post("authLogin", [AuthController::class, 'authLogin'])->name('authLogin'
     });
 
 
-    
+
 
 Route::middleware('auth.request')->group(function () {
 
