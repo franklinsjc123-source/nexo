@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\SliderController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\CompanyController;
 use App\Http\Controllers\Backend\PermissionController;
+use App\Http\Controllers\Backend\CategoryController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -59,6 +60,15 @@ Route::middleware('auth.request')->group(function () {
     Route::get('/getPermission/{id}', [PermissionController::class, "getPermission"])->name('getPermission');
     Route::post('updatePermission', [PermissionController::class, "updatePermission"])->name('updatePermission');
     Route::get('addPermission/{id?}', [PermissionController::class, 'addPermission'])->name('addPermission');
+
+
+
+
+
+    // Category
+    Route::get('category', [CategoryController::class, 'category'])->name('category');
+    Route::get('addCategory/{id?}', [CategoryController::class, 'addCategory'])->name('addCategory');
+    Route::post('storeUpdateCategory', [CategoryController::class, 'storeUpdateCategory'])->name('storeUpdateCategory');
 
 
 });
