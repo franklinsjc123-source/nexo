@@ -250,16 +250,16 @@ use Illuminate\Support\Facades\Auth;
                     <ul class="pe-slide-menu collapse " id="collapseLogistics-mas">
 
                         <li class="slide pe-nav-content1">
-                            <a href="javascript:void(0)">Masters</a>
+                            <a href="javascript:void(0)">Product Masters</a>
                         </li>
 
                         @if(auth()->check() && auth()->user()->hasPermission('Route'))
-                        <li class="pe-slide-item">
-                            <a href="<?= route('route') ?>" class="pe-nav-link
-                                    @if(request()->routeIs(['route', 'addRoute'])) active @endif">
-                                Category
-                            </a>
-                        </li>
+                            <li class="pe-slide-item">
+                                <a href="<?= route('category') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['category', 'addCategory'])) active @endif">
+                                    Category
+                                </a>
+                            </li>
                          @endif
 
 
