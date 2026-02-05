@@ -22,7 +22,7 @@ class SliderController extends Controller
 
     public function addSlider($id = '')
     {
-        $record = '';
+        $records = '';
         if ($id > 0) {
             $records   =  Slider::where('id', $id )->first();
 
