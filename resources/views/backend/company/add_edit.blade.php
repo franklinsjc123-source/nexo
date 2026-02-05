@@ -220,58 +220,5 @@
          });
      });
 
-     $('#saveMakeBtn').click(function() {
-         let name = $('#zone_name').val();
-
-         $.ajax({
-             url: "{{ route('store') }}",
-
-             type: "POST",
-             data: {
-                 name: name,
-                 _token: "{{ csrf_token() }}"
-             },
-
-             success: function(res) {
-                 console.log(res);
-                 $('#makeModal').modal('hide');
-
-                 $('#zone_name').val('');
-
-                 $('#zonal').append(
-                     `<option value="${res.id}" selected >${res.zone_name}</option>`
-                 );
-             },
-             error: function() {
-                 $('#make_error').text("Name field is required");
-             }
-         });
-     });
-
-
-     // master Bill add
-     $('#saveBillBtn1').click(function() {
-         let name = $('#bill_type_name').val();
-
-         $.ajax({
-             url: "{{ route('billstore') }}",
-             type: "POST",
-             data: {
-                 name: name,
-                 _token: "{{ csrf_token() }}"
-             },
-             success: function(res) {
-                 console.log(res);
-                 $('#makeModal1').modal('hide');
-                 $('#bill_type_name').val('');
-                 $('#bill_type').append(
-                     `<option value="${res.id}" selected>${res.bill_type_name}</option>`
-                 );
-             },
-             error: function() {
-                 $('#make_error').text("Name field is required");
-             }
-         });
-     });
  </script>
  @endsection
