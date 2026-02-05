@@ -52,20 +52,20 @@
 
                                          <div class="col-xl-4">
                                          <label for="name" class="form-label">Name <span class="text-danger"> *</span></label>
-                                         <input type="text" value="<?php echo $name?>" class="form-control" id="name" name="name" placeholder="Enter Name" >
+                                         <input type="text" value="<?php echo old('name',$name) ?>" class="form-control" id="name" name="name" placeholder="Enter Name" >
                                         <span class="text-danger error-message"></span>
                                     </div>
 
 
                                     <div class="col-xl-4">
                                          <label for="email" class="form-label">Email <span class="text-danger"> *</span></label>
-                                         <input type="text" value="<?php echo $email?>" class="form-control" id="email" name="email" placeholder="Enter Email" onkeyup="commonCheckExist(this,'users', 'email', this.value)">
+                                         <input type="text" value="<?php echo old('email',$email) ?>" class="form-control" id="email" name="email" placeholder="Enter Email" onkeyup="commonCheckExist(this,'users', 'email', this.value)">
                                         <span class="text-danger error-message"></span>
                                     </div>
 
                                        <div class="col-xl-4">
                                          <label for="mobile" class="form-label">Mobile <span class="text-danger"> *</span></label>
-                                         <input type="text" value="<?php echo $mobile?>" maxlength="10" class="form-control" id="mobile" name="mobile" placeholder="Enter Mobile" onkeyup="commonCheckExist(this,'users', 'mobile', this.value)">
+                                         <input type="text" value="<?php echo  old('mobile',$mobile)?>" maxlength="10" class="form-control" id="mobile" name="mobile" placeholder="Enter Mobile" onkeyup="commonCheckExist(this,'users', 'mobile', this.value)">
                                         <span class="text-danger error-message"></span>
                                     </div>
 
@@ -77,11 +77,7 @@
                                         </label>
 
                                         <div class="position-relative">
-                                            <input type="password"
-                                                class="form-control pe-5"
-                                                id="password"
-                                                name="password"
-                                                placeholder="Enter Password">
+                                            <input type="password" class="form-control pe-5" id="password" name="password" placeholder="Enter Password">
 
                                             <span class="position-absolute top-50 end-0 translate-middle-y me-3"
                                                 style="cursor: pointer;"
@@ -150,23 +146,34 @@
                  mobile: {
                      required: true
                  },
+                  name: {
+                     required: true
+                 },
 
              },
              messages: {
+                 name: {
+                     required: "Please enter name"
+                 },
 
                  email: {
-                     required: "Please Enter Email"
+                     required: "Please enter email"
                  },
                  mobile: {
-                     required: "Please Enter Mobile No"
+                     required: "Please enter mobile no"
                  },
 
              },
-             errorElement: "span",
+
+              errorElement: "span",
              errorPlacement: function(error, element) {
-                 error.addClass("text-danger");
-                 error.insertAfter(element);
-             }
+                error.addClass("text-danger small");
+                if (element.hasClass("select2-hidden-accessible")) {
+                    error.insertAfter(element.next('.select2'));
+                } else {
+                    error.insertAfter(element);
+                }
+            }
          });
      });
  </script>

@@ -10,6 +10,7 @@ use App\Http\Controllers\Backend\CompanyController;
 use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ShopController;
+use App\Http\Controllers\Backend\ProductController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -71,5 +72,10 @@ Route::middleware('auth.request')->group(function () {
     Route::get('addShop/{id?}', [ShopController::class, 'addShop'])->name('addShop');
     Route::post('storeUpdateShop', [ShopController::class, 'storeUpdateShop'])->name('storeUpdateShop');
 
-    
+
+    // product
+    Route::get('product', [ProductController::class, 'product'])->name('product');
+    Route::get('addProduct/{id?}', [ProductController::class, 'addProduct'])->name('addProduct');
+    Route::post('storeUpdateProduct', [ProductController::class, 'storeUpdateProduct'])->name('storeUpdateProduct');
+
 });
