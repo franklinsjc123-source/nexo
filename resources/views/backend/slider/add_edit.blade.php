@@ -43,7 +43,7 @@
                                  <div class="row g-4">
 
                                           <div class="col-xl-4">
-                                            <label for="slider_photo_path" class="form-label">Slider</label>
+                                            <label for="slider_photo_path" class="form-label">Slider <span class="text-danger"> *</span></label>
 
                                             <input type="hidden" value="<?php echo $slider_photo_path ?>" class="form-control"  name="old_slider_photo_path">
                                             <input type="file" class="form-control" id="slider_photo_path" name="slider_photo_path">
@@ -56,6 +56,8 @@
                                             @error('slider_photo_path') <span class="text-danger">{{$message}}</span> @enderror
                                             @endif
                                           </div>
+
+                                          <input type="hidden" id="has_old_slider" value="<?= !empty($slider_photo_path) ? 1 : 0 ?>">
 
                                  </div>
                              </div>
@@ -75,21 +77,18 @@
  <script>
      $(function() {
          $("#sliderForm").validate({
-             rules: {
-
-                 slider: {
-                     required: true
-                 },
-
-
-             },
-             messages: {
-
-                 slider: {
-                     required: "Please Enter Slider"
-                 },
-
-             },
+           rules: {
+                slider_photo_path: {
+                    required: function () {
+                        return $('#has_old_slider').val() == 0;
+                    }
+                }
+            },
+            messages: {
+                slider_photo_path: {
+                    required: "Please upload slider image"
+                }
+            },
              errorElement: "span",
              errorPlacement: function(error, element) {
                  error.addClass("text-danger");

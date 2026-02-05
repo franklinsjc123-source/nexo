@@ -44,9 +44,9 @@ class CategoryController extends Controller
 
         if ($request->hasFile('photo_path')) {
             $file = $request->file('photo_path');
-            $imageName = 'slider_' . time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
-            $file->move(public_path('uploads/slider'), $imageName);
-            $imageUrl = url('uploads/slider/' . $imageName);
+            $imageName = 'category_' . time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+            $file->move(public_path('uploads/category'), $imageName);
+            $imageUrl = url('uploads/category/' . $imageName);
         }
 
         $data = [

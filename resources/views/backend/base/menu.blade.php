@@ -265,8 +265,8 @@ use Illuminate\Support\Facades\Auth;
 
                         @if(auth()->check() && auth()->user()->hasPermission('Driver'))
                          <li class="pe-slide-item">
-                            <a href="<?= route('driver') ?>" class="pe-nav-link
-                                @if(request()->routeIs(['driver', 'addDriver'])) active @endif">
+                            <a href="<?= route('shop') ?>" class="pe-nav-link
+                                @if(request()->routeIs(['shop', 'addShop'])) active @endif">
                                 Shop
                             </a>
                         </li>

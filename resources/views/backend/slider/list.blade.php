@@ -38,7 +38,7 @@
                             ?>
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
-                                <td> <img class="mt-2" src="<?= $row->file_path ?>" alt="image description" width="80" height="80"></td>
+                                <td> <img class="mt-2" src="<?= $row->file_path ?>" alt="image description" width="50" height="50"></td>
                                 <td><a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" onclick="changeStatus('<?php echo $row->id ?>','<?php echo ($row->status == 1) ? 0 : 1 ?>','Slider')" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">
                                             <?php echo ($row->status == 1) ? 'Active' : 'In-Active' ?></a>
                                 </td>

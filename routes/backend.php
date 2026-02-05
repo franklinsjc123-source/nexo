@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\CompanyController;
 use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\ShopController;
 
 use Illuminate\Support\Facades\Route;
 
@@ -52,7 +53,6 @@ Route::middleware('auth.request')->group(function () {
     Route::get('addCompany/{id?}', [CompanyController::class, 'addCompany'])->name('addCompany');
     Route::post('storeUpdateCompany', [CompanyController::class, 'storeUpdateCompany'])->name('storeUpdateCompany');
 
-
     //permission
     Route::match(['get', 'post'], 'permission', [PermissionController::class, 'permission'])->name('permission');
     Route::post('/storeUpdatePermission', [PermissionController::class, "storeUpdatePermission"])->name('storeUpdatePermission');
@@ -61,14 +61,15 @@ Route::middleware('auth.request')->group(function () {
     Route::post('updatePermission', [PermissionController::class, "updatePermission"])->name('updatePermission');
     Route::get('addPermission/{id?}', [PermissionController::class, 'addPermission'])->name('addPermission');
 
-
-
-
-
     // Category
     Route::get('category', [CategoryController::class, 'category'])->name('category');
     Route::get('addCategory/{id?}', [CategoryController::class, 'addCategory'])->name('addCategory');
     Route::post('storeUpdateCategory', [CategoryController::class, 'storeUpdateCategory'])->name('storeUpdateCategory');
 
+    // shop
+    Route::get('shop', [ShopController::class, 'shop'])->name('shop');
+    Route::get('addShop/{id?}', [ShopController::class, 'addShop'])->name('addShop');
+    Route::post('storeUpdateShop', [ShopController::class, 'storeUpdateShop'])->name('storeUpdateShop');
 
+    
 });
