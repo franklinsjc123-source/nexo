@@ -7,12 +7,12 @@
     $id                     = isset($records->id) ? $records->id : '';
     $category               = isset($records->category) ? $records->category : '';
     $shop                   = isset($records->shop) ? $records->shop : '';
-    $product_name                 = isset($records->product_name) ? $records->product_name : '';
-    $original_price             = isset($records->original_price) ? $records->original_price : '';
-    $discount_price             = isset($records->discount_price) ? $records->discount_price : '';
+    $product_name           = isset($records->product_name) ? $records->product_name : '';
+    $original_price         = isset($records->original_price) ? $records->original_price : '';
+    $discount_price         = isset($records->discount_price) ? $records->discount_price : '';
     $end_time               = isset($records->end_time) ? $records->end_time : '';
-    $product_description                = isset($records->product_description) ? $records->product_description : '';
-    $product_image             = isset($records->product_image) ? $records->product_image:'';
+    $product_description    = isset($records->product_description) ? $records->product_description : '';
+    $product_image          = isset($records->product_image) ? $records->product_image:'';
     $status                 = isset($records->status) ? $records->status:'';
     $type                   = ($id == '')   ? 'Create' : 'Update';
 
@@ -95,7 +95,7 @@
 
                                           <div class="col-xl-4">
                                             <label for="original_price" class="form-label">
-                                                Original Price <span class="text-danger"></span>
+                                                Original Price <span class="text-danger">*</span>
                                             </label>
                                             <input type="text" class="form-control" id="original_price" name="original_price" placeholder="Enter Original Price" value="<?= old('original_price',$original_price) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9.]/g,'');">
                                             @error('original_price') <span class="text-danger">{{ $message }}</span> @enderror
@@ -103,7 +103,7 @@
 
                                         <div class="col-xl-4">
                                             <label for="original_price" class="form-label">
-                                                Discount Price <span class="text-danger"></span>
+                                                Discount Price <span class="text-danger">*</span>
                                             </label>
                                             <input type="text" class="form-control" id="discount_price" name="discount_price" placeholder="Enter Discount Price" value="<?= old('discount_price',$discount_price) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9.]/g,'');">
                                             @error('discount_price') <span class="text-danger">{{ $message }}</span> @enderror
@@ -136,6 +136,7 @@
                                             @error('product_image') <span class="text-danger">{{$message}}</span> @enderror
                                         @endif
                                     </div>
+                                          <input type="hidden" id="has_old_product_image" value="<?= !empty($product_image) ? 1 : 0 ?>">
 
 
 
@@ -155,58 +156,86 @@
      </div>
  </main>
  <script>
+
+    $('#category').on('change', function () {
+    let categoryId = $(this).val();
+
+    $('#shop').html('<option value="">--select--</option>');
+
+    if (categoryId) {
+        $.ajax({
+            url: "{{ route('getShopsByCategory') }}",
+            type: "GET",
+            data: { category_id: categoryId },
+            success: function (data) {
+                $.each(data, function (key, value) {
+                    $('#shop').append(
+                        '<option value="'+ value.id +'">'+ value.shop_name +'</option>'
+                    );
+                });
+            }
+        });
+    }
+});
+
+
+
      $(function() {
-         $("#shopForm").validate({
+         $("#productForm").validate({
              rules: {
 
                 category: {
                     required: true
                 },
-                shop_name: {
+                shop: {
+                    required: true
+                },
+                product_name: {
+                    required: true
+                },
+                original_price: {
+                    required: true
+                },
+                discount_price: {
+                    required: true
+                },
+                 product_description: {
                     required: true
                 },
 
-                contact_no: {
-                    required: true
-                },
-                start_time: {
-                    required: true
-                },
-                end_time: {
-                    required: true
-                },
-                 address: {
-                    required: true
-                },
-
-                photo_path: {
-                    required: true
-                },
+                product_image: {
+                    required: function () {
+                        return $('#has_old_product_image').val() == 0;
+                    }
+                }
              },
              messages: {
 
                 category: {
-                    required: "Please enter category name"
+                    required: "Please select category "
                 },
-                 contact_no: {
-                    required: "Please enter contact no"
+                 shop: {
+                    required: "Please select shop "
                 },
-                shop_name: {
-                    required: "Please enter shop name"
-                },
-
-                start_time: {
-                    required: "Please enter start time"
+                product_name: {
+                    required: "Please enter product name"
                 },
 
-                end_time: {
-                    required: "Please enter end time"
+                original_price: {
+                    required: "Please enter original price"
                 },
 
-                address: {
-                    required: "Please enter address"
+                discount_price: {
+                    required: "Please enter discount price"
                 },
 
+                product_description: {
+                    required: "Please enter product description"
+                },
+
+                product_image: {
+                    required: "Please upload product image"
+                }
              },
             errorElement: "span",
             errorPlacement: function(error, element) {
@@ -219,5 +248,7 @@
             }
          });
      });
+
+
  </script>
  @endsection
