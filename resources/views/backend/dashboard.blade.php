@@ -7,8 +7,9 @@
         <div class="row mt-5">
             <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 webGradient text-white">
+                     <a href="#">
                     <div class="card-body">
-                        <a href="#">
+
                         <div class="d-flex justify-content-between gap-5 mb-5">
                             <div>
                                 <h4 class="text-white mb-1">Total Orders</h4>
@@ -18,16 +19,19 @@
                                     class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">0</div>
                             </div>
                         </div>
-                        </a>
+
                     </div>
+                     </a>
                 </div>
             </div>
 
 
             <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 IntelligenceGradient text-white">
+                   <a href="#">
                     <div class="card-body">
-                        <a href="#">
+
+
                         <div class="d-flex justify-content-between gap-5 mb-5">
                             <div>
                                 <h4 class="text-white mb-1">Today Orders</h4>
@@ -39,8 +43,9 @@
 
                             </div>
                         </div>
-                        </a>
+
                     </div>
+                    </a>
                 </div>
             </div>
 
@@ -49,8 +54,9 @@
 
             <div class="col-md-6 col-xl-4 col-xxl-3">
                 <div class="card card-h-100 datascienceGradient text-white">
+                     <a href="#">
                     <div class="card-body">
-                        <a href="#">
+
                         <div class="d-flex justify-content-between gap-5 mb-5">
                             <div>
                                 <h4 class="text-white mb-1">Total Shops</h4>
@@ -60,16 +66,18 @@
                                     class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">0 </div>
                             </div>
                         </div>
-                        </a>
+
                     </div>
+                      </a>
                 </div>
             </div>
 
 
             <div class="col-md-6 col-xl-4 col-xxl-3">
                 <div class="card card-h-100 webGradient text-white">
+                   <a href="#">
                     <div class="card-body">
-                        <a href="#">
+
                         <div class="d-flex justify-content-between gap-5 mb-5">
                             <div>
                                 <h4 class="text-white mb-1">Total Users</h4>
@@ -79,16 +87,18 @@
                                     class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">0</div>
                             </div>
                         </div>
-                        </a>
+
                     </div>
+                      </a>
                 </div>
             </div>
 
 
             <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 IntelligenceGradient text-white">
+                    <a href="#">
                     <div class="card-body">
-                        <a href="#">
+
                         <div class="d-flex justify-content-between gap-5 mb-5">
                             <div>
                                 <h4 class="text-white mb-1">Delivery Persons</h4>
@@ -100,8 +110,9 @@
 
                             </div>
                         </div>
-                        </a>
+
                     </div>
+                    </a>
                 </div>
             </div>
 

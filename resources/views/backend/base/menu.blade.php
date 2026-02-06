@@ -308,12 +308,21 @@ use Illuminate\Support\Facades\Auth;
                 </li>
 
 
+
                    <li class="pe-slide pe-has-sub">
                     <a href="#" class="pe-nav-link">
                         <i class="bi bi-person-fill pe-nav-icon"></i>
                         <span class="pe-nav-content">Delivery Person </span>
                     </a>
                 </li>
+
+                 <li class="pe-slide pe-has-sub">
+                    <a href="#" class="pe-nav-link">
+                        <i class=" bi bi-file-earmark pe-nav-icon"></i>
+                        <span class="pe-nav-content">Reports </span>
+                    </a>
+                </li>
+
 
 
 
