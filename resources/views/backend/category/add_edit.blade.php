@@ -65,6 +65,8 @@
                                             @error('photo_path') <span class="text-danger">{{$message}}</span> @enderror
                                             @endif
                                           </div>
+                                          <input type="hidden" id="has_old_photo_path" value="<?= !empty($photo_path) ? 1 : 0 ?>">
+
 
                                  </div>
                              </div>
@@ -84,21 +86,50 @@
  <script>
      $(function() {
          $("#categoryForm").validate({
-             rules: {
 
+
+              rules: {
                  category_name: {
                      required: true
                  },
-
-
-             },
+                photo_path: {
+                    required: function () {
+                        return $('#has_old_photo_path').val() == 0;
+                    }
+                }
+            },
              messages: {
 
                  category_name: {
                      required: "Please enter category name"
                  },
+                  slider_photo_path: {
+                    required: "Please upload Category image"
+                }
 
              },
+             errorElement: "span",
+             errorPlacement: function(error, element) {
+                 error.addClass("text-danger");
+                 error.insertAfter(element);
+             }
+         });
+     });
+
+       $(function() {
+         $("#sliderForm").validate({
+           rules: {
+                slider_photo_path: {
+                    required: function () {
+                        return $('#has_old_slider').val() == 0;
+                    }
+                }
+            },
+            messages: {
+                slider_photo_path: {
+                    required: "Please upload slider image"
+                }
+            },
              errorElement: "span",
              errorPlacement: function(error, element) {
                  error.addClass("text-danger");

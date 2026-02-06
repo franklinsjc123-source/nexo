@@ -86,7 +86,7 @@ class ShopController extends Controller
                 );
         }
 
-        Category::where('id', $id)->update($data);
+        Shop::where('id', $id)->update($data);
 
         return redirect()->route('shop')->with('success', 'Shop Updated Successfully');
     }

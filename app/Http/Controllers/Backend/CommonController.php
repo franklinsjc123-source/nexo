@@ -34,7 +34,7 @@ class CommonController extends Controller
                  $update =    $model::Where('id',$id)->update(array('status' => 1));
                      $model::Where('id', '!=', $id)->update(array('status' => 0));
                 }
-        } 
+        }
         else {
             $update = $model::where('id', $id)->update($updateArray);
         }
@@ -50,6 +50,12 @@ class CommonController extends Controller
         $id     = $input['id'];
         $model  = 'App\\Models\\' . $input['model'];
         $update = $model::where('id', $id)->delete();
+
+        if($input['model'] ==  'Shop'){
+            'App\\Models\\Product'::where('shop', $id)->delete();
+        }
+
+
         if ($update) {
             echo 1;
         }
@@ -58,7 +64,7 @@ class CommonController extends Controller
     public function profile()
     {
         $userId    = Auth::user()->id;
-        $record    = User::Where('id', $userId)->first();       
+        $record    = User::Where('id', $userId)->first();
         return view('backend.profile', compact('record'));
     }
 
@@ -121,11 +127,11 @@ class CommonController extends Controller
 
 
 
-    
 
-    
 
-    
+
+
+
     public function getZoneBasedData(Request $request)
     {
         $zoneId = $request->zone_id;
@@ -143,7 +149,7 @@ class CommonController extends Controller
         $vehicles = Vehicle::where('zonal', $zoneId)
             ->select('id', 'vehicle_no')
             ->orderBy('vehicle_no')
-            ->get();    
+            ->get();
 
         return response()->json([
             'companies' => $companies,
@@ -166,12 +172,12 @@ class CommonController extends Controller
                         ->orderBy('vehicle_no')
                         ->get();
 
-    
+
 
         return response()->json([ 'routes' => $routes, 'vehicles' => $vehicles]);
     }
 
-    
+
     public function getVehicleBasedData(Request $request)
     {
         $vehicleId = $request->vehicle_id;
@@ -180,13 +186,13 @@ class CommonController extends Controller
 
         $zones = Zone::where('id', $vehicle->zonal ?? 0)
             ->select('id', 'zone_name')->get();
-        
+
         $companies = Company::where('id', $vehicle->company ?? 0)
-            ->select('id', 'full_name')->get();    
-        
+            ->select('id', 'full_name')->get();
+
         return response()->json([ 'zones' => $zones, 'companies' => $companies ]);
     }
 
-    
+
 
 }
