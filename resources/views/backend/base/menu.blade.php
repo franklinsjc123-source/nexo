@@ -156,7 +156,7 @@ use Illuminate\Support\Facades\Auth;
 
                 <li class="pe-slide pe-has-sub">
                     <a href="<?= route('dashboard') ?>" class="pe-nav-link">
-                        <i class="bi bi-calendar-week pe-nav-icon"></i>
+                        <i class="  bi bi-house-door-fill pe-nav-icon"></i>
                         <span class="pe-nav-content">Dashboards </span>
                     </a>
                 </li>
@@ -168,7 +168,7 @@ use Illuminate\Support\Facades\Auth;
                     <a href="#collapseLogistics" class="pe-nav-link" data-bs-toggle="collapse"
                         aria-expanded="true"
                         aria-controls="collapseLogistics">
-                        <i class="bi bi-gear pe-nav-icon"></i>
+                        <i class="bi bi-gear-fill pe-nav-icon"></i>
                         <span class="pe-nav-content">Settings</span>
                         <i class="ri-arrow-down-s-line pe-nav-arrow"></i>
                     </a>
@@ -242,7 +242,7 @@ use Illuminate\Support\Facades\Auth;
                     <a href="#collapseLogistics-mas" class="pe-nav-link" data-bs-toggle="collapse"
                         aria-expanded="false"
                         aria-controls="collapseLogistics">
-                        <i class="bi bi-cart-fill pe-nav-icon"></i>
+                        <i class="bi bi-bag-fill pe-nav-icon"></i>
                         <span class="pe-nav-content">Product Master</span>
                         <i class="ri-arrow-down-s-line pe-nav-arrow"></i>
                     </a>
@@ -280,12 +280,39 @@ use Illuminate\Support\Facades\Auth;
                                 Product
                             </a>
                         </li>
+
+
                         @endif
 
 
 
 
                     </ul>
+                </li>
+
+
+                   <li class="pe-slide pe-has-sub">
+                    <a href="#" class="pe-nav-link">
+                        <i class="bi  bi-percent pe-nav-icon"></i>
+                        <span class="pe-nav-content">Offers </span>
+                    </a>
+                </li>
+
+
+
+                   <li class="pe-slide pe-has-sub">
+                    <a href="#" class="pe-nav-link">
+                        <i class="bi bi-cart-fill pe-nav-icon"></i>
+                        <span class="pe-nav-content">Orders </span>
+                    </a>
+                </li>
+
+
+                   <li class="pe-slide pe-has-sub">
+                    <a href="#" class="pe-nav-link">
+                        <i class="bi bi-person-fill pe-nav-icon"></i>
+                        <span class="pe-nav-content">Delivery Person </span>
+                    </a>
                 </li>
 
 
