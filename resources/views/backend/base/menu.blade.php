@@ -11,14 +11,14 @@ use Illuminate\Support\Facades\Auth;
                 <div class="me-auto">
                     <div class="d-inline-flex align-items-center gap-5">
                         <a href="<?= route('dashboard') ?>" class="fs-18 fw-semibold">
-                            <img height="30" class="header-sidebar-logo-default d-none" alt="Logo"
-                                src="<?= asset('backend_assets') ?>/images/yogesh_travels.png">
-                            <img height="30" class="header-sidebar-logo-light d-none" alt="Logo"
-                                src="<?= asset('backend_assets') ?>/images/yogesh_travels.png">
-                            <img height="30" class="header-sidebar-logo-small d-none" alt="Logo"
-                                src="<?= asset('backend_assets') ?>/images/yogesh_travels.png">
-                            <img height="30" class="header-sidebar-logo-small-light d-none" alt="Logo"
-                                src="<?= asset('backend_assets') ?>/images/yogesh_travels.png">
+                            <img height="60" class="header-sidebar-logo-default d-none" alt="Logo"
+                                src="<?= asset('backend_assets') ?>/images/logo.jpg">
+                            <img height="60" class="header-sidebar-logo-light d-none" alt="Logo"
+                                src="<?= asset('backend_assets') ?>/images/logo.jpg">
+                            <img height="60" class="header-sidebar-logo-small d-none" alt="Logo"
+                                src="<?= asset('backend_assets') ?>/images/logo.jpg">
+                            <img height="60" class="header-sidebar-logo-small-light d-none" alt="Logo"
+                                src="<?= asset('backend_assets') ?>/images/logo.jpg">
                         </a>
 
                         <button type="button"
@@ -139,14 +139,14 @@ use Illuminate\Support\Facades\Auth;
         <div class="pe-app-sidebar-logo px-6 d-flex align-items-center position-relative">
             <!--begin::Brand Image-->
             <a href="<?= route('dashboard') ?>" class="fs-18 fw-semibold">
-                <img height="30" class="pe-app-sidebar-logo-default d-none" alt="Logo"
-                    src="<?= asset('backend_assets') ?>/images/yogesh_travels.png">
-                <img height="30" class="pe-app-sidebar-logo-light d-none" alt="Logo"
-                    src="<?= asset('backend_assets') ?>/images/yogesh_travels.png">
-                <img height="30" class="pe-app-sidebar-logo-minimize d-none" alt="Logo"
-                    src="<?= asset('backend_assets') ?>/images/yogesh_travels.png">
-                <img height="30" class="pe-app-sidebar-logo-minimize-light d-none" alt="Logo"
-                    src="<?= asset('backend_assets') ?>/images/yogesh_travels.png">
+                <img height="60" class="pe-app-sidebar-logo-default d-none" alt="Logo"
+                    src="<?= asset('backend_assets') ?>/images/logo.jpg">
+                <img height="60" class="pe-app-sidebar-logo-light d-none" alt="Logo"
+                    src="<?= asset('backend_assets') ?>/images/logo.jpg">
+                <img height="60" class="pe-app-sidebar-logo-minimize d-none" alt="Logo"
+                    src="<?= asset('backend_assets') ?>/images/logo.jpg">
+                <img height="60" class="pe-app-sidebar-logo-minimize-light d-none" alt="Logo"
+                    src="<?= asset('backend_assets') ?>/images/logo.jpg">
                 <!-- FabKin -->
             </a>
             <!--end::Brand Image-->
