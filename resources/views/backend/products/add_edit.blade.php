@@ -70,13 +70,7 @@
                                         <label class="form-label"> Shop <span class="text-danger">*</span></label>
                                         <select class="form-control select2" id="shop" name="shop">
                                             <option value="">--select--</option>
-                                                <?php
-                                                    if (isset($shopData)) {
-                                                        foreach ($shopData as $val) { ?>
-                                                        <option <?=(old('shop', $shop) == $val->id)? 'selected':'' ?> value="<?php echo $val->id ?>"><?php echo ucwords($val->shop_name) ?></option>
-                                                <?php }
-                                                }
-                                                ?>
+
                                         </select>
 
                                         @error('shop') <span class="text-danger">{{$message}}</span> @enderror
@@ -178,8 +172,34 @@
     }
 });
 
+$(document).ready(function () {
 
+    let categoryId = $('#category').val();
+    let selectedShop = "{{ old('shop', $shop ?? '') }}";
 
+    $('#shop').empty().append('<option value="">Select Shop</option>');
+
+    if (categoryId) {
+        $.ajax({
+            url: "{{ route('getShopsByCategory') }}",
+            type: "GET",
+            data: { category_id: categoryId },
+            success: function (data) {
+
+                $.each(data, function (key, value) {
+
+                    let selected = (value.id == selectedShop) ? 'selected' : '';
+
+                    $('#shop').append(
+                        '<option value="' + value.id + '" ' + selected + '>' +
+                        value.shop_name +
+                        '</option>'
+                    );
+                });
+            }
+        });
+    }
+});
      $(function() {
          $("#productForm").validate({
              rules: {
