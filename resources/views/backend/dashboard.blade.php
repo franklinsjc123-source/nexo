@@ -8,7 +8,7 @@
             <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 webGradient text-white">
                     <div class="card-body">
-                        <a href="{{route('company')}}">
+                        <a href="#">
                         <div class="d-flex justify-content-between gap-5 mb-5">
                             <div>
                                 <h4 class="text-white mb-1">Total Orders</h4>
@@ -24,10 +24,10 @@
             </div>
 
 
-               <div class="col-md-6 col-xl-4 col-xxl-4">
+            <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 IntelligenceGradient text-white">
                     <div class="card-body">
-                        <a href="{{route('driver')}}">
+                        <a href="#">
                         <div class="d-flex justify-content-between gap-5 mb-5">
                             <div>
                                 <h4 class="text-white mb-1">Today Orders</h4>
@@ -47,10 +47,10 @@
 
 
 
-              <div class="col-md-6 col-xl-4 col-xxl-3">
+            <div class="col-md-6 col-xl-4 col-xxl-3">
                 <div class="card card-h-100 datascienceGradient text-white">
                     <div class="card-body">
-                        <a href="{{route('staff')}}">
+                        <a href="#">
                         <div class="d-flex justify-content-between gap-5 mb-5">
                             <div>
                                 <h4 class="text-white mb-1">Total Shops</h4>
@@ -69,7 +69,7 @@
             <div class="col-md-6 col-xl-4 col-xxl-3">
                 <div class="card card-h-100 webGradient text-white">
                     <div class="card-body">
-                        <a href="{{route('vehicle')}}">
+                        <a href="#">
                         <div class="d-flex justify-content-between gap-5 mb-5">
                             <div>
                                 <h4 class="text-white mb-1">Total Users</h4>
@@ -88,7 +88,7 @@
             <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 IntelligenceGradient text-white">
                     <div class="card-body">
-                        <a href="{{route('driver')}}">
+                        <a href="#">
                         <div class="d-flex justify-content-between gap-5 mb-5">
                             <div>
                                 <h4 class="text-white mb-1">Delivery Persons</h4>
@@ -105,11 +105,7 @@
                 </div>
             </div>
 
-
-
         </div>
-
-
 
 
     </div><!--End container-fluid-->
