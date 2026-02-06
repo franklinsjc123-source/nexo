@@ -10,7 +10,7 @@
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                 <div class="card mx-xxl-8">
                     <div class="card-body py-12 px-8">
-                        <img src="<?= asset('backend_assets') ?>/images/yogesh_travels.png" alt="" height="30" class="mb-4 mx-auto d-block">                        
+                        <img src="<?= asset('backend_assets') ?>/images/yogesh_travels.png" alt="" height="30" class="mb-4 mx-auto d-block">
                         <form method="POST" action="<?= route('authLogin') ?>">
                             @csrf
                             <div class="row g-4">
@@ -39,13 +39,13 @@
                                     <button type="submit" class="btn btn-primary w-full mb-4">Sign In<i class="bi bi-box-arrow-in-right ms-1 fs-16"></i></button>
                                 </div>
                             </div>
-                           
+
                         </form>
                         <div class="text-center">
                         </div>
                     </div>
                 </div>
-                <p class="position-relative text-center fs-12 mb-0">© 2025 YOHESH TRAVELS</p>
+                <p class="position-relative text-center fs-12 mb-0">© 2026 NEXO CART</p>
             </div>
         </div>
     </div>
@@ -58,6 +58,6 @@
     }
      setInterval(function () {
         fetch('/refresh-session');
-    }, 1 * 60 * 1000); 
+    }, 1 * 60 * 1000);
 </script>
 @endsection

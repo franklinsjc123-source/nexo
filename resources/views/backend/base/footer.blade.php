@@ -9,11 +9,14 @@
  <!-- Begin Footer -->
  <footer class="footer">
      <div class="container-fluid">
-         <div class="d-flex justify-content-between align-items-center gap-2">
+         <center>
+
+            {{-- <div class="d-flex justify-content-between align-items-center gap-2"> --}}
              <script>
                  document.write(new Date().getFullYear())
-             </script> © YOHESH TRAVELS
-         </div>
+             </script> © NEXO CART
+         {{-- </div> --}}
+         </center>
      </div>
  </footer>
  <!-- END Footer -->
