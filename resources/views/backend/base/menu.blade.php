@@ -136,10 +136,10 @@ use Illuminate\Support\Facades\Auth;
 
 
     <aside class="pe-app-sidebar" id="sidebar">
-        <div class="pe-app-sidebar-logo px-6 d-flex align-items-center position-relative">
+        <div class="pe-app-sidebar-logo  d-flex align-items-center position-relative">
             <!--begin::Brand Image-->
             <a href="<?= route('dashboard') ?>" class="fs-18 fw-semibold">
-                <img height="60" class="pe-app-sidebar-logo-default d-none" alt="Logo"
+                <img style="height:73px; width:238px" width="100%" class="pe-app-sidebar-logo-default d-none" alt="Logo"
                     src="<?= asset('backend_assets') ?>/images/logo.jpg">
                 <img height="60" class="pe-app-sidebar-logo-light d-none" alt="Logo"
                     src="<?= asset('backend_assets') ?>/images/logo.jpg">

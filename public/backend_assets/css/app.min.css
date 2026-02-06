@@ -425,10 +425,10 @@ File: Main Css File
 
 .btn-primary {
   box-shadow: 0 0.125rem 0.375rem 0 rgba(var(--pe-primary-rgb), 0.3);
-  --pe-btn-bg: #B20202;
-  --pe-btn-border-color: #B20202;
-  --pe-btn-hover-bg: #B20202;
-  --pe-btn-hover-border-color: #B20202;
+  --pe-btn-bg: #673ab7;
+  --pe-btn-border-color: #673ab7;
+  --pe-btn-hover-bg: #673ab7;
+  --pe-btn-hover-border-color: #673ab7;
   --pe-btn-active-bg: var(--pe-primary-text-emphasis);
   --pe-btn-active-border-color: var(--pe-primary-text-emphasis);
   --pe-btn-disabled-bg:var(--pe-primary);
@@ -548,17 +548,17 @@ File: Main Css File
 
 .btn-success {
   box-shadow: 0 0.125rem 0.375rem 0 rgba(var(--pe-success-rgb), 0.3);
-  --pe-btn-bg: #B20202;
-  --pe-btn-border-color: #B20202;
-  --pe-btn-hover-bg: #B20202;
-  --pe-btn-hover-border-color: #B20202;
-  --pe-btn-active-bg: #B20202;
-  --pe-btn-active-border-color: #B20202;
+  --pe-btn-bg: #673ab7;
+  --pe-btn-border-color: #673ab7;
+  --pe-btn-hover-bg: #673ab7;
+  --pe-btn-hover-border-color: #673ab7;
+  --pe-btn-active-bg: #673ab7;
+  --pe-btn-active-border-color: #673ab7;
   --pe-btn-disabled-bg:var(--pe-success);
   --pe-btn-disabled-border-color:var(--pe-success);
 }
 .btn-success:first-child:active, .btn-success:active {
-  box-shadow: 0 0.125rem 0.375rem 0 #B20202;
+  box-shadow: 0 0.125rem 0.375rem 0 #673ab7;
 }
 
 .btn-light-success {
@@ -2345,7 +2345,7 @@ File: Main Css File
   }
 }
 .pe-app-sidebar {
-  background-color: #DE2f2f;
+  background-color: #673ab7;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -7861,7 +7861,7 @@ code[class*=language-] {
 
     .pe-app-sidebar {
         position: fixed !important;
-        background-color: #DE2f2f !important;
+        background-color: #673ab7 !important;
         top: 0;
         left: -280px;
         width: 280px;
