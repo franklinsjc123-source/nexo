@@ -10,7 +10,7 @@
             <div class="col-12 col-md-8 col-lg-6 col-xl-5">
                 <div class="card mx-xxl-8">
                     <div class="card-body py-12 px-8">
-                        <img src="<?= asset('backend_assets') ?>/images/yogesh_travels.png" alt="" height="30" class="mb-4 mx-auto d-block">
+                        <img src="<?= asset('backend_assets') ?>/images/logo.jpg" alt="" height="60" class="mb-4 mx-auto d-block">
                         <form method="POST" action="<?= route('authLogin') ?>">
                             @csrf
                             <div class="row g-4">
