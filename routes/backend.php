@@ -77,5 +77,6 @@ Route::middleware('auth.request')->group(function () {
     Route::get('product', [ProductController::class, 'product'])->name('product');
     Route::get('addProduct/{id?}', [ProductController::class, 'addProduct'])->name('addProduct');
     Route::post('storeUpdateProduct', [ProductController::class, 'storeUpdateProduct'])->name('storeUpdateProduct');
-
+    Route::get('get-shops-by-category', [ProductController::class, 'getShopsByCategory'])->name('getShopsByCategory');
+    
 });

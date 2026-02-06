@@ -29,13 +29,13 @@ class ProductController extends Controller
     {
         $records = '';
         if ($id > 0) {
-            $records   =  Product::where('id', $id )->first();
+            $records   =  Product::where('id', $id)->first();
         }
 
-          $categoryData   =  Category::orderBy('category_name', 'ASC')->get();
-          $shopData   =  Shop::orderBy('shop_name', 'ASC')->get();
+        $categoryData   =  Category::orderBy('category_name', 'ASC')->get();
+        $shopData   =  Shop::orderBy('shop_name', 'ASC')->get();
 
-        return view('backend.products.add_edit', compact('records', 'id','categoryData','shopData'));
+        return view('backend.products.add_edit', compact('records', 'id', 'categoryData', 'shopData'));
     }
 
     public function storeUpdateProduct(Request $request)
@@ -82,5 +82,13 @@ class ProductController extends Controller
         Product::where('id', $id)->update($data);
 
         return redirect()->route('product')->with('success', 'Product Updated Successfully');
+    }
+
+
+    public function getShopsByCategory(Request $request)
+    {
+        return Shop::where('category', $request->category_id)
+            ->where('status', 1)
+            ->get(['id', 'shop_name']);
     }
 }

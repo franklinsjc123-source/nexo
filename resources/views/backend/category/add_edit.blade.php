@@ -103,7 +103,7 @@
                  category_name: {
                      required: "Please enter category name"
                  },
-                  slider_photo_path: {
+                  photo_path: {
                     required: "Please upload Category image"
                 }
 
