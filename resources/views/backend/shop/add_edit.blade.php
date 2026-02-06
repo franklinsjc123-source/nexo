@@ -102,7 +102,7 @@
                                             <label for="gst_no" class="form-label">
                                                 GST Number <span class="text-danger"></span>
                                             </label>
-                                            <input type="text" class="form-control" id="gst_no" name="gst_no" placeholder="Enter GST Number" value="<?= old('gst_no',$gst_no) ?? '' ?>" maxlength="10">
+                                            <input type="text" class="form-control" id="gst_no" name="gst_no" placeholder="Enter GST Number" value="<?= old('gst_no',$gst_no) ?? '' ?>">
                                             @error('gst_no') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
 
@@ -121,6 +121,7 @@
 
                                         <input type="hidden" value="<?php echo $photo_path ?>" class="form-control"  name="old_photo_path">
                                         <input type="file" class="form-control" id="photo_path" name="photo_path">
+                                          <input type="hidden" id="has_old_photo_path" value="<?= !empty($photo_path) ? 1 : 0 ?>">
 
                                         @if(isset($id) && $photo_path != "")
                                                 <img class="mt-2" src="<?= $photo_path ?>" alt="image description" width="200" height="100">
@@ -173,9 +174,11 @@
                     required: true
                 },
 
-                photo_path: {
-                    required: true
-                },
+               photo_path: {
+                    required: function () {
+                        return $('#has_old_photo_path').val() == 0;
+                    }
+                }
              },
              messages: {
 
@@ -200,6 +203,10 @@
                 address: {
                     required: "Please enter address"
                 },
+
+                  slider_photo_path: {
+                    required: "Please upload Shop image"
+                }
 
              },
             errorElement: "span",

@@ -43,8 +43,8 @@
                             ?>
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
-                                <td><?= $row->categoryData->category_name ?></td>
-                                <td><?= $row->shopData->shop_name ?></td>
+                                <td><?= optional($row->categoryData)->category_name ?? '-' ?></td>
+                                <td><?= optional($row->shopData)->shop_name ?? '-' ?></td>
                                 <td><?= $row->product_name ?></td>
                                 <td><?= $row->original_price ?></td>
                                 <td><?= $row->discount_price ?></td>
