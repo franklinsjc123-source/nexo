@@ -394,7 +394,7 @@ sup {
 }
 
 a {
-  color: rgba(var(--pe-link-color-rgb), var(--pe-link-opacity, 1));
+  color: #673ab7;
   text-decoration: none;
 }
 a:hover {
@@ -4570,7 +4570,7 @@ textarea.form-control-lg {
 .nav-pills {
   --pe-nav-pills-border-radius: var(--pe-border-radius);
   --pe-nav-pills-link-active-color: #fff;
-  --pe-nav-pills-link-active-bg: var(--pe-primary);
+  --pe-nav-pills-link-active-bg: #673ab7;
 }
 .nav-pills .nav-link {
   border-radius: var(--pe-nav-pills-border-radius);
