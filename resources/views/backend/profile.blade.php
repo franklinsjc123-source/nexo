@@ -30,7 +30,7 @@
                     </nav>
                 </div>
             </div>
-            
+
             <div class="row">
                 <div class="col-12">
                     <div class="mb-6">
@@ -54,23 +54,23 @@
                                             <div class="col-lg-4">
                                                 <div class="tab-pane fade show active" id="html-label-input-required" role="tabpanel" aria-labelledby="html-label-input-required-tab" tabindex="0">
                                                     <label for="labelInputRequired" class="form-label">Name<span class="text-danger ms-1">*</span></label>
-                                                    <input type="text" placeholder="Enter Your Name" class="form-control" id="labelInputRequired" value="<?= $name ?>">
+                                                    <input type="text" placeholder="Enter Your Name" class="form-control" id="labelInputRequired" value="<?= $name ?>" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <label for="inputExample26" class="form-label">Email<span class="text-danger ms-1">*</span></label>
                                                 <div class="form-icon">
-                                                    <input type="email" class="form-control" id="inputExample26" name="email" value="<?= $email ?>" placeholder="example@gmail.com">
+                                                    <input type="email" class="form-control" id="inputExample26" name="email" value="<?= $email ?>" placeholder="example@gmail.com" readonly>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <label class="form-label" for="contact-number">Contact Number</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text bg-secondary-200" id="basic-addon1">+91</span>
-                                                    <input type="text" class="form-control" id="contact-number"   value="<?= $mobile ?>"  name="mobile" placeholder="123-456-7890">
+                                                    <input type="text" class="form-control" id="contact-number"   value="<?= $mobile ?>"  name="mobile" placeholder="123-456-7890" readonly>
                                                 </div>
                                             </div>
-                                           
+
                                             <!-- <div class="col-lg-4">
                                                 <label for="addressInputLayout4" class="form-label">Address<span class="text-danger ms-1">*</span></label>
                                                 <div class="form-group">
@@ -84,7 +84,7 @@
                                                     <input type="text" class="form-control form-control-icon" id="zipCodeLayout1" placeholder="Zip Code" required>
                                                 </div>
                                             </div> -->
-                                           
+
                                             <div class="col-lg-12 d-flex justify-content-end gap-2 flex-shrink-0 mt-8">
                                                 <button type="button" class="btn btn-light-dark text-body">Cancel</button>
                                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -97,21 +97,24 @@
                         <div class="tab-pane fade" id="information-tab-pane" role="tabpanel" aria-labelledby="information-tab" tabindex="0">
                             <div class="card">
                                 <div class="card-body p-6">
-                                    <form action="<?=  route('change-password') ?>" method="POST" class="py-4">
+                                    <form action="<?=  route('change-password') ?>" id="passwordForm" method="POST" class="py-4">
+                                         @csrf
+
+                                          <input type="hidden" name="id" value="<?= $id ?>" />
                                         <div class="row g-5">
                                             <div class="col-lg-4">
                                                 <div class="tab-pane fade show active" id="html-label-input-required" role="tabpanel" aria-labelledby="html-label-input-required-tab" tabindex="0">
                                                     <label for="password" class="form-label">Password <span class="text-danger ms-1">*</span> <i class="bi bi-eye" onclick="showPassword('password')"></i></label>
-                                                    <input type="password" placeholder="Enter Password" class="form-control" id="password" >
+                                                    <input type="password" name="password" placeholder="Enter Password" class="form-control" id="password" >
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <div class="tab-pane fade show active" id="html-label-input-required" role="tabpanel" aria-labelledby="html-label-input-required-tab" tabindex="0">
                                                     <label for="cpassword" class="form-label">Confirm Password <span class="text-danger ms-1">*</span> <i class="bi bi-eye" onclick="showPassword('cpassword')"></i></label>
-                                                    <input type="password" placeholder="Enter Confirm Password" id="cpassword" class="form-control" id="labelInputRequired" >
+                                                    <input type="password"  placeholder="Enter Confirm Password"  name="cpassword"   id="cpassword" class="form-control" id="labelInputRequired" >
                                                 </div>
                                             </div>
-                                           
+
                                             <div class="col-lg-12 d-flex justify-content-end gap-2 flex-shrink-0 mt-8">
                                                 <button type="button" class="btn btn-light-dark text-body">Cancel</button>
                                                 <button type="submit" class="btn btn-primary">Submit</button>
@@ -127,6 +130,51 @@
 
         </div><!--End container-fluid-->
     </main><!--End app-wrapper-->
+
+
+     <script>
+     $(function() {
+         $("#passwordForm").validate({
+             rules: {
+                 password: {
+                     required: true
+                 },
+                 cpassword: {
+                     required: true,
+                       equalTo: "#password"
+                 },
+
+
+
+             },
+             messages: {
+                 password: {
+                     required: "Please enter password "
+                 },
+                 cpassword: {
+                     required: "Please enter confirm password",
+                      equalTo: "Password and confirm password must match"
+
+                 },
+
+
+
+             },
+             errorElement: "span",
+             errorPlacement: function(error, element) {
+                 error.addClass("text-danger small");
+                if (element.hasClass("select2-hidden-accessible")) {
+                    error.insertAfter(element.next('.select2'));
+                } else {
+                    error.insertAfter(element);
+                }
+             }
+         });
+     });
+
+ </script>
+
+
     <script>
         function showPassword(id)
     {

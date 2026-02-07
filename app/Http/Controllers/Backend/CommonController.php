@@ -93,6 +93,7 @@ class CommonController extends Controller
         $passwd  = $input['password'] ?? '';
         $cpasswd = $input['cpassword'] ?? '';
         $id      = $input['id'] ?? '';
+   
         if ($passwd == $cpasswd) {
             $pwd    = Hash::make($passwd);
             $update = User::whereId($id)->update(['password' => $pwd]);
