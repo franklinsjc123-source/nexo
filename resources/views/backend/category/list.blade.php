@@ -47,7 +47,7 @@
                                 </td>
                                 <td>
                                     <a data-toggle="tooltip" data-placement="top" title="Edit" href="<?php echo route('addCategory',[$row->id]) ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil-fill"></i></a>
-                                    <a data-toggle="tooltip" data-placement="top" title="Delete" data-original-title="Delete" href="javascript:void(0)" onclick="commonDelete('<?php echo $row->id ?>','Category')" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></a>
+                                    {{-- <a data-toggle="tooltip" data-placement="top" title="Delete" data-original-title="Delete" href="javascript:void(0)" onclick="commonDelete('<?php echo $row->id ?>','Category')" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></a> --}}
                                 </td>
                             </tr>
 

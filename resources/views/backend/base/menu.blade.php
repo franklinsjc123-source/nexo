@@ -70,20 +70,25 @@ use Illuminate\Support\Facades\Auth;
                             </div>
                         </div>
                     </div>
+                    <?php
+                    use App\Models\Company;
+
+                    $company_data = Company::first();
+                    ?>
 
 
                     <div class="dropdown pe-dropdown-mega d-none d-md-block">
                         <button class="header-profile-btn btn gap-1 text-start" type="button"
                             data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="header-btn btn position-relative">
-                                <img src="<?= asset('backend_assets') ?>/images/avatar/avatar-10.jpg" alt=""
+                                <img src="<?=   $company_data->logo ?>" alt=""
                                     class="img-fluid rounded-circle">
                                 <span
                                     class="position-absolute translate-middle badge border border-light rounded-circle bg-success"><span
                                         class="visually-hidden">unread messages</span></span>
                             </span>
                             <div class="d-none d-lg-block pe-2">
-                                <span class="d-block mb-0 fs-13 fw-semibold"><?= Auth::user()->name ?> </span>
+                                <span class="d-block mb-0 fs-13 fw-semibold"><?= $company_data->company_name  ?> </span>
 
                             </div>
                         </button>
