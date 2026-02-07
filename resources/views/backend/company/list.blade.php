@@ -26,7 +26,7 @@
                 </div>
             </div>
            <div class="table-responsive mt-5">
-               <table id="datatables" class="table table-nowrap table-hover table-bordered w-100 mt-5 colum-search">
+               <table   id="datatables" class="table table-nowrap table-hover table-bordered w-100 mt-5 ">
 
                     <?php
                     if (isset($records)) {?>
