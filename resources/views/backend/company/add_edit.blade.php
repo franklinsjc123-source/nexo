@@ -12,7 +12,7 @@
     $company_address        = isset($record->company_address) ? $record->company_address : '';
     $state                  = isset($record->state) ? $record->state : '';
     $pincode                = isset($record->pincode) ? $record->pincode : '';
-    $pan_no                 = isset($record->pan_no) ? $record->pan_no : '';
+    $fssai_no               = isset($record->fssai_no) ? $record->fssai_no : '';
     $gst_no                 = isset($record->gst_no) ? $record->gst_no : '';
     $company_logo           = isset($record->logo) ? $record->logo : '';
     $old_company_logo       = isset($record->logo) ? $record->logo : '';
@@ -66,13 +66,24 @@
 
                                         </div>
 
+                                        <div class="col-xl-4">
+                                            <label for="company_address" class="form-label">Address  <span class="text-danger"> *</span> </label>
+                                            <textarea class="form-control" id="company_address" name="company_address">  <?php echo $company_address ?></textarea>
+                                            @error('company_address') <span class="text-danger">{{$message}}</span> @enderror
+
+                                        </div>
+                                        <div class="col-xl-4">
+                                            <label for="state" class="form-label">State  <span class="text-danger"> *</span> </label>
+                                            <input type="text" value="<?php echo $state ?>" class="form-control" id="state" name="state"   placeholder="Enter State">
+                                        </div>
+
                                          <div class="col-xl-4">
                                             <label for="phone" class="form-label">Phone   <span class="text-danger"> *</span></label>
                                             <input type="number" value="<?php echo $phone ?>" class="form-control" id="phone" name="phone"  placeholder="Enter Phone No">
                                         </div>
 
 
-                                          <div class="col-xl-4">
+                                        <div class="col-xl-4">
                                             <label for="email" class="form-label">Email  <span class="text-danger"> *</span></label>
                                             <input type="text" value="<?php echo $email ?>" class="form-control" id="email" name="email"  placeholder="Enter Email">
                                         </div>
@@ -83,36 +94,30 @@
                                             <input type="number" value="<?php echo $delivery_charge ?>" class="form-control" id="delivery_charge" name="delivery_charge"  placeholder="Enter Delivery Charge">
                                         </div>
 
-                                         <div class="col-xl-4">
-                                            <label for="pan_no" class="form-label">Pan No </label>
-                                            <input type="text" value="<?php echo $pan_no ?>" class="form-control" id="pan_no" name="pan_no"  placeholder="Enter Pan No">
-                                        </div>
-
-                                        <div class="col-xl-4">
+                                           <div class="col-xl-4">
                                             <label for="gst_no" class="form-label">GST No </label>
                                             <input type="text" value="<?php echo $gst_no ?>" class="form-control" id="gst_no" name="gst_no" placeholder="Enter GST No" >
                                         </div>
 
-
-                                        <div class="col-xl-4">
-                                            <label for="company_address" class="form-label">Address  <span class="text-danger"> *</span> </label>
-                                            <textarea class="form-control" id="company_address" name="company_address">  <?php echo $company_address ?></textarea>
-                                            @error('company_address') <span class="text-danger">{{$message}}</span> @enderror
-
-                                        </div>
-
                                          <div class="col-xl-4">
-                                            <label for="state" class="form-label">State  <span class="text-danger"> *</span> </label>
-                                            <input type="text" value="<?php echo $state ?>" class="form-control" id="state" name="state"   placeholder="Enter State">
+                                            <label for="fssai_no" class="form-label">FSSAI No  <span class="text-danger"> *</span> </label>
+                                            <input type="text" value="<?php echo $fssai_no ?>" class="form-control" id="fssai_no" name="fssai_no"  placeholder="Enter FSSAI No">
                                         </div>
 
 
 
 
-                                        <div class="col-xl-4">
+
+
+
+
+
+
+
+                                        {{-- <div class="col-xl-4">
                                             <label for="pincode" class="form-label">Pincode  <span class="text-danger"> *</span> </label>
                                             <input type="text" value="<?php echo $pincode ?>" class="form-control" id="pincode" name="pincode" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g,'');" placeholder="Enter Pincode">
-                                        </div>
+                                        </div> --}}
 
 
                                         <div class="col-xl-4">
@@ -179,6 +184,10 @@
                  pincode: {
                      required: true
                  },
+                   fssai_no: {
+                     required: true
+                 },
+
 
 
 
@@ -205,6 +214,11 @@
                  pincode: {
                      required: "Please enter pincode "
                  },
+
+                 fssai_no: {
+                     required: "Please enter FSSAI No "
+                 },
+
 
 
              },

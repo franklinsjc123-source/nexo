@@ -54,13 +54,7 @@ $menu       = isset($record->category) ? $record->category : '';
                             <?php
                             if (isset($permissionArr)) {
                                 foreach ($permissionArr as $key => $row) { ?>
-                                    <!-- <label class="ckbox mt-2 mb-4">
-                                                        <input name="parent" class="parent-<?= $key ?>" value="" type="checkbox" onclick="checkAll('<?= $key ?>')"><span class="mb-0 font-weight-bold fs-15"><?= $key ?></span>
-                                                    </label> -->
-                                    <!-- <div class="form-check mb-2 mt-3 bg-primary py-2 text-white px-4">
-                                        <input type="checkbox" name="parent" value="" class="form-check-input parent-<?= $key ?>" id="customCheckcolor<?= $key ?>" onclick="checkAll('<?= $key ?>')">
-                                        <label class="form-check-label" for="customCheckcolor<?= $key ?>"><?= $key ?></label>
-                                    </div> -->
+
 
                                      <div class="section-title bg-light mb-4 mt-2">
                                         <input type="checkbox" name="parent" value="" class="form-check-input parent-<?= $key ?>" id="customCheckcolor<?= $key ?>" onclick="checkAll('<?= $key ?>')">
@@ -68,26 +62,14 @@ $menu       = isset($record->category) ? $record->category : '';
                                     </div>
 
                                     <?php foreach ($row as $ky => $val) { ?>
-                                        <!-- <div class="form-group  mg-b-10 mt-3 mb-4 col-md-3">
-                                                    <label class="ckbox">
-                                                        <input name="permissions[]" id="child<?= $val['id'] ?>" class="child-<?= $key ?>" value="<?= $val['id'] ?>" type="checkbox"><span><?= ucwords($val['permission_name']) ?></span>
-                                                    </label>
-                                                </div> -->
+
                                         <div class="form-check mb-2 col-md-3 mt-2 ">
                                             <input type="checkbox" value="<?= $val['id'] ?>" name="permissions[]" id="child<?= $val['id'] ?>" class="form-check-input child-<?= $key ?>">
                                             <label class="form-check-label" for="child<?= $val['id'] ?>"><?= ucwords($val['permission_name']) ?></label>
 
                                              <br>
 
-                                            <!-- ACTION PERMISSION -->
-                                            {{-- <input style="margin-top:8px" type="checkbox"
-                                                value="<?= $val['id'] ?>"
-                                                name="permissions_action[]"
-                                                id="action<?= $val['id'] ?>"
-                                                class="form-check-input action-perm child-action-<?= $key ?>"
-                                                >
 
-                                            <label  style="margin-top:7px" for="action<?= $val['id'] ?>">Action</label> --}}
 
                                         </div>
                                     <?php  }
@@ -135,7 +117,7 @@ function checkAll(id){
         function getPermission(val)
         {
 
-            var url = "<?php echo url('/backend/getPermission/'); ?>/" + val;
+            var url = "<?php echo url('/getPermission/'); ?>/" + val;
             $.ajax({
                 type: 'GET',
                 url: url,

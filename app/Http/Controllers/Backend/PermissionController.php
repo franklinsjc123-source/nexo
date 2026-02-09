@@ -60,6 +60,9 @@ class PermissionController extends Controller
 
     public function updatePermission(Request $request)
 {
+
+
+
         $input = $request->all();
          if(isset($input["_token"])){
 
@@ -74,10 +77,12 @@ class PermissionController extends Controller
             array_merge($permissions, $permissions_action)
         );
 
+       
+
         // Sync permissions
         $user->syncPermissions($allPermissions);
 
-    
+
 
         return redirect()->back()->with('success', 'Permission Added Successfully');
     }
@@ -89,7 +94,7 @@ class PermissionController extends Controller
         // $users = User::Where('status',1)->get(['name','id']);
         $msg = $badge = '';
             $permissions = Permission::leftjoin('permission_category as pc','pc.id','=','permissions.category')
-            ->Orderby('permissions.name','ASC')
+            // ->Orderby('permissions.name','ASC')
             ->get(['permissions.id','permissions.display_name','pc.id as category','pc.name']);
             $permissionArr = array();
             foreach($permissions as $key=>$val)
