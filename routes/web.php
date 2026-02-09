@@ -108,7 +108,9 @@ Route::middleware('auth.request')->group(function () {
     Route::get('get-shops-by-category', [ProductController::class, 'getShopsByCategory'])->name('getShopsByCategory');
 
     // product upload
+    Route::get('sample-excel', [ProductUploadController::class, 'exportExcel'])->name('sample-excel');
+    // Route::get('sample-csv', [ProductUploadController::class, 'exportCSV'])->name('sample-csv');
     Route::get('product-upload', [ProductUploadController::class, 'productUpload'])->name('product-upload');
-    Route::get('storeProductUpload', [ProductUploadController::class, 'storeProductUpload'])->name('storeProductUpload');
+    Route::post('storeProductUpload', [ProductUploadController::class, 'storeProductUpload'])->name('storeProductUpload');
 
 });
