@@ -11,6 +11,7 @@ use App\Http\Controllers\Backend\PermissionController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ShopController;
 use App\Http\Controllers\Backend\ProductController;
+use App\Http\Controllers\Backend\ProductUploadController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -106,5 +107,8 @@ Route::middleware('auth.request')->group(function () {
     Route::post('storeUpdateProduct', [ProductController::class, 'storeUpdateProduct'])->name('storeUpdateProduct');
     Route::get('get-shops-by-category', [ProductController::class, 'getShopsByCategory'])->name('getShopsByCategory');
 
+    // product upload
+    Route::get('product-upload', [ProductUploadController::class, 'productUpload'])->name('product-upload');
+    Route::get('storeProductUpload', [ProductUploadController::class, 'storeProductUpload'])->name('storeProductUpload');
 
 });

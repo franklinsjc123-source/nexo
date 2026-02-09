@@ -10,9 +10,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- layout setup -->
     <script type="module" src="<?= asset('backend_assets') ?>/js/layout-setup.js"></script>
-    
+
     <!-- App favicon -->
-    <link rel="shortcut icon" href="<?= asset('backend_assets') ?>/images/yogesh_favicon.png">    <!-- Simplebar Css -->
+    <link rel="shortcut icon" href="<?= asset('backend_assets') ?>/images/fevi_icon.png">    <!-- Simplebar Css -->
     <link rel="stylesheet" href="<?= asset('backend_assets') ?>/libs/simplebar/simplebar.min.css">
 
        <!--datatable css-->
@@ -36,7 +36,7 @@
 
     <link href="<?= asset('backend_assets') ?>/css/select2.min.css" id="app-style" rel="stylesheet" type="text/css">
 
-   
+
 
     <script src="<?= asset('backend_assets') ?>/js/jquery.min.js"></script>
     <script src="<?= asset('backend_assets') ?>/libs/apexcharts/apexcharts.min.js"></script>
