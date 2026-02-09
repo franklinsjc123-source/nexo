@@ -13,9 +13,9 @@ class SliderController extends Controller
 
     public function slider()
     {
-        //  if (!$this->checkPermission('Zone')) {
-        //     return view('unauthorized');
-        // }
+         if (!$this->checkPermission('Slider')) {
+            return view('unauthorized');
+        }
         $records   =  Slider::orderBy('id', 'ASC')->get();
         return view('backend.slider.list', compact('records'));
     }

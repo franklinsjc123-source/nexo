@@ -14,9 +14,9 @@ class ShopController extends Controller
 
     public function shop()
     {
-        //  if (!$this->checkPermission('Zone')) {
-        //     return view('unauthorized');
-        // }
+         if (!$this->checkPermission('Shop')) {
+            return view('unauthorized');
+        }
 
 
         $records   =  Shop::orderBy('id', 'ASC')->get();
