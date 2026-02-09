@@ -290,6 +290,18 @@ use Illuminate\Support\Facades\Auth;
                         @endif
 
 
+                         @if(auth()->check() && auth()->user()->hasPermission('Vehicle'))
+                        <li class="pe-slide-item">
+                            <a href="<?= route('product-upload') ?>" class="pe-nav-link
+                                @if(request()->routeIs(['product-upload'])) active @endif">
+                                Product Upload
+                            </a>
+                        </li>
+
+
+                        @endif
+
+
 
 
                     </ul>
