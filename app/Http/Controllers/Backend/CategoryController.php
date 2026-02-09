@@ -13,9 +13,9 @@ class CategoryController extends Controller
 
     public function category()
     {
-        //  if (!$this->checkPermission('Zone')) {
-        //     return view('unauthorized');
-        // }
+         if (!$this->checkPermission('Category')) {
+            return view('unauthorized');
+        }
         $records   =  Category::orderBy('id', 'ASC')->get();
         return view('backend.category.list', compact('records'));
     }

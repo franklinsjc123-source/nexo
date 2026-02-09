@@ -15,7 +15,7 @@ class CompanyController extends Controller
     public function company()
     {
 
-        if (!$this->checkPermission('Company')) {
+        if (!$this->checkPermission('Company-Settings')) {
             return view('unauthorized');
         }
 

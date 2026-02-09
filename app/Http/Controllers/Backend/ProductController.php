@@ -15,9 +15,9 @@ class ProductController extends Controller
 
     public function product()
     {
-        //  if (!$this->checkPermission('Zone')) {
-        //     return view('unauthorized');
-        // }
+         if (!$this->checkPermission('Product')) {
+            return view('unauthorized');
+        }
 
 
         $records   =  Product::orderBy('id', 'ASC')->get();

@@ -30,9 +30,9 @@ class ProductUploadController extends Controller
 
     public function productUpload($id = '')
     {
-        //  if (!$this->checkPermission('Zone')) {
-        //     return view('unauthorized');
-        // }
+         if (!$this->checkPermission('Product-Upload')) {
+            return view('unauthorized');
+        }
 
         return view('backend.product-upload.upload');
     }

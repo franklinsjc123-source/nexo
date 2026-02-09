@@ -6,11 +6,20 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Traits\PermissionCheckTrait;
 
 class UserController extends Controller
 {
+    use PermissionCheckTrait;
+
     public function users()
     {
+
+     if (!$this->checkPermission('User-Management')) {
+            return view('unauthorized');
+        }
+
+
         $records = User::Where('auth_level', 2)->get();
         return view('backend.users.list', compact('records'));
     }

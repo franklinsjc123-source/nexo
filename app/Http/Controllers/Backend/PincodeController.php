@@ -14,9 +14,9 @@ class PincodeController extends Controller
 
     public function pincode()
     {
-        //  if (!$this->checkPermission('Zone')) {
-        //     return view('unauthorized');
-        // }
+         if (!$this->checkPermission('Pincode')) {
+            return view('unauthorized');
+        }
         $records   =  PinCode::orderBy('id', 'ASC')->get();
         return view('backend.pincode.list', compact('records'));
     }
