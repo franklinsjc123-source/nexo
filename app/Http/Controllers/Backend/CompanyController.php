@@ -63,7 +63,7 @@ class CompanyController extends Controller
             'company_address'   => isset($input['company_address'])      ?  $input['company_address']      : '',
             'pincode'           => isset($input['pincode'])  ?  $input['pincode']  : '',
             'state'             => isset($input['state'])   ?  $input['state']   : '',
-            'pan_no'            => isset($input['pan_no'])    ?  $input['pan_no']    : '',
+            'fssai_no'            => isset($input['fssai_no'])    ?  $input['fssai_no']    : '',
             'gst_no'            => isset($input['gst_no'])    ?  $input['gst_no']    : '',
             'logo'              => $imageUrl    ?  $imageUrl   : '',
         );

@@ -184,15 +184,17 @@ use Illuminate\Support\Facades\Auth;
                             <a href="javascript:void(0)">Settings</a>
                         </li>
 
-                         <li class="pe-slide-item">
-                            <a href="<?= route('company') ?>" class="pe-nav-link
-                                    @if(request()->routeIs(['company', 'addCompany'])) active @endif">
-                                Company Setttings
-                            </a>
-                        </li>
+                        @if(auth()->check() && auth()->user()->hasPermission('Company-Settings'))
+                            <li class="pe-slide-item">
+                                <a href="<?= route('company') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['company', 'addCompany'])) active @endif">
+                                    Company Setttings
+                                </a>
+                            </li>
+                        @endif
 
 
-
+                        @if(auth()->check() && auth()->user()->hasPermission('Pincode'))
 
                         <li class="pe-slide-item">
                             <a href="<?= route('pincode') ?>" class="pe-nav-link
@@ -200,7 +202,9 @@ use Illuminate\Support\Facades\Auth;
                                 Pincode
                             </a>
                         </li>
+                        @endif
 
+                        @if(auth()->check() && auth()->user()->hasPermission('Slider'))
 
                          <li class="pe-slide-item">
                             <a href="<?= route('slider') ?>" class="pe-nav-link
@@ -208,6 +212,7 @@ use Illuminate\Support\Facades\Auth;
                                 Slider
                             </a>
                         </li>
+                        @endif
 
 
                         @if(auth()->check() && auth()->user()->hasPermission('User-Management'))
@@ -258,7 +263,7 @@ use Illuminate\Support\Facades\Auth;
                             <a href="javascript:void(0)">Product Masters</a>
                         </li>
 
-                        @if(auth()->check() && auth()->user()->hasPermission('Route'))
+                        @if(auth()->check() && auth()->user()->hasPermission('Category'))
                             <li class="pe-slide-item">
                                 <a href="<?= route('category') ?>" class="pe-nav-link
                                         @if(request()->routeIs(['category', 'addCategory'])) active @endif">
@@ -268,7 +273,7 @@ use Illuminate\Support\Facades\Auth;
                          @endif
 
 
-                        @if(auth()->check() && auth()->user()->hasPermission('Driver'))
+                        @if(auth()->check() && auth()->user()->hasPermission('Shop'))
                          <li class="pe-slide-item">
                             <a href="<?= route('shop') ?>" class="pe-nav-link
                                 @if(request()->routeIs(['shop', 'addShop'])) active @endif">
@@ -278,7 +283,7 @@ use Illuminate\Support\Facades\Auth;
                         @endif
 
 
-                        @if(auth()->check() && auth()->user()->hasPermission('Vehicle'))
+                        @if(auth()->check() && auth()->user()->hasPermission('Product'))
                         <li class="pe-slide-item">
                             <a href="<?= route('product') ?>" class="pe-nav-link
                                 @if(request()->routeIs(['product', 'addProduct'])) active @endif">
@@ -290,7 +295,7 @@ use Illuminate\Support\Facades\Auth;
                         @endif
 
 
-                         @if(auth()->check() && auth()->user()->hasPermission('Vehicle'))
+                         @if(auth()->check() && auth()->user()->hasPermission('Product-Upload'))
                         <li class="pe-slide-item">
                             <a href="<?= route('product-upload') ?>" class="pe-nav-link
                                 @if(request()->routeIs(['product-upload'])) active @endif">
@@ -307,24 +312,26 @@ use Illuminate\Support\Facades\Auth;
                     </ul>
                 </li>
 
-
+                @if(auth()->check() && auth()->user()->hasPermission('Offers'))
                    <li class="pe-slide pe-has-sub">
-                    <a href="#" class="pe-nav-link">
-                        <i class="bi  bi-percent pe-nav-icon"></i>
-                        <span class="pe-nav-content">Offers </span>
-                    </a>
-                </li>
+                        <a href="#" class="pe-nav-link">
+                            <i class="bi  bi-percent pe-nav-icon"></i>
+                            <span class="pe-nav-content">Offers </span>
+                        </a>
+                    </li>
+                @endif
 
 
-
+                @if(auth()->check() && auth()->user()->hasPermission('Orders'))
                    <li class="pe-slide pe-has-sub">
                     <a href="#" class="pe-nav-link">
                         <i class="bi bi-cart-fill pe-nav-icon"></i>
                         <span class="pe-nav-content">Orders </span>
                     </a>
                 </li>
+                @endif
 
-
+                @if(auth()->check() && auth()->user()->hasPermission('Delivery-Persons'))
 
                    <li class="pe-slide pe-has-sub">
                     <a href="#" class="pe-nav-link">
@@ -332,6 +339,8 @@ use Illuminate\Support\Facades\Auth;
                         <span class="pe-nav-content">Delivery Person </span>
                     </a>
                 </li>
+                @endif
+                @if(auth()->check() && auth()->user()->hasPermission('Reports'))
 
                  <li class="pe-slide pe-has-sub">
                     <a href="#" class="pe-nav-link">
@@ -339,6 +348,7 @@ use Illuminate\Support\Facades\Auth;
                         <span class="pe-nav-content">Reports </span>
                     </a>
                 </li>
+                @endif
 
 
 
