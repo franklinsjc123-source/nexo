@@ -233,13 +233,14 @@ use Illuminate\Support\Facades\Auth;
                         </li>
                         @endif
 
-
+                     <?php  if(Auth::user()->auth_level  == 1 ) {  ?>
                         <li class="pe-slide-item">
                             <a href="<?= route('assign-permission') ?>" class="pe-nav-link
                                     @if(request()->routeIs(['assign-permission'])) active @endif">
                                Assign Permission
                             </a>
                         </li>
+                    <?php } ?>
 
                     </ul>
                 </li>
