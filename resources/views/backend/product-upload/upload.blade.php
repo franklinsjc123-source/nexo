@@ -27,6 +27,7 @@
                              <div class="card-header">
                                  <h5 class="mb-0"> Product Upload</h5>
                                  <div class="float-end">
+                                     <a href="<?= route('sample-excel') ?>" class="btn btn-primary">Sample Excel</a>
                                      <a href="<?= route('product-upload') ?>" class="btn btn-primary">Back</a>
                                  </div>
                              </div>
@@ -34,13 +35,9 @@
                              <div class="card-body">
                                  <div class="row g-4">
 
-
-
-
                                           <div class="col-xl-4">
                                             <label for="file" class="form-label">Upload CSV<span class="text-danger"> *</span>
-                                            <input type="file" class="form-control" id="file" name="file"   accept=".csv" >
-
+                                            <input type="file" class="form-control" id="file" name="file"     accept=".xlsx,.xls" >
 
                                           </div>
 
@@ -66,23 +63,17 @@
 
 
               rules: {
-                 category_name: {
+                 file: {
                      required: true
                  },
-                photo_path: {
-                    required: function () {
-                        return $('#has_old_photo_path').val() == 0;
-                    }
-                }
+
             },
              messages: {
 
-                 category_name: {
-                     required: "Please enter category name"
+                 file: {
+                     required: "Please upload a CSV file"
                  },
-                  photo_path: {
-                    required: "Please upload Category image"
-                }
+
 
              },
              errorElement: "span",
