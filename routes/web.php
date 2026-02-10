@@ -12,6 +12,7 @@ use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\ShopController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\ProductUploadController;
+use App\Http\Controllers\Backend\UnitController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -64,6 +65,13 @@ Route::middleware('auth.request')->group(function () {
     Route::get('pincode', [PincodeController::class, 'pincode'])->name('pincode');
     Route::get('addPincode/{id?}', [PincodeController::class, 'addPincode'])->name('addPincode');
     Route::post('storeUpdatePincode', [PincodeController::class, 'storeUpdatePincode'])->name('storeUpdatePincode');
+
+
+     //pincode
+    Route::get('unit', [UnitController::class, 'unit'])->name('unit');
+    Route::get('addUnit/{id?}', [UnitController::class, 'addUnit'])->name('addUnit');
+    Route::post('storeUpdateUnit', [UnitController::class, 'storeUpdateUnit'])->name('storeUpdateUnit');
+
 
     //Usesr Management
     Route::get("users", [UserController::class, 'users'])->name('users');
