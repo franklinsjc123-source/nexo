@@ -273,6 +273,15 @@ use Illuminate\Support\Facades\Auth;
                             </li>
                          @endif
 
+                           @if(auth()->check() && auth()->user()->hasPermission('Unit'))
+                            <li class="pe-slide-item">
+                                <a href="<?= route('unit') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['unit', 'addUnit'])) active @endif">
+                                    Unit
+                                </a>
+                            </li>
+                         @endif
+
 
                         @if(auth()->check() && auth()->user()->hasPermission('Shop'))
                          <li class="pe-slide-item">
