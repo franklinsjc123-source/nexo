@@ -300,8 +300,6 @@ use Illuminate\Support\Facades\Auth;
                                 Product
                             </a>
                         </li>
-
-
                         @endif
 
 

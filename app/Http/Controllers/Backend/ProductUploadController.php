@@ -44,7 +44,7 @@ class ProductUploadController extends Controller
             'Content-Disposition' => 'attachment; filename="sample_product_upload.csv"',
         ];
 
-        $columns = ['category', 'shop', 'product_name', 'original_price', 'discount_price', 'product_description'];
+        $columns = ['category', 'shop', 'product_name','unit','qty', 'original_price', 'discount_price', 'product_description'];
 
         $callback = function () use ($columns) {
             $file = fopen('php://output', 'w');
