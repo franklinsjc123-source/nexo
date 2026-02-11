@@ -55,7 +55,7 @@ class ProductController extends Controller
         $discount_price      = $request->discount_price ?? '';
         $product_description = $request->product_description ?? '';
         $imageUrl            = $request->old_product_image ?? '';
-
+    
         if ($request->hasFile('product_image')) {
             $file = $request->file('product_image');
             $imageName = 'product_' . time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());

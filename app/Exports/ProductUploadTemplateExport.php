@@ -9,6 +9,8 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use App\Models\Category;
 use App\Models\Shop;
+use App\Models\Unit;
+
 
 class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
 {
@@ -18,6 +20,8 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
             'category',
             'shop',
             'product_name',
+            'unit',
+            'qty',
             'original_price',
             'discount_price',
             'product_description'
@@ -26,7 +30,7 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
 
     public function array(): array
     {
-        return []; // empty rows
+        return [];
     }
 
     public function registerEvents(): array
@@ -43,6 +47,11 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
                     ->pluck('shop_name')
                     ->toArray();
 
+
+                $units = Unit::where('status', 1)
+                    ->pluck('unit_name')
+                    ->toArray();
+
                 // Create hidden sheet
                 $spreadsheet = $event->sheet->getDelegate()->getParent();
                 $listSheet = $spreadsheet->createSheet();
@@ -56,6 +65,11 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
                 // Fill shops
                 foreach ($shops as $i => $value) {
                     $listSheet->setCellValue('B' . ($i + 1), $value);
+                }
+
+                // Fill unit
+                foreach ($units as $i => $value) {
+                    $listSheet->setCellValue('D' . ($i + 1), $value);
                 }
 
                 // Hide sheet
@@ -81,6 +95,17 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
                     $shopValidation->setAllowBlank(false);
                     $shopValidation->setShowDropDown(true);
                     $shopValidation->setFormula1('=lists!$B$1:$B$' . count($shops));
+
+
+
+                    $unitValidation = $event->sheet
+                        ->getCell("D{$row}")
+                        ->getDataValidation();
+
+                    $unitValidation->setType(DataValidation::TYPE_LIST);
+                    $unitValidation->setAllowBlank(false);
+                    $unitValidation->setShowDropDown(true);
+                    $unitValidation->setFormula1('=lists!$D$1:$D$' . count($units));
                 }
             }
         ];
