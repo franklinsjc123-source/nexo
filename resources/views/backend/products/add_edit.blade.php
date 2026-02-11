@@ -7,6 +7,8 @@
     $id                     = isset($records->id) ? $records->id : '';
     $category               = isset($records->category) ? $records->category : '';
     $shop                   = isset($records->shop) ? $records->shop : '';
+    $qty                    = isset($records->qty) ? $records->qty : '';
+    $unit                   = isset($records->unit) ? $records->unit : '';
     $product_name           = isset($records->product_name) ? $records->product_name : '';
     $original_price         = isset($records->original_price) ? $records->original_price : '';
     $discount_price         = isset($records->discount_price) ? $records->discount_price : '';
@@ -83,6 +85,34 @@
                                             </label>
                                             <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Enter Product Name" value="<?= old('product_name',$product_name) ?? '' ?>"  >
                                             @error('product_name') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+
+
+                                         <div class="col-xl-4">
+                                        <label class="form-label"> Unit <span class="text-danger">*</span></label>
+                                        <select class="form-control select2" id="unit" name="unit">
+                                           <option value="">--select--</option>
+                                                <?php
+                                                    if (isset($unitData)) {
+                                                        foreach ($unitData as $val) { ?>
+                                                        <option <?=(old('unit', $unit) == $val->id)? 'selected':'' ?> value="<?php echo $val->id ?>"><?php echo ucwords($val->unit_name) ?></option>
+                                                <?php }
+                                                }
+                                                ?>
+
+                                        </select>
+
+                                        @error('unit') <span class="text-danger">{{$message}}</span> @enderror
+
+                                    </div>
+
+
+                                    <div class="col-xl-4">
+                                            <label for="original_price" class="form-label">
+                                                Quantity <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" id="qty" name="qty" placeholder="Enter Quantity" value="<?= old('qty',$qty) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9]/g,'');">
+                                            @error('qty') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
 
 
@@ -222,6 +252,16 @@ $(document).ready(function () {
                  product_description: {
                     required: true
                 },
+                  unit: {
+                    required: true
+                },
+
+                qty: {
+                    required: true
+                },
+                  product_description: {
+                    required: true
+                },
 
                 product_image: {
                     required: function () {
@@ -252,6 +292,15 @@ $(document).ready(function () {
                 product_description: {
                     required: "Please enter product description"
                 },
+
+                unit: {
+                    required: "Please select unit"
+                },
+
+                 qty: {
+                    required: "Please enter quantity"
+                },
+
 
                 product_image: {
                     required: "Please upload product image"
