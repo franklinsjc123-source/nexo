@@ -6,6 +6,8 @@
 
     $id                     = isset($records->id) ? $records->id : '';
     $category_name          = isset($records->category_name) ? $records->category_name : '';
+    $min_order_value        = isset($records->min_order_value) ? $records->min_order_value : '';
+
     $photo_path             = isset($records->file_path) ? $records->file_path:'';
     $status                 = isset($records->status) ? $records->status:'';
     $type                   = ($id == '')   ? 'Create' : 'Update';
@@ -47,6 +49,13 @@
                                             <label for="category_name" class="form-label">Category Name <span class="text-danger"> *</span></label>
                                             <input type="text" value="<?php echo $category_name ?>" class="form-control" id="category_name" name="category_name" placeholder="Enter Category Name">
                                             @error('category_name') <span class="text-danger">{{$message}}</span> @enderror
+
+                                        </div>
+
+                                          <div class="col-xl-4">
+                                            <label for="min_order_value" class="form-label">Minimum Order Value <span class="text-danger"> *</span></label>
+                                            <input type="text" value="<?php echo $min_order_value ?>" class="form-control" id="min_order_value" name="min_order_value" placeholder="Enter Mininum Order Value">
+                                            @error('min_order_value') <span class="text-danger">{{$message}}</span> @enderror
 
                                         </div>
 
@@ -92,6 +101,12 @@
                  category_name: {
                      required: true
                  },
+
+                min_order_value: {
+                     required: true
+                 },
+
+
                 photo_path: {
                     required: function () {
                         return $('#has_old_photo_path').val() == 0;
@@ -102,6 +117,9 @@
 
                  category_name: {
                      required: "Please enter category name"
+                 },
+                 min_order_value: {
+                     required: "Please enter miminum order value"
                  },
                   photo_path: {
                     required: "Please upload Category image"
