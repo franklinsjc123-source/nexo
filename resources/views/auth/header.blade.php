@@ -6,12 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta content="Admin & Dashboards Template" name="description" />
     <meta content="Pixeleyez" name="author" />
-    
+
     <!-- layout setup -->
     <script type="module" src="<?= asset('backend_assets') ?>/js/layout-setup.js"></script>
-    
+
     <!-- App favicon -->
-    <link rel="shortcut icon" href="<?= asset('backend_assets') ?>/images/yogesh_favicon.png">    <!-- Simplebar Css -->
+    <link rel="shortcut icon" href="<?= asset('backend_assets') ?>/images/fevi_icon.png">
     <link rel="stylesheet" href="<?= asset('backend_assets') ?>/libs/simplebar/simplebar.min.css">
       <link href="<?= asset('backend_assets') ?>/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
     <!-- Swiper Css -->
