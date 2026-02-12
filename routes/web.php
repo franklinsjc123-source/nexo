@@ -112,6 +112,9 @@ Route::middleware('auth.request')->group(function () {
     //orders Management
     Route::get("orders", [OrderController::class, 'orders'])->name('orders');
 
+       //direct orders Management
+    Route::get("direct-orders", [OrderController::class, 'directOrders'])->name('direct-orders');
+
 
     //Delivery Person Management
     Route::get("deliveryPerson", [DeliveryPersonController::class, 'deliveryPerson'])->name('deliveryPerson');

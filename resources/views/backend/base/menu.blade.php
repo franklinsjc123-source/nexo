@@ -339,14 +339,47 @@ use Illuminate\Support\Facades\Auth;
                 @endif
 
 
-                @if(auth()->check() && auth()->user()->hasPermission('Orders'))
-                   <li class="pe-slide pe-has-sub">
-                    <a href="{{ route('orders') }}" class="pe-nav-link">
-                        <i class="bi bi-cart-fill pe-nav-icon"></i>
-                        <span class="pe-nav-content">Orders </span>
+
+
+
+                @if(auth()->check() && auth()->user()->hasPermission('Category'))
+                  <li class="pe-slide pe-has-sub">
+
+                    <a href="#collapseLogistics-order" class="pe-nav-link" data-bs-toggle="collapse"
+                        aria-expanded="false"
+                        aria-controls="collapseLogistics">
+                        <i class="bi bi-bag-fill pe-nav-icon"></i>
+                        <span class="pe-nav-content"> Orders</span>
+                        <i class="ri-arrow-down-s-line pe-nav-arrow"></i>
                     </a>
+
+                    <ul class="pe-slide-menu collapse " id="collapseLogistics-order">
+
+                        <li class="slide pe-nav-content1">
+                            <a href="javascript:void(0)">Orders </a>
+                        </li>
+
+
+                            <li class="pe-slide-item">
+                                <a href="<?= route('orders') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['orders'])) active @endif">
+                                    Orders
+                                </a>
+                            </li>
+
+
+                            <li class="pe-slide-item">
+                                <a href="<?= route('direct-orders') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['direct-orders'])) active @endif">
+                                    Direct  Orders
+                                </a>
+                            </li>
+
+
+                    </ul>
                 </li>
-                @endif
+
+                   @endif
 
                 @if(auth()->check() && auth()->user()->hasPermission('Delivery-Persons'))
 
