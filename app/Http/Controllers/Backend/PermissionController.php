@@ -90,7 +90,8 @@ class PermissionController extends Controller
 
     public function assignPermission(Request $request)
     {
-        $users = User::where('status',1)->where('auth_level',2)->get(['name','id']);
+        // ->where('auth_level',2)
+        $users = User::where('status',1)->get(['name','id']);
         // $users = User::Where('status',1)->get(['name','id']);
         $msg = $badge = '';
             $permissions = Permission::leftjoin('permission_category as pc','pc.id','=','permissions.category')

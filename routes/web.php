@@ -13,6 +13,8 @@ use App\Http\Controllers\Backend\ShopController;
 use App\Http\Controllers\Backend\ProductController;
 use App\Http\Controllers\Backend\ProductUploadController;
 use App\Http\Controllers\Backend\UnitController;
+use App\Http\Controllers\Backend\CustomerController;
+use App\Http\Controllers\Backend\DeliveryPersonController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -30,34 +32,14 @@ Route::middleware('auth.request')->group(function () {
 
     Route::get("dashboard", [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get("logout", [AuthController::class, 'logout'])->name('logout');
-    Route::get("blank", [DashboardController::class, 'blank'])->name('blank');
-    Route::get("users", [UserController::class, 'users'])->name('users');
 
 
     Route::get('profile', [CommonController::class, 'profile'])->name('profile');
-
     Route::post('/save-profile', [CommonController::class, "saveProfile"])->name('save-profile');
     Route::post('/change-password', [CommonController::class, "changePassword"])->name('change-password');
-
     Route::post('/updateCommonStatus', [CommonController::class, "updateCommonStatus"])->name('updateCommonStatus');
     Route::post('/commonDelete', [CommonController::class, "commonDelete"])->name('commonDelete');
     Route::post('/checkExist', [CommonController::class, "checkExist"])->name('checkExist');
-
-
-    Route::get('/fetch/zone-based-data', [CommonController::class, 'getZoneBasedData']);
-    Route::get('/fetch/company-based-data', [CommonController::class, 'getCompanyBasedData']);
-    Route::get('/fetch/vehicle-based-data', [CommonController::class, 'getVehicleBasedData']);
-
-
-     Route::get("dashboard", [DashboardController::class, 'dashboard'])->name('dashboard');
-    Route::get("logout", [AuthController::class, 'logout'])->name('logout');
-    Route::get("blank", [DashboardController::class, 'blank'])->name('blank');
-
-    Route::get('profile', [CommonController::class, 'profile'])->name('profile');
-    Route::post('/save-profile', [CommonController::class, "saveProfile"])->name('save-profile');
-    Route::post('/change-password', [CommonController::class, "changePassword"])->name('change-password');
-    Route::post('/updateCommonStatus', [CommonController::class, "updateCommonStatus"])->name('updateCommonStatus');
-    Route::post('/commonDelete', [CommonController::class, "commonDelete"])->name('commonDelete');
 
 
 
@@ -120,5 +102,17 @@ Route::middleware('auth.request')->group(function () {
     // Route::get('sample-csv', [ProductUploadController::class, 'exportCSV'])->name('sample-csv');
     Route::get('product-upload', [ProductUploadController::class, 'productUpload'])->name('product-upload');
     Route::post('storeProductUpload', [ProductUploadController::class, 'storeProductUpload'])->name('storeProductUpload');
+
+
+    //Customer Management
+    Route::get("customers", [CustomerController::class, 'customers'])->name('customers');
+
+
+    //Delivery Person Management
+    Route::get("deliveryPerson", [DeliveryPersonController::class, 'deliveryPerson'])->name('deliveryPerson');
+    Route::get('addDeliveryPerson/{id?}', [DeliveryPersonController::class, 'addDeliveryPerson'])->name('addDeliveryPerson');
+    Route::post('storeUpdateDeliveryPerson', [DeliveryPersonController::class, 'storeUpdateDeliveryPerson'])->name('storeUpdateDeliveryPerson');
+
+
 
 });
