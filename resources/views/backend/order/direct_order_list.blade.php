@@ -58,7 +58,6 @@
                 </tbody>
             </table>
         </div>
-        <!-- Submit Section -->
     </div>
 </main>
 @endsection
