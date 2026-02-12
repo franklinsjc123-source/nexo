@@ -15,6 +15,8 @@ use App\Http\Controllers\Backend\ProductUploadController;
 use App\Http\Controllers\Backend\UnitController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DeliveryPersonController;
+use App\Http\Controllers\Backend\OrderController;
+use App\Http\Controllers\Backend\OfferController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -107,12 +109,20 @@ Route::middleware('auth.request')->group(function () {
     //Customer Management
     Route::get("customers", [CustomerController::class, 'customers'])->name('customers');
 
+    //orders Management
+    Route::get("orders", [OrderController::class, 'orders'])->name('orders');
+
 
     //Delivery Person Management
     Route::get("deliveryPerson", [DeliveryPersonController::class, 'deliveryPerson'])->name('deliveryPerson');
     Route::get('addDeliveryPerson/{id?}', [DeliveryPersonController::class, 'addDeliveryPerson'])->name('addDeliveryPerson');
     Route::post('storeUpdateDeliveryPerson', [DeliveryPersonController::class, 'storeUpdateDeliveryPerson'])->name('storeUpdateDeliveryPerson');
 
+
+    // offers
+    Route::get('offers', [OfferController::class, 'offers'])->name('offers');
+    Route::get('addOffer/{id?}', [OfferController::class, 'addOffer'])->name('addOffer');
+    Route::post('storeUpdateOffer', [OfferController::class, 'storeUpdateOffer'])->name('storeUpdateOffer');
 
 
 });

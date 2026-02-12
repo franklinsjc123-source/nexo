@@ -150,7 +150,6 @@
                  name: {
                      required: "Please enter name"
                  },
-
                  email: {
                      required: "Please enter email"
                  },
