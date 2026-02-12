@@ -51,7 +51,7 @@ Route::middleware('auth.request')->group(function () {
     Route::post('storeUpdatePincode', [PincodeController::class, 'storeUpdatePincode'])->name('storeUpdatePincode');
 
 
-     //pincode
+    //unit
     Route::get('unit', [UnitController::class, 'unit'])->name('unit');
     Route::get('addUnit/{id?}', [UnitController::class, 'addUnit'])->name('addUnit');
     Route::post('storeUpdateUnit', [UnitController::class, 'storeUpdateUnit'])->name('storeUpdateUnit');
@@ -123,6 +123,5 @@ Route::middleware('auth.request')->group(function () {
     Route::get('offers', [OfferController::class, 'offers'])->name('offers');
     Route::get('addOffer/{id?}', [OfferController::class, 'addOffer'])->name('addOffer');
     Route::post('storeUpdateOffer', [OfferController::class, 'storeUpdateOffer'])->name('storeUpdateOffer');
-
 
 });

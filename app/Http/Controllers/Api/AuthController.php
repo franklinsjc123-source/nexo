@@ -28,13 +28,28 @@ class AuthController extends Controller
                 return response()->json(['status' => 'User not found'], 400);
             } else {
 
+                $otp =  1234;
+
                 $updateArray =  array(
-                    'otp' => 1234
+                    'otp' =>  $otp
                 );
+
                 User::where('id', $user->id)->update($updateArray);
 
-                $success_array = array('status' => 'success', 'message' => 'login Successfully', 'data' => $user);
+
+                 $url = "https://2factor.in/API/V1/0db8d8b3-0825-11f1-a6b2-0200cd936042/SMS/+91$mobile/$otp/OTP1";
+                        $curl = curl_init();
+                        curl_setopt($curl, CURLOPT_URL, $url);
+                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                        curl_setopt($curl, CURLOPT_HEADER, false);
+                        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+                        $data = curl_exec($curl);
+                        curl_close($curl);
+
+
+                $success_array = array('status' => 'success', 'message' => 'OTP send successfully', 'otp' => '1234');
                 return response()->json(array($success_array), 200);
+
             }
         } else {
 
@@ -102,8 +117,7 @@ class AuthController extends Controller
 
         if ($mobile != '' && $otp != '') {
 
-            $user_id = User::where('mobile', $mobile)->value('id');
-
+            $user_id    = User::where('mobile', $mobile)->value('id');
             $stored_otp = User::where('id', $user_id)->value('otp');
 
             if ($stored_otp ==  $otp) {
@@ -111,15 +125,16 @@ class AuthController extends Controller
                 $updateArray =  array(
                     'is_verified' => 1
                 );
-
                 User::where('id', $user_id)->update($updateArray);
 
                 $success_array = array('status' => 'success', 'message' => 'Otp verified successfully');
                 return response()->json(array($success_array), 200);
+
             } else {
                 $error_array = array('status' => 'error', 'message' => 'Otp not matched');
                 return response()->json(array($error_array), 400);
             }
+
         } else {
             $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
             return response()->json(array($error_array), 400);
@@ -167,12 +182,17 @@ class AuthController extends Controller
             );
 
             $update = User::where('id', $user_id)->update($updateArray);
+
             if ($update) {
+
                 $success_array = array('status' => 'success', 'message' => 'Updated Successfully');
                 return response()->json(array($success_array), 200);
+
             } else {
+
                 $error_array = array('status' => 'error', 'message' => 'Not updated');
                 return response()->json(array($error_array), 400);
+
             }
         } else {
 
