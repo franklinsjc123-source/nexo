@@ -331,7 +331,7 @@ use Illuminate\Support\Facades\Auth;
 
                 @if(auth()->check() && auth()->user()->hasPermission('Offers'))
                    <li class="pe-slide pe-has-sub">
-                        <a href="#" class="pe-nav-link">
+                        <a href="{{ route('offers') }}" class="pe-nav-link">
                             <i class="bi  bi-percent pe-nav-icon"></i>
                             <span class="pe-nav-content">Offers </span>
                         </a>
@@ -341,7 +341,7 @@ use Illuminate\Support\Facades\Auth;
 
                 @if(auth()->check() && auth()->user()->hasPermission('Orders'))
                    <li class="pe-slide pe-has-sub">
-                    <a href="#" class="pe-nav-link">
+                    <a href="{{ route('orders') }}" class="pe-nav-link">
                         <i class="bi bi-cart-fill pe-nav-icon"></i>
                         <span class="pe-nav-content">Orders </span>
                     </a>
