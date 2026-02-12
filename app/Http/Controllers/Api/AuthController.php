@@ -77,7 +77,7 @@ class AuthController extends Controller
                 'name'          => $name,
                 'email'         => $email,
                 'mobile'        => $mobile,
-                'auth_level'    => 1,
+                'auth_level'    => 3,
                 'created_at'    => now()
 
             );
@@ -107,6 +107,13 @@ class AuthController extends Controller
             $stored_otp = User::where('id', $user_id)->value('otp');
 
             if ($stored_otp ==  $otp) {
+
+                $updateArray =  array(
+                    'is_verified' => 1
+                );
+
+                User::where('id', $user_id)->update($updateArray);
+
                 $success_array = array('status' => 'success', 'message' => 'Otp verified successfully');
                 return response()->json(array($success_array), 200);
             } else {
@@ -152,7 +159,6 @@ class AuthController extends Controller
         $mobile = $request->input('mobile');
 
         if ($name != '' &&  $email != '' &&  $mobile != '') {
-
 
             $updateArray = array(
                 'name'          => $name,
