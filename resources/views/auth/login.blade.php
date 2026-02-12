@@ -2,7 +2,7 @@
 @section('content')
 <body>
 <!-- START -->
-<div style="background: linear-gradient(135deg, #a5d6a7, #e8f5e9);">
+<div >
     <img src="<?= asset('backend_assets') ?>/images/auth/login_bg.jpg" alt="" class="auth-bg light w-full h-full opacity-60 position-absolute top-0">
     <img src="<?= asset('backend_assets') ?>/images/auth/auth_bg_dark.jpg" alt="" class="auth-bg d-none dark">
     <div class="container">
