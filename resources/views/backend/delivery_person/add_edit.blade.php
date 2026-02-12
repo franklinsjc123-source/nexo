@@ -28,7 +28,7 @@
          </div>
          <div class="row">
              <div class="col-xl-12 col-xxl-12">
-                 <form method="POST" id="zonetForm" action="<?= route('storeUpdateDeliveryPerson') ?>" enctype="multipart/form-data">
+                 <form method="POST" id="deliveryForm" action="<?= route('storeUpdateDeliveryPerson') ?>" enctype="multipart/form-data">
                      @csrf
                      <div>
                         <div class="card">
@@ -132,7 +132,7 @@
 
 
      $(function() {
-         $("#zonetForm").validate({
+         $("#deliveryForm").validate({
              rules: {
 
                  email: {
