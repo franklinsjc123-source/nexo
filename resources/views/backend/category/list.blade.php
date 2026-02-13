@@ -27,6 +27,7 @@
                     <tr>
                         <th>S.No</th>
                         <th>Category</th>
+                        <th>Min. Order Value</th>
                         <th>Category Image</th>
                          <th>Status</th>
                         <th>Action</th>
@@ -40,6 +41,7 @@
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
                                 <td><?= $row->category_name  ?></td>
+                                <td><?= $row->min_order_value  ?></td>
                                 <td> <img class="mt-2" src="<?= $row->file_path ?>" alt="image description" width="50" height="50"></td>
 
                                 <td><a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" onclick="changeStatus('<?php echo $row->id ?>','<?php echo ($row->status == 1) ? 0 : 1 ?>','Category')" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">
