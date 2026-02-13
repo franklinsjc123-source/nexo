@@ -37,3 +37,5 @@ Route::get('clear-cart', [CartController::class, 'clearCart'])->name('clear-cart
 
 Route::get('/getAllCategory',[HomeController::class,"getAllCategory"])->name('getAllCategory');
 Route::get('/getAllShopsByCategory',[HomeController::class,"getAllShopsByCategory"])->name('getAllShopsByCategory');
+Route::get('/getAllProductsByShop',[HomeController::class,"getAllProductsByShop"])->name('getAllProductsByShop');
+Route::get('/getAllSlider',[HomeController::class,"getAllSlider"])->name('getAllSlider');
