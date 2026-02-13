@@ -20,7 +20,7 @@ class HomeController extends Controller
             $success_array = array('status' => 'success', 'message' => 'Data received successfully', 'data' =>  $category);
             return response()->json(array($success_array), 200);
         } else {
-            $error_array = array('status' => 'success', 'message' => 'Something went wrong');
+            $error_array = array('status' => 'error', 'message' => 'Something went wrong');
             return response()->json(array($error_array), 400);
         }
 
@@ -37,9 +37,9 @@ class HomeController extends Controller
             $success_array = array('status' => 'success', 'message' => 'Data received successfully', 'data' =>  $shops);
             return response()->json(array($success_array), 200);
         } else {
-            $error_array = array('status' => 'success', 'message' => 'Something went wrong');
+            $error_array = array('status' => 'error', 'message' => 'Something went wrong');
             return response()->json(array($error_array), 400);
         }
-        
+
     }
 }
