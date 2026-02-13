@@ -7,7 +7,7 @@
         <div class="row mt-5">
             <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 webGradient text-white">
-                     <a href="#">
+                     <a href="{{ route('orders') }}">
                     <div class="card-body">
 
                         <div class="d-flex justify-content-between gap-5 mb-5">
@@ -16,7 +16,7 @@
                             </div>
                             <div class="flex-shrink-0">
                                 <div
-                                    class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">0</div>
+                                    class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">{{ $order_count ?? 0  }}</div>
                             </div>
                         </div>
 
@@ -26,9 +26,29 @@
             </div>
 
 
-            <div class="col-md-6 col-xl-4 col-xxl-4">
+              <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 IntelligenceGradient text-white">
-                   <a href="#">
+                    <a href="{{ route('direct-orders') }}">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between gap-5 mb-5">
+                                <div>
+                                    <h4 class="text-white mb-1">Total Direct Orders</h4>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <div
+                                        class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">
+                                    {{ $order_count ?? 0  }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+
+            {{-- <div class="col-md-6 col-xl-4 col-xxl-4">
+                <div class="card card-h-100 IntelligenceGradient text-white">
+                   <a href="{{ route('orders') }}">
                     <div class="card-body">
 
 
@@ -47,14 +67,14 @@
                     </div>
                     </a>
                 </div>
-            </div>
+            </div> --}}
 
 
 
 
             <div class="col-md-6 col-xl-4 col-xxl-3">
                 <div class="card card-h-100 datascienceGradient text-white">
-                     <a href="#">
+                     <a href="{{ route('shop') }}">
                     <div class="card-body">
 
                         <div class="d-flex justify-content-between gap-5 mb-5">
@@ -63,7 +83,7 @@
                             </div>
                             <div class="flex-shrink-0">
                                 <div
-                                    class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">0 </div>
+                                    class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold"> {{ $shop_count  ?? 0 }} </div>
                             </div>
                         </div>
 
@@ -75,16 +95,16 @@
 
             <div class="col-md-6 col-xl-4 col-xxl-3">
                 <div class="card card-h-100 webGradient text-white">
-                   <a href="#">
+                   <a href="{{ route('customers') }}">
                     <div class="card-body">
 
                         <div class="d-flex justify-content-between gap-5 mb-5">
                             <div>
-                                <h4 class="text-white mb-1">Total Users</h4>
+                                <h4 class="text-white mb-1">Total Customers</h4>
                             </div>
                             <div class="flex-shrink-0">
                                 <div
-                                    class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">0</div>
+                                    class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">{{ $customer_count ?? 0 }}</div>
                             </div>
                         </div>
 
@@ -96,7 +116,7 @@
 
             <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 IntelligenceGradient text-white">
-                    <a href="#">
+                    <a href="{{ route('deliveryPerson') }}">
                     <div class="card-body">
 
                         <div class="d-flex justify-content-between gap-5 mb-5">
@@ -106,7 +126,7 @@
                             <div class="flex-shrink-0">
                                 <div
                                     class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">
-                                   0</div>
+                                   {{ $delivert_person_count ?? 0 }}</div>
 
                             </div>
                         </div>
