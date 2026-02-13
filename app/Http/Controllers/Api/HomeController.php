@@ -59,8 +59,7 @@ class HomeController extends Controller
         if ($products->isEmpty()) {
             return response()->json([
                 'status' => 'success',
-                'message' => 'No products found',
-                'data' => []
+                'message' => 'No products found'
             ], 200);
         }
 
