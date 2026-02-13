@@ -43,52 +43,52 @@ class HomeController extends Controller
         }
     }
 
-public function getAllProductsByShop(Request $request)
-{
-    $shop_id = $request->input('shop_id');
+    public function getAllProductsByShop(Request $request)
+    {
+        $shop_id = $request->input('shop_id');
 
-    $products = Product::with([
-        'categoryData:id,category_name',
-        'shopData:id,shop_name',
-        'unitData:id,unit_name'
-    ])
-    ->where('shop', $shop_id)
-    ->where('status', 1)
-    ->get();
+        $products = Product::with([
+            'categoryData:id,category_name',
+            'shopData:id,shop_name',
+            'unitData:id,unit_name'
+        ])
+            ->where('shop', $shop_id)
+            ->where('status', 1)
+            ->get();
 
-    if ($products->isEmpty()) {
+        if ($products->isEmpty()) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'No products found',
+                'data' => []
+            ], 200);
+        }
+
+        $data = $products->map(function ($product) {
+            return [
+                'id'                  => $product->id,
+                'category_id'         => $product->category,
+                'category_name'       => optional($product->categoryData)->category_name,
+                'shop_id'             => $product->shop,
+                'shop_name'           => optional($product->shopData)->shop_name,
+                'product_name'        => $product->product_name,
+                'qty'                 => $product->qty,
+                'unit_id'             => $product->unit,
+                'unit_name'           => optional($product->unitData)->unit_name,
+                'original_price'      => $product->original_price,
+                'discount_price'      => $product->discount_price,
+                'product_description' => $product->product_description,
+                'product_image'       => $product->product_image,
+                'status'              => $product->status,
+            ];
+        });
+
         return response()->json([
             'status' => 'success',
-            'message' => 'No products found',
-            'data' => []
+            'message' => 'Data received successfully',
+            'data' => $data
         ], 200);
     }
-
-    $data = $products->map(function ($product) {
-        return [
-            'id'                  => $product->id,
-            'category_id'         => $product->category,
-            'category_name'       => optional($product->categoryData)->category_name,
-            'shop_id'             => $product->shop,
-            'shop_name'           => optional($product->shopData)->shop_name,
-            'product_name'        => $product->product_name,
-            'qty'                 => $product->qty,
-            'unit_id'             => $product->unit,
-            'unit_name'           => optional($product->unitData)->unit_name,
-            'original_price'      => $product->original_price,
-            'discount_price'      => $product->discount_price,
-            'product_description' => $product->product_description,
-            'product_image'       => $product->product_image,
-            'status'              => $product->status,
-        ];
-    });
-
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Data received successfully',
-        'data' => $data
-    ], 200);
-}
 
 
 
