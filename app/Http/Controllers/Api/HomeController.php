@@ -16,13 +16,14 @@ class HomeController extends Controller
 
         $category = Category::where('status', 1)->get();
 
-        if ($category) {
+        if ($category->isNotEmpty()) {
             $success_array = array('status' => 'success', 'message' => 'Data received successfully', 'data' =>  $category);
             return response()->json(array($success_array), 200);
         } else {
             $error_array = array('status' => 'success', 'message' => 'Something went wrong');
             return response()->json(array($error_array), 400);
         }
+
     }
 
 
@@ -32,12 +33,13 @@ class HomeController extends Controller
         $category_id = $request->input('category_id');
         $shops = Shop::where('category', $category_id)->where('status', 1)->get();
 
-        if ($shops) {
+        if ($shops->isNotEmpty()) {
             $success_array = array('status' => 'success', 'message' => 'Data received successfully', 'data' =>  $shops);
             return response()->json(array($success_array), 200);
         } else {
             $error_array = array('status' => 'success', 'message' => 'Something went wrong');
             return response()->json(array($error_array), 400);
         }
+        
     }
 }

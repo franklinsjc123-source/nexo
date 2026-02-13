@@ -37,14 +37,14 @@ class AuthController extends Controller
                 User::where('id', $user->id)->update($updateArray);
 
 
-                 $url = "https://2factor.in/API/V1/0db8d8b3-0825-11f1-a6b2-0200cd936042/SMS/+91$mobile/$otp/OTP1";
-                        $curl = curl_init();
-                        curl_setopt($curl, CURLOPT_URL, $url);
-                        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-                        curl_setopt($curl, CURLOPT_HEADER, false);
-                        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-                        $data = curl_exec($curl);
-                        curl_close($curl);
+                //         $url = "https://2factor.in/API/V1/0db8d8b3-0825-11f1-a6b2-0200cd936042/SMS/+91$mobile/$otp/OTP1";
+                //         $curl = curl_init();
+                //         curl_setopt($curl, CURLOPT_URL, $url);
+                //         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+                //         curl_setopt($curl, CURLOPT_HEADER, false);
+                //         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+                //         $data = curl_exec($curl);
+                //         curl_close($curl);
 
 
                 $success_array = array('status' => 'success', 'message' => 'OTP send successfully', 'otp' => '1234');
@@ -158,6 +158,7 @@ class AuthController extends Controller
                 $error_array = array('status' => 'success', 'message' => 'Something went wrong');
                 return response()->json(array($error_array), 400);
             }
+            
         } else {
             $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
             return response()->json(array($error_array), 400);
