@@ -40,6 +40,7 @@ class CategoryController extends Controller
 
         $id = $request->id ?? 0;
         $category_name = $request->category_name ?? 0;
+        $min_order_value = $request->min_order_value ?? 0;
         $imageUrl = $request->old_photo_path ?? '';
 
         if ($request->hasFile('photo_path')) {
@@ -51,6 +52,7 @@ class CategoryController extends Controller
 
         $data = [
             'category_name' => $category_name,
+            'min_order_value' => $min_order_value,
             'file_path' => $imageUrl,
         ];
 
