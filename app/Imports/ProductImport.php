@@ -11,18 +11,36 @@ use Illuminate\Support\Collection;
 
 class ProductImport implements ToCollection, WithHeadingRow
 {
+
+    public $imported = 0;
+    public $skipped = 0;
+
     public function collection(Collection $rows)
     {
+
+
         foreach ($rows as $row) {
 
-            if (empty($row['product_name'])) {
+            if (
+                empty($row['product_name']) &&
+                empty($row['category']) &&
+                empty($row['shop'])
+            ) {
                 continue;
             }
+
+            if (empty($row['product_name'])) {
+                $this->skipped++;
+                continue;
+            }
+
+
 
             $category = Category::where('category_name', $row['category'])->first();
             $shop = Shop::where('shop_name', $row['shop'])->first();
 
             if (!$category || !$shop) {
+                $this->skipped++;
                 continue;
             }
 
@@ -34,6 +52,7 @@ class ProductImport implements ToCollection, WithHeadingRow
                 'discount_price'      => $row['discount_price'],
                 'product_description' => $row['product_description'],
             ]);
+            $this->imported++;
         }
     }
 }
