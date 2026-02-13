@@ -35,11 +35,11 @@
                              <div class="card-body">
                                  <div class="row g-4">
 
-                                          <div class="col-xl-4">
-                                            <label for="file" class="form-label">Upload CSV<span class="text-danger"> *</span>
-                                            <input type="file" class="form-control" id="file" name="file"     accept=".xlsx,.xls" >
+                                    <div class="col-xl-4">
+                                    <label for="file" class="form-label">Upload CSV<span class="text-danger"> *</span>
+                                    <input type="file" class="form-control" id="file" name="file"     accept=".xlsx,.xls" >
 
-                                          </div>
+                                    </div>
 
 
                                  </div>

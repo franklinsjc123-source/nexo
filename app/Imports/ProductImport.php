@@ -5,6 +5,7 @@ namespace App\Imports;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Shop;
+use App\Models\Unit;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Collection;
@@ -38,6 +39,7 @@ class ProductImport implements ToCollection, WithHeadingRow
 
             $category = Category::where('category_name', $row['category'])->first();
             $shop = Shop::where('shop_name', $row['shop'])->first();
+            $unit = Unit::where('unit_name', $row['unit'])->first();
 
             if (!$category || !$shop) {
                 $this->skipped++;
@@ -47,6 +49,8 @@ class ProductImport implements ToCollection, WithHeadingRow
             Product::create([
                 'category'            => $category->id,
                 'shop'                => $shop->id,
+                'qty'                 => $row['qty'],
+                'unit'                => $unit->id,
                 'product_name'        => $row['product_name'],
                 'original_price'      => $row['original_price'],
                 'discount_price'      => $row['discount_price'],

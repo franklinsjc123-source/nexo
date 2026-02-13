@@ -51,9 +51,7 @@
                                     {{ $row->qty }}{{ optional($row->unitData)->unit_name ? ' ('.$row->unitData->unit_name.')' : '' }}
                                 </td>                                <td><?= $row->original_price ?></td>
                                 <td><?= $row->discount_price ?></td>
-
                                 <td> <img class="mt-2" src="<?= $row->product_image ?>" alt="image description" width="50" height="50"></td>
-
                                 <td><a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" onclick="changeStatus('<?php echo $row->id ?>','<?php echo ($row->status == 1) ? 0 : 1 ?>','Product')" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">
                                             <?php echo ($row->status == 1) ? 'Active' : 'In-Active' ?></a>
                                 </td>
