@@ -20,4 +20,9 @@ class Product extends Model
     {
         return $this->belongsTo(Shop::class, 'shop', 'id');
     }
+
+     public function unitData()
+    {
+        return $this->belongsTo(Unit::class, 'unit', 'id');
+    }
 }

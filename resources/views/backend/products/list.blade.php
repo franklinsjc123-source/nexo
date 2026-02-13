@@ -29,6 +29,7 @@
                         <th>Category</th>
                         <th>Shop Name</th>
                         <th>Product Name</th>
+                        <th>Quantity (unit)</th>
                         <th>Original Price</th>
                         <th>Discount Price</th>
                         <th>Product Image</th>
@@ -46,7 +47,9 @@
                                 <td><?= optional($row->categoryData)->category_name ?? '-' ?></td>
                                 <td><?= optional($row->shopData)->shop_name ?? '-' ?></td>
                                 <td><?= $row->product_name ?></td>
-                                <td><?= $row->original_price ?></td>
+                                <td>
+                                    {{ $row->qty }}{{ optional($row->unitData)->unit_name ? ' ('.$row->unitData->unit_name.')' : '' }}
+                                </td>                                <td><?= $row->original_price ?></td>
                                 <td><?= $row->discount_price ?></td>
 
                                 <td> <img class="mt-2" src="<?= $row->product_image ?>" alt="image description" width="50" height="50"></td>
