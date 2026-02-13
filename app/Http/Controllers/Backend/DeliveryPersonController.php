@@ -29,7 +29,7 @@ class DeliveryPersonController extends Controller
     {
         $record = '';
         if ($id > 0) {
-            $record = DeliveryPerson::first();
+            $record = DeliveryPerson::where('id', $id)->first();
         }
         return view('backend.delivery_person.add_edit', compact('record', 'id'));
     }

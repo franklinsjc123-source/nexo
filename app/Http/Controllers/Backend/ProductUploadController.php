@@ -30,7 +30,7 @@ class ProductUploadController extends Controller
 
     public function productUpload($id = '')
     {
-         if (!$this->checkPermission('Product-Upload')) {
+        if (!$this->checkPermission('Product-Upload')) {
             return view('unauthorized');
         }
 
@@ -44,7 +44,7 @@ class ProductUploadController extends Controller
             'Content-Disposition' => 'attachment; filename="sample_product_upload.csv"',
         ];
 
-        $columns = ['category', 'shop', 'product_name','unit','qty', 'original_price', 'discount_price', 'product_description'];
+        $columns = ['category', 'shop', 'product_name', 'unit', 'qty', 'original_price', 'discount_price', 'product_description'];
 
         $callback = function () use ($columns) {
             $file = fopen('php://output', 'w');
@@ -63,10 +63,25 @@ class ProductUploadController extends Controller
             'file' => 'required|file|mimes:xlsx,xls|max:5120'
         ]);
 
-        Excel::import(new ProductImport, $request->file('file'));
+        // Excel::import(new ProductImport, $request->file('file'));
+        $import = new ProductImport();
+        Excel::import($import, $request->file('file'));
+
+
+
+
+        if ($import->skipped > 0) {
+            return redirect()
+                ->route('product')
+                ->with(
+                    'error',
+                    "{$import->imported} products imported successfully.
+                 {$import->skipped} rows were skipped (invalid data)."
+                );
+        }
 
         return redirect()
             ->route('product')
-            ->with('success', 'Products uploaded successfully');
+            ->with('success', 'All products imported successfully');
     }
 }
