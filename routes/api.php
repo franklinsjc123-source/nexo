@@ -29,11 +29,11 @@ Route::post('/checkOTP',[AuthController::class,"checkOTP"])->name('checkOTP');
 Route::get('/getUserDetails',[AuthController::class,"getUserDetails"])->name('getUserDetails');
 
 
-Route::post('cart/add', [CartController::class, 'addToCart']);
-Route::get('cart', [CartController::class, 'viewCart']);
-Route::put('cart/update', [CartController::class, 'updateCartItem']);
-Route::delete('cart/remove/{item_id}', [CartController::class, 'removeCartItem']);
-Route::delete('cart/clear', [CartController::class, 'clearCart']);
+Route::post('add-cart', [CartController::class, 'addToCart'])->name('add-cart');
+Route::get('view-cart', [CartController::class, 'viewCart'])->name('view-cart');
+Route::post('update-cart', [CartController::class, 'updateCartItem'])->name('update-cart');
+Route::get('remove-cart-item', [CartController::class, 'removeCartItem'])->name('remove-cart-item');
+Route::get('clear-cart', [CartController::class, 'clearCart'])->name('clear-cart');
 
 Route::get('/getAllCategory',[HomeController::class,"getAllCategory"])->name('getAllCategory');
 Route::get('/getAllShopsByCategory',[HomeController::class,"getAllShopsByCategory"])->name('getAllShopsByCategory');
