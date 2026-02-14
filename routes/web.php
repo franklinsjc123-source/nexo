@@ -23,9 +23,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::get("/", [AuthController::class, 'index'])->name('login');
 Route::post("authLogin", [AuthController::class, 'authLogin'])->name('authLogin');
-  Route::get('/refresh-session', function () {
+Route::get('/refresh-session', function () {
     return response()->json(['status' => 'session refreshed']);
-    });
+});
 
 
 
@@ -112,9 +112,9 @@ Route::middleware('auth.request')->group(function () {
     //orders Management
     Route::get("orders", [OrderController::class, 'orders'])->name('orders');
 
-       //direct orders Management
+    //direct orders Management
     Route::get("direct-orders", [OrderController::class, 'directOrders'])->name('direct-orders');
-
+    Route::post('direct-orders-status-update', [OrderController::class, 'updateOrderStatus'])->name('direct-orders-status-update');
 
     //Delivery Person Management
     Route::get("deliveryPerson", [DeliveryPersonController::class, 'deliveryPerson'])->name('deliveryPerson');
@@ -126,5 +126,4 @@ Route::middleware('auth.request')->group(function () {
     Route::get('offers', [OfferController::class, 'offers'])->name('offers');
     Route::get('addOffer/{id?}', [OfferController::class, 'addOffer'])->name('addOffer');
     Route::post('storeUpdateOffer', [OfferController::class, 'storeUpdateOffer'])->name('storeUpdateOffer');
-
 });
