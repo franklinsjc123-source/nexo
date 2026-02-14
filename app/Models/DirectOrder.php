@@ -11,4 +11,14 @@ class DirectOrder extends Model
     protected $table   = 'direct_orders';
     protected $guarded = ['id'];
 
+    public function shopData()
+    {
+        return $this->belongsTo(Shop::class, 'shop_id', 'id');
+    }
+
+
+     public function userData()
+    {
+        return $this->belongsTo(User::class, 'customer_id', 'id');
+    }
 }

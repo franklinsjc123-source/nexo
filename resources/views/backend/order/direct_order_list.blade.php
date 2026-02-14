@@ -24,8 +24,8 @@
                     <tr>
                         <th>S.No</th>
                         <th>Order Date </th>
-                        <th>Shop Name </th>
                         <th>Customer Name</th>
+                        <th>Shop Name </th>
                         <th>Image</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -38,13 +38,17 @@
                             ?>
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
-                                <td><?php echo '' ?></td>
-                                <td><?php echo '' ?></td>
-                                <td><?php echo '' ?></td>
-                                <td><?php echo '' ?></td>
+                                <td><?= date('d-m-Y', strtotime($row->created_at)) ?></td>
+                                <td><?= optional($row->userData)->name ?? '-' ?></td>
+                                <td><?= optional($row->shopData)->shop_name ?? '-' ?></td>
                                 <td>
-                                    <a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" onclick="changeStatus('<?php echo $row->id ?>','<?php echo ($row->status == 1) ? 0 : 1 ?>','User')" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">
-                                            <?php echo ($row->status == 1) ? 'Active' : 'In-Active' ?>
+                                    <a href="<?= $row->image_url ?>" target="_blank">
+                                        <img src="<?= $row->image_url ?>" height="50" width="50">
+                                    </a>
+                                </td>
+                                <td>
+                                    <a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" onclick="changeOrderStatus('<?php echo $row->id ?>','<?php echo ($row->status == 1) ? 0 : 1 ?>','Order')" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">
+                                            <?php echo ($row->status == 1) ? '' : 'New Order' ?>
                                     </a>
                                 </td>
                                 <td>

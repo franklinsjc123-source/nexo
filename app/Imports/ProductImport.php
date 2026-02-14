@@ -50,7 +50,7 @@ class ProductImport implements ToCollection, WithHeadingRow
                 'category'            => $category->id,
                 'shop'                => $shop->id,
                 'qty'                 => $row['qty'],
-                'unit'                => $unit->id,
+                'unit'                => isset($unit->id) ?  $unit->id : '',
                 'product_name'        => $row['product_name'],
                 'original_price'      => $row['original_price'],
                 'discount_price'      => $row['discount_price'],
