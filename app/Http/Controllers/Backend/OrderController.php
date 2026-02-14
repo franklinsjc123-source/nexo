@@ -39,6 +39,19 @@ class OrderController extends Controller
     }
 
 
+    public function updateOrderStatus(Request $request)
+{
+    DirectOrder::where('id', $request->order_id)
+        ->update(['status' => $request->status]);
+
+    return response()->json([
+        'status' => true,
+        'message' => 'Order status updated successfully'
+    ]);
+}
+
+
+
 
 
 }
