@@ -77,14 +77,14 @@ class AuthController extends Controller
                     return response()->json([
                         'status'  => 'error',
                         'message' => 'Email  already exists'
-                    ], 409);
+                    ], 400);
                 }
 
                 if ($user->mobile ==  $mobile) {
                     return response()->json([
                         'status'  => 'error',
                         'message' => 'Mobile number already exists'
-                    ], 409);
+                    ], 400);
                 }
             }
 
@@ -158,7 +158,7 @@ class AuthController extends Controller
                 $error_array = array('status' => 'success', 'message' => 'Something went wrong');
                 return response()->json(array($error_array), 400);
             }
-            
+
         } else {
             $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
             return response()->json(array($error_array), 400);

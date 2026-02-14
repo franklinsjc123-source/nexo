@@ -26,7 +26,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login',[AuthController::class,"login"])->name('login');
 Route::post('/register',[AuthController::class,"register"])->name('register');
 Route::post('/checkOTP',[AuthController::class,"checkOTP"])->name('checkOTP');
-Route::get('/getUserDetails',[AuthController::class,"getUserDetails"])->name('getUserDetails');
 
 
 Route::post('add-cart', [CartController::class, 'addToCart'])->name('add-cart');
@@ -35,7 +34,10 @@ Route::post('update-cart', [CartController::class, 'updateCartItem'])->name('upd
 Route::get('remove-cart-item', [CartController::class, 'removeCartItem'])->name('remove-cart-item');
 Route::get('clear-cart', [CartController::class, 'clearCart'])->name('clear-cart');
 
+Route::get('/getUserDetails',[AuthController::class,"getUserDetails"])->name('getUserDetails');
 Route::get('/getAllCategory',[HomeController::class,"getAllCategory"])->name('getAllCategory');
 Route::get('/getAllShopsByCategory',[HomeController::class,"getAllShopsByCategory"])->name('getAllShopsByCategory');
 Route::get('/getAllProductsByShop',[HomeController::class,"getAllProductsByShop"])->name('getAllProductsByShop');
 Route::get('/getAllSlider',[HomeController::class,"getAllSlider"])->name('getAllSlider');
+
+
