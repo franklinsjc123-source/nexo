@@ -7,7 +7,7 @@ use App\Models\Category;
 use App\Models\Shop;
 use App\Models\Slider;
 use App\Models\Product;
-use App\Models\Pincode;
+use App\Models\PinCode;
 
 use Illuminate\Http\Request;
 
@@ -24,7 +24,7 @@ class HomeController extends Controller
 
         if ($pincode) {
 
-            $checkPincodeExistence = Pincode::where('pincode', $pincode)->exists();
+            $checkPincodeExistence = PinCode::where('pincode', $pincode)->exists();
 
 
             // If pincode exists, fetch data
