@@ -70,9 +70,9 @@ class HomeController extends Controller
             'shopData:id,shop_name',
             'unitData:id,unit_name'
         ])
-            ->where('shop', $shop_id)
-            ->where('status', 1)
-            ->get();
+        ->where('shop', $shop_id)
+        ->where('status', 1)
+        ->get();
 
         if ($products->isEmpty()) {
             return response()->json([

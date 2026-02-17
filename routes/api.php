@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OrderController;
+use App\Http\Controllers\Api\AdressController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -35,6 +36,7 @@ Route::post('update-cart', [CartController::class, 'updateCartItem'])->name('upd
 Route::get('remove-cart-item', [CartController::class, 'removeCartItem'])->name('remove-cart-item');
 Route::get('clear-cart', [CartController::class, 'clearCart'])->name('clear-cart');
 
+Route::post('add-address', [AdressController::class, 'addAddress'])->name('add-address');
 
 
 
