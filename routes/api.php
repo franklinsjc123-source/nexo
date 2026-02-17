@@ -35,11 +35,17 @@ Route::post('update-cart', [CartController::class, 'updateCartItem'])->name('upd
 Route::get('remove-cart-item', [CartController::class, 'removeCartItem'])->name('remove-cart-item');
 Route::get('clear-cart', [CartController::class, 'clearCart'])->name('clear-cart');
 
+
+
+
 Route::get('/getUserDetails',[AuthController::class,"getUserDetails"])->name('getUserDetails');
 Route::get('/getAllCategory',[HomeController::class,"getAllCategory"])->name('getAllCategory');
 Route::get('/getAllShopsByCategory',[HomeController::class,"getAllShopsByCategory"])->name('getAllShopsByCategory');
 Route::get('/getAllProductsByShop',[HomeController::class,"getAllProductsByShop"])->name('getAllProductsByShop');
 Route::get('/getAllSlider',[HomeController::class,"getAllSlider"])->name('getAllSlider');
+
+Route::get('/home-page',[HomeController::class,"getHomePageDetails"])->name('home-page');
+
 
 
 Route::post('/placeDirectOrder',[OrderController::class,"placeDirectOrder"])->name('placeDirectOrder');

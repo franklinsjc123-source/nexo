@@ -7,25 +7,48 @@ use App\Models\Category;
 use App\Models\Shop;
 use App\Models\Slider;
 use App\Models\Product;
+use App\Models\Pincode;
 
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
 
-    public function getAllCategory()
+
+
+
+    public function getHomePageDetails(Request $request)
     {
 
-        $category = Category::where('status', 1)->get();
+        $pincode = $request->input('pincode');
 
-        if ($category->isNotEmpty()) {
-            $success_array = array('status' => 'success', 'message' => 'Data received successfully', 'data' =>  $category);
-            return response()->json(array($success_array), 200);
+        if ($pincode) {
+
+            $checkPincodeExistence = Pincode::where('pincode', $pincode)->exists();
+
+
+            // If pincode exists, fetch data
+            $category = Category::where('status', 1)->get();
+            $shops    = Shop::where('status', 1)->get();
+            $slider   = Slider::where('status', 1)->get();
+
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Data received successfully',
+                'delivery' => !$checkPincodeExistence ? 'Delivery is not available for this pincode.' : 'Delivery is available.',
+                'data'    => [
+                    'categories' => $category,
+                    'shops'      => $shops,
+                    'sliders'    => $slider,
+                ]
+            ], 200);
         } else {
-            $error_array = array('status' => 'error', 'message' => 'Records not found');
+
+            $error_array = array('status' => 'error', 'message' => 'Fetching pincode Error');
             return response()->json(array($error_array), 400);
         }
     }
+
 
 
     public function getAllShopsByCategory(Request $request)
@@ -87,23 +110,5 @@ class HomeController extends Controller
             'message' => 'Data received successfully',
             'data' => $data
         ], 200);
-    }
-
-
-
-
-    public function getAllSlider(Request $request)
-    {
-
-
-        $slider = Slider::where('status', 1)->get();
-
-        if ($slider->isNotEmpty()) {
-            $success_array = array('status' => 'success', 'message' => 'Data received successfully', 'data' =>  $slider);
-            return response()->json(array($success_array), 200);
-        } else {
-            $error_array = array('status' => 'error', 'message' => 'Records not found');
-            return response()->json(array($error_array), 400);
-        }
     }
 }

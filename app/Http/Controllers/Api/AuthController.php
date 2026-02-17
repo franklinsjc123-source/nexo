@@ -126,8 +126,9 @@ class AuthController extends Controller
                     'is_verified' => 1
                 );
                 User::where('id', $user_id)->update($updateArray);
+                $user_data    = User::where('id',  $user_id )->first();
 
-                $success_array = array('status' => 'success', 'message' => 'Otp verified successfully');
+                $success_array = array('status' => 'success', 'message' => 'Otp verified successfully','data' => $user_data);
                 return response()->json(array($success_array), 200);
 
             } else {
