@@ -114,7 +114,9 @@ Route::middleware('auth.request')->group(function () {
 
     //direct orders Management
     Route::get("direct-orders", [OrderController::class, 'directOrders'])->name('direct-orders');
+    Route::get("addDirectOrderBill/{id}", [OrderController::class, 'addDirectOrderBill'])->name('addDirectOrderBill');
     Route::post('direct-orders-status-update', [OrderController::class, 'updateOrderStatus'])->name('direct-orders-status-update');
+    Route::post('storeUpdateDirectOrder', [OrderController::class, 'storeUpdateDirectOrder'])->name('storeUpdateDirectOrder');
 
     //Delivery Person Management
     Route::get("deliveryPerson", [DeliveryPersonController::class, 'deliveryPerson'])->name('deliveryPerson');

@@ -55,13 +55,15 @@
                                     <a href="javascript:void(0)" class="btn btn-sm btn-warning " data-id="<?= $row->id ?>" data-status="<?= $row->status ?>" data-toggle="tooltip" title="Edit">  <i class="bi bi-pencil-fill"></i>
                                     </a>
 
+                                      <a href="{{ route('addDirectOrderBill', [$row->id]) }}" class="btn btn-sm btn-secondary " data-toggle="tooltip" title="View">  <i class="bi bi-eye"></i>
+                                    </a>
+
                                      {{-- <a href="javascript:void(0)" class="btn btn-sm btn-warning editOrder" data-id="<?= $row->id ?>" data-status="<?= $row->status ?>" data-toggle="tooltip" title="Edit">  <i class="bi bi-pencil-fill"></i>
                                     </a> --}}
                                 </td>
                             </tr>
 
-                     <?php $i++;
-                                            }?>
+                     <?php $i++; } ?>
 
                 </tbody>
             </table>
@@ -81,9 +83,9 @@
             <div class="modal-body" id="orderStatusModalBody">
 
                 <div class="container-fluid ">
-<form method="POST" id="orderStatusForm" id="orderStatusForm"
-      action="{{ route('direct-orders-status-update') }}">
-    @csrf
+            <form method="POST" id="orderStatusForm" id="orderStatusForm"
+                action="{{ route('direct-orders-status-update') }}">
+                @csrf
 
 
         <div class="attendance-form">
