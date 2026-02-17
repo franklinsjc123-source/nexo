@@ -224,7 +224,7 @@ use Illuminate\Support\Facades\Auth;
                             <li class="pe-slide-item">
                                 <a href="<?= route('unit') ?>" class="pe-nav-link
                                         @if(request()->routeIs(['unit', 'addUnit'])) active @endif">
-                                    Unit
+                                    Unit dgd
                                 </a>
                             </li>
                          @endif
@@ -308,7 +308,7 @@ use Illuminate\Support\Facades\Auth;
                             <span class="pe-nav-content">Customers </span>
                         </a>
                     </li>
-                @endif  
+                @endif
 
                 @if(auth()->check() && auth()->user()->hasPermission('Delivery-Persons'))
 
