@@ -14,9 +14,6 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
 
-
-
-
     public function getHomePageDetails(Request $request)
     {
 
@@ -26,11 +23,9 @@ class HomeController extends Controller
 
             $checkPincodeExistence = PinCode::where('pincode', $pincode)->exists();
 
-
-            // If pincode exists, fetch data
-            $category = Category::where('status', 1)->get();
-            $shops    = Shop::where('status', 1)->get();
-            $slider   = Slider::where('status', 1)->get();
+            $category   = Category::where('status', 1)->get();
+            $shops      = Shop::where('status', 1)->inRandomOrder()->limit(8)->get();
+            $slider     = Slider::where('status', 1)->get();
 
             return response()->json([
                 'status'  => 'success',
