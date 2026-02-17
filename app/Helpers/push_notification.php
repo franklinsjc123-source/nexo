@@ -1,12 +1,11 @@
 <?php
 
-use App\Models\Shop;
+use App\Models\User;
+if (!function_exists('sendRequestNotification')) {
 
-if (!function_exists('sendDirectOrderNotificationForShop')) {
-
-    function sendDirectOrderNotificationForShop($title = '', $msg = '',$shop_id = '')
+    function sendRequestNotification($title = '', $msg = '')
     {
-        $deviceTokens = Shop::where('id', '=', '1')
+        $deviceTokens = User::where('auth_level', '!=', '1')
                             ->whereNotNull('device_id')
                             ->pluck('device_id')
                             ->toArray();
@@ -19,12 +18,16 @@ if (!function_exists('sendDirectOrderNotificationForShop')) {
             $payload = [
                 'message' => [
                     'token' => $token,
+                    // 'notification' => [
+                    //     'title' => $title,
+                    //     'body'  => $msg
+                    // ],
                     'data' => [
                         'title'    => $title,
                         'message'  => $msg
                     ],
                      'android' => [
-                         "priority" => "HIGH",
+                         "priority" => "HIGH",                       
                     ]
                 ]
             ];
