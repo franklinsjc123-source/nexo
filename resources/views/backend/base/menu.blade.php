@@ -224,7 +224,7 @@ use Illuminate\Support\Facades\Auth;
                             <li class="pe-slide-item">
                                 <a href="<?= route('unit') ?>" class="pe-nav-link
                                         @if(request()->routeIs(['unit', 'addUnit'])) active @endif">
-                                    Unit dgd
+                                    Unit 
                                 </a>
                             </li>
                          @endif
