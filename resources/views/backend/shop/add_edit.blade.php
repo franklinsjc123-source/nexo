@@ -5,6 +5,8 @@
 
 
     $id                     = isset($records->id) ? $records->id : '';
+    $user_id                = isset($records->user_id) ? $records->user_id : '';
+    $email                  = isset($records->userData->email) ? $records->userData->email : '';
     $category               = isset($records->category) ? $records->category : '';
     $shop_name              = isset($records->shop_name) ? $records->shop_name : '';
     $gst_no                 = isset($records->gst_no) ? $records->gst_no : '';
@@ -21,7 +23,6 @@
      <div class="container-fluid">
 
          <div class="d-flex align-items-center mt-2 mb-2">
-
              <div class="flex-shrink-0">
                  <nav aria-label="breadcrumb">
                      <ol class="breadcrumb justify-content-end mb-0">
@@ -31,6 +32,7 @@
                  </nav>
              </div>
          </div>
+         
          <div class="row">
              <div class="col-xl-12 col-xxl-12">
                  <form method="POST" id="shopForm" action="<?= route('storeUpdateShop') ?>" enctype="multipart/form-data">
@@ -46,6 +48,7 @@
                                  </div>
                              </div>
                              <input type="hidden" name="id" value="<?= $id ?>" />
+                             <input type="hidden" name="user_id" value="<?= $user_id ?>" />
                              <div class="card-body">
                                  <div class="row g-4">
 
@@ -79,6 +82,12 @@
                                             </label>
                                             <input type="text" class="form-control" id="contact_no" name="contact_no" placeholder="Enter Contact Number" value="<?= old('contact_no',$contact_no) ?? '' ?>" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g,'');">
                                             @error('contact_no') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div class="col-xl-4">
+                                            <label for="email" class="form-label">Email <span class="text-danger"> *</span></label>
+                                            <input type="text" value="<?php echo old('email',$email) ?>" class="form-control" id="email" name="email" placeholder="Enter Email" onkeyup="commonCheckExist(this,'users', 'email', this.value)">
+                                            <span class="text-danger error-message"></span>
                                         </div>
 
                                         <div class="col-xl-4">
@@ -164,6 +173,9 @@
                 contact_no: {
                     required: true
                 },
+                email: {
+                    required: true
+                },
                 start_time: {
                     required: true
                 },
@@ -185,8 +197,11 @@
                 category: {
                     required: "Please enter category name"
                 },
-                 contact_no: {
+                contact_no: {
                     required: "Please enter contact no"
+                },
+                email: {
+                    required: "Please enter email id"
                 },
                 shop_name: {
                     required: "Please enter shop name"

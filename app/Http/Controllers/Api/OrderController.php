@@ -35,6 +35,9 @@ class OrderController extends Controller
             $order = DirectOrder::create($insertArray);
 
             if ($order) {
+
+                sendDirectOrderNotificationForShop('nexocart', 'Notification for order',$shop_id);
+
                 $success_array = array('status' => 'success', 'message' => 'Order placed successfully');
                 return response()->json(array($success_array), 200);
             } else {
@@ -47,4 +50,6 @@ class OrderController extends Controller
             return response()->json(array($error_array), 400);
         }
     }
+
+
 }
