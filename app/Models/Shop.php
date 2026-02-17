@@ -15,4 +15,9 @@ class Shop extends Model
     {
         return $this->belongsTo(Category::class, 'category', 'id');
     }
+
+      public function userData()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

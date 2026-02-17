@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Shop;
+use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Traits\PermissionCheckTrait;
@@ -14,7 +15,7 @@ class ShopController extends Controller
 
     public function shop()
     {
-         if (!$this->checkPermission('Shop')) {
+        if (!$this->checkPermission('Shop')) {
             return view('unauthorized');
         }
 
@@ -30,13 +31,12 @@ class ShopController extends Controller
     {
         $records = '';
         if ($id > 0) {
-            $records   =  Shop::where('id', $id )->first();
-
+            $records   =  Shop::where('id', $id)->first();
         }
 
-          $categoryData   =  Category::orderBy('category_name', 'ASC')->get();
+        $categoryData   =  Category::orderBy('category_name', 'ASC')->get();
 
-        return view('backend.shop.add_edit', compact('records', 'id','categoryData'));
+        return view('backend.shop.add_edit', compact('records', 'id', 'categoryData'));
     }
 
     public function storeUpdateShop(Request $request)
@@ -47,7 +47,9 @@ class ShopController extends Controller
         ]);
 
         $id         = $request->id ?? 0;
+        $user_id    = $request->user_id ?? 0;
         $category   = $request->category ?? '';
+        $email      = $request->email ?? '';
         $shop_name  = $request->shop_name ?? '';
         $contact_no = $request->contact_no ?? '';
         $start_time = $request->start_time ?? '';
@@ -63,8 +65,27 @@ class ShopController extends Controller
             $imageUrl = url('uploads/shop/' . $imageName);
         }
 
+
+        $userArray = array(
+            'name'          => $shop_name,
+            'email'         => $email,
+            'mobile'        => $contact_no,
+            'auth_level'    => 4,
+        );
+
+
+        if ($user_id > 0) {
+
+           User::where('id',$user_id)->update($userArray);
+
+        } else {
+            $user = User::create($userArray);
+            $user_id =  $user->id;
+        }
+
         $data = [
             'category'      => $category,
+            'user_id'       => $user_id,
             'shop_name'     => $shop_name,
             'contact_no'    => $contact_no,
             'contact_no'    => $contact_no,

@@ -168,7 +168,163 @@ use Illuminate\Support\Facades\Auth;
 
 
 
-                <li class="pe-slide pe-has-sub active">
+
+
+
+
+
+                <li class="pe-slide pe-has-sub">
+
+                    <a href="#collapseLogistics-mas" class="pe-nav-link" data-bs-toggle="collapse"
+                        aria-expanded="false"
+                        aria-controls="collapseLogistics">
+                        <i class="bi bi-bag-fill pe-nav-icon"></i>
+                        <span class="pe-nav-content">Product Master</span>
+                        <i class="ri-arrow-down-s-line pe-nav-arrow"></i>
+                    </a>
+
+                    <ul class="pe-slide-menu collapse " id="collapseLogistics-mas">
+
+                        <li class="slide pe-nav-content1">
+                            <a href="javascript:void(0)">Product Masters</a>
+                        </li>
+
+                        @if(auth()->check() && auth()->user()->hasPermission('Category'))
+                            <li class="pe-slide-item">
+                                <a href="<?= route('category') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['category', 'addCategory'])) active @endif">
+                                    Category
+                                </a>
+                            </li>
+                         @endif
+
+
+
+
+                        @if(auth()->check() && auth()->user()->hasPermission('Shop'))
+                         <li class="pe-slide-item">
+                            <a href="<?= route('shop') ?>" class="pe-nav-link
+                                @if(request()->routeIs(['shop', 'addShop'])) active @endif">
+                                Shop
+                            </a>
+                        </li>
+                        @endif
+
+
+                        @if(auth()->check() && auth()->user()->hasPermission('Product'))
+                        <li class="pe-slide-item">
+                            <a href="<?= route('product') ?>" class="pe-nav-link
+                                @if(request()->routeIs(['product', 'addProduct'])) active @endif">
+                                Product
+                            </a>
+                        </li>
+                        @endif
+
+                        @if(auth()->check() && auth()->user()->hasPermission('Unit'))
+                            <li class="pe-slide-item">
+                                <a href="<?= route('unit') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['unit', 'addUnit'])) active @endif">
+                                    Unit
+                                </a>
+                            </li>
+                         @endif
+
+
+                         @if(auth()->check() && auth()->user()->hasPermission('Product-Upload'))
+                        <li class="pe-slide-item">
+                            <a href="<?= route('product-upload') ?>" class="pe-nav-link
+                                @if(request()->routeIs(['product-upload'])) active @endif">
+                                Product Upload
+                            </a>
+                        </li>
+
+
+                        @endif
+
+
+
+
+                    </ul>
+                </li>
+
+
+
+                @if(auth()->check() && auth()->user()->hasPermission('Offers'))
+                   <li class="pe-slide pe-has-sub">
+                        <a href="{{ route('offers') }}" class="pe-nav-link">
+                            <i class="bi  bi-percent pe-nav-icon"></i>
+                            <span class="pe-nav-content">Offers </span>
+                        </a>
+                    </li>
+                @endif
+
+
+
+
+
+                @if(auth()->check() && auth()->user()->hasPermission('Category'))
+                  <li class="pe-slide pe-has-sub">
+
+                    <a href="#collapseLogistics-order" class="pe-nav-link" data-bs-toggle="collapse"
+                        aria-expanded="false"
+                        aria-controls="collapseLogistics">
+                        <i class="bi bi-bag-fill pe-nav-icon"></i>
+                        <span class="pe-nav-content"> Orders</span>
+                        <i class="ri-arrow-down-s-line pe-nav-arrow"></i>
+                    </a>
+
+                    <ul class="pe-slide-menu collapse " id="collapseLogistics-order">
+
+                        <li class="slide pe-nav-content1">
+                            <a href="javascript:void(0)">Orders </a>
+                        </li>
+
+
+                            <li class="pe-slide-item">
+                                <a href="<?= route('orders') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['orders'])) active @endif">
+                                    Orders
+                                </a>
+                            </li>
+
+
+                            <li class="pe-slide-item">
+                                <a href="<?= route('direct-orders') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['direct-orders'])) active @endif">
+                                    Direct  Orders
+                                </a>
+                            </li>
+
+
+                    </ul>
+                </li>
+
+                   @endif
+
+                     @if(auth()->check() && auth()->user()->hasPermission('Customers'))
+                    <li class="pe-slide pe-has-sub">
+                        <a href="{{ route('customers') }}" class="pe-nav-link">
+                            <i class="bi bi-person-fill pe-nav-icon"></i>
+                            <span class="pe-nav-content">Customers </span>
+                        </a>
+                    </li>
+                @endif  
+
+                @if(auth()->check() && auth()->user()->hasPermission('Delivery-Persons'))
+
+                   <li class="pe-slide pe-has-sub">
+                    <a href="{{ route('deliveryPerson') }}" class="pe-nav-link">
+                        <i class="bi bi-person-fill pe-nav-icon"></i>
+                        <span class="pe-nav-content">Delivery Person </span>
+                    </a>
+                </li>
+                @endif
+
+
+
+
+
+                      <li class="pe-slide pe-has-sub active">
 
                     <a href="#collapseLogistics" class="pe-nav-link" data-bs-toggle="collapse"
                         aria-expanded="true"
@@ -248,148 +404,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 
-                <li class="pe-slide pe-has-sub">
 
-                    <a href="#collapseLogistics-mas" class="pe-nav-link" data-bs-toggle="collapse"
-                        aria-expanded="false"
-                        aria-controls="collapseLogistics">
-                        <i class="bi bi-bag-fill pe-nav-icon"></i>
-                        <span class="pe-nav-content">Product Master</span>
-                        <i class="ri-arrow-down-s-line pe-nav-arrow"></i>
-                    </a>
-
-                    <ul class="pe-slide-menu collapse " id="collapseLogistics-mas">
-
-                        <li class="slide pe-nav-content1">
-                            <a href="javascript:void(0)">Product Masters</a>
-                        </li>
-
-                        @if(auth()->check() && auth()->user()->hasPermission('Category'))
-                            <li class="pe-slide-item">
-                                <a href="<?= route('category') ?>" class="pe-nav-link
-                                        @if(request()->routeIs(['category', 'addCategory'])) active @endif">
-                                    Category
-                                </a>
-                            </li>
-                         @endif
-
-                           @if(auth()->check() && auth()->user()->hasPermission('Unit'))
-                            <li class="pe-slide-item">
-                                <a href="<?= route('unit') ?>" class="pe-nav-link
-                                        @if(request()->routeIs(['unit', 'addUnit'])) active @endif">
-                                    Unit
-                                </a>
-                            </li>
-                         @endif
-
-
-                        @if(auth()->check() && auth()->user()->hasPermission('Shop'))
-                         <li class="pe-slide-item">
-                            <a href="<?= route('shop') ?>" class="pe-nav-link
-                                @if(request()->routeIs(['shop', 'addShop'])) active @endif">
-                                Shop
-                            </a>
-                        </li>
-                        @endif
-
-
-                        @if(auth()->check() && auth()->user()->hasPermission('Product'))
-                        <li class="pe-slide-item">
-                            <a href="<?= route('product') ?>" class="pe-nav-link
-                                @if(request()->routeIs(['product', 'addProduct'])) active @endif">
-                                Product
-                            </a>
-                        </li>
-                        @endif
-
-
-                         @if(auth()->check() && auth()->user()->hasPermission('Product-Upload'))
-                        <li class="pe-slide-item">
-                            <a href="<?= route('product-upload') ?>" class="pe-nav-link
-                                @if(request()->routeIs(['product-upload'])) active @endif">
-                                Product Upload
-                            </a>
-                        </li>
-
-
-                        @endif
-
-
-
-
-                    </ul>
-                </li>
-
-                @if(auth()->check() && auth()->user()->hasPermission('Customers'))
-                    <li class="pe-slide pe-has-sub">
-                        <a href="{{ route('customers') }}" class="pe-nav-link">
-                            <i class="bi bi-person-fill pe-nav-icon"></i>
-                            <span class="pe-nav-content">Customers </span>
-                        </a>
-                    </li>
-                @endif
-
-                @if(auth()->check() && auth()->user()->hasPermission('Offers'))
-                   <li class="pe-slide pe-has-sub">
-                        <a href="{{ route('offers') }}" class="pe-nav-link">
-                            <i class="bi  bi-percent pe-nav-icon"></i>
-                            <span class="pe-nav-content">Offers </span>
-                        </a>
-                    </li>
-                @endif
-
-
-
-
-
-                @if(auth()->check() && auth()->user()->hasPermission('Category'))
-                  <li class="pe-slide pe-has-sub">
-
-                    <a href="#collapseLogistics-order" class="pe-nav-link" data-bs-toggle="collapse"
-                        aria-expanded="false"
-                        aria-controls="collapseLogistics">
-                        <i class="bi bi-bag-fill pe-nav-icon"></i>
-                        <span class="pe-nav-content"> Orders</span>
-                        <i class="ri-arrow-down-s-line pe-nav-arrow"></i>
-                    </a>
-
-                    <ul class="pe-slide-menu collapse " id="collapseLogistics-order">
-
-                        <li class="slide pe-nav-content1">
-                            <a href="javascript:void(0)">Orders </a>
-                        </li>
-
-
-                            <li class="pe-slide-item">
-                                <a href="<?= route('orders') ?>" class="pe-nav-link
-                                        @if(request()->routeIs(['orders'])) active @endif">
-                                    Orders
-                                </a>
-                            </li>
-
-
-                            <li class="pe-slide-item">
-                                <a href="<?= route('direct-orders') ?>" class="pe-nav-link
-                                        @if(request()->routeIs(['direct-orders'])) active @endif">
-                                    Direct  Orders
-                                </a>
-                            </li>
-
-
-                    </ul>
-                </li>
-
-                   @endif
-
-                @if(auth()->check() && auth()->user()->hasPermission('Delivery-Persons'))
-
-                   <li class="pe-slide pe-has-sub">
-                    <a href="{{ route('deliveryPerson') }}" class="pe-nav-link">
-                        <i class="bi bi-person-fill pe-nav-icon"></i>
-                        <span class="pe-nav-content">Delivery Person </span>
-                    </a>
-                </li>
-                @endif
                 @if(auth()->check() && auth()->user()->hasPermission('Reports'))
 
                  <li class="pe-slide pe-has-sub">
