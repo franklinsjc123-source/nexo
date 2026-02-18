@@ -50,7 +50,7 @@ class HomeController extends Controller
     {
 
         $category_id = $request->input('category_id');
-        $shops = Shop::where('category', $category_id)->where('status', 1)->get();
+        $shops = Shop::whereRaw("FIND_IN_SET(?, category)", [$category_id])->where('status', 1)->get();
 
         if ($shops->isNotEmpty()) {
             $success_array = array('status' => 'success', 'message' => 'Data received successfully', 'data' =>  $shops);
@@ -64,6 +64,7 @@ class HomeController extends Controller
     public function getAllProductsByShop(Request $request)
     {
         $shop_id = $request->input('shop_id');
+        $category_id = $request->input('category_id');
 
         $products = Product::with([
             'categoryData:id,category_name',
@@ -71,6 +72,7 @@ class HomeController extends Controller
             'unitData:id,unit_name'
         ])
         ->where('shop', $shop_id)
+        ->where('category', $category_id)
         ->where('status', 1)
         ->get();
 
