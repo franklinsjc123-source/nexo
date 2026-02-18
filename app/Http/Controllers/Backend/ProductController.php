@@ -21,8 +21,12 @@ class ProductController extends Controller
             return view('unauthorized');
         }
 
-
-        $records   =  Product::orderBy('id', 'ASC')->get();
+        if (Auth::user()->auth_level == 4) {
+            $shop_id    =  Shop::where('user_id', auth()->id())->value('id');
+            $records    =  Product::where('shop',$shop_id)->orderBy('id', 'ASC')->get();
+        } else {
+            $records   =  Product::orderBy('id', 'ASC')->get();
+        }
 
         return view('backend.products.list', compact('records'));
     }
@@ -37,9 +41,9 @@ class ProductController extends Controller
         if (Auth::user()->auth_level == 4) {
 
             $categoryIds      = Shop::where('user_id', auth()->id())->value('category');
+
             $categoryIdsArray = $categoryIds ? explode(',', $categoryIds) : [];
             $categoryData     = Category::where('status', 1)->whereIn('id', $categoryIdsArray)->orderBy('category_name', 'ASC')->get();
-
         } else {
             $categoryData   =  Category::where('status', 1)->orderBy('category_name', 'ASC')->get();
         }
