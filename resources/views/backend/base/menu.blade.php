@@ -423,12 +423,6 @@ use Illuminate\Support\Facades\Auth;
                 @endif
 
 
-
-
-
-
-
-
                 <li class="pe-slide pe-has-sub mobile-only">
                     <a href="<?= route('logout') ?>" class="pe-nav-link">
                         <i class="bi bi-box-arrow-right pe-nav-logout"></i>
