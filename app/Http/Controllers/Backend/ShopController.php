@@ -49,7 +49,6 @@ class ShopController extends Controller
 
         $id         = $request->id ?? 0;
         $user_id    = $request->user_id ?? 0;
-        $category   = $request->category ?? '';
         $email      = $request->email ?? '';
         $shop_name  = $request->shop_name ?? '';
         $contact_no = $request->contact_no ?? '';
@@ -58,6 +57,14 @@ class ShopController extends Controller
         $gst_no     = $request->gst_no ?? '';
         $address    = $request->address ?? '';
         $imageUrl   = $request->old_photo_path ?? '';
+
+        if (is_array($request->category)) {
+            $category = implode(',', $request->category);
+        } else {
+            $category = $request->category ?? '';
+        }
+
+
 
         if ($request->hasFile('photo_path')) {
             $file = $request->file('photo_path');

@@ -58,12 +58,18 @@
 
                                     <div class="col-xl-4">
                                         <label class="form-label">Shop Category <span class="text-danger">*</span></label>
-                                        <select class="form-control select2" id="category" name="category">
+                                        <select class="form-control select2" id="category" name="category[]" multiple>
+                                            @php
+                                                $selectedCategories = isset($category) ? explode(',', $category) : [];
+                                            @endphp
                                             <option value="">--select--</option>
                                                 <?php
                                                     if (isset($categoryData)) {
                                                         foreach ($categoryData as $val) { ?>
-                                                        <option <?=(old('category', $category) == $val->id)? 'selected':'' ?> value="<?php echo $val->id ?>"><?php echo ucwords($val->category_name) ?></option>
+                                                        <option value="{{ $val->id }}"
+                                                            {{ in_array($val->id, old('category', $selectedCategories)) ? 'selected' : '' }}>
+                                                            {{ ucwords($val->category_name) }}
+                                                        </option>
                                                 <?php }
                                                 }
                                                 ?>
@@ -79,6 +85,7 @@
                                             @error('shop_name') <span class="text-danger">{{$message}}</span> @enderror
 
                                         </div>
+
 
                                         <div class="col-xl-4">
                                             <label for="contact_no" class="form-label">

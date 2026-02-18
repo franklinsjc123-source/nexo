@@ -42,7 +42,7 @@
                             ?>
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
-                                <td><?= optional($row->categoryData)->category_name ?? '-' ?></td>
+                                <td>{{ $row->category_names }}</td>
                                 <td><?= $row->shop_name ?></td>
                                 <td><?= date('h:i A', strtotime($row->start_time)) ?></td>
                                 <td><?= date('h:i A', strtotime($row->end_time)) ?></td>

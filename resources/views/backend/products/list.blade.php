@@ -27,7 +27,9 @@
                     <tr>
                         <th>S.No</th>
                         <th>Category</th>
+                       <?php  if(Auth::user()->auth_level != 4)  { ?>
                         <th>Shop Name</th>
+                        <?php } ?>
                         <th>Product Name</th>
                         <th>Quantity (unit)</th>
                         <th>Original Price</th>
@@ -45,7 +47,10 @@
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
                                 <td><?= optional($row->categoryData)->category_name ?? '-' ?></td>
-                                <td><?= optional($row->shopData)->shop_name ?? '-' ?></td>
+                                <?php  if(Auth::user()->auth_level != 4)  { ?>
+                                    <td><?= optional($row->shopData)->shop_name ?? '-' ?></td>
+                                <?php } ?>
+
                                 <td><?= $row->product_name ?></td>
                                 <td>
                                     {{ $row->qty }}{{ optional($row->unitData)->unit_name ? ' ('.$row->unitData->unit_name.')' : '' }}

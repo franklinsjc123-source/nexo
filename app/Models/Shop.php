@@ -16,8 +16,22 @@ class Shop extends Model
         return $this->belongsTo(Category::class, 'category', 'id');
     }
 
-      public function userData()
+    public function userData()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+
+    public function getCategoryNamesAttribute()
+    {
+        if (!$this->category) {
+            return '-';
+        }
+
+        $ids = explode(',', $this->category);
+
+        return Category::whereIn('id', $ids)
+            ->pluck('category_name')
+            ->implode(', ');
     }
 }
