@@ -106,9 +106,6 @@ class ProductController extends Controller
         $shops = Shop::whereRaw("FIND_IN_SET(?, category)", [$request->category_id])
             ->where('status', 1)
             ->get(['id', 'shop_name']);
-
-
-
         return $shops;
     }
 }
