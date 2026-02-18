@@ -7,7 +7,7 @@ use App\Models\Shop;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Unit;
-
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Traits\PermissionCheckTrait;
 
@@ -17,7 +17,7 @@ class ProductController extends Controller
 
     public function product()
     {
-         if (!$this->checkPermission('Product')) {
+        if (!$this->checkPermission('Product')) {
             return view('unauthorized');
         }
 
@@ -34,11 +34,20 @@ class ProductController extends Controller
             $records   =  Product::where('id', $id)->first();
         }
 
-        $categoryData   =  Category::orderBy('category_name', 'ASC')->get();
-        $shopData       =  Shop::orderBy('shop_name', 'ASC')->get();
-        $unitData       =  Unit::orderBy('unit_name', 'ASC')->get();
+        if (Auth::user()->auth_level == 4) {
 
-        return view('backend.products.add_edit', compact('records', 'id', 'categoryData', 'shopData','unitData'));
+            $categoryIds      = Shop::where('user_id', auth()->id())->value('category');
+            $categoryIdsArray = $categoryIds ? explode(',', $categoryIds) : [];
+            $categoryData     = Category::where('status', 1)->whereIn('id', $categoryIdsArray)->orderBy('category_name', 'ASC')->get();
+
+        } else {
+            $categoryData   =  Category::where('status', 1)->orderBy('category_name', 'ASC')->get();
+        }
+
+        $shopData       =  Shop::where('status', 1)->orderBy('shop_name', 'ASC')->get();
+        $unitData       =  Unit::where('status', 1)->orderBy('unit_name', 'ASC')->get();
+
+        return view('backend.products.add_edit', compact('records', 'id', 'categoryData', 'shopData', 'unitData'));
     }
 
     public function storeUpdateProduct(Request $request)
@@ -93,8 +102,13 @@ class ProductController extends Controller
 
     public function getShopsByCategory(Request $request)
     {
-        return Shop::where('category', $request->category_id)
+
+        $shops = Shop::whereRaw("FIND_IN_SET(?, category)", [$request->category_id])
             ->where('status', 1)
             ->get(['id', 'shop_name']);
+
+
+
+        return $shops;
     }
 }

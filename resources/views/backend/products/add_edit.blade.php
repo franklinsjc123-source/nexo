@@ -51,33 +51,53 @@
                              <div class="card-body">
                                  <div class="row g-4">
 
-                                    <div class="col-xl-4">
-                                        <label class="form-label"> Category <span class="text-danger">*</span></label>
-                                        <select class="form-control select2" id="category" name="category">
-                                            <option value="">--select--</option>
-                                                <?php
-                                                    if (isset($categoryData)) {
-                                                        foreach ($categoryData as $val) { ?>
-                                                        <option <?=(old('category', $category) == $val->id)? 'selected':'' ?> value="<?php echo $val->id ?>"><?php echo ucwords($val->category_name) ?></option>
-                                                <?php }
-                                                }
-                                                ?>
-                                        </select>
 
-                                        @error('category') <span class="text-danger">{{$message}}</span> @enderror
+                                        <div class="col-xl-4">
+                                            <label class="form-label"> Category <span class="text-danger">*</span></label>
+                                            <select class="form-control select2" id="category" name="category">
+                                                <option value="">--select--</option>
+                                                    <?php
+                                                        if (isset($categoryData)) {
+                                                            foreach ($categoryData as $val) { ?>
+                                                            <option <?=(old('category', $category) == $val->id)? 'selected':'' ?> value="<?php echo $val->id ?>"><?php echo ucwords($val->category_name) ?></option>
+                                                    <?php }
+                                                    }
+                                                    ?>
+                                            </select>
 
-                                    </div>
+                                            @error('category') <span class="text-danger">{{$message}}</span> @enderror
 
-                                     <div class="col-xl-4">
-                                        <label class="form-label"> Shop <span class="text-danger">*</span></label>
-                                        <select class="form-control select2" id="shop" name="shop">
-                                            <option value="">--select--</option>
+                                        </div>
 
-                                        </select>
+                                   
 
-                                        @error('shop') <span class="text-danger">{{$message}}</span> @enderror
 
-                                    </div>
+
+
+                                    <?php
+
+                                      if(Auth::user()->auth_level == 4)  {
+
+                                           $shop_id = \App\Models\Shop::where('user_id', auth()->id())->value('id');
+                                        ?>
+                                        <input type="hidden" name="shop"  value="{{  $shop_id }}">
+
+                                    <?php  } else { ?>
+                                        <div class="col-xl-4">
+                                            <label class="form-label"> Shop <span class="text-danger">*</span></label>
+                                            <select class="form-control select2" id="shop" name="shop">
+                                                <option value="">--select--</option>
+
+                                            </select>
+
+                                            @error('shop') <span class="text-danger">{{$message}}</span> @enderror
+
+                                        </div>
+
+
+                                    <?php }  ?>
+
+
 
                                         <div class="col-xl-4">
                                             <label for="contact_no" class="form-label">
