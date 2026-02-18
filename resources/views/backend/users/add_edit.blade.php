@@ -5,7 +5,7 @@
 
  <?php
      $id             = isset($record->id) ? $record->id : '';
-    $name          = isset($record->name) ? $record->name:'';
+    $name            = isset($record->name) ? $record->name:'';
     $mobile          = isset($record->mobile) ? $record->mobile:'';
     $email           = isset($record->email) ? $record->email:'';
     $status          = isset($record->status) ? $record->status:'';
@@ -49,25 +49,24 @@
                                         <h6 class="fw-bold text-success mb-0">User Details</h6>
                                     </div>
                                     <div class="row g-4">
+                                        <div class="col-xl-4">
+                                            <label for="name" class="form-label">Name <span class="text-danger"> *</span></label>
+                                            <input type="text" value="<?php echo old('name',$name) ?>" class="form-control" id="name" name="name" placeholder="Enter Name" >
+                                            <span class="text-danger error-message"></span>
+                                        </div>
 
-                                         <div class="col-xl-4">
-                                         <label for="name" class="form-label">Name <span class="text-danger"> *</span></label>
-                                         <input type="text" value="<?php echo old('name',$name) ?>" class="form-control" id="name" name="name" placeholder="Enter Name" >
-                                        <span class="text-danger error-message"></span>
-                                    </div>
 
+                                        <div class="col-xl-4">
+                                            <label for="email" class="form-label">Email <span class="text-danger"> *</span></label>
+                                            <input type="text" value="<?php echo old('email',$email) ?>" class="form-control" id="email" name="email" placeholder="Enter Email" onkeyup="commonCheckExist(this,'users', 'email', this.value)">
+                                            <span class="text-danger error-message"></span>
+                                        </div>
 
-                                    <div class="col-xl-4">
-                                         <label for="email" class="form-label">Email <span class="text-danger"> *</span></label>
-                                         <input type="text" value="<?php echo old('email',$email) ?>" class="form-control" id="email" name="email" placeholder="Enter Email" onkeyup="commonCheckExist(this,'users', 'email', this.value)">
-                                        <span class="text-danger error-message"></span>
-                                    </div>
-
-                                       <div class="col-xl-4">
-                                         <label for="mobile" class="form-label">Mobile <span class="text-danger"> *</span></label>
-                                         <input type="text" value="<?php echo  old('mobile',$mobile)?>" maxlength="10" class="form-control" id="mobile" name="mobile" placeholder="Enter Mobile" onkeyup="commonCheckExist(this,'users', 'mobile', this.value)">
-                                        <span class="text-danger error-message"></span>
-                                    </div>
+                                        <div class="col-xl-4">
+                                            <label for="mobile" class="form-label">Mobile <span class="text-danger"> *</span></label>
+                                            <input type="text" value="<?php echo  old('mobile',$mobile)?>" maxlength="10" class="form-control" id="mobile" name="mobile" placeholder="Enter Mobile" onkeyup="commonCheckExist(this,'users', 'mobile', this.value)">
+                                            <span class="text-danger error-message"></span>
+                                        </div>
 
 
 
