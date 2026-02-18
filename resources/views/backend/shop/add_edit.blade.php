@@ -148,26 +148,21 @@
 
                                         <div class="col-xl-4">
 
-                                        <label for="photo_path" class="form-label">Shop Image<span class="text-danger"> *</span>  </label>
+                                            <label for="photo_path" class="form-label">Shop Image<span class="text-danger"> *</span>  </label>
 
-                                        <input type="hidden" value="<?php echo $photo_path ?>" class="form-control"  name="old_photo_path">
-                                        <input type="file" class="form-control" id="photo_path" name="photo_path">
-                                          <input type="hidden" id="has_old_photo_path" value="<?= !empty($photo_path) ? 1 : 0 ?>">
+                                            <input type="hidden" value="<?php echo $photo_path ?>" class="form-control"  name="old_photo_path">
+                                            <input type="file" class="form-control" id="photo_path" name="photo_path">
+                                            <input type="hidden" id="has_old_photo_path" value="<?= !empty($photo_path) ? 1 : 0 ?>">
 
-                                        @if(isset($id) && $photo_path != "")
-                                                <img class="mt-2" src="<?= $photo_path ?>" alt="image description" width="200" height="100">
+                                            @if(isset($id) && $photo_path != "")
+                                                    <img class="mt-2" src="<?= $photo_path ?>" alt="image description" width="200" height="100">
+                                                @endif
+
+                                            @if($photo_path =="" )
+                                                @error('photo_path') <span class="text-danger">{{$message}}</span> @enderror
                                             @endif
-
-                                        @if($photo_path =="" )
-                                            @error('photo_path') <span class="text-danger">{{$message}}</span> @enderror
-                                        @endif
-                                    </div>
-
-
-
-
-
-                                 </div>
+                                        </div>
+                                </div>
                              </div>
                          </div>
                      </div>
