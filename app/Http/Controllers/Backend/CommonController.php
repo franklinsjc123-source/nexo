@@ -4,11 +4,8 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Company;
+use App\Models\Shop;
 use App\Models\Zone;
-use App\Models\Driver;
-use App\Models\Vehicle;
-use App\Models\Route;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -53,6 +50,8 @@ class CommonController extends Controller
 
         if($input['model'] ==  'Shop'){
             'App\\Models\\Product'::where('shop', $id)->delete();
+             $shop   =  Shop::where('id', $id)->first();
+            'App\\Models\\User'::where('id', $shop->user_id)->delete();
         }
 
 
@@ -93,7 +92,7 @@ class CommonController extends Controller
         $passwd  = $input['password'] ?? '';
         $cpasswd = $input['cpassword'] ?? '';
         $id      = $input['id'] ?? '';
-   
+
         if ($passwd == $cpasswd) {
             $pwd    = Hash::make($passwd);
             $update = User::whereId($id)->update(['password' => $pwd]);
@@ -124,74 +123,6 @@ class CommonController extends Controller
             ]);
         }
 
-    }
-
-
-
-
-
-
-
-
-    public function getZoneBasedData(Request $request)
-    {
-        $zoneId = $request->zone_id;
-
-        $companies = Company::where('zonal', $zoneId)
-            ->select('id', 'full_name')
-            ->orderBy('full_name')
-            ->get();
-
-        $drivers = Driver::where('zonal', $zoneId)
-            ->select('id', 'driver_name')
-            ->orderBy('driver_name')
-            ->get();
-
-        $vehicles = Vehicle::where('zonal', $zoneId)
-            ->select('id', 'vehicle_no')
-            ->orderBy('vehicle_no')
-            ->get();
-
-        return response()->json([
-            'companies' => $companies,
-            'vehicles' => $vehicles,
-            'drivers'   => $drivers
-        ]);
-    }
-
-    public function getCompanyBasedData(Request $request)
-    {
-        $companyId = $request->company_id;
-
-        $routes = Route::where('company', $companyId)
-            ->select('id', 'route_name')
-            ->orderBy('route_name')
-            ->get();
-
-        $vehicles = Vehicle::where('company', $companyId)
-                        ->select('id', 'vehicle_no')
-                        ->orderBy('vehicle_no')
-                        ->get();
-
-
-
-        return response()->json([ 'routes' => $routes, 'vehicles' => $vehicles]);
-    }
-
-
-    public function getVehicleBasedData(Request $request)
-    {
-        $vehicleId = $request->vehicle_id;
-
-        $vehicle = Vehicle::where('id', $vehicleId)->first();
-
-        $zones = Zone::where('id', $vehicle->zonal ?? 0)
-            ->select('id', 'zone_name')->get();
-
-        $companies = Company::where('id', $vehicle->company ?? 0)
-            ->select('id', 'full_name')->get();
-
-        return response()->json([ 'zones' => $zones, 'companies' => $companies ]);
     }
 
 

@@ -67,25 +67,25 @@ class ShopController extends Controller
         }
 
 
-        $userArray = array(
-            'name'          => $shop_name,
-            'email'         => $email,
-            'mobile'        => $contact_no,
-            'auth_level'    => 4,
-        );
+        $userArray = [
+            'name'       => $shop_name,
+            'email'      => $email,
+            'mobile'     => $contact_no,
+            'auth_level' => 4,
+        ];
 
         if ($request->password) {
-            $userArray = ['password'     => Hash::make($request->password)];
+            $userArray['password'] = Hash::make($request->password);
         }
 
         if ($user_id > 0) {
 
             User::where('id', $user_id)->update($userArray);
         } else {
-            $user = User::create($userArray);
-            $user_id =  $user->id;
-        }
 
+            $user = User::create($userArray);
+            $user_id = $user->id;
+        }
         $data = [
             'category'      => $category,
             'user_id'       => $user_id,

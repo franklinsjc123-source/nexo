@@ -94,6 +94,24 @@
                                         <span class="text-danger error-message"></span>
                                     </div>
 
+                                    <div class="col-xl-4">
+                                        <label for="password" class="form-label">
+                                            Password <span class="text-danger">*</span>
+                                        </label>
+
+                                        <div class="position-relative">
+                                            <input type="password" class="form-control pe-5" id="password" name="password" placeholder="Enter Password">
+
+                                            <span class="position-absolute top-50 end-0 translate-middle-y me-3"
+                                                style="cursor: pointer;"
+                                                onclick="togglePassword()">
+                                                <i class="fa fa-eye" id="togglePasswordIcon"></i>
+                                            </span>
+                                        </div>
+
+                                        <span class="text-danger error-message"></span>
+                                    </div>
+
                                         <div class="col-xl-4">
                                             <label for="start_time" class="form-label">
                                                 Shop Start Time <span class="text-danger">*</span>
@@ -145,23 +163,7 @@
                                         @endif
                                     </div>
 
-                                    <div class="col-xl-4">
-                                        <label for="password" class="form-label">
-                                            Password <span class="text-danger">*</span>
-                                        </label>
 
-                                        <div class="position-relative">
-                                            <input type="password" class="form-control pe-5" id="password" name="password" placeholder="Enter Password">
-
-                                            <span class="position-absolute top-50 end-0 translate-middle-y me-3"
-                                                style="cursor: pointer;"
-                                                onclick="togglePassword()">
-                                                <i class="fa fa-eye" id="togglePasswordIcon"></i>
-                                            </span>
-                                        </div>
-
-                                        <span class="text-danger error-message"></span>
-                                    </div>
 
 
 
