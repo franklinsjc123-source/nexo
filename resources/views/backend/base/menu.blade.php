@@ -262,7 +262,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 
-                @if(auth()->check() && auth()->user()->hasPermission('Category'))
+                @if(auth()->check() && auth()->user()->hasPermission('Orders'))
                   <li class="pe-slide pe-has-sub">
 
                     <a href="#collapseLogistics-order" class="pe-nav-link" data-bs-toggle="collapse"
