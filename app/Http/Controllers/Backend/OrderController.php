@@ -58,15 +58,19 @@ class OrderController extends Controller
 
         if ($id > 0) {
             $record = DirectOrder::where('id', $id)->first();
+            $order_items = DirectOrderItems::where('order_id', $id)->get();
+
         }
 
-        return view('backend.order.add_edit', compact('record'));
+        return view('backend.order.add_edit', compact('record','order_items'));
     }
 
      public function storeUpdateDirectOrder(Request $request){
 
         $input = $request->all();
         $id    = $input['id'];
+
+        DirectOrderItems::where('order_id', $id)->delete();
 
         foreach ($input['product_name'] as $i => $product_name) {
 
@@ -81,13 +85,16 @@ class OrderController extends Controller
         }
 
 
-          $pdfFileName = 'Invoice_' .$id . '_' . date('Ymd_His') . '.pdf';
+        $pdfFileName = 'Invoice_' .$id . '_' . date('Ymd_His') . '.pdf';
 
         $pdfPath = public_path('uploads/direct_order_invoice/' . $pdfFileName);
 
+        $order_details = DirectOrder::where('id', $id)->first();
+        $order_items = DirectOrderItems::where('order_id', $id)->get();
+
         $pdf = Pdf::loadView(
-            'backend.invoice.generate_invoice',
-            compact('')
+            'backend.order.generate_invoice',
+            compact('order_items','order_details')
         )
             ->setPaper('A4', 'portrait')
             ->setOptions([
@@ -97,8 +104,16 @@ class OrderController extends Controller
         $pdf->save($pdfPath);
 
         DirectOrder::where('id', $id)->update([
-            'path_file' => URL::to('/') . '/uploads/direct_order_invoice/' . $pdfFileName
+            'total_amount' => $request->total_amount,
+            'cgst' => $request->total_amount * 0.09,
+            'sgst' => $request->total_amount * 0.09,
+            'total_tax_amount' => $request->total_amount * 0.18,
+            'total_invoice_amount' => ( $request->total_amount * 0.18 )  +  $request->total_amount,
+            'invoice_file' => URL::to('/') . '/uploads/direct_order_invoice/' . $pdfFileName
         ]);
+
+
+        return redirect()->route('direct-orders')->with('success', 'Invoice generated successfully');
 
      }
 }

@@ -55,11 +55,14 @@
                                     <a href="javascript:void(0)" class="btn btn-sm btn-warning " data-id="<?= $row->id ?>" data-status="<?= $row->status ?>" data-toggle="tooltip" title="Edit">  <i class="bi bi-pencil-fill"></i>
                                     </a>
 
-                                      <a href="{{ route('addDirectOrderBill', [$row->id]) }}" class="btn btn-sm btn-secondary " data-toggle="tooltip" title="View">  <i class="bi bi-eye"></i>
+                                      <a href="{{ route('addDirectOrderBill', [$row->id]) }}" class="btn btn-sm btn-info " data-toggle="tooltip" title="View">  <i class="bi bi-eye"></i>
                                     </a>
 
-                                     {{-- <a href="javascript:void(0)" class="btn btn-sm btn-warning editOrder" data-id="<?= $row->id ?>" data-status="<?= $row->status ?>" data-toggle="tooltip" title="Edit">  <i class="bi bi-pencil-fill"></i>
-                                    </a> --}}
+                                    <?php if($row->total_amount > 0) {  ?>
+                                        <a data-toggle="tooltip" target="_blank" href="{{ $row->invoice_file }}" data-placement="top" title="Invoice"  class="btn btn-sm btn-secondary"><i class="bi bi-file-earmark-break"></i></a>
+                                    <?php } ?>
+
+
                                 </td>
                             </tr>
 

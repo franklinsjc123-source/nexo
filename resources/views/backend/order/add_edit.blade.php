@@ -55,33 +55,33 @@
                                         <div id="otherChargesWrapper">
 
                                             {{-- EDIT MODE --}}
-                                            @if(!empty($bill_extras_datas) && count($bill_extras_datas) > 0)
+                                            @if(!empty($order_items) && count($order_items) > 0)
 
-                                                @foreach($bill_extras_datas as $extra)
+                                                @foreach($order_items as $oi)
                                                     <div class="row other-charge-row align-items-end mt-3">
 
                                                         <!-- Description -->
                                                         <div class="col-xl-3">
                                                             <label class="form-label fw-semibold">Product Name</label>
-                                                            <input type="text" class="form-control" name="product_name[]" value="{{ $extra->name }}" placeholder="Enter Product Name">
+                                                            <input type="text" class="form-control" name="product_name[]" value="{{ $oi->product_name }}" placeholder="Enter Product Name">
                                                         </div>
 
                                                         <div class="col-xl-2">
                                                             <label class="form-label fw-semibold">HSN Code</label>
-                                                            <input type="text" class="form-control" name="hsn_code[]" value="{{ $extra->hsn_code }}" placeholder="Example:  9999">
+                                                            <input type="text" class="form-control" name="hsn_code[]" value="{{ $oi->hsn_code }}" placeholder="Example:  9999">
                                                         </div>
 
 
 
                                                            <div class="col-xl-2">
                                                             <label class="form-label fw-semibold">Quantity</label>
-                                                            <input type="text" class="form-control" name="quantity[]" value="{{ $extra->quantity }}" placeholder="Example:  2 kg">
+                                                            <input type="text" class="form-control" name="quantity[]" value="{{ $oi->quantity }}" placeholder="Example:  2 kg">
                                                         </div>
 
                                                         <!-- Amount -->
                                                         <div class="col-xl-2">
                                                             <label class="form-label fw-semibold">Amount</label>
-                                                            <input type="text" class="form-control other-amount" name="amount[]" value="{{ $extra->amount }}" placeholder="Enter Amount" oninput="limitDecimal(this); calculateInvoice();">
+                                                            <input type="text" class="form-control other-amount" name="amount[]" value="{{ $oi->amount }}" placeholder="Enter Amount" oninput="limitDecimal(this); calculateInvoice();">
                                                         </div>
 
                                                         <!-- Buttons -->
@@ -146,11 +146,10 @@
                                         </div>
 
                                          <div class="col-xl-4 mt-3">
-                                            <input type="text" class="form-control" id="total_amount" name="total_amount" placeholder=" Amount" value="{{ $total_amount ?? '' }}" maxlength="20" readonly>
+                                            <input type="text" class="form-control" id="total_amount" name="total_amount" placeholder=" Amount" value="{{ $record->total_amount ?? '' }}" maxlength="20" readonly>
 
                                         </div>
 
-                                        <input type="hidden" class="form-control" id="total_invoice_amount" name="total_invoice_amount" placeholder=" Total Incoice Amount" >
 
                                     </div>
                                 </div>
@@ -178,9 +177,6 @@
 
 
 
-<script>
-let vehicleIndex = {{ !empty($bill_amount_datas) && is_countable($bill_amount_datas) ? count($bill_amount_datas) : 1 }};
-</script>
 
 
 <script>
