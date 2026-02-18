@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Traits\PermissionCheckTrait;
+use Illuminate\Support\Facades\Hash;
 
 class ShopController extends Controller
 {
@@ -71,13 +72,17 @@ class ShopController extends Controller
             'email'         => $email,
             'mobile'        => $contact_no,
             'auth_level'    => 4,
+
+
         );
 
+        if ($request->password) {
+            $userArray = ['password'     => Hash::make($request->password)];
+        }
 
         if ($user_id > 0) {
 
-           User::where('id',$user_id)->update($userArray);
-
+            User::where('id', $user_id)->update($userArray);
         } else {
             $user = User::create($userArray);
             $user_id =  $user->id;

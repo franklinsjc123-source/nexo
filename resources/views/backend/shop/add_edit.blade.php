@@ -1,6 +1,8 @@
  @extends('backend.app_template')
  @section('title','Shop Store or Update')
  @section('content')
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
  <?php
 
 
@@ -47,8 +49,10 @@
                                      <a href="<?= route('shop') ?>" class="btn btn-primary">Back</a>
                                  </div>
                              </div>
-                             <input type="hidden" name="id" value="<?= $id ?>" />
-                             <input type="hidden" name="user_id" value="<?= $user_id ?>" />
+
+                            <input type="hidden" name="id" value="<?= $id ?>" />
+                            <input type="hidden" name="user_id" value="<?= $user_id ?>" />
+
                              <div class="card-body">
                                  <div class="row g-4">
 
@@ -119,7 +123,7 @@
                                             <label for="address" class="form-label">
                                                 Shop Address <span class="text-danger">*</span>
                                             </label>
-                                            <textarea class="form-control" id="address" name="address" rows="3" placeholder="Enter Shop Address"
+                                            <textarea class="form-control" id="address" name="address" rows="1" placeholder="Enter Shop Address"
                                             ><?= old('address',$address) ?? '' ?></textarea>
                                             @error('address') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
@@ -141,6 +145,24 @@
                                         @endif
                                     </div>
 
+                                    <div class="col-xl-4">
+                                        <label for="password" class="form-label">
+                                            Password <span class="text-danger">*</span>
+                                        </label>
+
+                                        <div class="position-relative">
+                                            <input type="password" class="form-control pe-5" id="password" name="password" placeholder="Enter Password">
+
+                                            <span class="position-absolute top-50 end-0 translate-middle-y me-3"
+                                                style="cursor: pointer;"
+                                                onclick="togglePassword()">
+                                                <i class="fa fa-eye" id="togglePasswordIcon"></i>
+                                            </span>
+                                        </div>
+
+                                        <span class="text-danger error-message"></span>
+                                    </div>
+
 
 
                                  </div>
@@ -159,6 +181,22 @@
      </div>
  </main>
  <script>
+
+    function togglePassword() {
+        const password = document.getElementById('password');
+        const icon = document.getElementById('togglePasswordIcon');
+
+        if (password.type === 'password') {
+            password.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            password.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+
      $(function() {
          $("#shopForm").validate({
              rules: {
