@@ -72,8 +72,6 @@ class ShopController extends Controller
             'email'         => $email,
             'mobile'        => $contact_no,
             'auth_level'    => 4,
-
-
         );
 
         if ($request->password) {

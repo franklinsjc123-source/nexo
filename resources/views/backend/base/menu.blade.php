@@ -397,10 +397,10 @@ use Illuminate\Support\Facades\Auth;
                             </a>
                         </li>
 
-                         <li class="pe-slide-item">
-                            <a href="<?= route('assign-permission') ?>" class="pe-nav-link
-                                    @if(request()->routeIs(['assign-permission'])) active @endif">
-                               Assign Permission Shop
+                        <li class="pe-slide-item">
+                            <a href="{{ route('assign-permission', ['type' => 'shop']) }}"
+                            class="pe-nav-link {{ request()->get('type') == 'shop' ? 'active' : '' }}">
+                            Assign Permission Shop
                             </a>
                         </li>
                     <?php } ?>

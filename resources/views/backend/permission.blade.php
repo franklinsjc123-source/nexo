@@ -33,7 +33,7 @@ $menu       = isset($record->category) ? $record->category : '';
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <input type="hidden" name="id" value="<?= $id ?>" />
-                                    <p class="mg-b-10">users<span class="text-danger">*</span></p>
+                                    <p class="mg-b-10">   <?= $type == 'shop' ?  'Shops': 'Users' ?> <span class="text-danger">*</span></p>
                                     <select onchange="getPermission(this.value)" class="form-control select2" name="user">
                                         <option value="">--select--</option>
                                         <?php
