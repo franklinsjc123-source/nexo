@@ -224,7 +224,7 @@ use Illuminate\Support\Facades\Auth;
                             <li class="pe-slide-item">
                                 <a href="<?= route('unit') ?>" class="pe-nav-link
                                         @if(request()->routeIs(['unit', 'addUnit'])) active @endif">
-                                    Unit 
+                                    Unit
                                 </a>
                             </li>
                          @endif
@@ -394,6 +394,13 @@ use Illuminate\Support\Facades\Auth;
                             <a href="<?= route('assign-permission') ?>" class="pe-nav-link
                                     @if(request()->routeIs(['assign-permission'])) active @endif">
                                Assign Permission
+                            </a>
+                        </li>
+
+                         <li class="pe-slide-item">
+                            <a href="<?= route('assign-permission') ?>" class="pe-nav-link
+                                    @if(request()->routeIs(['assign-permission'])) active @endif">
+                               Assign Permission Shop
                             </a>
                         </li>
                     <?php } ?>
