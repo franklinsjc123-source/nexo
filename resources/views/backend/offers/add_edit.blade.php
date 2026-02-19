@@ -46,11 +46,11 @@
                              <div class="card-body">
                                  <div class="row g-4">
 
-                                   <?php               if(Auth::user()->auth_level == 4)  {
+                                   <?php  if(Auth::user()->auth_level == 4)  {
 
                                            $shop_id = \App\Models\Shop::where('user_id', auth()->id())->value('id');
                                         ?>
-                                        <input type="hidden" name="shop"  value="{{  $shop_id }}">
+                                        <input type="hidden" name="shop_id"  value="{{  $shop_id }}">
 
                                     <?php  } else { ?>
 

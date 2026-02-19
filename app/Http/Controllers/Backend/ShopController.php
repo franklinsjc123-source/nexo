@@ -20,9 +20,8 @@ class ShopController extends Controller
             return view('unauthorized');
         }
 
-
         $records   =  Shop::orderBy('id', 'ASC')->get();
-
+        
         // dd( $records);
 
         return view('backend.shop.list', compact('records'));

@@ -24,7 +24,7 @@ class OfferController extends Controller
         if (Auth::user()->auth_level == 4) {
 
             $user_id   =   auth()->id();
-            $shop_id   =  Shop::where('user_id', $user_id )->orderBy('shop_name', 'ASC')->get();
+            $shop_id   =  Shop::where('user_id', $user_id )->value('id');
             $records   =  Offers::where('shop_id',$shop_id)->orderBy('id', 'desc')->get();
 
         } else {
@@ -32,6 +32,8 @@ class OfferController extends Controller
             $records   =  Offers::orderBy('id', 'desc')->get();
 
         }
+
+
 
         return view('backend.offers.list', compact('records'));
     }
@@ -50,6 +52,8 @@ class OfferController extends Controller
     public function storeUpdateOffer(Request $request)
     {
 
+
+
         $id                     = $request->id ?? 0;
         $shop_id                = $request->shop_id ?? '';
         $offer_code             = $request->offer_code ?? '';
@@ -67,6 +71,7 @@ class OfferController extends Controller
         ];
 
         if (empty($id)) {
+
             $insert = Offers::create($data);
 
             return redirect()

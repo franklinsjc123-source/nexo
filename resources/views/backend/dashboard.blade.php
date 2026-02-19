@@ -45,6 +45,49 @@
                 </div>
             </div>
 
+            <div class="col-md-6 col-xl-4 col-xxl-3">
+                <div class="card card-h-100 datascienceGradient text-white">
+                     <a href="{{ route('orders') }}">
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between gap-5 mb-5">
+                            <div>
+                                <h4 class="text-white mb-1">Today Orders</h4>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <div
+                                    class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold"> {{ $today_order_count  ?? 0 }} </div>
+                            </div>
+                        </div>
+
+                    </div>
+                      </a>
+                </div>
+            </div>
+
+
+
+            <div class="row mt-5">
+            <div class="col-md-6 col-xl-4 col-xxl-4">
+                <div class="card card-h-100 webGradient text-white">
+                     <a href="{{ route('direct-orders') }}">
+                    <div class="card-body">
+
+                        <div class="d-flex justify-content-between gap-5 mb-5">
+                            <div>
+                                <h4 class="text-white mb-1">Today  Direct Orders</h4>
+                            </div>
+                            <div class="flex-shrink-0">
+                                <div
+                                    class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">{{ $today_direct_order_count ?? 0  }}</div>
+                            </div>
+                        </div>
+
+                    </div>
+                     </a>
+                </div>
+            </div>
+
 
             {{-- <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 IntelligenceGradient text-white">
@@ -69,7 +112,7 @@
                 </div>
             </div> --}}
 
-
+        <?php  if (Auth::user()->auth_level != 4) { ?>
 
 
             <div class="col-md-6 col-xl-4 col-xxl-3">
@@ -135,6 +178,9 @@
                     </a>
                 </div>
             </div>
+
+        <?php  } ?>
+
 
         </div>
 
