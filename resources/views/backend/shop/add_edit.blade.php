@@ -96,8 +96,12 @@
                                         </div>
 
                                     <div class="col-xl-4">
+
+                                        <?php
+                                            $user_id = \App\Models\Shop::where('id', $id)->value('user_id');
+                                            ?>
                                          <label for="email" class="form-label">Email <span class="text-danger"> *</span></label>
-                                         <input type="text" value="<?php echo old('email',$email) ?>" class="form-control" id="email" name="email" placeholder="Enter Email" onkeyup="commonCheckExist(this,'users', 'email', this.value)">
+                                         <input type="text" value="<?php echo old('email',$email) ?>" class="form-control" id="email" name="email" placeholder="Enter Email"  onkeyup="commonCheckExist(this,'users','email', this.value, {{ $user_id ?? 'null' }})">
                                         <span class="text-danger error-message"></span>
                                     </div>
 

@@ -465,7 +465,7 @@ function changezone(vehicleId)
     });
 </script>
 <script>
-function commonCheckExist(element, table, column) {
+function commonCheckExist(element, table, column, value, id = null) {
 
     $.ajax({
         url: "{{ route('checkExist') }}",
@@ -473,7 +473,8 @@ function commonCheckExist(element, table, column) {
         data: {
             table: table,
             column: column,
-            value: element.value,
+            value: value,
+            id: id,
             _token: $('meta[name="csrf-token"]').attr('content')
         },
         success: function (res) {
@@ -483,11 +484,12 @@ function commonCheckExist(element, table, column) {
 
             if(res.status === false){
                 errorSpan.html(res.message);
-				element.value="";
+                element.value="";
             }
         }
     });
 }
+
 </script>
 
  @include('backend.alert')

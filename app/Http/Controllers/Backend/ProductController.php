@@ -63,6 +63,7 @@ class ProductController extends Controller
         $qty                 = $request->qty ?? '';
         $unit                = $request->unit ?? '';
         $product_name        = $request->product_name ?? '';
+        $hsn_code            = $request->hsn_code ?? '';
         $original_price      = $request->original_price ?? '';
         $discount_price      = $request->discount_price ?? '';
         $product_description = $request->product_description ?? '';
@@ -81,10 +82,11 @@ class ProductController extends Controller
             'qty'                       => $qty,
             'unit'                      => $unit,
             'product_name'              => $product_name,
+            'hsn_code'                  => $hsn_code,
             'original_price'            => $original_price,
             'discount_price'            => $discount_price,
             'product_description'       => $product_description,
-            'product_image'                 => $imageUrl,
+            'product_image'             => $imageUrl,
         ];
 
         if (empty($id)) {

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\DB;
 
 class CommonController extends Controller
 {
-      public function updateCommonStatus(Request $request)
+    public function updateCommonStatus(Request $request)
     {
         $input       = $request->all();
         $id          = $input['id'];
@@ -24,15 +24,12 @@ class CommonController extends Controller
         ];
         if ($input['model'] == 'States') {
             $update = $model::where('state_id', $id)->update(['is_active' => $status]);
-
-        }elseif($input['model'] == 'FinancialYear'){
-                if($status == 1)
-                {
-                 $update =    $model::Where('id',$id)->update(array('status' => 1));
-                     $model::Where('id', '!=', $id)->update(array('status' => 0));
-                }
-        }
-        else {
+        } elseif ($input['model'] == 'FinancialYear') {
+            if ($status == 1) {
+                $update =    $model::Where('id', $id)->update(array('status' => 1));
+                $model::Where('id', '!=', $id)->update(array('status' => 0));
+            }
+        } else {
             $update = $model::where('id', $id)->update($updateArray);
         }
 
@@ -48,9 +45,9 @@ class CommonController extends Controller
         $model  = 'App\\Models\\' . $input['model'];
         $update = $model::where('id', $id)->delete();
 
-        if($input['model'] ==  'Shop'){
+        if ($input['model'] ==  'Shop') {
             'App\\Models\\Product'::where('shop', $id)->delete();
-             $shop   =  Shop::where('id', $id)->first();
+            $shop   =  Shop::where('id', $id)->first();
             'App\\Models\\User'::where('id', $shop->user_id)->delete();
         }
 
@@ -80,7 +77,7 @@ class CommonController extends Controller
 
         $id = $input['id'] ?? '';
 
-         $update = User::whereId($id)->update($data);
+        $update = User::whereId($id)->update($data);
         //  $msg =  "Profile was Updated By ";
         //  if (!$this->storeLog($msg)) {}
         return redirect()->back()->with('success', 'Profile Updated');
@@ -106,25 +103,23 @@ class CommonController extends Controller
 
     public function checkExist(Request $request)
     {
-        $table  = $request->table;
-        $column = $request->column;
-        $value  = $request->value;
+        $query = DB::table($request->table)
+            ->where($request->column, $request->value);
 
-        // Check duplicate
-        $query = \DB::table($table)->where($column, $value);
+        // 🔥 Ignore current ID in edit
+        if (!empty($request->id)) {
+            $query->where('id', '!=', $request->id);
+        }
 
         $exists = $query->exists();
 
-        // If record exists → return duplicate message
         if ($exists) {
             return response()->json([
-                'status'  => false,
-                'message' => ucfirst(str_replace('_',' ', $column)) . " already exists!"
+                'status' => false,
+                'message' => ucfirst($request->column) . ' already exists'
             ]);
         }
 
+        return response()->json(['status' => true]);
     }
-
-
-
 }

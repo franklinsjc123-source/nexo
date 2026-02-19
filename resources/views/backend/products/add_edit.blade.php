@@ -10,6 +10,7 @@
     $qty                    = isset($records->qty) ? $records->qty : '';
     $unit                   = isset($records->unit) ? $records->unit : '';
     $product_name           = isset($records->product_name) ? $records->product_name : '';
+    $hsn_code               = isset($records->hsn_code) ? $records->hsn_code : '';
     $original_price         = isset($records->original_price) ? $records->original_price : '';
     $discount_price         = isset($records->discount_price) ? $records->discount_price : '';
     $end_time               = isset($records->end_time) ? $records->end_time : '';
@@ -69,7 +70,7 @@
 
                                         </div>
 
-                                   
+
 
 
 
@@ -105,6 +106,14 @@
                                             </label>
                                             <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Enter Product Name" value="<?= old('product_name',$product_name) ?? '' ?>"  >
                                             @error('product_name') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+
+                                         <div class="col-xl-4">
+                                            <label for="contact_no" class="form-label">
+                                                HSN Code <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" id="hsn_code" name="hsn_code"  maxlength="8" minlength="4" oninput="this.value = this.value.replace(/[^0-9]/g,'');"  placeholder="Enter HSN Code" value="<?= old('hsn_code',$hsn_code) ?? '' ?>"  >
+                                            @error('hsn_code') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
 
 
@@ -263,6 +272,11 @@ $(document).ready(function () {
                 product_name: {
                     required: true
                 },
+
+                hsn_code: {
+                    required: true
+                },
+
                 original_price: {
                     required: true
                 },
@@ -299,6 +313,10 @@ $(document).ready(function () {
                 },
                 product_name: {
                     required: "Please enter product name"
+                },
+
+                hsn_code: {
+                    required: "Please enter HSN Code"
                 },
 
                 original_price: {
