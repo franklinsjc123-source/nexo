@@ -66,6 +66,7 @@ class AuthController extends Controller
         $name = $request->input('name');
         $email = $request->input('email');
         $mobile = $request->input('mobile');
+        $referral_code = $request->input('referral_code');
 
         if ($name != '' &&  $email != '' &&  $mobile) {
 
@@ -92,6 +93,7 @@ class AuthController extends Controller
                 'name'          => $name,
                 'email'         => $email,
                 'mobile'        => $mobile,
+                'referral_code' => $referral_code,
                 'auth_level'    => 3,
                 'created_at'    => now()
 
