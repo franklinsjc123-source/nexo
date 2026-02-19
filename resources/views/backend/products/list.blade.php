@@ -31,6 +31,7 @@
                         <th>Shop Name</th>
                         <?php } ?>
                         <th>Product Name</th>
+                        <th>HSN  Code</th>
                         <th>Quantity (unit)</th>
                         <th>Original Price</th>
                         <th>Discount Price</th>
@@ -52,6 +53,7 @@
                                 <?php } ?>
 
                                 <td><?= $row->product_name ?></td>
+                                <td><?= $row->hsn_code ?></td>
                                 <td>
                                     {{ $row->qty }}{{ optional($row->unitData)->unit_name ? ' ('.$row->unitData->unit_name.')' : '' }}
                                 </td>                                <td><?= $row->original_price ?></td>
