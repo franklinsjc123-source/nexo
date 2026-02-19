@@ -7,6 +7,8 @@
     $id                     = isset($records->id) ? $records->id : '';
     $shop_id                = isset($records->shop_id) ? $records->shop_id : '';
     $offer_code             = isset($records->offer_code) ? $records->offer_code : '';
+    $minimum_order_amount   = isset($records->minimum_order_amount) ? $records->minimum_order_amount : '';
+    $discount_percentage    = isset($records->discount_percentage) ? $records->discount_percentage : '';
     $expiry_date            = isset($records->expiry_date) ? $records->expiry_date:'';
     $status                 = isset($records->status) ? $records->status:'';
     $type                   = ($id == '')   ? 'Create' : 'Update';
@@ -44,6 +46,14 @@
                              <div class="card-body">
                                  <div class="row g-4">
 
+                                   <?php               if(Auth::user()->auth_level == 4)  {
+
+                                           $shop_id = \App\Models\Shop::where('user_id', auth()->id())->value('id');
+                                        ?>
+                                        <input type="hidden" name="shop"  value="{{  $shop_id }}">
+
+                                    <?php  } else { ?>
+
                                     <div class="col-xl-4">
                                         <label class="form-label">Shop  <span class="text-danger">*</span></label>
                                         <select class="form-control select2" id="shop_id" name="shop_id">
@@ -61,6 +71,9 @@
 
                                     </div>
 
+                                    <?php  } ?>
+
+
 
 
                                         <div class="col-xl-4">
@@ -72,6 +85,26 @@
                                         </div>
 
 
+
+                                        <div class="col-xl-4">
+                                            <label for="minimum_order_amount" class="form-label">
+                                                Minimum Order Amount <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" id="minimum_order_amount" name="minimum_order_amount" placeholder="Enter Minimum Order Amount" value="<?= old('minimum_order_amount',$minimum_order_amount) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9]/g,'');"  >
+                                            @error('minimum_order_amount') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+
+
+
+                                         <div class="col-xl-4">
+                                            <label for="discount_percentage" class="form-label">
+                                                Discount Percentage <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" id="discount_percentage" name="discount_percentage" placeholder="Enter Minimum Order Amount" value="<?= old('discount_percentage',$discount_percentage) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9]/g,'');"  >
+                                            @error('discount_percentage') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+
+
                                          <div class="col-xl-4">
                                             <label for="expiry_date" class="form-label">
                                                 Expiry Date <span class="text-danger">*</span>
@@ -79,8 +112,6 @@
                                             <input type="date" class="form-control" id="expiry_date" min="<?= date('Y-m-d') ?>"  name="expiry_date" placeholder="Enter Offer Code" value="<?= old('expiry_date',$expiry_date) ?? '' ?>" >
                                             @error('expiry_date') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
-
-
                                  </div>
                              </div>
                          </div>
@@ -108,7 +139,15 @@
                     required: true
                 },
 
-                offer_code: {
+                minimum_order_amount: {
+                    required: true
+                },
+
+                 expiry_date: {
+                    required: true
+                },
+
+                 discount_percentage: {
                     required: true
                 },
 
@@ -123,8 +162,16 @@
                     required: "Please enter offer code"
                 },
 
-                offer_code: {
-                    required: "Please enter offer code"
+                minimum_order_amount: {
+                    required: "Please minimum order amount"
+                },
+
+                discount_percentage: {
+                    required: "Please enter discount percentage"
+                },
+
+                 expiry_date: {
+                    required: "Please enter expiry "
                 },
 
 

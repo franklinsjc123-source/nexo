@@ -26,8 +26,12 @@
                 <thead>
                     <tr>
                         <th>S.No</th>
-                        <th>Shop</th>
+                        <?php if(Auth::user()->auth_level != 4)  { ?>
+                            <th>Shop</th>
+                        <?php } ?>
                         <th>Offer Code</th>
+                        <th>Min Order Value</th>
+                        <th>Discount Percentage</th>
                         <th>Expiry Date</th>
                          <th>Status</th>
                         <th>Action</th>
@@ -40,8 +44,13 @@
                             ?>
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
-                                <td><?= $row->shopData->shop_name ?></td>
+                                <?php if(Auth::user()->auth_level != 4)  { ?>
+                                    <td><?= $row->shopData->shop_name ?></td>
+                                <?php } ?>
+
                                 <td><?= $row->offer_code ?></td>
+                                <td><?= $row->minimum_order_amount ?></td>
+                                <td><?= $row->discount_percentage ?></td>
                                 <td><?= date('d-m-Y', strtotime($row->expiry_date)) ?></td>
                                 <td><a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" onclick="changeStatus('<?php echo $row->id ?>','<?php echo ($row->status == 1) ? 0 : 1 ?>','Offers')" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">
                                             <?php echo ($row->status == 1) ? 'Active' : 'In-Active' ?></a>
