@@ -59,13 +59,13 @@
 
                                     <div class="col-xl-4">
                                          <label for="email" class="form-label">Email <span class="text-danger"> *</span></label>
-                                         <input type="text" value="<?php echo old('email',$email) ?>" class="form-control" id="email" name="email" placeholder="Enter Email" onkeyup="commonCheckExist(this,'delivery_person', 'email', this.value)">
+                                         <input type="text" value="<?php echo old('email',$email) ?>" class="form-control" id="email" name="email" placeholder="Enter Email" onkeyup="commonCheckExist(this,'delivery_person','email', this.value, {{ $id ?? 'null' }})">
                                         <span class="text-danger error-message"></span>
                                     </div>
 
                                        <div class="col-xl-4">
                                          <label for="mobile" class="form-label">Mobile <span class="text-danger"> *</span></label>
-                                         <input type="text" value="<?php echo  old('mobile',$mobile)?>" maxlength="10" class="form-control" id="mobile" name="mobile" placeholder="Enter Mobile" onkeyup="commonCheckExist(this,'delivery_person', 'mobile', this.value)">
+                                         <input type="text" value="<?php echo  old('mobile',$mobile)?>" maxlength="10" class="form-control" id="mobile" name="mobile" placeholder="Enter Mobile" onkeyup="commonCheckExist(this,'delivery_person','mobile', this.value, {{ $id ?? 'null' }})">
                                         <span class="text-danger error-message"></span>
                                     </div>
 

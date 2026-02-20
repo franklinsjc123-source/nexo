@@ -112,7 +112,7 @@
                                             <label for="contact_no" class="form-label">
                                                 HSN Code <span class="text-danger">*</span>
                                             </label>
-                                            <input type="text" class="form-control" id="hsn_code" name="hsn_code"  maxlength="8" minlength="4" oninput="this.value = this.value.replace(/[^0-9]/g,'');"  placeholder="Enter HSN Code" value="<?= old('hsn_code',$hsn_code) ?? '' ?>"  >
+                                            <input type="text" class="form-control" id="hsn_code" name="hsn_code"  maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g,'');"  placeholder="Enter HSN Code" value="<?= old('hsn_code',$hsn_code) ?? '' ?>"  >
                                             @error('hsn_code') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
 

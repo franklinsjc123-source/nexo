@@ -68,12 +68,10 @@
 
                                                         <div class="col-xl-2">
                                                             <label class="form-label fw-semibold">HSN Code</label>
-                                                            <input type="text" class="form-control" name="hsn_code[]" value="{{ $oi->hsn_code }}" placeholder="Example:  9999">
+                                                            <input type="text" class="form-control" name="hsn_code[]"  maxlength="6"  value="{{ $oi->hsn_code }}" placeholder="Example:  9999" oninput="this.value = this.value.replace(/[^0-9]/g,'');">
                                                         </div>
 
-
-
-                                                           <div class="col-xl-2">
+                                                        <div class="col-xl-2">
                                                             <label class="form-label fw-semibold">Quantity</label>
                                                             <input type="text" class="form-control" name="quantity[]" value="{{ $oi->quantity }}" placeholder="Example:  2 kg">
                                                         </div>

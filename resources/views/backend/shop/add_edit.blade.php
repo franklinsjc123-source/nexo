@@ -58,11 +58,10 @@
 
                                     <div class="col-xl-4">
                                         <label class="form-label">Shop Category <span class="text-danger">*</span></label>
-                                        <select class="form-control select2" id="category" name="category[]" multiple>
+                                        <select class="form-control select2" id="category" name="category[]" multiple data-placeholder="Select">
                                             @php
                                                 $selectedCategories = isset($category) ? explode(',', $category) : [];
                                             @endphp
-                                            <option value="">--select--</option>
                                                 <?php
                                                     if (isset($categoryData)) {
                                                         foreach ($categoryData as $val) { ?>
@@ -91,8 +90,8 @@
                                             <label for="contact_no" class="form-label">
                                                 Contact Number <span class="text-danger">*</span>
                                             </label>
-                                            <input type="text" class="form-control" id="contact_no" name="contact_no" placeholder="Enter Contact Number" value="<?= old('contact_no',$contact_no) ?? '' ?>" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g,'');">
-                                            @error('contact_no') <span class="text-danger">{{ $message }}</span> @enderror
+                                            <input type="text" class="form-control" id="contact_no" name="contact_no" placeholder="Enter Contact Number" value="<?= old('contact_no',$contact_no) ?? '' ?>" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g,'');"  onkeyup="commonCheckExist(this,'users','mobile', this.value, {{ $user_id ?? 'null' }})">
+                                             <span class="text-danger error-message"></span>
                                         </div>
 
                                     <div class="col-xl-4">
