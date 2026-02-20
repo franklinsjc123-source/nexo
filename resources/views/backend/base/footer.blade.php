@@ -226,6 +226,12 @@ $(document).on('shown.bs.modal', '.modal', function () {
 
 
 <script>
+
+
+window.addEventListener("load", function () {
+    document.getElementById("globalLoader").style.display = "none";
+});
+
 $(document).ready(function () {
     initColumnSearchDataTable(document);
 });
@@ -311,138 +317,6 @@ $(document).ready(function () {
     }
 
 
-
-//zonal based company list
-function changecompany(zoneId)
-{
-   // $('#company_id').html('<option value="">Select Company</option>');
-
-    $('#driver_id').html('<option value="">Select Driver</option>');
-
-    if (!zoneId) return;
-
-    $.ajax({
-        url: '/fetch/zone-based-data',
-        type: 'GET',
-        data: { zone_id: zoneId },
-        success: function (res) {
-
-            // if (res.companies?.length) {
-            //     res.companies.forEach(row => {
-            //         $('#company_id').append(
-            //             `<option value="${row.id}">${row.full_name}</option>`
-            //         );
-            //     });
-            // } else {
-            //     $('#company_id').html('<option value="">Select Company</option>');
-            // }
-
-            // if (res.vehicles?.length) {
-            //     res.vehicles.forEach(row => {
-            //         $('#vehicle_id').append(
-            //             `<option value="${row.id}">${row.vehicle_no}</option>`
-            //         );
-            //     });
-            // }
-
-            if (res.drivers?.length) {
-                res.drivers.forEach(row => {
-                    $('#driver_id').append(
-                        `<option value="${row.id}">${row.driver_name}</option>`
-                    );
-                });
-            } else {
-                $('#driver_id').html('<option value="">Select Driver</option>');
-            }
-            // Drivers
-            // if (res.drivers && res.drivers.length > 0) {
-            //     let driversId = res.drivers[0].id;
-            //         $('#driver_id').val(driversId).trigger('change.select2');
-            // }
-
-        }
-    });
-}
-
-function changeroute(companyId, selectedRouteId = null)
-{
-    $('#route_id').html('<option value="">Select Route</option>');
-
-    if (!companyId) return;
-
-    $.ajax({
-        url: '/fetch/company-based-data',
-        type: 'GET',
-        data: { company_id: companyId },
-        success: function (res) {
-
-            if (res.routes && res.routes.length > 0) {
-                $.each(res.routes, function (i, row) {
-
-                    let selected = selectedRouteId == row.id ? 'selected' : '';
-
-                    $('#route_id').append(
-                        `<option value="${row.id}" ${selected}>${row.route_name}</option>`
-                    );
-                });
-            }
-        }
-    });
-}
-
-
-// function changeroute(companyId)
-// {
-//     $('#route_id').html('<option value="">Select Route</option>');
-
-//     if (!companyId) return;
-//         $.ajax({
-//             url: '/fetch/company-based-data',
-//             type: 'GET',
-//             data: { company_id: companyId },
-//             success: function (res) {
-
-//                if (res.routes && res.routes.length > 0) {
-//                     $.each(res.routes, function (i, row) {
-//                         $('#route_id').append(
-//                             `<option value="${row.id}">${row.route_name}</option>`
-//                         );
-//                     });
-//                 }else{
-//                     $('#route_id').html('<option value="">Select Route</option>');
-//                 }
-
-//             }
-//         });
-// }
-
-function changezone(vehicleId)
-{
-    if (!vehicleId) return;
-    $('#company_id').html('<option value="">Select Company</option>');
-    $.ajax({
-        url: '/fetch/vehicle-based-data',
-        type: 'GET',
-        data: { vehicle_id: vehicleId },
-        success: function (res) {
-
-            // if (res.zones && res.zones.length > 0) {
-            //     let zoneId = res.zones[0].id;
-            //         $('#zonal').val(zoneId).trigger('change.select2');
-            // }
-            if (res.companies && res.companies.length > 0) {
-                res.companies.forEach(row => {
-                    $('#company_id').append(
-                        `<option value="${row.id}">${row.full_name}</option>`
-                    );
-                });
-            }else{
-                $('#company_id').html('<option value="">Select Company</option>');
-            }
-
-        }
-    });
-}
 
 </script>
 

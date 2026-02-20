@@ -41,4 +41,9 @@
     <script src="<?= asset('backend_assets') ?>/js/jquery.min.js"></script>
     <script src="<?= asset('backend_assets') ?>/libs/apexcharts/apexcharts.min.js"></script>
 </head>
+
+<div id="globalLoader">
+    <div class="spinner"></div>
+</div>
+
 <body>
