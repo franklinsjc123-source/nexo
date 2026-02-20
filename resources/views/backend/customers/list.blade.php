@@ -23,6 +23,7 @@
                 <thead>
                     <tr>
                         <th>S.No</th>
+                        <th>Referral Code</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
@@ -37,6 +38,7 @@
                             ?>
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
+                                <td><?php echo $row->referral_code ?></td>
                                 <td><?php echo $row->name ?></td>
                                 <td><?php echo $row->email ?></td>
                                 <td><?php echo $row->mobile ?></td>
