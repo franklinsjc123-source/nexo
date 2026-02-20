@@ -286,13 +286,13 @@ $(document).ready(function () {
                  product_description: {
                     required: true
                 },
-                  unit: {
-                    required: true
-                },
+                //   unit: {
+                //     required: true
+                // },
 
-                qty: {
-                    required: true
-                },
+                // qty: {
+                //     required: true
+                // },
                   product_description: {
                     required: true
                 },
@@ -331,13 +331,13 @@ $(document).ready(function () {
                     required: "Please enter product description"
                 },
 
-                unit: {
-                    required: "Please select unit"
-                },
+                // unit: {
+                //     required: "Please select unit"
+                // },
 
-                 qty: {
-                    required: "Please enter quantity"
-                },
+                //  qty: {
+                //     required: "Please enter quantity"
+                // },
 
 
                 product_image: {
