@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use App\Models\Referral;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use App\Http\Traits\PermissionCheckTrait;
 
 class ReferralController extends Controller
@@ -15,13 +14,13 @@ class ReferralController extends Controller
     public function referral()
     {
 
-     if (!$this->checkPermission('User-Management')) {
+        if (!$this->checkPermission('Referral')) {
             return view('unauthorized');
         }
 
 
-        $records = User::Where('auth_level', 2)->get();
-        return view('backend.users.list', compact('records'));
+        $records = Referral::get();
+        return view('backend.referral.list', compact('records'));
     }
 
 
@@ -29,9 +28,21 @@ class ReferralController extends Controller
     {
         $record = '';
         if ($id > 0) {
-            $record = User::Where('id', $id)->first();
+            $record = Referral::Where('id', $id)->first();
+            $new_referral_code = '';
+        } else {
+
+            $new_referral_code = $this->generateReferralCode();
         }
-        return view('backend.users.add_edit', compact('record', 'id'));
+        return view('backend.referral.add_edit', compact('record', 'id','new_referral_code'));
+    }
+
+    private function generateReferralCode()
+    {
+        $last = Referral::orderBy('id', 'desc')->first();
+        $number = $last ? $last->id + 1 : 1;
+
+        return 'REF' . str_pad($number, 4, '0', STR_PAD_LEFT);
     }
 
     public function storeUpdateReferral(Request $request)
@@ -40,28 +51,28 @@ class ReferralController extends Controller
         $id        = isset($input['id']) ? $input['id'] : 0;
 
         $insertArray = array(
-            'mobile'       => $input['mobile'],
-            'name'       => $input['name'],
-            'email'        => $input['email'],
+            'mobile'        => $input['mobile'],
+            'name'          => $input['name'],
+            'referral_code' => $input['referral_code'],
         );
 
         if ($id == 0 || $id == '') {
-            $insert = User::create($insertArray);
+            $insert = Referral::create($insertArray);
             if ($insert['id'] > 0) {
-                return redirect()->route('users')->with('success', 'Referral Saved Successfully');
+                return redirect()->route('referral')->with('success', 'Referral Saved Successfully');
             } else {
-                return redirect()->route('users')->with('error', 'Something went wrong!');
+                return redirect()->route('referral')->with('error', 'Something went wrong!');
             }
         } else {
 
 
             $updateArray = array(
                 'mobile'         => isset($input['mobile'])    ?  $input['mobile']    : '',
-                'email'         => isset($input['email'])    ?  $input['email']    : '',
-                'name'         => isset($input['name'])    ?  $input['name']    : '',
+                'referral_code'  => isset($input['referral_code'])    ?  $input['referral_code']    : '',
+                'name'           => isset($input['name'])    ?  $input['name']    : '',
             );
-            $update = User::Where('id', $id)->update($updateArray);
-            return redirect()->route('users')->with('success', 'User Updated Successfully');
+            $update = Referral::Where('id', $id)->update($updateArray);
+            return redirect()->route('users')->with('success', 'Referral Updated Successfully');
         }
     }
 }
