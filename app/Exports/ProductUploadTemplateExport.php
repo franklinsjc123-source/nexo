@@ -10,22 +10,38 @@ use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use App\Models\Category;
 use App\Models\Shop;
 use App\Models\Unit;
+use Illuminate\Support\Facades\Auth;
 
 
 class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
 {
     public function headings(): array
     {
-        return [
-            'category',
-            'shop',
-            'product_name',
-            'unit',
-            'qty',
-            'original_price',
-            'discount_price',
-            'product_description'
-        ];
+
+        if (Auth::user()->auth_level == 4) {
+
+            return [
+                'category',
+                'product_name',
+                'unit',
+                'qty',
+                'original_price',
+                'discount_price',
+                'product_description'
+            ];
+        } else {
+
+            return [
+                'category',
+                'shop',
+                'product_name',
+                'unit',
+                'qty',
+                'original_price',
+                'discount_price',
+                'product_description'
+            ];
+        }
     }
 
     public function array(): array
@@ -33,79 +49,82 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
         return [];
     }
 
+
     public function registerEvents(): array
     {
         return [
             AfterSheet::class => function (AfterSheet $event) {
 
-                // Fetch data
+                $authLevel = Auth::user()->auth_level;
+
                 $categories = Category::where('status', 1)
                     ->pluck('category_name')
                     ->toArray();
-
-                $shops = Shop::where('status', 1)
-                    ->pluck('shop_name')
-                    ->toArray();
-
 
                 $units = Unit::where('status', 1)
                     ->pluck('unit_name')
                     ->toArray();
 
-                // Create hidden sheet
                 $spreadsheet = $event->sheet->getDelegate()->getParent();
                 $listSheet = $spreadsheet->createSheet();
                 $listSheet->setTitle('lists');
 
-                // Fill categories
+                // Category list
                 foreach ($categories as $i => $value) {
                     $listSheet->setCellValue('A' . ($i + 1), $value);
                 }
 
-                // Fill shops
-                foreach ($shops as $i => $value) {
-                    $listSheet->setCellValue('B' . ($i + 1), $value);
-                }
-
-                // Fill unit
+                // Unit list
                 foreach ($units as $i => $value) {
-                    $listSheet->setCellValue('D' . ($i + 1), $value);
+                    $listSheet->setCellValue('C' . ($i + 1), $value);
                 }
 
-                // Hide sheet
-                $listSheet->setSheetState(\PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::SHEETSTATE_HIDDEN);
+                // Only if NOT auth_level 4 → Add shop
+                if ($authLevel != 4) {
+                    $shops = Shop::where('status', 1)
+                        ->pluck('shop_name')
+                        ->toArray();
 
-                // Category dropdown (Column A)
+                    foreach ($shops as $i => $value) {
+                        $listSheet->setCellValue('B' . ($i + 1), $value);
+                    }
+                }
+
+                $listSheet->setSheetState(
+                    \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::SHEETSTATE_HIDDEN
+                );
+
                 for ($row = 2; $row <= 500; $row++) {
-                    $catValidation = $event->sheet
-                        ->getCell("A{$row}")
-                        ->getDataValidation();
 
+                    // Category dropdown (Column A)
+                    $catValidation = $event->sheet->getCell("A{$row}")->getDataValidation();
                     $catValidation->setType(DataValidation::TYPE_LIST);
                     $catValidation->setAllowBlank(false);
                     $catValidation->setShowDropDown(true);
                     $catValidation->setFormula1('=lists!$A$1:$A$' . count($categories));
 
-                    // Shop dropdown (Column B)
-                    $shopValidation = $event->sheet
-                        ->getCell("B{$row}")
-                        ->getDataValidation();
+                    if ($authLevel != 4) {
 
-                    $shopValidation->setType(DataValidation::TYPE_LIST);
-                    $shopValidation->setAllowBlank(false);
-                    $shopValidation->setShowDropDown(true);
-                    $shopValidation->setFormula1('=lists!$B$1:$B$' . count($shops));
+                        // Shop dropdown (Column B)
+                        $shopValidation = $event->sheet->getCell("B{$row}")->getDataValidation();
+                        $shopValidation->setType(DataValidation::TYPE_LIST);
+                        $shopValidation->setAllowBlank(false);
+                        $shopValidation->setShowDropDown(true);
+                        $shopValidation->setFormula1('=lists!$B$1:$B$' . count($shops));
 
+                        $unitColumn = 'D'; // because shop column exists
+                    } else {
+                        $unitColumn = 'C'; // shop column removed
+                    }
 
-
-                    $unitValidation = $event->sheet
-                        ->getCell("D{$row}")
+                    // Unit dropdown
+                    $unitValidation = $event->sheet->getCell("{$unitColumn}{$row}")
                         ->getDataValidation();
 
                     $unitValidation->setType(DataValidation::TYPE_LIST);
                     $unitValidation->setAllowBlank(false);
                     $unitValidation->setShowDropDown(true);
-                    $unitValidation->setFormula1('=lists!$D$1:$D$' . count($units));
+                    $unitValidation->setFormula1('=lists!$C$1:$C$' . count($units));
                 }
             }
         ];
