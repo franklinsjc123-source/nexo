@@ -86,10 +86,12 @@ class ProductController extends Controller
             'original_price'            => $original_price,
             'discount_price'            => $discount_price,
             'product_description'       => $product_description,
+            'created_by'                => auth()->id(),
             'product_image'             => $imageUrl,
         ];
 
         if (empty($id)) {
+            $data['created_by'] = auth()->id();
             $insert = Product::create($data);
 
             return redirect()
