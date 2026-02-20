@@ -110,7 +110,7 @@
 
                                          <div class="col-xl-4">
                                             <label for="contact_no" class="form-label">
-                                                HSN Code <span class="text-danger">*</span>
+                                                HSN Code <span class="text-danger"></span>
                                             </label>
                                             <input type="text" class="form-control" id="hsn_code" name="hsn_code"  maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g,'');"  placeholder="Enter HSN Code" value="<?= old('hsn_code',$hsn_code) ?? '' ?>"  >
                                             @error('hsn_code') <span class="text-danger">{{ $message }}</span> @enderror
@@ -273,9 +273,6 @@ $(document).ready(function () {
                     required: true
                 },
 
-                hsn_code: {
-                    required: true
-                },
 
                 original_price: {
                     required: true
@@ -315,9 +312,6 @@ $(document).ready(function () {
                     required: "Please enter product name"
                 },
 
-                hsn_code: {
-                    required: "Please enter HSN Code"
-                },
 
                 original_price: {
                     required: "Please enter original price"
