@@ -118,7 +118,7 @@
 
 
                                          <div class="col-xl-4">
-                                        <label class="form-label"> Unit <span class="text-danger">*</span></label>
+                                        <label class="form-label"> Unit <span class="text-danger"></span></label>
                                         <select class="form-control select2" id="unit" name="unit">
                                            <option value="">--select--</option>
                                                 <?php
@@ -138,7 +138,7 @@
 
                                     <div class="col-xl-4">
                                             <label for="original_price" class="form-label">
-                                                Quantity <span class="text-danger">*</span>
+                                                Quantity <span class="text-danger"></span>
                                             </label>
                                             <input type="text" class="form-control" id="qty" name="qty" placeholder="Enter Quantity" value="<?= old('qty',$qty) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9]/g,'');">
                                             @error('qty') <span class="text-danger">{{ $message }}</span> @enderror
