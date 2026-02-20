@@ -38,9 +38,12 @@
                             <li class="nav-item" role="presentation">
                                 <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Profile</button>
                             </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="information-tab" data-bs-toggle="tab" data-bs-target="#information-tab-pane" type="button" role="tab" aria-controls="information-tab-pane" aria-selected="true">Credentials</button>
-                            </li>
+
+                            <?php  if (Auth::user()->auth_level != 4) { ?>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="information-tab" data-bs-toggle="tab" data-bs-target="#information-tab-pane" type="button" role="tab" aria-controls="information-tab-pane" aria-selected="true">Credentials</button>
+                                </li>
+                            <?php }  ?>
                         </ul>
                     </div>
                     <div class="tab-content" id="myTabContent">
@@ -54,20 +57,20 @@
                                             <div class="col-lg-4">
                                                 <div class="tab-pane fade show active" id="html-label-input-required" role="tabpanel" aria-labelledby="html-label-input-required-tab" tabindex="0">
                                                     <label for="labelInputRequired" class="form-label">Name<span class="text-danger ms-1">*</span></label>
-                                                    <input type="text" placeholder="Enter Your Name" class="form-control" id="labelInputRequired" value="<?= $name ?>" readonly>
+                                                    <input type="text" placeholder="Enter Your Name" class="form-control" id="labelInputRequired" value="<?= $name ?>"  <?= Auth::user()->auth_level == 4 ? 'readonly' : '' ?> >
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <label for="inputExample26" class="form-label">Email<span class="text-danger ms-1">*</span></label>
                                                 <div class="form-icon">
-                                                    <input type="email" class="form-control" id="inputExample26" name="email" value="<?= $email ?>" placeholder="example@gmail.com" readonly>
+                                                    <input type="email" class="form-control" id="inputExample26" name="email" value="<?= $email ?>" placeholder="example@gmail.com" <?= Auth::user()->auth_level == 4 ? 'readonly' : '' ?>>
                                                 </div>
                                             </div>
                                             <div class="col-lg-4">
                                                 <label class="form-label" for="contact-number">Contact Number</label>
                                                 <div class="input-group">
                                                     <span class="input-group-text bg-secondary-200" id="basic-addon1">+91</span>
-                                                    <input type="text" class="form-control" id="contact-number"   value="<?= $mobile ?>"  name="mobile" placeholder="123-456-7890" readonly>
+                                                    <input type="text" class="form-control" id="contact-number"   value="<?= $mobile ?>"  name="mobile" placeholder="123-456-7890" <?= Auth::user()->auth_level == 4 ? 'readonly' : '' ?>>
                                                 </div>
                                             </div>
 
@@ -85,10 +88,14 @@
                                                 </div>
                                             </div> -->
 
-                                            <div class="col-lg-12 d-flex justify-content-end gap-2 flex-shrink-0 mt-8">
-                                                <button type="button" class="btn btn-light-dark text-body">Cancel</button>
-                                                <button type="submit" class="btn btn-primary">Submit</button>
-                                            </div>
+                                            <?php  if (Auth::user()->auth_level != 4) { ?>
+
+                                                <div class="col-lg-12 d-flex justify-content-end gap-2 flex-shrink-0 mt-8">
+                                                    <button type="button" class="btn btn-light-dark text-body">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                                </div>
+
+                                            <?php } ?>
                                         </div>
                                     </form>
                                 </div>
