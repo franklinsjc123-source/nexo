@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\DirectOrder;
 use App\Models\DirectOrderItems;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Shop;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\URL;
@@ -34,7 +36,13 @@ class OrderController extends Controller
             return view('unauthorized');
         }
 
-        $records   =  DirectOrder::orderBy('id', 'DESC')->get();
+        if (Auth::user()->auth_level == 4) {
+            $shop_id   =  Shop::where('user_id', auth()->id())->value('id');
+            $records   =  DirectOrder::where('shop_id', $shop_id)->orderBy('id', 'DESC')->get();
+        } else {
+            $records   =  DirectOrder::orderBy('id', 'DESC')->get();
+        }
+
         return view('backend.order.direct_order_list', compact('records'));
     }
 
@@ -59,13 +67,13 @@ class OrderController extends Controller
         if ($id > 0) {
             $record = DirectOrder::where('id', $id)->first();
             $order_items = DirectOrderItems::where('order_id', $id)->get();
-
         }
 
-        return view('backend.order.add_edit', compact('record','order_items'));
+        return view('backend.order.add_edit', compact('record', 'order_items'));
     }
 
-     public function storeUpdateDirectOrder(Request $request){
+    public function storeUpdateDirectOrder(Request $request)
+    {
 
         $input = $request->all();
         $id    = $input['id'];
@@ -74,18 +82,17 @@ class OrderController extends Controller
 
         foreach ($input['product_name'] as $i => $product_name) {
 
-             DirectOrderItems::create([
+            DirectOrderItems::create([
                 'order_id'      => $id,
                 'hsn_code'      => $request->hsn_code[$i] ?? '',
                 'product_name'  => $product_name,
                 'quantity'      => $request->quantity[$i] ?? 0,
                 'amount'        => $request->amount[$i] ?? 0,
             ]);
-
         }
 
 
-        $pdfFileName = 'Invoice_' .$id . '_' . date('Ymd_His') . '.pdf';
+        $pdfFileName = 'Invoice_' . $id . '_' . date('Ymd_His') . '.pdf';
 
         $pdfPath = public_path('uploads/direct_order_invoice/' . $pdfFileName);
 
@@ -94,7 +101,7 @@ class OrderController extends Controller
 
         $pdf = Pdf::loadView(
             'backend.order.generate_invoice',
-            compact('order_items','order_details')
+            compact('order_items', 'order_details')
         )
             ->setPaper('A4', 'portrait')
             ->setOptions([
@@ -108,12 +115,11 @@ class OrderController extends Controller
             'cgst' => $request->total_amount * 0.09,
             'sgst' => $request->total_amount * 0.09,
             'total_tax_amount' => $request->total_amount * 0.18,
-            'total_invoice_amount' => ( $request->total_amount * 0.18 )  +  $request->total_amount,
+            'total_invoice_amount' => ($request->total_amount * 0.18)  +  $request->total_amount,
             'invoice_file' => URL::to('/') . '/uploads/direct_order_invoice/' . $pdfFileName
         ]);
 
 
         return redirect()->route('direct-orders')->with('success', 'Invoice generated successfully');
-
-     }
+    }
 }
