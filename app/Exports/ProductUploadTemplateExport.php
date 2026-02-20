@@ -25,6 +25,7 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
                 'product_name',
                 'unit',
                 'qty',
+                'hsn_code',
                 'original_price',
                 'discount_price',
                 'product_description'
@@ -37,6 +38,7 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
                 'product_name',
                 'unit',
                 'qty',
+                'hsn_code',
                 'original_price',
                 'discount_price',
                 'product_description'
@@ -69,17 +71,14 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
                 $listSheet = $spreadsheet->createSheet();
                 $listSheet->setTitle('lists');
 
-                // Category list
                 foreach ($categories as $i => $value) {
                     $listSheet->setCellValue('A' . ($i + 1), $value);
                 }
 
-                // Unit list
                 foreach ($units as $i => $value) {
                     $listSheet->setCellValue('C' . ($i + 1), $value);
                 }
 
-                // Only if NOT auth_level 4 → Add shop
                 if ($authLevel != 4) {
                     $shops = Shop::where('status', 1)
                         ->pluck('shop_name')
