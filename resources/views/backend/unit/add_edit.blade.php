@@ -42,7 +42,7 @@
                                  <div class="row g-4">
                                     <div class="col-xl-4">
                                          <label for="unit_name" class="form-label">Unit <span class="text-danger"> *</span></label>
-                                         <input type="text"  value="<?php echo $unit_name?>" class="form-control" id="unit_name" name="unit_name" placeholder="Enter Unit Name" onkeyup="commonCheckExist(this,'unit', 'unit_name', this.value)">
+                                         <input type="text"  value="<?php echo $unit_name?>" class="form-control" id="unit_name" name="unit_name" placeholder="Enter Unit Name" onkeyup="commonCheckExist(this,'unit','unit_name', this.value, {{ $id ?? 'null' }})"  >
                                         <span class="text-danger error-message"></span>
                                     </div>
                                  </div>

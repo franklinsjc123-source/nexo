@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Shop;
 use App\Models\Product;
+use App\Models\Offers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -48,6 +49,7 @@ class CommonController extends Controller
 
         if ($input['model'] ==  'Shop') {
             Product::where('shop', $id)->delete();
+            Offers::where('shop_id', $id)->delete();
             $shop   =  Shop::where('id', $id)->first();
             User::where('id', $shop->user_id)->delete();
         }

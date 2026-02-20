@@ -34,7 +34,6 @@ class OfferController extends Controller
         }
 
 
-
         return view('backend.offers.list', compact('records'));
     }
 
@@ -44,6 +43,7 @@ class OfferController extends Controller
         if ($id > 0) {
             $records   =  Offers::where('id', $id)->first();
         }
+
         $shopData       =  Shop::orderBy('shop_name', 'ASC')->get();
 
         return view('backend.offers.add_edit', compact('records', 'id', 'shopData'));

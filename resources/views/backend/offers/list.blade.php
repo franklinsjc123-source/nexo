@@ -45,7 +45,7 @@
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
                                 <?php if(Auth::user()->auth_level != 4)  { ?>
-                                    <td><?= $row->shopData->shop_name ?></td>
+                                   <td>{{ $row->shopData?->shop_name ?? '-' }}</td>
                                 <?php } ?>
 
                                 <td><?= $row->offer_code ?></td>

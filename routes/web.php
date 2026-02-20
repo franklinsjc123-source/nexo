@@ -17,6 +17,7 @@ use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DeliveryPersonController;
 use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\OfferController;
+use App\Http\Controllers\Backend\ReferralController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -64,9 +65,9 @@ Route::middleware('auth.request')->group(function () {
 
 
     //Refferar
-    Route::get("users", [UserController::class, 'users'])->name('users');
-    Route::get('addUser/{id?}', [UserController::class, 'addUser'])->name('addUser');
-    Route::post('storeUpdateUser', [UserController::class, 'storeUpdateUser'])->name('storeUpdateUser');
+    Route::get("referral", [ReferralController::class, 'referral'])->name('referral');
+    Route::get('addReferral/{id?}', [ReferralController::class, 'addReferral'])->name('addReferral');
+    Route::post('storeUpdateReferral', [ReferralController::class, 'storeUpdateReferral'])->name('storeUpdateReferral');
 
     // Slider
     Route::get('slider', [SliderController::class, 'slider'])->name('slider');

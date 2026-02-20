@@ -321,6 +321,19 @@ use Illuminate\Support\Facades\Auth;
                 @endif
 
 
+                    @if(auth()->check() && auth()->user()->hasPermission('Referral'))
+
+                   <li class="pe-slide pe-has-sub">
+                    <a href="{{ route('referral') }}" class="pe-nav-link">
+                        <i class="bi  bi-ticket-detailed pe-nav-icon"></i>
+                        <span class="pe-nav-content">Referral </span>
+                    </a>
+                </li>
+                @endif
+
+
+
+
 
 
 
