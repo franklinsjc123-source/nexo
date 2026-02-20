@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Shop;
-use App\Models\Zone;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -43,13 +43,17 @@ class CommonController extends Controller
         $input  = $request->all();
         $id     = $input['id'];
         $model  = 'App\\Models\\' . $input['model'];
-        $update = $model::where('id', $id)->delete();
+
+
 
         if ($input['model'] ==  'Shop') {
-            'App\\Models\\Product'::where('shop', $id)->delete();
+            Product::where('shop', $id)->delete();
             $shop   =  Shop::where('id', $id)->first();
-            'App\\Models\\User'::where('id', $shop->user_id)->delete();
+            User::where('id', $shop->user_id)->delete();
         }
+
+        $update = $model::where('id', $id)->delete();
+
 
 
         if ($update) {

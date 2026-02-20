@@ -63,6 +63,11 @@ Route::middleware('auth.request')->group(function () {
     Route::post('storeUpdateUser', [UserController::class, 'storeUpdateUser'])->name('storeUpdateUser');
 
 
+    //Refferar
+    Route::get("users", [UserController::class, 'users'])->name('users');
+    Route::get('addUser/{id?}', [UserController::class, 'addUser'])->name('addUser');
+    Route::post('storeUpdateUser', [UserController::class, 'storeUpdateUser'])->name('storeUpdateUser');
+
     // Slider
     Route::get('slider', [SliderController::class, 'slider'])->name('slider');
     Route::get('addSlider/{id?}', [SliderController::class, 'addSlider'])->name('addSlider');
