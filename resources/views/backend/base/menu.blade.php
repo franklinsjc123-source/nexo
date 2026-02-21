@@ -333,95 +333,105 @@ use Illuminate\Support\Facades\Auth;
 
 
 
+                @php
+                    $showSettings =
+                        auth()->check() && (
+                            auth()->user()->hasPermission('Company-Settings') ||
+                            auth()->user()->hasPermission('Pincode') ||
+                            auth()->user()->hasPermission('Slider') ||
+                            auth()->user()->hasPermission('User-Management') ||
+                            auth()->user()->hasPermission('permission') ||
+                            Auth::user()->auth_level == 1
+                        );
+                @endphp
+                
+                @if($showSettings)
+
+                    <li class="pe-slide pe-has-sub active">
+
+                        <a href="#collapseLogistics" class="pe-nav-link" data-bs-toggle="collapse"
+                            aria-expanded="true"
+                            aria-controls="collapseLogistics">
+                            <i class="bi bi-gear-fill pe-nav-icon"></i>
+                            <span class="pe-nav-content">Settings</span>
+                            <i class="ri-arrow-down-s-line pe-nav-arrow"></i>
+                        </a>
+
+                        <ul class="pe-slide-menu collapse " id="collapseLogistics">
+
+                            <li class="slide pe-nav-content1">
+                                <a href="javascript:void(0)">Settings</a>
+                            </li>
+
+                            @if(auth()->check() && auth()->user()->hasPermission('Company-Settings'))
+                                <li class="pe-slide-item">
+                                    <a href="<?= route('company') ?>" class="pe-nav-link
+                                            @if(request()->routeIs(['company', 'addCompany'])) active @endif">
+                                        Company Setttings
+                                    </a>
+                                </li>
+                            @endif
 
 
+                            @if(auth()->check() && auth()->user()->hasPermission('Pincode'))
 
-
-                      <li class="pe-slide pe-has-sub active">
-
-                    <a href="#collapseLogistics" class="pe-nav-link" data-bs-toggle="collapse"
-                        aria-expanded="true"
-                        aria-controls="collapseLogistics">
-                        <i class="bi bi-gear-fill pe-nav-icon"></i>
-                        <span class="pe-nav-content">Settings</span>
-                        <i class="ri-arrow-down-s-line pe-nav-arrow"></i>
-                    </a>
-
-                    <ul class="pe-slide-menu collapse " id="collapseLogistics">
-
-                        <li class="slide pe-nav-content1">
-                            <a href="javascript:void(0)">Settings</a>
-                        </li>
-
-                        @if(auth()->check() && auth()->user()->hasPermission('Company-Settings'))
                             <li class="pe-slide-item">
-                                <a href="<?= route('company') ?>" class="pe-nav-link
-                                        @if(request()->routeIs(['company', 'addCompany'])) active @endif">
-                                    Company Setttings
+                                <a href="<?= route('pincode') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['pincode', 'addPincode'])) active @endif">
+                                    Pincode
                                 </a>
                             </li>
-                        @endif
+                            @endif
 
+                            @if(auth()->check() && auth()->user()->hasPermission('Slider'))
 
-                        @if(auth()->check() && auth()->user()->hasPermission('Pincode'))
-
-                        <li class="pe-slide-item">
-                            <a href="<?= route('pincode') ?>" class="pe-nav-link
-                                    @if(request()->routeIs(['pincode', 'addPincode'])) active @endif">
-                                Pincode
-                            </a>
-                        </li>
-                        @endif
-
-                        @if(auth()->check() && auth()->user()->hasPermission('Slider'))
-
-                         <li class="pe-slide-item">
-                            <a href="<?= route('slider') ?>" class="pe-nav-link
-                                    @if(request()->routeIs(['slider', 'addSlider'])) active @endif">
-                                Slider
-                            </a>
-                        </li>
-                        @endif
-
-
-                        @if(auth()->check() && auth()->user()->hasPermission('User-Management'))
                             <li class="pe-slide-item">
-                                <a href="<?= route('users') ?>" class="pe-nav-link
-                                        @if(request()->routeIs(['user', 'addUser'])) active @endif">
-                                    User Management
+                                <a href="<?= route('slider') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['slider', 'addSlider'])) active @endif">
+                                    Slider
                                 </a>
                             </li>
-                        @endif
-
-                         @if(auth()->check() && auth()->user()->hasPermission('permission'))
-                          <li class="pe-slide-item">
-                            <a href="<?= route('permission') ?>" class="pe-nav-link
-                                     @if(request()->routeIs(['permission', 'addPermission'])) active @endif">
-                                Permission
-                            </a>
-                        </li>
-                        @endif
-
-                     <?php  if(Auth::user()->auth_level  == 1 ) {  ?>
-                        <li class="pe-slide-item">
-                            <a href="<?= route('assign-permission') ?>" class="pe-nav-link
-                                    @if(request()->routeIs(['assign-permission'])) active @endif">
-                               Assign Permission
-                            </a>
-                        </li>
-
-                        <li class="pe-slide-item">
-                            <a href="{{ route('assign-permission', ['type' => 'shop']) }}"
-                            class="pe-nav-link {{ request()->get('type') == 'shop' ? 'active' : '' }}">
-                            Assign Permission Shop
-                            </a>
-                        </li>
-                    <?php } ?>
-
-                    </ul>
-                </li>
+                            @endif
 
 
+                            @if(auth()->check() && auth()->user()->hasPermission('User-Management'))
+                                <li class="pe-slide-item">
+                                    <a href="<?= route('users') ?>" class="pe-nav-link
+                                            @if(request()->routeIs(['user', 'addUser'])) active @endif">
+                                        User Management
+                                    </a>
+                                </li>
+                            @endif
+
+                            @if(auth()->check() && auth()->user()->hasPermission('permission'))
+                            <li class="pe-slide-item">
+                                <a href="<?= route('permission') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['permission', 'addPermission'])) active @endif">
+                                    Permission
+                                </a>
+                            </li>
+                            @endif
+
+                        <?php  if(Auth::user()->auth_level  == 1 ) {  ?>
+                            <li class="pe-slide-item">
+                                <a href="<?= route('assign-permission') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['assign-permission'])) active @endif">
+                                Assign Permission
+                                </a>
+                            </li>
+
+                            <li class="pe-slide-item">
+                                <a href="{{ route('assign-permission', ['type' => 'shop']) }}"
+                                class="pe-nav-link {{ request()->get('type') == 'shop' ? 'active' : '' }}">
+                                Assign Permission Shop
+                                </a>
+                            </li>
+                        <?php } ?>
+
+                        </ul>
+                    </li>
+
+                @endif
 
 
 
