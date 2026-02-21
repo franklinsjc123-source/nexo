@@ -59,9 +59,30 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
 
                 $authLevel = Auth::user()->auth_level;
 
-                $categories = Category::where('status', 1)
-                    ->pluck('category_name')
-                    ->toArray();
+
+                if (Auth::user()->auth_level == 4) {
+                    $shopCategories = Shop::where('user_id', auth()->id())
+                        ->value('category');
+
+                    $categories = [];
+
+                    if ($shopCategories) {
+
+                        $categoryIds = explode(',', $shopCategories);
+
+                        $categories = Category::where('status', 1)
+                            ->whereIn('id', $categoryIds)
+                            ->pluck('category_name')
+                            ->toArray();
+                    }
+                } else {
+
+                    $categories = Category::where('status', 1)
+                        ->pluck('category_name')
+                        ->toArray();
+                }
+
+
 
                 $units = Unit::where('status', 1)
                     ->pluck('unit_name')
