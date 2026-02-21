@@ -21,7 +21,7 @@ class HomeController extends Controller
 
         if ($pincode) {
 
-            $checkPincodeExistence = PinCode::where('pincode', $pincode)->exists();
+            $checkPincodeExistence = PinCode::where('pincode', $pincode)->where('status', 1)->exists();
 
             $category   = Category::where('status', 1)->get();
             $shops      = Shop::where('status', 1)->inRandomOrder()->limit(8)->get();
