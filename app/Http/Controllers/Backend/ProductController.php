@@ -44,6 +44,7 @@ class ProductController extends Controller
 
             $categoryIdsArray = $categoryIds ? explode(',', $categoryIds) : [];
             $categoryData     = Category::where('status', 1)->whereIn('id', $categoryIdsArray)->orderBy('category_name', 'ASC')->get();
+            
         } else {
             $categoryData   =  Category::where('status', 1)->orderBy('category_name', 'ASC')->get();
         }

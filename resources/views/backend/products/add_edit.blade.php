@@ -76,6 +76,7 @@
                                       if(Auth::user()->auth_level == 4)  {
 
                                            $shop_id = \App\Models\Shop::where('user_id', auth()->id())->value('id');
+                                           $is_hotel = \App\Models\Shop::where('id',  $shop_id)->value('is_hotel');
                                         ?>
                                         <input type="hidden" name="shop"  value="{{  $shop_id }}">
 
@@ -104,7 +105,9 @@
                                             @error('product_name') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
 
-                                        <div class="col-xl-4" id="food_type_div" style="display:none;">
+                                        <?php  if (Auth::user()->auth_level == 4 && $is_hotel == 1 )  {  ?>
+
+                                            <div class="col-xl-4"  >
                                                 <label for="food_type" class="form-label">
                                                     Food Type <span class="text-danger">*</span>
                                                 </label>
@@ -119,6 +122,28 @@
                                                     <span class="text-danger">{{ $message }}</span>
                                                 @enderror
                                             </div>
+
+                                        <?php } else { ?>
+
+                                            <div class="col-xl-4" id="food_type_div" style="display:none;">
+                                                <label for="food_type" class="form-label">
+                                                    Food Type <span class="text-danger">*</span>
+                                                </label>
+
+                                                <select name="food_type" id="food_type" class="form-select ">
+                                                    <option value="">Select Type</option>
+                                                    <option value="veg" {{ old('food_type', $food_type) == 'veg' ? 'selected' : '' }}>Veg</option>
+                                                    <option value="non_veg" {{ old('food_type', $food_type) == 'non_veg' ? 'selected' : '' }}>Non-Veg</option>
+                                                </select>
+
+                                                @error('food_type')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
+
+                                     <?php    } ?>
+
+
 
                                          <div class="col-xl-4">
                                             <label for="contact_no" class="form-label">
