@@ -45,7 +45,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 col-xl-4 col-xxl-3">
+            <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 datascienceGradient text-white">
                      <a href="{{ route('orders') }}">
                     <div class="card-body">
@@ -67,7 +67,6 @@
 
 
 
-            <div class="row mt-5">
             <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 webGradient text-white">
                      <a href="{{ route('direct-orders') }}">
@@ -115,7 +114,7 @@
         <?php  if (Auth::user()->auth_level != 4) { ?>
 
 
-            <div class="col-md-6 col-xl-4 col-xxl-3">
+            <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 datascienceGradient text-white">
                      <a href="{{ route('shop') }}">
                     <div class="card-body">
@@ -136,7 +135,7 @@
             </div>
 
 
-            <div class="col-md-6 col-xl-4 col-xxl-3">
+            <div class="col-md-6 col-xl-4 col-xxl-4">
                 <div class="card card-h-100 webGradient text-white">
                    <a href="{{ route('customers') }}">
                     <div class="card-body">
