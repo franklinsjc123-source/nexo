@@ -30,7 +30,7 @@ class HomeController extends Controller
             return response()->json([
                 'status'  => 'success',
                 'message' => 'Data received successfully',
-                'delivery' => !$checkPincodeExistence ? 'Delivery is not available for this pincode.' : 'Delivery is available.',
+                'delivery' => !$checkPincodeExistence ? 'not available' : 'available.',
                 'data'    => [
                     'categories' => $category,
                     'shops'      => $shops,
