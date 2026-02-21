@@ -157,7 +157,7 @@
 
 
             <div class="col-md-6 col-xl-4 col-xxl-4">
-                <div class="card card-h-100 IntelligenceGradient text-white">
+                <div class="card card-h-100 webGradient text-white">
                     <a href="{{ route('deliveryPerson') }}">
                     <div class="card-body">
 
