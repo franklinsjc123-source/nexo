@@ -23,10 +23,10 @@
                 <thead>
                     <tr>
                         <th>S.No</th>
-                        <th>Referral Code</th>
                         <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
+                        <th>Referred By</th>
                          <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -38,10 +38,11 @@
                             ?>
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
-                                <td><?php echo $row->referral_code ?></td>
                                 <td><?php echo $row->name ?></td>
                                 <td><?php echo $row->email ?></td>
                                 <td><?php echo $row->mobile ?></td>
+                                <td>{{ optional($row->referralData)->name ?? '-' }}</td>
+
                                 <td>
                                     <a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" onclick="changeStatus('<?php echo $row->id ?>','<?php echo ($row->status == 1) ? 0 : 1 ?>','User')" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">
                                             <?php echo ($row->status == 1) ? 'Active' : 'In-Active' ?>

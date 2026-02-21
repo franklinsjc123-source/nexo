@@ -47,4 +47,10 @@ class User extends Authenticatable implements LaratrustUser
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+
+        public function referralData()
+    {
+        return $this->belongsTo(Referral::class, 'referral_code', 'referral_code');
+    }
 }
