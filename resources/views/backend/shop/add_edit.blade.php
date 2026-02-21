@@ -10,6 +10,7 @@
     $user_id                = isset($records->user_id) ? $records->user_id : '';
     $category               = isset($records->category) ? $records->category : '';
     $shop_name              = isset($records->shop_name) ? $records->shop_name : '';
+    $is_hotel               = isset($records->is_hotel) ? $records->is_hotel : '';
     $email                  = isset($records->userData->email) ? $records->userData->email : '';
     $gst_no                 = isset($records->gst_no) ? $records->gst_no : '';
     $contact_no             = isset($records->contact_no) ? $records->contact_no : '';
@@ -171,6 +172,44 @@
                                             @if($photo_path =="" )
                                                 @error('photo_path') <span class="text-danger">{{$message}}</span> @enderror
                                             @endif
+                                        </div>
+
+                                        <div class="col-xl-4">
+                                            <label class="form-label">Is Hotel? <span class="text-danger">*</span></label>
+
+                                            <div class="d-flex gap-4 mt-2">
+
+                                                {{-- YES --}}
+                                                <div class="form-check">
+                                                    <input class="form-check-input"
+                                                        type="radio"
+                                                        name="is_hotel"
+                                                        id="is_hotel_yes"
+                                                        value="1"
+                                                        {{ old('is_hotel', $is_hotel ?? 0) == 1 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="is_hotel_yes">
+                                                        Yes
+                                                    </label>
+                                                </div>
+
+                                                {{-- NO (Default Selected) --}}
+                                                <div class="form-check">
+                                                    <input class="form-check-input"
+                                                        type="radio"
+                                                        name="is_hotel"
+                                                        id="is_hotel_no"
+                                                        value="0"
+                                                        {{ old('is_hotel', $is_hotel ?? 0) == 0 ? 'checked' : '' }}>
+                                                    <label class="form-check-label" for="is_hotel_no">
+                                                        No
+                                                    </label>
+                                                </div>
+
+                                            </div>
+
+                                            @error('is_hotel')
+                                                <span class="text-danger">{{ $message }}</span>
+                                            @enderror
                                         </div>
                                 </div>
                              </div>

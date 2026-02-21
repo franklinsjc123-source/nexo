@@ -64,6 +64,7 @@ class ProductController extends Controller
         $unit                = $request->unit ?? '';
         $product_name        = $request->product_name ?? '';
         $hsn_code            = $request->hsn_code ?? '';
+        $food_type            = $request->food_type ?? '';
         $original_price      = $request->original_price ?? '';
         $discount_price      = $request->discount_price ?? '';
         $product_description = $request->product_description ?? '';
@@ -82,6 +83,7 @@ class ProductController extends Controller
             'qty'                       => $qty,
             'unit'                      => $unit,
             'product_name'              => $product_name,
+            'food_type'                 => $food_type,
             'hsn_code'                  => $hsn_code,
             'original_price'            => $original_price,
             'discount_price'            => $discount_price,
@@ -113,7 +115,7 @@ class ProductController extends Controller
 
         $shops = Shop::whereRaw("FIND_IN_SET(?, category)", [$request->category_id])
             ->where('status', 1)
-            ->get(['id', 'shop_name']);
+            ->get(['id', 'shop_name','is_hotel']);
         return $shops;
     }
 }

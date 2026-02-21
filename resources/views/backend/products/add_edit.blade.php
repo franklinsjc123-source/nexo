@@ -10,6 +10,7 @@
     $qty                    = isset($records->qty) ? $records->qty : '';
     $unit                   = isset($records->unit) ? $records->unit : '';
     $product_name           = isset($records->product_name) ? $records->product_name : '';
+    $food_type              = isset($records->food_type) ? $records->food_type : '';
     $hsn_code               = isset($records->hsn_code) ? $records->hsn_code : '';
     $original_price         = isset($records->original_price) ? $records->original_price : '';
     $discount_price         = isset($records->discount_price) ? $records->discount_price : '';
@@ -70,11 +71,6 @@
 
                                         </div>
 
-
-
-
-
-
                                     <?php
 
                                       if(Auth::user()->auth_level == 4)  {
@@ -107,6 +103,22 @@
                                             <input type="text" class="form-control" id="product_name" name="product_name" placeholder="Enter Product Name" value="<?= old('product_name',$product_name) ?? '' ?>"  >
                                             @error('product_name') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
+
+                                        <div class="col-xl-4" id="food_type_div" style="display:none;">
+                                                <label for="food_type" class="form-label">
+                                                    Food Type <span class="text-danger">*</span>
+                                                </label>
+
+                                                <select name="food_type" id="food_type" class="form-select ">
+                                                    <option value="">Select Type</option>
+                                                    <option value="veg" {{ old('food_type', $food_type) == 'veg' ? 'selected' : '' }}>Veg</option>
+                                                    <option value="non_veg" {{ old('food_type', $food_type) == 'non_veg' ? 'selected' : '' }}>Non-Veg</option>
+                                                </select>
+
+                                                @error('food_type')
+                                                    <span class="text-danger">{{ $message }}</span>
+                                                @enderror
+                                            </div>
 
                                          <div class="col-xl-4">
                                             <label for="contact_no" class="form-label">
@@ -210,6 +222,35 @@
  </main>
  <script>
 
+//     $(document).on('change', '#shop', function () {
+
+//     let isHotel = $(this).find(':selected').data('hotel');
+
+//     if (isHotel == 1) {
+//         $('#food_type_div').removeClass('d-none');
+//     } else {
+//         $('#food_type_div').addClass('d-none');
+//         $('#food_type').val('');
+//     }
+
+// });
+
+$(document).on('change', '#shop', function () {
+
+    let isHotel = $(this).find(':selected').data('hotel');
+
+    if (isHotel == 1) {
+        $('#food_type_div').slideDown(200);
+    } else {
+        $('#food_type_div').slideUp(200);
+        $('#food_type').val('');
+    }
+
+});
+
+
+
+
     $('#category').on('change', function () {
     let categoryId = $(this).val();
 
@@ -222,9 +263,11 @@
             data: { category_id: categoryId },
             success: function (data) {
                 $.each(data, function (key, value) {
-                    $('#shop').append(
-                        '<option value="'+ value.id +'">'+ value.shop_name +'</option>'
-                    );
+                  $('#shop').append(
+            '<option value="'+ value.id +'" data-hotel="'+ value.is_hotel +'">'+
+            value.shop_name +
+            '</option>'
+        );
                 });
             }
         });
@@ -235,6 +278,7 @@ $(document).ready(function () {
 
     let categoryId = $('#category').val();
     let selectedShop = "{{ old('shop', $shop ?? '') }}";
+
 
     $('#shop').empty().append('<option value="">Select Shop</option>');
 
@@ -249,12 +293,14 @@ $(document).ready(function () {
 
                     let selected = (value.id == selectedShop) ? 'selected' : '';
 
-                    $('#shop').append(
-                        '<option value="' + value.id + '" ' + selected + '>' +
+                   $('#shop').append(
+                        '<option value="' + value.id + '" data-hotel="' + value.is_hotel + '" ' + selected + '>' +
                         value.shop_name +
                         '</option>'
                     );
                 });
+
+                $('#shop').trigger('change');
             }
         });
     }
@@ -294,6 +340,15 @@ $(document).ready(function () {
                     required: true
                 },
 
+
+                food_type: {
+                    required: function () {
+                        let isHotel = $('#shop').find(':selected').data('hotel');
+                        return isHotel == 1;
+                    }
+                },
+
+
                 product_image: {
                     required: function () {
                         return $('#has_old_product_image').val() == 0;
@@ -325,9 +380,10 @@ $(document).ready(function () {
                     required: "Please enter product description"
                 },
 
-                // unit: {
-                //     required: "Please select unit"
-                // },
+
+                food_type: {
+                    required: "Please select food type"
+                },
 
                 //  qty: {
                 //     required: "Please enter quantity"

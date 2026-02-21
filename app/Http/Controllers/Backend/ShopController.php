@@ -21,7 +21,7 @@ class ShopController extends Controller
         }
 
         $records   =  Shop::orderBy('id', 'ASC')->get();
-        
+
         // dd( $records);
 
         return view('backend.shop.list', compact('records'));
@@ -54,6 +54,7 @@ class ShopController extends Controller
         $start_time = $request->start_time ?? '';
         $end_time   = $request->end_time ?? '';
         $gst_no     = $request->gst_no ?? '';
+        $is_hotel   = $request->is_hotel ?? '';
         $address    = $request->address ?? '';
         $imageUrl   = $request->old_photo_path ?? '';
 
@@ -102,6 +103,7 @@ class ShopController extends Controller
             'end_time'      => $end_time,
             'gst_no'        => $gst_no,
             'address'       => $address,
+            'is_hotel'      => $is_hotel,
             'file_path'     => $imageUrl,
         ];
 
