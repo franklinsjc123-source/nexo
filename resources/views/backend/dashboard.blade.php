@@ -115,7 +115,7 @@
 
 
             <div class="col-md-6 col-xl-4 col-xxl-4">
-                <div class="card card-h-100 datascienceGradient text-white">
+                <div class="card card-h-100 IntelligenceGradient text-white">
                      <a href="{{ route('shop') }}">
                     <div class="card-body">
 
@@ -136,7 +136,7 @@
 
 
             <div class="col-md-6 col-xl-4 col-xxl-4">
-                <div class="card card-h-100 webGradient text-white">
+                <div class="card card-h-100 datascienceGradient text-white">
                    <a href="{{ route('customers') }}">
                     <div class="card-body">
 
