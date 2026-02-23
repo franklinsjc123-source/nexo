@@ -20,7 +20,9 @@
                                     @error('email') <span class="text-danger">{{ $message }}</span>@enderror
                                 </div>
                                 <div class="col-12">
-                                    <label for="password" class="form-label">Password <span class="text-danger">*</span> <i onclick="showPasswd()" class="bi bi-eye ms-1 fs-16"></i></label>
+                                    <label for="password" class="form-label">Password <span class="text-danger">*</span>
+                                        {{-- <i onclick="showPasswd()" class="bi bi-eye ms-1 fs-16"></i> --}}
+                                    </label>
                                     <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" >
                                      @error('password') <span class="text-danger">{{ $message }}</span>@enderror
                                 </div>
