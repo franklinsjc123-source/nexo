@@ -20,24 +20,25 @@
 </head>
 <body>
 
-     <table width="100%" style="margin-top:-20px; border:none !important; border-collapse:collapse;">
+     <table width="100%" style=" border-radius: 50px; margin-top:-20px; border:none !important; border-collapse:collapse;">
         <tr style="border:none !important;">
 
-            <td width="20%" style="border:none;">
+            <td width="10%" style="border:none;">
                 <img src="{{ $company->logo  }}" style="height :80px; width:80px">
             </td>
 
-            <td width="50%" style="border:none; text-align:center;">
+            <td width="60%" style="border:none; text-align:center;">
                 <h2 style="margin:0;"> NEXOCART</h2>
                 <p style="margin:5px 0;">
-                <b>{{ $company->company_address }} , <br>{{  $company->state }}  - {{  $company->pincode }}</b> <br>
+                <b>{{ $company->company_address }} , <br>{{  $company->state }}  - {{  $company->pincode }} .</b> <br>
+                <b>  Email :  {{ $company->email }} </b> </p>
 
-                <b>  Mobile :  {{ $company->phone }} </b> </p>
 
             </td>
-            <td width="20%" style="border:none !important;" class="right" colspan="2">
-                <b>GST No: {{ $company->gst_no }}</b>
-                <b>  Email :  {{ $company->email }} </b> </p>
+            <td width="30%" style="border:none !important;" class="right" colspan="2">
+                <b>GST No: {{ $company->gst_no }}</b><br>
+                <b>  Mobile :  {{ $company->phone }} </b> </p>
+
 
             </td>
         </tr>
@@ -46,15 +47,8 @@
 
 <hr>
 
- To:<br>
-<b>dfgdfgdfg</b> <br>
-dfghdflkgdfg
-- 60088<br>
 
-
-<br>
-
-    <b>Abstract For the Month of {{ \Carbon\Carbon::create()->month($month)->format('F') }} {{ $year }}  </b><br>
+   <h3><b>Abstract For the Month of {{ \Carbon\Carbon::create()->month($month)->format('F') }} {{ $year }}  </b></h3>
 
 <br>
 
