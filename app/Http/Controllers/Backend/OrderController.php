@@ -8,6 +8,8 @@ use App\Models\DirectOrder;
 use App\Models\DirectOrderItems;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Shop;
+use App\Models\Company
+;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\URL;
@@ -120,37 +122,58 @@ class OrderController extends Controller
         ]);
 
         return redirect()->route('direct-orders')->with('success', 'Invoice generated successfully');
-
     }
 
-    public function directOrdersAbstract(Request $request){
-
-
+    public function directOrdersAbstract(Request $request)
+    {
 
         $year  = (int) $request->year;
         $month = (int) $request->month;
         $company = (int) $request->company;
         $abstract_submit =  $request->abstract_submit;
 
-
-
         if (!empty($request)) {
 
-            $records   =  DirectOrder::whereDate('created_at', $year)
-                ->whereDate('created_at', $month)->orderBy('id', 'ASC')->get();
+            $records   =  DirectOrder::whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)->orderBy('id', 'ASC')->get();
 
-        return view('backend.order.direct_order_list', compact('records'));
+
+            return view('backend.order.direct_order_list', compact('records'));
         }
-
     }
 
 
 
-   public function storeDirectOrdersAbstract(Request $request){
+    public function storeDirectOrdersAbstract(Request $request)
+    {
 
 
+        $input = $request->all();
 
-   }
+        $year  = $input['absract_year'];
+        $month = $input['absract_month'];
 
+        $records = DirectOrder::whereYear('created_at', $year)
+            ->whereMonth('created_at', $month)
+            ->orderBy('id', 'ASC')
+            ->get();
 
+        $monthName = date('F', mktime(0, 0, 0, $month, 10));
+
+        $pdfFileName = 'Abstract_'. '_' . $monthName. '_' . $year. '.pdf';
+
+        $pdfPath = public_path('uploads/abstract/' . $pdfFileName);
+
+        $company = Company::orderBy('id', 'asc')->first();
+
+        $pdf = Pdf::loadView(
+            'backend.invoice.generate_abstract',
+            compact('records','year', 'month','company')
+        )->setPaper('A4', 'portrait')
+            ->setOptions(['isRemoteEnabled' => true]);
+
+        $pdf->save($pdfPath);
+
+        return response()->download($pdfPath, $pdfFileName);
+    }
 }

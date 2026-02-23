@@ -65,7 +65,6 @@
                 <div class="col-md-3 text-end">
                     <form method="POST" action="{{ route('abstract.download') }}">
                         @csrf
-                        <input type="hidden" name="absract_company" value="{{ request('company') }}">
                         <input type="hidden" name="absract_year" value="{{ request('year') }}">
                         <input type="hidden" name="absract_month" value="{{ request('month') }}">
 
