@@ -19,7 +19,7 @@ class ReferralController extends Controller
         }
 
 
-          $records = Referral::withCount(['users'])->get();
+        $records = Referral::withCount(['users'])->get();
 
         return view('backend.referral.list', compact('records'));
     }
@@ -38,14 +38,30 @@ class ReferralController extends Controller
         return view('backend.referral.add_edit', compact('record', 'id', 'new_referral_code'));
     }
 
+    // private function generateReferralCode()
+    // {
+    //     $year = date('Y');
+
+    //     $last = Referral::latest('id')->first();
+    //     $nextNumber = $last ? $last->id + 1 : 1;
+
+    //     return 'NC' . $year . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+    // }
+
+
     private function generateReferralCode()
     {
-        $year = date('Y');
+        $lastReferral = Referral::orderBy('id', 'desc')->first();
 
-        $last = Referral::latest('id')->first();
-        $nextNumber = $last ? $last->id + 1 : 1;
+        if (!$lastReferral || !$lastReferral->referral_code) {
+            return 'NC2026'; // starting value
+        }
 
-        return 'NC' . $year . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+        $lastNumber = (int) str_replace('NC', '', $lastReferral->referral_code);
+
+        $newNumber = $lastNumber + 1;
+
+        return 'NC' . $newNumber;
     }
 
 

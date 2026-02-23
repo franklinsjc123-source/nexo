@@ -21,12 +21,17 @@
              <div class="flex-shrink-0">
                  <nav aria-label="breadcrumb">
                      <ol class="breadcrumb justify-content-end mb-0">
-                         <li class="breadcrumb-item"><a href="javascript:void(0)">Direct Order</a></li>
+                         <li class="breadcrumb-item"><a href="javascript:void(0)">Direct Order </a></li>
                          <li class="breadcrumb-item active" aria-current="page"><?= $type ?></li>
                      </ol>
                  </nav>
              </div>
          </div>
+
+
+
+
+
          <div class="row">
              <div class="col-xl-12 col-xxl-12">
                  <form method="POST" id="directOrderForm" action="<?= route('storeUpdateDirectOrder') ?>" enctype="multipart/form-data">
@@ -47,9 +52,17 @@
                                 <div class="card-body">
                                     <div class="card-body row border shadow-lg rounded p-4 m-2">
 
+
+                                        <center>
+                                            <a target="_blank" href="<?=  $image_url  ?>"><img src="<?= $image_url ?>" class="mb-5" height="150" width="150" ></a>
+                                        </center>
+
+
                                         <div class="section-title bg-light mb-4">
                                             <h6 class="fw-bold text-success mb-0">Add Details</h6>
                                         </div>
+
+
 
 
                                         <div id="otherChargesWrapper">
@@ -202,11 +215,11 @@
    $(function() {
          $("#directOrderForm").validate({
              rules: {
-                 'vehicle_id[]': {
+                 'product_name[]': {
                      required: true
                  },
 
-                  'vehicle_model[]': {
+                  'quantity[]': {
                      required: true
                  },
 
@@ -216,8 +229,11 @@
              },
 
              messages: {
-                amount: {
-                     required: "Please select vehicle"
+                product_name: {
+                     required: "Please enter product name"
+                 },
+                    quantity: {
+                     required: "Please enter quantity"
                  },
                  vehicle_id: {
                      required: "Please enter amount"

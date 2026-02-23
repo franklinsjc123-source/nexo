@@ -17,6 +17,69 @@
 
         </div>
 
+
+        <div class="row mt-5 align-items-end">
+
+            <div class="col-md-9">
+                <form method="POST" action="{{ route('direct-order-abstract') }}">
+                    @csrf
+
+                    <div class="row">
+
+                        <div class="col-md-4 mb-2">
+                            <label>Year</label>
+                            <select class="form-control select2" name="year" id="yearSelect">
+                                @for($y = now()->year; $y >= 2025; $y--)
+                                    <option value="{{ $y }}" {{ (request('year') ?? now()->year) == $y ? 'selected' : '' }}>
+                                        {{ $y }}
+                                    </option>
+                                @endfor
+                            </select>
+                        </div>
+
+                        <div class="col-md-4 mb-2">
+                            <label>Month</label>
+                            <select class="form-control select2" name="month" id="monthSelect">
+                                @foreach([
+                                    1=>'January',2=>'February',3=>'March',4=>'April',
+                                    5=>'May',6=>'June',7=>'July',8=>'August',
+                                    9=>'September',10=>'October',11=>'November',12=>'December'
+                                ] as $key => $month)
+                                    <option value="{{ $key }}" {{ (request('month') ?? now()->month) == $key ? 'selected' : '' }}>
+                                        {{ $month }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <button class="btn btn-primary mt-2">
+                        Search
+                    </button>
+                </form>
+            </div>
+
+
+            @if(request('month'))
+                <div class="col-md-3 text-end">
+                    <form method="POST" action="{{ route('abstract.download') }}">
+                        @csrf
+                        <input type="hidden" name="absract_company" value="{{ request('company') }}">
+                        <input type="hidden" name="absract_year" value="{{ request('year') }}">
+                        <input type="hidden" name="absract_month" value="{{ request('month') }}">
+
+                        <button class="btn btn-success">
+                            <i class="bi bi-download"></i> Abstract
+                        </button>
+                    </form>
+                </div>
+            @endif
+
+</div>
+
+
+
         <div class="row">
 
             <table id="datatables" class="table table-nowrap table-hover table-bordered w-100 mt-5 colum-search">
