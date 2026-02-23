@@ -27,17 +27,19 @@
                 <img src="{{ $company->logo  }}" style="  border-radius: 50px; height :80px; width:80px">
             </td>
 
-            <td width="55%" style="border:none; text-align:center;">
+            <td width="60%" style="border:none; text-align:center;">
                 <h2 style="margin:0;"> NEXOCART</h2>
                 <p style="margin:5px 0;">
-                <b>{{ $company->company_address }} , <br>{{  $company->state }}  .</b> <br>
-                <b>  Mobile :  {{ $company->phone }} </b> </p>
+                <b>{{ $company->company_address }} , <br>{{  $company->state }}.</b> <br>
+                <b>  Email :  {{ $company->email }} </b> </p>
+
 
 
             </td>
-            <td width="35%" style="border:none !important;" class="right" colspan="2">
+            <td width="35%" style="border:none !important;" style="float:left" colspan="2">
                 <b>GST No: {{ $company->gst_no }}</b><br>
-                <b>  Email :  {{ $company->email }} </b> </p>
+                <b>  Mobile :  {{ $company->phone }} </b> </p>
+
 
 
 
@@ -49,7 +51,7 @@
 <hr>
 
 
-   <h3><b>Abstract For the Month of {{ \Carbon\Carbon::create()->month($month)->format('F') }} {{ $year }}  </b></h3>
+   <h3><b>Direct Order Abstract  For the Month of {{ \Carbon\Carbon::create()->month($month)->format('F') }} {{ $year }}  </b></h3>
 
 <br>
 
