@@ -29,6 +29,7 @@
                         <th>Name</th>
                         <th>Mobile</th>
                         <th>Referral Code</th>
+                        <th>Referred Members</th>
                         <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -43,6 +44,7 @@
                                 <td><?php echo $row->name ?></td>
                                 <td><?php echo $row->mobile ?></td>
                                 <td><?php echo $row->referral_code ?></td>
+                                <td><?php echo  $row->users_count ?></td>
 
                                 <td><a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" onclick="changeStatus('<?php echo $row->id ?>','<?php echo ($row->status == 1) ? 0 : 1 ?>','Referral')" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">
                                             <?php echo ($row->status == 1) ? 'Active' : 'In-Active' ?></a>

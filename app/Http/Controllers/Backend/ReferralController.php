@@ -19,7 +19,8 @@ class ReferralController extends Controller
         }
 
 
-        $records = Referral::get();
+          $records = Referral::withCount(['users'])->get();
+
         return view('backend.referral.list', compact('records'));
     }
 
@@ -75,7 +76,7 @@ class ReferralController extends Controller
                 'name'           => isset($input['name'])    ?  $input['name']    : '',
             );
             $update = Referral::Where('id', $id)->update($updateArray);
-            return redirect()->route('users')->with('success', 'Referral Updated Successfully');
+            return redirect()->route('referral')->with('success', 'Referral Updated Successfully');
         }
     }
 }

@@ -11,4 +11,9 @@ class Referral extends Model
     protected $table   = 'referral';
     protected $guarded = ['id'];
 
+    public function users()
+{
+    return $this->hasMany(User::class, 'referral_code', 'referral_code');
+}
+
 }
