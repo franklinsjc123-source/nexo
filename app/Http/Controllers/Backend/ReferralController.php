@@ -34,16 +34,19 @@ class ReferralController extends Controller
 
             $new_referral_code = $this->generateReferralCode();
         }
-        return view('backend.referral.add_edit', compact('record', 'id','new_referral_code'));
+        return view('backend.referral.add_edit', compact('record', 'id', 'new_referral_code'));
     }
 
     private function generateReferralCode()
     {
-        $last = Referral::orderBy('id', 'desc')->first();
-        $number = $last ? $last->id + 1 : 1;
+        $year = date('Y');
 
-        return 'REF' . str_pad($number, 4, '0', STR_PAD_LEFT);
+        $last = Referral::latest('id')->first();
+        $nextNumber = $last ? $last->id + 1 : 1;
+
+        return 'NC' . $year . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
     }
+
 
     public function storeUpdateReferral(Request $request)
     {
