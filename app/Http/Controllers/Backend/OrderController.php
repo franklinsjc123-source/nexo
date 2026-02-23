@@ -125,7 +125,7 @@ class OrderController extends Controller
 
     public function directOrdersAbstract(Request $request){
 
-    
+
 
         $year  = (int) $request->year;
         $month = (int) $request->month;
@@ -136,21 +136,11 @@ class OrderController extends Controller
 
         if (!empty($request)) {
 
-            $records   =  DirectOrder::whereDate('create_at', $year)
-                ->whereDate('create_at', $month)->orderBy('id', 'ASC')->get();
-
-            return view('backend.bill-trip.list', compact('records'));
-        }
-
-
-        if (Auth::user()->auth_level == 4) {
-            $shop_id   =  Shop::where('user_id', auth()->id())->value('id');
-            $records   =  DirectOrder::where('shop_id', $shop_id)->orderBy('id', 'DESC')->get();
-        } else {
-            $records   =  DirectOrder::orderBy('id', 'DESC')->get();
-        }
+            $records   =  DirectOrder::whereDate('created_at', $year)
+                ->whereDate('created_at', $month)->orderBy('id', 'ASC')->get();
 
         return view('backend.order.direct_order_list', compact('records'));
+        }
 
     }
 

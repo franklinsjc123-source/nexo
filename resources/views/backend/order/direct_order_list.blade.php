@@ -29,7 +29,7 @@
                         <div class="col-md-4 mb-2">
                             <label>Year</label>
                             <select class="form-control select2" name="year" id="yearSelect">
-                                @for($y = now()->year; $y >= 2025; $y--)
+                                @for($y = now()->year; $y >= 2026; $y--)
                                     <option value="{{ $y }}" {{ (request('year') ?? now()->year) == $y ? 'selected' : '' }}>
                                         {{ $y }}
                                     </option>
@@ -80,7 +80,7 @@
 
 
 
-        <div class="row">
+        <div class="row mt-5">
 
             <table id="datatables" class="table table-nowrap table-hover table-bordered w-100 mt-5 colum-search">
                 <thead>
