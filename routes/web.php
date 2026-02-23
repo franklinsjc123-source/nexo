@@ -120,7 +120,7 @@ Route::middleware('auth.request')->group(function () {
 
     //direct orders Management
     Route::get("direct-orders", [OrderController::class, 'directOrders'])->name('direct-orders');
-    Route::post("direct-order-abstract", [OrderController::class, 'directOrdersAbstract'])->name('direct-order-abstract');
+    Route::match(['get', 'post'],"direct-order-abstract", [OrderController::class, 'directOrdersAbstract'])->name('direct-order-abstract');
     Route::post('/abstract/download', [OrderController::class, 'storeDirectOrdersAbstract'])->name('abstract.download');
     Route::get("addDirectOrderBill/{id}", [OrderController::class, 'addDirectOrderBill'])->name('addDirectOrderBill');
     Route::post('direct-orders-status-update', [OrderController::class, 'updateOrderStatus'])->name('direct-orders-status-update');
