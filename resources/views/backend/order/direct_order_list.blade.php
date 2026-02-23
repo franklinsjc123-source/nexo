@@ -16,6 +16,7 @@
             </div>
 
         </div>
+        <?php if( Auth::user()->auth_level != 4) { ?>
 
 
         <div class="row mt-5 align-items-end">
@@ -75,7 +76,9 @@
                 </div>
             @endif
 
-</div>
+        </div>
+        <?php } ?>
+
 
 
 
