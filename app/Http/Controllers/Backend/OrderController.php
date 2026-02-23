@@ -100,7 +100,7 @@ class OrderController extends Controller
         $order_items = DirectOrderItems::where('order_id', $id)->get();
 
         $pdf = Pdf::loadView(
-            'backend.order.generate_invoice',
+            'backend.invoice.generate_invoice',
             compact('order_items', 'order_details')
         )
             ->setPaper('A4', 'portrait')
