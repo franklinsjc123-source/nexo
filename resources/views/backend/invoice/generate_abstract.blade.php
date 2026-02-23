@@ -40,9 +40,6 @@
                 <b>GST No: {{ $company->gst_no }}</b><br>
                 <b>  Mobile :  {{ $company->phone }} </b> </p>
 
-
-
-
             </td>
         </tr>
 
