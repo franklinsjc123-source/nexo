@@ -76,7 +76,7 @@
                                                         <!-- Description -->
                                                         <div class="col-xl-3">
                                                             <label class="form-label fw-semibold">Product Name</label>
-                                                            <input type="text" class="form-control required-field" name="product_name[]" value="{{ $oi->product_name }}" placeholder="Enter Product Name">
+                                                            <input type="text" class="form-control" name="product_name[]" value="{{ $oi->product_name }}" placeholder="Enter Product Name">
                                                         </div>
 
                                                         <div class="col-xl-2">
@@ -86,13 +86,13 @@
 
                                                         <div class="col-xl-2">
                                                             <label class="form-label fw-semibold">Quantity</label>
-                                                            <input type="text" class="form-control required-field" name="quantity[]" value="{{ $oi->quantity }}" placeholder="Example:  2 kg">
+                                                            <input type="text" class="form-control" name="quantity[]" value="{{ $oi->quantity }}" placeholder="Example:  2 kg">
                                                         </div>
 
                                                         <!-- Amount -->
                                                         <div class="col-xl-2">
                                                             <label class="form-label fw-semibold">Amount</label>
-                                                            <input type="text" class="form-control other-amount required-field" name="amount[]" value="{{ $oi->amount }}" placeholder="Enter Amount" oninput="limitDecimal(this); calculateInvoice();">
+                                                            <input type="text" class="form-control other-amount" name="amount[]" value="{{ $oi->amount }}" placeholder="Enter Amount" oninput="limitDecimal(this); calculateInvoice();">
                                                         </div>
 
                                                         <!-- Buttons -->
@@ -112,23 +112,23 @@
 
                                                     <div class="col-xl-4">
                                                         <label class="form-label fw-semibold">Product Name</label>
-                                                        <input type="text" class="form-control required-field" name="product_name[]" placeholder="Enter Product Name">
+                                                        <input type="text" class="form-control" name="product_name[]" placeholder="Enter Product Name">
                                                     </div>
 
 
                                                         <div class="col-xl-2">
                                                             <label class="form-label fw-semibold">HSN Code</label>
-                                                            <input type="text" class="form-control " name="hsn_code[]" value="" placeholder="Example:  9999">
+                                                            <input type="text" class="form-control" name="hsn_code[]" value="" placeholder="Example:  9999">
                                                         </div>
 
                                                         <div class="col-xl-2">
                                                             <label class="form-label fw-semibold">Quantity</label>
-                                                            <input type="text" class="form-control required-field" name="quantity[]" value="" placeholder="Example:  2 kg">
+                                                            <input type="text" class="form-control" name="quantity[]" value="" placeholder="Example:  2 kg">
                                                         </div>
 
                                                     <div class="col-xl-2">
                                                         <label class="form-label fw-semibold">Amount</label>
-                                                        <input type="text" class="form-control other-amount required-field" name="amount[]" placeholder="Enter Amount" oninput="limitDecimal(this); calculateInvoice();">
+                                                        <input type="text" class="form-control other-amount" name="amount[]" placeholder="Enter Amount" oninput="limitDecimal(this); calculateInvoice();">
                                                     </div>
 
                                                     <div class="col-xl-2">
@@ -212,33 +212,44 @@
 
 
 
-$(function () {
+   $(function() {
+         $("#directOrderForm").validate({
+             rules: {
+                 'product_name[]': {
+                     required: true
+                 },
 
-    $.validator.addClassRules("required-field", {
-        required: true
-    });
+                  'quantity[]': {
+                     required: true
+                 },
 
-    $("#directOrderForm").validate({
-        ignore: [],
-        errorElement: "span",
-        // errorClass: "text-danger small",
-          errorPlacement: function(error, element) {
-            return false; // do not show message text
-        },
+                  'amount[]': {
+                     required: true
+                 },
+             },
 
-
-        highlight: function (element) {
-            $(element).addClass("is-invalid");
-        },
-        unhighlight: function (element) {
-            $(element).removeClass("is-invalid");
-        }
-    });
-
-});
-
-
-
+             messages: {
+                product_name: {
+                     required: "Please enter product name"
+                 },
+                    quantity: {
+                     required: "Please enter quantity"
+                 },
+                 vehicle_id: {
+                     required: "Please enter amount"
+                 },
+             },
+             errorElement: "span",
+             errorPlacement: function(error, element) {
+                 error.addClass("text-danger small");
+                if (element.hasClass("select2-hidden-accessible")) {
+                    error.insertAfter(element.next('.select2'));
+                } else {
+                    error.insertAfter(element);
+                }
+             }
+         });
+     });
 
 document.addEventListener('click', function (e) {
 
@@ -248,36 +259,10 @@ document.addEventListener('click', function (e) {
         let row = e.target.closest('.other-charge-row');
         let clone = row.cloneNode(true);
 
-        let rowCount = document.querySelectorAll('.other-charge-row').length;
-
-        clone.querySelectorAll('input').forEach(input => {
-
-            input.value = '';
-            $(input).removeClass('is-invalid error');
-            $(input).next('span.text-danger').remove();
-
-            // 🔥 Change name to unique index
-            if (input.name.includes('product_name')) {
-                input.name = 'product_name[' + rowCount + ']';
-            }
-            if (input.name.includes('quantity')) {
-                input.name = 'quantity[' + rowCount + ']';
-            }
-            if (input.name.includes('amount')) {
-                input.name = 'amount[' + rowCount + ']';
-            }
-        });
+        clone.querySelectorAll('input').forEach(input => input.value = '');
 
         document.getElementById('otherChargesWrapper').appendChild(clone);
-
-        // Add validation to new fields
-        $(clone).find(".required-field").each(function () {
-            $(this).rules("add", {
-                required: true
-            });
-        });
     }
-
 
     if (e.target.classList.contains('removeRow')) {
 
