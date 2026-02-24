@@ -63,7 +63,7 @@ $menu       = isset($record->category) ? $record->category : '';
 
                                     <?php foreach ($row as $ky => $val) { ?>
 
-                                        <div class="form-check mb-2 col-md-3 mt-2 ">
+                                        <div class="form-check mb-2 col-md-4 mt-2 ">
                                             <input type="checkbox" value="<?= $val['id'] ?>" name="permissions[]" id="child<?= $val['id'] ?>" class="form-check-input child-<?= $key ?>">
                                             <label class="form-check-label" for="child<?= $val['id'] ?>"><?= ucwords($val['permission_name']) ?></label>
 
@@ -99,7 +99,7 @@ $menu       = isset($record->category) ? $record->category : '';
     </div><!--End container-fluid-->
 </main><!--End app-wrapper-->
 <script>
-function checkAll(id){
+    function checkAll(id){
             $('.child-'+id).each( (index,obj)=>{
                 var cbox = $('.parent-' + id);
                 var isChecked = cbox.prop("checked");
