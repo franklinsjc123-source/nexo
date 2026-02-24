@@ -59,10 +59,10 @@
                                     @if(auth()->user()->hasPermission('Offers-Edit'))
                                         <a data-toggle="tooltip" data-placement="top" title="Edit" href="<?php echo route('addOffer',[$row->id]) ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil-fill"></i></a>
                                     @endif
-                                    @if(auth()->user()->hasPermission('Offers-Edit'))
+                                    @if(auth()->user()->hasPermission('Offers-Delete'))
                                         <a data-toggle="tooltip" data-placement="top" title="Delete" data-original-title="Delete" href="javascript:void(0)" onclick="commonDelete('<?php echo $row->id ?>','Offers')" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></a>
                                     @endif
-                                    
+
                                 </td>
                             </tr>
 
