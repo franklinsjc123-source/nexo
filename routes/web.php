@@ -16,6 +16,7 @@ use App\Http\Controllers\Backend\UnitController;
 use App\Http\Controllers\Backend\CustomerController;
 use App\Http\Controllers\Backend\DeliveryPersonController;
 use App\Http\Controllers\Backend\OrderController;
+use App\Http\Controllers\Backend\DirectOrderController;
 use App\Http\Controllers\Backend\OfferController;
 use App\Http\Controllers\Backend\ReferralController;
 
@@ -119,13 +120,14 @@ Route::middleware('auth.request')->group(function () {
     Route::get("orders", [OrderController::class, 'orders'])->name('orders');
 
     //direct orders Management
-    Route::get("direct-orders", [OrderController::class, 'directOrders'])->name('direct-orders');
-    Route::match(['get', 'post'],"direct-order-abstract", [OrderController::class, 'directOrdersAbstract'])->name('direct-order-abstract');
-    Route::post('/abstract/download', [OrderController::class, 'storeDirectOrdersAbstract'])->name('abstract.download');
-    Route::get("addDirectOrderBill/{id}", [OrderController::class, 'addDirectOrderBill'])->name('addDirectOrderBill');
-    Route::post('direct-orders-status-update', [OrderController::class, 'updateOrderStatus'])->name('direct-orders-status-update');
-    Route::post('storeUpdateDirectOrder', [OrderController::class, 'storeUpdateDirectOrder'])->name('storeUpdateDirectOrder');
+    Route::get("direct-orders", [DirectOrderController::class, 'directOrders'])->name('direct-orders');
+    Route::match(['get', 'post'],"direct-order-abstract", [DirectOrderController::class, 'directOrdersAbstract'])->name('direct-order-abstract');
+    Route::post('/abstract/download', [DirectOrderController::class, 'storeDirectOrdersAbstract'])->name('abstract.download');
+    Route::get("addDirectOrderBill/{id}", [DirectOrderController::class, 'addDirectOrderBill'])->name('addDirectOrderBill');
+    Route::post('direct-orders-status-update', [DirectOrderController::class, 'updateOrderStatus'])->name('direct-orders-status-update');
+    Route::post('storeUpdateDirectOrder', [DirectOrderController::class, 'storeUpdateDirectOrder'])->name('storeUpdateDirectOrder');
 
+    
     //Delivery Person Management
     Route::get("deliveryPerson", [DeliveryPersonController::class, 'deliveryPerson'])->name('deliveryPerson');
     Route::get('addDeliveryPerson/{id?}', [DeliveryPersonController::class, 'addDeliveryPerson'])->name('addDeliveryPerson');
