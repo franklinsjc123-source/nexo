@@ -90,9 +90,12 @@ class DirectOrderController extends Controller
         $order_details = DirectOrder::where('id', $id)->first();
         $order_items = DirectOrderItems::where('order_id', $id)->get();
 
+        $company = Company::orderBy('id', 'asc')->first();
+
+
         $pdf = Pdf::loadView(
             'backend.invoice.generate_invoice',
-            compact('order_items', 'order_details')
+            compact('order_items', 'order_details','company')
         )
             ->setPaper('A4', 'portrait')
             ->setOptions([
@@ -125,7 +128,7 @@ class DirectOrderController extends Controller
 
             $query  =  DirectOrder::whereYear('created_at', $year)
                 ->whereMonth('created_at', $month)->orderBy('id', 'ASC');
-                
+
             if ($order_status) {
                  $query->where('order_status',$order_status);
             }
