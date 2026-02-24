@@ -101,7 +101,7 @@ $menu       = isset($record->category) ? $record->category : '';
                                                     </div>
 
                                                     <!-- CHILD -->
-                                                    <div class="row" style="margin-left:25px;">
+                                                    <div class="row mt-2" style="margin-left:25px;">
 
                                                         <?php if(isset($permissions['edit'])) { ?>
                                                             <div class="form-check  col-md-3 ">
