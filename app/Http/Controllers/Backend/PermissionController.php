@@ -94,7 +94,7 @@ class PermissionController extends Controller
 
         $type = $request->type ? $request->type : 'user';
 
-        if ( $type == 'shop') {
+        if ($type == 'shop') {
 
             $users = User::where('status', 1)->where('auth_level', 4)->get(['name', 'id']);
         } else {
@@ -104,19 +104,28 @@ class PermissionController extends Controller
 
         // $users = User::Where('status',1)->get(['name','id']);
         $msg = $badge = '';
-        $permissions = Permission::leftjoin('permission_category as pc', 'pc.id', '=', 'permissions.category')
-            // ->Orderby('permissions.name','ASC')
-            ->get(['permissions.id', 'permissions.display_name', 'pc.id as category', 'pc.name']);
-        $permissionArr = array();
-        foreach ($permissions as $key => $val) {
-            $permissionArr[$val->name][] = array(
-                "id"              => $val->id,
-                "cid"             => $val->category,
-                "category"        => $val->name,
-                "permission_name" => $val->display_name,
-            );
+        $permissions = Permission::leftJoin('permission_category as pc', 'pc.id', '=', 'permissions.category')
+            ->orderBy('pc.id')
+            ->orderBy('permissions.name')
+            ->get([
+                'permissions.id',
+                'permissions.category',
+                'permissions.name',          // ✅ IMPORTANT
+                'permissions.display_name',
+                'pc.name as category_name'   // ✅ rename to avoid conflict
+            ]);
+        $permissionArr = [];
+
+        foreach ($permissions as $val) {
+
+            $permissionArr[$val->category_name][] = [
+                "id"           => $val->id,
+                "name"         => $val->name,          // ✅ base name
+                "display_name" => $val->display_name,  // ✅ label name
+            ];
         }
-        return view('backend.permission', compact('users','type', 'permissionArr', 'msg'));
+
+        return view('backend.permission', compact('users', 'type', 'permissionArr', 'msg'));
     }
 
     public function getPermission($id)

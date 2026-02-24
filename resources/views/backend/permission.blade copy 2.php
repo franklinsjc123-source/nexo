@@ -57,84 +57,78 @@ $menu       = isset($record->category) ? $record->category : '';
                                 foreach ($permissionArr as $key => $row) { ?>
 
 
-                                     <div class="section-title bg-light  mb-4 mt-2">
+                                     <div class="section-title bg-light mb-4 mt-2">
                                         <input type="checkbox" name="parent" value="" class="form-check-input parent-<?= $key ?>" id="customCheckcolor<?= $key ?>" onclick="checkAll('<?= $key ?>')">
                                         <label class="form-check-label" for="customCheckcolor<?= $key ?>"><?= $key ?></label>
                                     </div>
 
-                                    <?php
-                                        $grouped = [];
+                      <?php
+$grouped = [];
 
-                                        foreach ($row as $perm) {
+foreach ($row as $perm) {
 
-                                            $name = $perm['name']; // ✅ FIXED
+    $name = $perm['name']; // ✅ FIXED
 
-                                            if (str_contains($name, '-Edit')) {
-                                                $base = str_replace('-Edit', '', $name);
-                                                $grouped[$base]['edit'] = $perm;
-                                            } elseif (str_contains($name, '-Delete')) {
-                                                $base = str_replace('-Delete', '', $name);
-                                                $grouped[$base]['delete'] = $perm;
-                                            } else {
-                                                $grouped[$name]['main'] = $perm;
-                                            }
-                                        }
-                                        ?>
+    if (str_contains($name, '-Edit')) {
+        $base = str_replace('-Edit', '', $name);
+        $grouped[$base]['edit'] = $perm;
+    } elseif (str_contains($name, '-Delete')) {
+        $base = str_replace('-Delete', '', $name);
+        $grouped[$base]['delete'] = $perm;
+    } else {
+        $grouped[$name]['main'] = $perm;
+    }
+}
+?>
 
-                                        <?php foreach ($grouped as $base => $permissions) { ?>
+<?php foreach ($grouped as $base => $permissions) { ?>
 
-                                            <?php if(isset($permissions['main'])) { ?>
+    <?php if(isset($permissions['main'])) { ?>
 
-                                                <div class="mb-3  col-md-4 ">
+        <div class="mb-3">
 
-                                                    <!-- MAIN -->
-                                                    <div class="form-check">
-                                                        <input type="checkbox"
-                                                            value="<?= $permissions['main']['id'] ?>"
-                                                            name="permissions[]"
-                                                            id="child<?= $permissions['main']['id'] ?>"
-                                                            class="form-check-input child-<?= $key ?>">
+            <!-- MAIN -->
+            <div class="form-check">
+                <input type="checkbox"
+                    value="<?= $permissions['main']['id'] ?>"
+                    name="permissions[]"
+                    class="form-check-input child-<?= $key ?>">
 
-                                                        <label class="form-check-label">
-                                                            <?= ucwords($permissions['main']['display_name']) ?>
-                                                        </label>
-                                                    </div>
+                <label class="form-check-label">
+                    <?= ucwords($permissions['main']['display_name']) ?>
+                </label>
+            </div>
 
-                                                    <!-- CHILD -->
-                                                    <div class="row" style="margin-left:25px;">
+            <!-- CHILD -->
+            <div style="margin-left:25px;">
 
-                                                        <?php if(isset($permissions['edit'])) { ?>
-                                                            <div class="form-check  col-md-3 ">
-                                                                <input type="checkbox"
-                                                                    value="<?= $permissions['edit']['id'] ?>"
-                                                                    name="permissions[]"
-                                                                    id="child<?= $permissions['edit']['id'] ?>"
-                                                                    class="form-check-input child-<?= $key ?>">
-                                                                <label>Edit</label>
-                                                            </div>
-                                                        <?php } ?>
+                <?php if(isset($permissions['edit'])) { ?>
+                    <div class="form-check">
+                        <input type="checkbox"
+                            value="<?= $permissions['edit']['id'] ?>"
+                            name="permissions[]"
+                            class="form-check-input child-<?= $key ?>">
+                        <label>Edit</label>
+                    </div>
+                <?php } ?>
 
-                                                        <?php if(isset($permissions['delete'])) { ?>
-                                                            <div class="form-check  col-md-3  ">
-                                                                <input type="checkbox"
-                                                                    value="<?= $permissions['delete']['id'] ?>"
-                                                                    name="permissions[]"
-                                                                    id="child<?= $permissions['delete']['id'] ?>"
-                                                                    class="form-check-input child-<?= $key ?>">
-                                                                <label>Delete</label>
-                                                            </div>
-                                                        <?php } ?>
+                <?php if(isset($permissions['delete'])) { ?>
+                    <div class="form-check">
+                        <input type="checkbox"
+                            value="<?= $permissions['delete']['id'] ?>"
+                            name="permissions[]"
+                            class="form-check-input child-<?= $key ?>">
+                        <label>Delete</label>
+                    </div>
+                <?php } ?>
 
-                                                    </div>
+            </div>
 
-                                                </div>
+        </div>
 
-                                            <?php } ?>
+    <?php } ?>
 
-                                        <?php } ?>
-
-
-
+<?php } ?>
                                <?php  } }  ?>
 
                         </div>
