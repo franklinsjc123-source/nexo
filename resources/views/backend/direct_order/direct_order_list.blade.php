@@ -1,6 +1,16 @@
 @extends('backend.app_template')
 @section('title','Direct Orders  List')
 @section('content')
+
+<style>
+    .select2-container {
+    width: 100% !important;
+}
+
+.select2-container--open {
+    z-index: 9999 !important; /* Below modal (1050) */
+}
+</style>
 <main class="app-wrapper">
     <div class="container-fluid">
 
@@ -50,6 +60,16 @@
                                         {{ $month }}
                                     </option>
                                 @endforeach
+                            </select>
+                        </div>
+
+                          <div class="col-md-4 mb-2">
+                            <label>Order Status</label>
+                            <select class="form-control select2 " id="order_status" name="order_status">
+                                <option value="">All</option>
+                                <option {{ request('order_status')  == 1 ? 'selected' : '' }} value="1">New order</option>
+                                <option {{ request('order_status')  == 2 ? 'selected' : '' }} value="2">Delivered</option>
+                                <option {{ request('order_status')  == 3 ? 'selected' : '' }} value="3">Cancelled</option>
                             </select>
                         </div>
 
@@ -111,16 +131,33 @@
                                         <img src="<?= $row->image_url ?>" height="50" width="50">
                                     </a>
                                 </td>
-                                <td>
-                                    <a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">
-                                            <?php echo ($row->status == 1) ? '' : 'New Order' ?>
+                               <td>
+                                    <?php
+                                        if ($row->order_status == 1) {
+                                            $class = "warning";
+                                            $text  = "New Order";
+                                        } elseif ($row->order_status == 2) {
+                                            $class = "success";
+                                            $text  = "Delivered";
+                                        } elseif ($row->order_status == 3) {
+                                            $class = "danger";
+                                            $text  = "Cancelled";
+                                        } else {
+                                            $class = "secondary";
+                                            $text  = "Unknown";
+                                        }
+                                    ?>
+
+                                    <a href="javascript:void(0)"
+                                        class="badge bg-<?php echo $class; ?> editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>"> <?php echo $text; ?>
                                     </a>
                                 </td>
                                 <td>
-                                    <a href="javascript:void(0)" class="btn btn-sm btn-warning " data-id="<?= $row->id ?>" data-status="<?= $row->status ?>" data-toggle="tooltip" title="Edit">  <i class="bi bi-pencil-fill"></i>
+                                    <a href="javascript:void(0)" class="btn btn-sm btn-warning editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>" data-toggle="tooltip" title="Edit">
+                                        <i class="bi bi-pencil-fill"></i>
                                     </a>
 
-                                      <a href="{{ route('addDirectOrderBill', [$row->id]) }}" class="btn btn-sm btn-info " data-toggle="tooltip" title="View">  <i class="bi bi-eye"></i>
+                                    <a href="{{ route('addDirectOrderBill', [$row->id]) }}" class="btn btn-sm btn-info " data-toggle="tooltip" title="View">  <i class="bi bi-eye"></i>
                                     </a>
 
                                     <?php if($row->total_amount > 0) {  ?>
@@ -140,108 +177,77 @@
 </main>
 
 <div class="modal fade" id="orderStatusModal" tabindex="-1">
-    <div class="modal-dialog modal-md modal-dialog-centered modal-dialog-scrollable">
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <h5 class="modal-title" id="orderStatusModalTitle"></h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-
-            <div class="modal-body" id="orderStatusModalBody">
-
-                <div class="container-fluid ">
-            <form method="POST" id="orderStatusForm" id="orderStatusForm"
-                action="{{ route('direct-orders-status-update') }}">
-                @csrf
-
-
-        <div class="attendance-form">
-
-
-
-                                <div class="row align-items-center mb-3">
-                                    <label class="col-12 col-md-4 fw-semibold text-start text-md-end mb-1 mb-md-0">
-                                        Staff Code <span class="text-danger">*</span>
-                                    </label>
-                                    <div class="col-md-7">
-                                        <select class="form-control select2" name="staff_code" id="staff_code"  data-placeholder="" >
-                                                <option value="">-- Select --</option>
-                                               <option value="1">New order</option>
-                                                <option value="2">Delivered</option>
-                                                <option value="3">Cancelled</option>
-                                            </select>
-                                    </div>
-                                </div>
-
-
-
-    </div>
-
-    <div class="d-flex justify-content-end gap-3 my-4">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-        {{-- <button type="submit" class="btn btn-primary">Save</button> --}}
-        <button type="submit" class="btn btn-primary" name="submit_and_next" value="1" > Save </button>
-    </div>
-</form>
-</div>
-
-            </div>
-
-        </div>
-    </div>
-</div>
-
-
-<div class="modal fade" id="orderStatusModal" tabindex="-1">
     <div class="modal-dialog">
         <div class="modal-content">
-
             <div class="modal-header">
                 <h5 class="modal-title">Update Order Status</h5>
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-
             <div class="modal-body">
                 <input type="hidden" id="order_id">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <label class="mb-2">Change Status</label>
 
-                <label>Status</label>
-
-
-                <select class="form-control select2" id="order_status" name="order_status">
-                    <option value="1">New order</option>
-                    <option value="2">Delivered</option>
-                    <option value="3">Cancelled</option>
-
-                </select>
-
-
-
+                        <select class="form-control select2 " id="change_order_status" name="change_order_status">
+                            <option value="1">New order</option>
+                            <option value="2">Delivered</option>
+                            <option value="3">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
             </div>
+            <div class="modal-footer mt-5">
 
-            <div class="modal-footer">
+                  <button class="btn btn-danger" id="close-modal" >Cancel</button>
                 <button class="btn btn-primary" id="saveStatus">Update</button>
             </div>
-
         </div>
     </div>
 </div>
+
+
+
 <script>
-    $(document).on('click', '.editOrder', function () {
-    let orderId = $(this).data('id');
-    let status  = $(this).data('status');
 
-    $('#order_id').val(orderId);
-    $('#order_status').val(status);
+    $(document).ready(function () {
 
-    $('#orderStatusModal').modal('show');
+    $('#change_order_status').select2({
+        dropdownParent: $('#orderStatusModal'),
+        width: '100%'
+    });
+
 });
 
 
 
+
+$(document).on('click', '#close-modal', function () {
+
+    $('#orderStatusModal').modal('hide');
+});
+
+$(document).on('click', '.editOrderStatus', function () {
+
+    let orderId = $(this).data('id');
+    let status  = $(this).data('status');
+
+    $('#order_id').val(orderId);
+
+    $('#orderStatusModal').modal('show');
+
+    setTimeout(function(){
+        $('#change_order_status')
+            .val(status)
+            .trigger('change');
+    }, 200);
+
+});
+
 $('#saveStatus').click(function () {
+
     let orderId = $('#order_id').val();
-    let status  = $('#order_status').val();
+    let status  = $('#change_order_status').val();
 
     $.ajax({
         url: "<?= route('direct-orders-status-update') ?>",

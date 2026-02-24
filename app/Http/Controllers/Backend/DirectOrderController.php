@@ -7,8 +7,7 @@ use App\Models\DirectOrder;
 use App\Models\DirectOrderItems;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Shop;
-use App\Models\Company
-;
+use App\Models\Company;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\URL;
@@ -42,7 +41,7 @@ class DirectOrderController extends Controller
     public function updateOrderStatus(Request $request)
     {
         DirectOrder::where('id', $request->order_id)
-            ->update(['status' => $request->status]);
+            ->update(['order_status' => $request->status]);
 
         return response()->json([
             'status' => true,
@@ -119,13 +118,19 @@ class DirectOrderController extends Controller
 
         $year  = (int) $request->year;
         $month = (int) $request->month;
-        $company = (int) $request->company;
+        $order_status = (int) $request->order_status;
         $abstract_submit =  $request->abstract_submit;
 
         if (!empty($request)) {
 
-            $records   =  DirectOrder::whereYear('created_at', $year)
-                ->whereMonth('created_at', $month)->orderBy('id', 'ASC')->get();
+            $query  =  DirectOrder::whereYear('created_at', $year)
+                ->whereMonth('created_at', $month)->orderBy('id', 'ASC');
+                
+            if ($order_status) {
+                 $query->where('order_status',$order_status);
+            }
+
+            $records = $query->get();
 
 
             return view('backend.direct_order.direct_order_list', compact('records'));
@@ -150,7 +155,7 @@ class DirectOrderController extends Controller
 
         $monthName = date('F', mktime(0, 0, 0, $month, 10));
 
-        $pdfFileName = 'Abstract_'. '_' . $monthName. '_' . $year. '.pdf';
+        $pdfFileName = 'Abstract_' . '_' . $monthName . '_' . $year . '.pdf';
 
         $pdfPath = public_path('uploads/abstract/' . $pdfFileName);
 
@@ -158,7 +163,7 @@ class DirectOrderController extends Controller
 
         $pdf = Pdf::loadView(
             'backend.invoice.generate_abstract',
-            compact('records','year', 'month','company')
+            compact('records', 'year', 'month', 'company')
         )->setPaper('A4', 'portrait')
             ->setOptions(['isRemoteEnabled' => true]);
 
