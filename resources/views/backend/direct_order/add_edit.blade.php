@@ -161,6 +161,62 @@
 
                                         </div>
 
+                                          <div class="col-xl-8 mt-3">
+                                            <label style="float:right; margin-top:7px" class="form-label fw-semibold">CGST </label>
+
+                                        </div>
+
+                                         <div class="col-xl-4 mt-3">
+                                            <input type="text" class="form-control" id="cgst" name="cgst" placeholder=" Amount" value="{{ $record->cgst ?? '' }}" maxlength="20" readonly>
+
+                                        </div>
+
+
+
+                                        <div class="col-xl-8 mt-3">
+                                            <label style="float:right; margin-top:7px" class="form-label fw-semibold">SGST </label>
+
+                                        </div>
+
+                                         <div class="col-xl-4 mt-3">
+                                            <input type="text" class="form-control" id="sgst" name="sgst" placeholder=" Amount" value="{{ $record->sgst ?? '' }}" maxlength="20" readonly>
+
+                                        </div>
+
+
+
+
+                                        <div class="col-xl-8 mt-3">
+                                            <label style="float:right; margin-top:7px" class="form-label fw-semibold">Advance Amount </label>
+
+                                        </div>
+
+                                         <div class="col-xl-4 mt-3">
+                                            <input type="text" class="form-control" id="advance_amount" name="advance_amount" placeholder=" Amount" value="{{ $record->advance_amount ?? '' }}" maxlength="20"  readonly>
+
+                                        </div>
+
+                                          <div class="col-xl-8 mt-3">
+                                            <label style="float:right; margin-top:7px" class="form-label fw-semibold">Delivery Amount </label>
+
+                                        </div>
+
+                                         <div class="col-xl-4 mt-3">
+                                            <input type="text" class="form-control" id="delivery_amount" name="delivery_amount" placeholder=" Amount" value="{{ $record->delivery_amount ?? '' }}" maxlength="20" oninput="this.value = this.value.replace(/[^0-9.]/g,''); limitDecimal(this); calculateInvoice();" >
+
+                                        </div>
+
+
+                                         <div class="col-xl-8 mt-3">
+                                            <label style="float:right; margin-top:7px" class="form-label fw-semibold">Total Invoice Amount </label>
+
+                                        </div>
+
+                                         <div class="col-xl-4 mt-3">
+                                            <input type="text" class="form-control" id="total_invoice_amount" name="total_invoice_amount" placeholder=" Amount" value="{{ $record->total_invoice_amount ?? '' }}" maxlength="20"  >
+
+                                        </div>
+
 
                                     </div>
                                 </div>
@@ -305,39 +361,52 @@ document.addEventListener('click', function (e) {
         el.value = parts.join('.');
     }
 }
-
 function calculateInvoice() {
-    let total = 0;
-    let total_extra = 0;
+
     let total_other_amount = 0;
 
-    document.querySelectorAll('.vehicle-amount').forEach(el => {
-        total += parseFloat(el.value) || 0;
-    });
-
+    // Sum all other amounts
     document.querySelectorAll('.other-amount').forEach(el => {
         total_other_amount += parseFloat(el.value) || 0;
     });
 
-     $('.extra-km-amount').each(function () {
-        total_extra += parseFloat($(this).val()) || 0;
-    });
+
+    $('#total_amount').val(total_other_amount.toFixed(2));
 
 
-    // let otherBill = parseFloat(document.getElementById('other_bill_amount')?.value) || 0;
+    let advance_amount = total_other_amount ;
 
-    total_amount = total + total_other_amount + total_extra ;
+    let cgst = total_other_amount * 0.09;
+    let sgst = total_other_amount * 0.09;
 
-    let cgst = (total + total_extra) * 0.09;
-    let sgst = (total + total_extra) * 0.09;
-    let tax  = cgst + sgst;
-    // alert(cgst);
+    let advance_total = (advance_amount + cgst + sgst )  * 0.10;
 
-    document.getElementById('total_amount').value = total_amount.toFixed(2);
-    document.getElementById('cgst').value = cgst.toFixed(2);
-    document.getElementById('sgst').value = sgst.toFixed(2);
-    document.getElementById('total_tax_amount').value = tax.toFixed(2);
-    document.getElementById('total_invoice_amount').value = (total_amount + tax).toFixed(2);
+
+    let advanceField = document.getElementById('advance_amount');
+    if (advanceField) {
+        advanceField.value = advance_total.toFixed(2);
+    }
+
+
+    if (document.getElementById('cgst')) {
+        document.getElementById('cgst').value = cgst.toFixed(2);
+    }
+
+    if (document.getElementById('sgst')) {
+        document.getElementById('sgst').value = sgst.toFixed(2);
+    }
+
+    // Get advance & delivery
+    let delivery_amount = parseFloat(document.getElementById('delivery_amount')?.value) || 0;
+
+    // Final total calculation
+    let total_invoice_amount = total_other_amount + cgst + sgst + delivery_amount ;
+
+    // Set total invoice
+    let totalField = document.getElementById('total_invoice_amount');
+    if (totalField) {
+        totalField.value = total_invoice_amount.toFixed(2);
+    }
 }
  </script>
 
