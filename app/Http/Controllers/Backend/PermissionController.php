@@ -96,34 +96,60 @@ class PermissionController extends Controller
 
         if ($type == 'shop') {
 
-            $users = User::where('status', 1)->where('auth_level', 4)->get(['name', 'id']);
+            $users = User::where('status', 1)
+                ->where('auth_level', 4)
+                ->get(['name', 'id']);
+
+            // ✅ Only specific categories for auth_level 4
+            $permissions = Permission::leftJoin('permission_category as pc', 'pc.id', '=', 'permissions.category')
+               ->whereIn('pc.id', [2, 3, 4])
+                ->whereNotIn('permissions.name', [
+                'Category',
+                'Category-Edit',
+                'Category-Delete',
+                'Shop',
+                'Shop-Edit',
+                'Shop-Delete',
+            ])
+                ->orderBy('pc.id')
+                ->orderBy('permissions.name')
+                ->get([
+                    'permissions.id',
+                    'permissions.category',
+                    'permissions.name',
+                    'permissions.display_name',
+                    'pc.name as category_name'
+                ]);
         } else {
 
-            $users = User::where('status', 1)->whereIn('auth_level', [1, 2])->get(['name', 'id']);
+            $users = User::where('status', 1)
+                ->whereIn('auth_level', [1, 2])
+                ->get(['name', 'id']);
+
+            // ✅ Show all categories for other users
+            $permissions = Permission::leftJoin('permission_category as pc', 'pc.id', '=', 'permissions.category')
+                ->orderBy('pc.id')
+                ->orderBy('permissions.name')
+                ->get([
+                    'permissions.id',
+                    'permissions.category',
+                    'permissions.name',
+                    'permissions.display_name',
+                    'pc.name as category_name'
+                ]);
         }
 
-        // $users = User::Where('status',1)->get(['name','id']);
-        $msg = $badge = '';
-        $permissions = Permission::leftJoin('permission_category as pc', 'pc.id', '=', 'permissions.category')
-            ->orderBy('pc.id')
-            ->orderBy('permissions.name')
-            ->get([
-                'permissions.id',
-                'permissions.category',
-                'permissions.name',          // ✅ IMPORTANT
-                'permissions.display_name',
-                'pc.name as category_name'   // ✅ rename to avoid conflict
-            ]);
         $permissionArr = [];
 
         foreach ($permissions as $val) {
-
             $permissionArr[$val->category_name][] = [
                 "id"           => $val->id,
-                "name"         => $val->name,          // ✅ base name
-                "display_name" => $val->display_name,  // ✅ label name
+                "name"         => $val->name,
+                "display_name" => $val->display_name,
             ];
         }
+        $msg = $badge = '';
+
 
         return view('backend.permission', compact('users', 'type', 'permissionArr', 'msg'));
     }
