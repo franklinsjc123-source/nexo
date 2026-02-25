@@ -78,7 +78,7 @@
         .company-right-text {
             font-size: 13px;
             line-height: 1.8;
-            margin-top: 30px!important;
+            /* margin-top: 30px!important; */
         }
 
         /* Bill To / Invoice Details */
@@ -151,7 +151,10 @@
             font-size: 13px;
         }
         .summary-left-cell {
-            /* empty left portion */
+            width: 50%;
+            vertical-align: bottom;
+            padding: 10px;
+            word-wrap: break-word;
         }
         .summary-right-outer {
             width: 280px;
@@ -298,7 +301,7 @@
             </td>
 
             <!-- COMPANY INFO CENTER -->
-            <td class="header-info-cell" style="width:50%;">
+            <td class="header-info-cell" style="width:45%;">
                 <div class="company-name">{{ $company->company_name }}</div>
                 <div class="company-sub">
                    {{$company->company_address }}<br/>
@@ -308,8 +311,10 @@
             </td>
 
             <!-- COMPANY INFO RIGHT -->
-            <td class="header-right-cell" style="width:30%;">
+            <td class="header-right-cell" style="width:35%;">
                 <div class="company-right-text ">
+                    Invoice: <strong> {{ $order_details->id }} </strong><br/>
+                    Date: <strong> {{ date('d-m-Y', strtotime($order_details->created_at))  }} </strong><br/>
                     Email: <strong> {{ $company->email }}</strong><br/>
                     State: <strong>{{ $company->state  }}</strong>
                 </div>
@@ -325,22 +330,49 @@
 
           <thead>
             <tr>
-                <th>Bill To:</th>
-                <th>Invoice Details:<</th>
+                <th>Customer Bill To:</th>
+                <th>Shipping Address:</th>
             </tr>
         </thead>
-        <tbody>
-
+      <tbody>
             <tr>
-                <td style="width:41%; border-right:1px solid #444;">
+                <!-- Left column: Shop details table without border on the address cell -->
+                <td style="width:50%; border-right:1px solid #444; vertical-align: top; padding: 10px;">
+                <table style="width: 100%; border-collapse: collapse;">
 
+                     <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Shop</td>
+                    <td style="border: none; ">:</td>
+                    <td style="border: none; padding: 4px;">{{ $shop_details->shop_name }}</td>
+                    </tr>
 
-                    HINDU NADAR URAVIN MURAI, RAJAPALAYAM
+                    <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Address</td>
+                    <td style="border: none; ">:</td>
+                    
+                    <td style="border: none; padding: 4px;">{{ $shop_details->address }}</td>
+                    </tr>
+                    <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Contact</td>
+                    <td style="border: none; ">:</td>
+                    
+
+                    <td style="border: none; padding: 4px;">{{ $shop_details->contact_no }}</td>
+                    </tr>
+                    <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">GST No</td>
+                    <td style="border: none; ">:</td>
+                    
+
+                    <td style="border: none; padding: 4px;">{{ $shop_details->gst_no }}</td>
+                    </tr>
+                </table>
                 </td>
-                <td style="width:50%;">
 
-                    No: <strong>72</strong><br/>
-                    Date: <strong>19-09-2025</strong>
+                <!-- Right column: Customer address -->
+                <td style="width:50%; vertical-align: top; padding: 10px;">
+                <!-- You can replace this with dynamic customer address -->
+                Customer address comes here
                 </td>
             </tr>
         </tbody>
@@ -396,7 +428,7 @@
     <table class="summary-table">
         <tr>
             <td class="summary-left-cell">
-                Note:<br>
+               <strong> Note:</strong><br>
                 Delivery charges are charged separately and are not included in the base invoice amount. The total amount payable shall be the invoice value plus applicable delivery charges.
 
             </td>
@@ -437,12 +469,12 @@
                       <tr>
                         <td >Advance</td>
                         <td class="rb-colon">:</td>
-                        <td class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹</span>{{ number_format ( ($total_amount +  ( $total_amount*0.18 )) * 0.10,2) }} </td>
+                        <td class="rb-val text-right" ><span style="font-family:  DejaVu Sans, sans-serif;">₹</span> <b style="color:blue">{{ number_format ( ($total_amount +  ( $total_amount*0.18 )) * 0.10,2) }} </b> </td>
                     </tr>
                     <tr>
-                        <td  style="white-space: nowrap;" >Delivery Charge</td>
+                        <td  style="white-space: nowrap;" >Delivery Charges</td>
                         <td  class="rb-colon" >:</td>
-                        <td  class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹</span>{{ number_format($order_details->delivery_amount,2)}} </td>
+                        <td  class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹</span>  <b style="color:blue">{{ number_format($order_details->delivery_amount,2)}}  </b> </td>
                     </tr>
 
                 </table>
