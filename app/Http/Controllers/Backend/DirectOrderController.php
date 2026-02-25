@@ -106,6 +106,8 @@ class DirectOrderController extends Controller
 
         DirectOrder::where('id', $id)->update([
             'total_amount' => $request->total_amount,
+            'advance_amount' => $request->advance_amount,
+            'delivery_amount' => $request->delivery_amount,
             'cgst' => $request->total_amount * 0.09,
             'sgst' => $request->total_amount * 0.09,
             'total_tax_amount' => $request->total_amount * 0.18,
