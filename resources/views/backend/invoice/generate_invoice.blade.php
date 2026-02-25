@@ -442,7 +442,7 @@
                     <tr>
                         <td  style="white-space: nowrap;" >Delivery Charge</td>
                         <td  class="rb-colon" >:</td>
-                        <td  class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹</span>{{ number_format($io->delivery_amount * 0.09 ,2)}} </td>
+                        <td  class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹</span>{{ number_format($order_details->delivery_amount,2)}} </td>
                     </tr>
 
                 </table>
