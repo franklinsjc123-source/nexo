@@ -508,7 +508,7 @@
     <table class="bottom-table">
 
         <tr>
-            <td></td>
+            <td >   bank details comes here</td>
             <td  style="background-color: #d7d8e9;"><strong>For {{ $company->company_name }}</strong></td>
         </tr>
         <tr>
