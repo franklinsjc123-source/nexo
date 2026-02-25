@@ -349,20 +349,20 @@
                     <tr>
                     <td style="border: none; padding: 4px; font-weight: bold;">Address</td>
                     <td style="border: none; ">:</td>
-                    
+
                     <td style="border: none; padding: 4px;">{{ $shop_details->address }}</td>
                     </tr>
                     <tr>
                     <td style="border: none; padding: 4px; font-weight: bold;">Contact</td>
                     <td style="border: none; ">:</td>
-                    
+
 
                     <td style="border: none; padding: 4px;">{{ $shop_details->contact_no }}</td>
                     </tr>
                     <tr>
                     <td style="border: none; padding: 4px; font-weight: bold;">GST No</td>
                     <td style="border: none; ">:</td>
-                    
+
 
                     <td style="border: none; padding: 4px;">{{ $shop_details->gst_no }}</td>
                     </tr>
@@ -463,7 +463,7 @@
                     </tr>
 
                      <tr>
-                      <td colspan="3" >Fifty Three Thousand Six Hundred and Fifty Rupees only</td>
+                      <td colspan="3" >{{ $order_details->amount_in_words }}</td>
                     </tr>
 
                       <tr>
@@ -495,7 +495,7 @@
         <tbody>
             <tr>
                 <td style="width:41%; border-right:1px solid #444;">
-                  Delivery charges are additional and will be added to the invoice amount.
+                  remarks comes here
                 </td>
             </tr>
         </tbody>
