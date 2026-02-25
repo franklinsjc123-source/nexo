@@ -5,7 +5,7 @@
 
 
     $id                     = isset($record->id) ? $record->id : '';
-    $company_name              = isset($record->company_name) ? $record->company_name : '';
+    $company_name           = isset($record->company_name) ? $record->company_name : '';
     $phone                  = isset($record->phone) ? $record->phone : '';
     $email                  = isset($record->email) ? $record->email : '';
     $delivery_charge        = isset($record->delivery_charge) ? $record->delivery_charge : '';
@@ -16,6 +16,16 @@
     $gst_no                 = isset($record->gst_no) ? $record->gst_no : '';
     $company_logo           = isset($record->logo) ? $record->logo : '';
     $old_company_logo       = isset($record->logo) ? $record->logo : '';
+    $terms                  = isset($record->terms) ? $record->terms : '';
+    $invoice_no             = isset($record->invoice_no) ? $record->invoice_no : '';
+    $direct_invoice_no      = isset($record->direct_invoice_no) ? $record->direct_invoice_no : '';
+
+    $bank_name              = isset($record->bank_name) ? $record->bank_name : '';
+    $branch_name            = isset($record->branch_name) ? $record->branch_name : '';
+    $ifsc                   = isset($record->ifsc) ? $record->ifsc : '';
+    $account_no             = isset($record->account_no) ? $record->account_no : '';
+    $qr_code                = isset($record->qr_code) ? $record->qr_code : '';
+    $old_qr_code            = isset($record->qr_code) ? $record->qr_code : '';
     $type                   = ($id == '')   ? 'Create' : 'Update';
 
     ?>
@@ -105,6 +115,24 @@
                                         </div>
 
 
+                                          <div class="col-xl-4">
+                                            <label for="terms" class="form-label">Terms & conditions  <span class="text-danger"> </span> </label>
+                                            <textarea class="form-control" id="terms" name="terms">  <?php echo $terms ?></textarea>
+                                            @error('terms') <span class="text-danger">{{$message}}</span> @enderror
+
+                                        </div>
+
+                                          <div class="col-xl-4">
+                                            <label for="invoice_no" class="form-label">Invoice  No  <span class="text-danger"> *</span> </label>
+                                            <input type="text" value="<?php echo $invoice_no ?>" class="form-control" id="invoice_no" name="invoice_no"  placeholder="Enter Invoice No">
+                                        </div>
+
+                                        <div class="col-xl-4">
+                                            <label for="direct_invoice_no" class="form-label">Invoice No (Direct) <span class="text-danger"> *</span> </label>
+                                            <input type="text" value="<?php echo $direct_invoice_no ?>" class="form-control" id="direct_invoice_no" name="direct_invoice_no"  placeholder="Enter Invoice No (Direct)">
+                                        </div>
+
+
 
 
 
@@ -132,6 +160,64 @@
 
                                             @if($company_logo =="" )
                                              @error('company_logo') <span class="text-danger">{{$message}}</span> @enderror
+                                            @endif
+                                          </div>
+
+                                    </div>
+                                </div>
+
+
+
+                                 <div class="card-body border shadow-lg rounded p-4 m-2">
+
+                                    <div class="section-title bg-light mb-4">
+                                        <h6 class="fw-bold text-success mb-0">Bank Details</h6>
+                                    </div>
+                                    <div class="row g-3">
+
+
+
+
+                                        <div class="col-xl-4">
+                                            <label for="bank_name" class="form-label">Bank Name <span class="text-danger"> *</span></label>
+                                            <input type="text" value="<?php echo $bank_name ?>" class="form-control" id="bank_name" name="bank_name" placeholder="Enter Bank Name">
+                                            @error('bank_name') <span class="text-danger">{{$message}}</span> @enderror
+                                        </div>
+
+                                        <div class="col-xl-4">
+                                            <label for="branch_name" class="form-label">Branch Name <span class="text-danger"> *</span></label>
+                                            <input type="text" value="<?php echo $branch_name ?>" class="form-control" id="branch_name" name="branch_name" placeholder="Enter Branch Name">
+                                            @error('branch_name') <span class="text-danger">{{$message}}</span> @enderror
+                                        </div>
+
+
+                                          <div class="col-xl-4">
+                                            <label for="ifsc" class="form-label">IFSC  <span class="text-danger"> *</span></label>
+                                            <input type="text" value="<?php echo $ifsc ?>" class="form-control" id="ifsc" name="ifsc" placeholder="Enter IFSC ">
+                                            @error('ifsc') <span class="text-danger">{{$message}}</span> @enderror
+                                        </div>
+
+
+
+
+                                         <div class="col-xl-4">
+                                            <label for="phone" class="form-label">Account No   <span class="text-danger"> *</span></label>
+                                            <input type="number" value="<?php echo $account_no ?>" class="form-control" id="account_no" name="account_no"  placeholder="Enter Account Number">
+                                        </div>
+
+
+                                        <div class="col-xl-4">
+                                            <label for="company_logo" class="form-label">QR Code  <span class="text-danger"> *</span> </label>
+
+                                            <input type="hidden" value="<?php echo $old_qr_code ?>" class="form-control"  name="old_qr_code">
+                                            <input type="file" class="form-control" id="qr_code" name="qr_code">
+
+                                            @if(isset($id) && $qr_code != "")
+                                                    <img class="mt-2" src="<?= $qr_code ?>" alt="image description" width="100" height="100">
+                                                @endif
+
+                                            @if($qr_code =="" )
+                                             @error('qr_code') <span class="text-danger">{{$message}}</span> @enderror
                                             @endif
                                           </div>
 
@@ -187,6 +273,32 @@
                    fssai_no: {
                      required: true
                  },
+                   invoice_no: {
+                     required: true
+                 },
+                   direct_invoice_no: {
+                     required: true
+                 },
+                   bank_name: {
+                     required: true
+                 },
+                   branch_name: {
+                     required: true
+                 },
+                   ifsc: {
+                     required: true
+                 },
+
+                  account_no: {
+                     required: true
+                 },
+
+
+
+
+
+
+
 
 
 
@@ -215,11 +327,31 @@
                      required: "Please enter pincode "
                  },
 
-                 fssai_no: {
+                fssai_no: {
                      required: "Please enter FSSAI No "
                  },
 
+                invoice_no: {
+                     required: "Please enter invoice No "
+                 },
 
+                direct_invoice_no: {
+                     required: "Please enter direct invoice No "
+                 },
+
+                bank_name: {
+                     required: "Please enter bank name "
+                 },
+                branch_name: {
+                     required: "Please enter branch name "
+                 },
+
+                ifsc: {
+                     required: "Please enter ifsc name "
+                 },
+                account_no: {
+                     required: "Please enter account no "
+                 },
 
              },
              errorElement: "span",

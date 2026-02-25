@@ -52,6 +52,18 @@ class CompanyController extends Controller
 
         }
 
+
+
+
+        if ($request->file('qr_code') != '') {
+
+            $file = $request->file('qr_code');
+            $imageName = 'qr_code_' . time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
+            $file->move(public_path('uploads/qr_code'), $imageName);
+            $qrImageUrl = url('uploads/qr_code/' . $imageName);
+
+        }
+
         // dd($imageUrl);
 
 
@@ -63,9 +75,18 @@ class CompanyController extends Controller
             'company_address'   => isset($input['company_address'])      ?  $input['company_address']      : '',
             'pincode'           => isset($input['pincode'])  ?  $input['pincode']  : '',
             'state'             => isset($input['state'])   ?  $input['state']   : '',
-            'fssai_no'            => isset($input['fssai_no'])    ?  $input['fssai_no']    : '',
+            'fssai_no'          => isset($input['fssai_no'])    ?  $input['fssai_no']    : '',
             'gst_no'            => isset($input['gst_no'])    ?  $input['gst_no']    : '',
+            'terms'             => isset($input['terms'])    ?  $input['terms']    : '',
+            'invoice_no'        => isset($input['invoice_no'])    ?  $input['invoice_no']    : '',
+            'direct_invoice_no' => isset($input['direct_invoice_no'])    ?  $input['direct_invoice_no']    : '',
+            'bank_name'         => isset($input['bank_name'])    ?  $input['bank_name']    : '',
+            'branch_name'       => isset($input['branch_name'])    ?  $input['branch_name']    : '',
+            'ifsc'              => isset($input['ifsc'])    ?  $input['ifsc']    : '',
+            'account_no'        => isset($input['account_no'])    ?  $input['account_no']    : '',
             'logo'              => $imageUrl    ?  $imageUrl   : '',
+            'qr_code'           => $qrImageUrl    ?  $qrImageUrl   : '',
+
         );
 
         $update = Company::Where('id', $id)->update($updateArray);
