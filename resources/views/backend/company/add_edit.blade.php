@@ -185,11 +185,9 @@
                                         </div>
 
                                         <div class="col-xl-4">
-                                            <label for="branch_name" class="form-label">Branch Name <span class="text-danger"> *</span></label>
-                                            <input type="text" value="<?php echo $branch_name ?>" class="form-control" id="branch_name" name="branch_name" placeholder="Enter Branch Name">
-                                            @error('branch_name') <span class="text-danger">{{$message}}</span> @enderror
+                                            <label for="phone" class="form-label">Account No   <span class="text-danger"> *</span></label>
+                                            <input type="number" value="<?php echo $account_no ?>" class="form-control" id="account_no" name="account_no"  placeholder="Enter Account Number">
                                         </div>
-
 
                                           <div class="col-xl-4">
                                             <label for="ifsc" class="form-label">IFSC  <span class="text-danger"> *</span></label>
@@ -197,13 +195,19 @@
                                             @error('ifsc') <span class="text-danger">{{$message}}</span> @enderror
                                         </div>
 
-
-
-
-                                         <div class="col-xl-4">
-                                            <label for="phone" class="form-label">Account No   <span class="text-danger"> *</span></label>
-                                            <input type="number" value="<?php echo $account_no ?>" class="form-control" id="account_no" name="account_no"  placeholder="Enter Account Number">
+                                        <div class="col-xl-4">
+                                            <label for="branch_name" class="form-label">Branch Name <span class="text-danger"> *</span></label>
+                                            <input type="text" value="<?php echo $branch_name ?>" class="form-control" id="branch_name" name="branch_name" placeholder="Enter Branch Name">
+                                            @error('branch_name') <span class="text-danger">{{$message}}</span> @enderror
                                         </div>
+
+
+
+
+
+
+
+
 
 
                                         <div class="col-xl-4">
