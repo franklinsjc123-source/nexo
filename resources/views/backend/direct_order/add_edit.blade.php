@@ -202,7 +202,7 @@
                                         </div>
 
                                          <div class="col-xl-4 mt-3">
-                                            <input type="text" class="form-control" id="delivery_amount" name="delivery_amount" placeholder=" Amount" value="{{ $record->delivery_amount ?? '' }}" maxlength="20" oninput="this.value = this.value.replace(/[^0-9.]/g,''); limitDecimal(this); calculateInvoice();" >
+                                            <input type="text" class="form-control" id="delivery_amount" required name="delivery_amount" placeholder=" Amount" value="{{ $record->delivery_amount ?? '' }}" maxlength="20" oninput="this.value = this.value.replace(/[^0-9.]/g,''); limitDecimal(this); calculateInvoice();" >
 
                                         </div>
 
@@ -277,11 +277,9 @@ $(function () {
     $("#directOrderForm").validate({
         ignore: [],
         errorElement: "span",
-        // errorClass: "text-danger small",
           errorPlacement: function(error, element) {
-            return false; // do not show message text
+            return false;
         },
-
 
         highlight: function (element) {
             $(element).addClass("is-invalid");
