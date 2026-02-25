@@ -441,7 +441,7 @@
                     </tr>
 
                      <tr>
-                       <td style="white-space: nowrap;">SGST @ 9%</td>
+                       <td style="white-space: nowrap;">SGST @9%</td>
                         <td class="colon-col">:</td>
                         <td class="val-col"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($total_amount * 0.09 , 2)}}</td>
                     </tr>

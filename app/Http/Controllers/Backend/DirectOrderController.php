@@ -87,6 +87,27 @@ class DirectOrderController extends Controller
 
         $pdfPath = public_path('uploads/direct_order_invoice/' . $pdfFileName);
 
+
+
+
+
+
+        $total_amount =  ($request->total_amount * 0.18)  +  $request->total_amount;
+        $amount_in_words =  $this->amountToWords($total_amount);
+
+        DirectOrder::where('id', $id)->update([
+            'total_amount' => $request->total_amount,
+            'advance_amount' => $request->advance_amount,
+            'delivery_amount' => $request->delivery_amount,
+            'amount_in_words' => $amount_in_words,
+            'cgst' => $request->total_amount * 0.09,
+            'sgst' => $request->total_amount * 0.09,
+            'total_tax_amount' => $request->total_amount * 0.18,
+            'total_invoice_amount' => $total_amount,
+            'invoice_file' => URL::to('/') . '/uploads/direct_order_invoice/' . $pdfFileName
+        ]);
+
+
         $order_details = DirectOrder::where('id', $id)->first();
         $shop_details = Shop::where('id', $order_details->shop_id)->first();
         $order_items = DirectOrderItems::where('order_id', $id)->get();
@@ -105,19 +126,7 @@ class DirectOrderController extends Controller
 
         $pdf->save($pdfPath);
 
-        $amount_in_words =  $this->amountToWords($request->total_invoice_amount);
 
-        DirectOrder::where('id', $id)->update([
-            'total_amount' => $request->total_amount,
-            'advance_amount' => $request->advance_amount,
-            'delivery_amount' => $request->delivery_amount,
-            'amount_in_words' => $amount_in_words,
-            'cgst' => $request->total_amount * 0.09,
-            'sgst' => $request->total_amount * 0.09,
-            'total_tax_amount' => $request->total_amount * 0.18,
-            'total_invoice_amount' => ($request->total_amount * 0.18)  +  $request->total_amount,
-            'invoice_file' => URL::to('/') . '/uploads/direct_order_invoice/' . $pdfFileName
-        ]);
 
         return redirect()->route('direct-orders')->with('success', 'Invoice generated successfully');
     }
