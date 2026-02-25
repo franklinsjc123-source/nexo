@@ -395,8 +395,12 @@
     <!-- ═══════════════════════════════════════ -->
     <table class="summary-table">
         <tr>
-            <td class="summary-left-cell">&nbsp;</td>
-            <td class="summary-right-outer" style="width:229px; border-left:1px solid #444; padding:0;">
+            <td class="summary-left-cell">
+                Note:<br>
+                Delivery charges are charged separately and are not included in the base invoice amount. The total amount payable shall be the invoice value plus applicable delivery charges.
+
+            </td>
+            <td class="summary-right-outer" style="width:344px; border-left:1px solid #444; padding:0;">
                 <table class="summary-inner">
                     <tr>
                         <td>Sub Total</td>
@@ -433,12 +437,12 @@
                       <tr>
                         <td >Advance</td>
                         <td class="rb-colon">:</td>
-                        <td class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹ {{ number_format ( ($total_amount +  ( $total_amount*0.18 )) * 0.10,2) }} </td>
+                        <td class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹</span>{{ number_format ( ($total_amount +  ( $total_amount*0.18 )) * 0.10,2) }} </td>
                     </tr>
                     <tr>
                         <td  style="white-space: nowrap;" >Delivery Charge</td>
-                        <td class="rb-colon">:</td>
-                        <td class="rb-val text-right"><span style="font-family: DejaVu Sans, sans-serif;">₹ 100 </td>
+                        <td  class="rb-colon" >:</td>
+                        <td  class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹</span>{{ number_format($io->delivery_amount * 0.09 ,2)}} </td>
                     </tr>
 
                 </table>
@@ -459,7 +463,7 @@
         <tbody>
             <tr>
                 <td style="width:41%; border-right:1px solid #444;">
-                    Thank you for doing business with us.
+                  Delivery charges are additional and will be added to the invoice amount.
                 </td>
             </tr>
         </tbody>
