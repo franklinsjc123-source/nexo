@@ -41,17 +41,31 @@ class DashboardController extends Controller
             $delivert_person_count      = count(DeliveryPerson::where('status', 1)->get());
         }
 
-        $categoryData = DB::table('shop')
-            ->join('category', 'shop.category', '=', 'category.id')
-            ->select('category.category_name', DB::raw('COUNT(shop.id) as total'))
-            ->groupBy('category.category_name')
+        $categoryData = DB::table('category')
+            ->leftJoin('shop', 'shop.category', '=', 'category.id')
+            ->leftJoin('products', 'products.shop', '=', 'shop.id')
+            ->select(
+                'category.category_name',
+                DB::raw('COUNT(DISTINCT shop.id) as shop_count'),
+                DB::raw('COUNT(DISTINCT products.id) as product_count')
+            )
+            ->groupBy('category.id', 'category.category_name')
             ->get();
 
         $categoryLabels = $categoryData->pluck('category_name');
-        $categoryCounts = $categoryData->pluck('total');
+        $shopCounts     = $categoryData->pluck('shop_count');
+        $productCounts  = $categoryData->pluck('product_count');
+        $categoryLabels = [];
+        $shopCounts = [];
+        $productCounts = [];
+
+        foreach ($categoryData as $row) {
+            $categoryLabels[] = $row->category_name;
+            $shopCounts[] = $row->shop_count;
+            $productCounts[] = $row->product_count;
+        }
 
 
-
-        return view('backend.dashboard', compact('shop_count', 'customer_count', 'order_count', 'delivert_person_count', 'direct_order_count', 'delivert_person_count', 'today_direct_order_count', 'today_order_count', 'categoryLabels', 'categoryCounts'));
+        return view('backend.dashboard', compact('shop_count', 'customer_count', 'order_count', 'delivert_person_count', 'direct_order_count', 'delivert_person_count', 'today_direct_order_count', 'today_order_count', 'categoryLabels', 'shopCounts', 'productCounts'));
     }
 }

@@ -164,10 +164,12 @@
             </div>
             <div class="card-body text-center">
 
-                <!-- Control Size Here -->
-                <div style="width:300px; height:300px; margin:auto;">
-                    <canvas id="categoryPieChart"></canvas>
+                <div class="col-md-6">
+                       <canvas id="categoryPieChart"></canvas>
+
                 </div>
+
+
 
             </div>
         </div>
@@ -179,34 +181,48 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-var ctx = document.getElementById('categoryPieChart').getContext('2d');
+    var ctx = document.getElementById('categoryPieChart').getContext('2d');
 
-new Chart(ctx, {
-    type: 'pie',
-    data: {
-        labels: {!! json_encode($categoryLabels) !!},
-        datasets: [{
-            data: {!! json_encode($categoryCounts) !!},
-            backgroundColor: [
-                '#FF6384',
-                '#36A2EB',
-                '#FFCE56',
-                '#4BC0C0',
-                '#9966FF',
-                '#FF9F40',
-                '#8BC34A',
-                '#FF5722'
-            ]
-        }]
-    },
-    options: {
-        responsive: true,
-        plugins: {
-            legend: {
-                position: 'bottom'
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: {!! json_encode($categoryLabels) !!},
+            datasets: [{
+                data: {!! json_encode($shopCounts) !!}, // pie size based on shops
+                backgroundColor: [
+                    '#FF6384',
+                    '#36A2EB',
+                    '#FFCE56',
+                    '#4BC0C0',
+                    '#9966FF',
+                    '#FF9F40'
+                ]
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+
+                            var shopCounts = {!! json_encode($shopCounts) !!};
+                            var productCounts = {!! json_encode($productCounts) !!};
+
+                            var index = context.dataIndex;
+
+                            return [
+                                "Shops: " + shopCounts[index],
+                                "Products: " + productCounts[index]
+                            ];
+                        }
+                    }
+                },
+                legend: {
+                    position: 'bottom'
+                }
             }
         }
-    }
-});
+    });
 </script>
 @endsection
