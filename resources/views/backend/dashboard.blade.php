@@ -157,22 +157,21 @@
         </div>
 
 
-
         <div class="card mt-4">
-            <div class="card-header">
-                <h5>Shops Based on Category</h5>
-            </div>
             <div class="card-body text-center">
-
-                <div class="col-md-6">
-                       <canvas id="categoryPieChart"></canvas>
-
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Shops Based on Category</h5>
+                        <canvas id="categoryPieChart"></canvas>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Order and Direct Orders</h5>
+                        {{-- <canvas id="categoryPieChart"></canvas> --}}
+                    </div>
                 </div>
-
-
-
             </div>
         </div>
+
 
 
     </div><!--End container-fluid-->
