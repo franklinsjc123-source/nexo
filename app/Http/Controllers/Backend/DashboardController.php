@@ -41,16 +41,19 @@ class DashboardController extends Controller
             $delivert_person_count      = count(DeliveryPerson::where('status', 1)->get());
         }
 
-        $categoryData = DB::table('category')
-            ->leftJoin('shop', 'shop.category', '=', 'category.id')
-            ->leftJoin('products', 'products.shop', '=', 'shop.id')
-            ->select(
-                'category.category_name',
-                DB::raw('COUNT(DISTINCT shop.id) as shop_count'),
-                DB::raw('COUNT(DISTINCT products.id) as product_count')
-            )
-            ->groupBy('category.id', 'category.category_name')
-            ->get();
+       $categoryData = DB::table('category')
+        ->leftJoin('shop', function($join) {
+            $join->whereRaw("FIND_IN_SET(category.id, shop.category)");
+        })
+        ->leftJoin('products', 'products.shop', '=', 'shop.id')
+        ->select(
+            'category.id',
+            'category.category_name',
+            DB::raw('COUNT(DISTINCT shop.id) as shop_count'),
+            DB::raw('COUNT(DISTINCT products.id) as product_count')
+        )
+        ->groupBy('category.id', 'category.category_name')
+        ->get();
 
         $categoryLabels = $categoryData->pluck('category_name');
         $shopCounts     = $categoryData->pluck('shop_count');
