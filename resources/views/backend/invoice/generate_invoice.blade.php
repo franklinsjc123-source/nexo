@@ -285,7 +285,7 @@
             <!-- LOGO: Replace src with your actual logo path e.g. src="{{ public_path('images/logo.png') }}" -->
             <td class="header-logo-cell" style="width:20%;">
                 <img
-                    src="https://nexoocart.in/uploads/company_logo/company_logo_1771340568_logoo.png"
+                    src="{{ $company->logo }}"
                     alt="Sri Kali Agencies Logo"
                     width="100"
                     height="100"
@@ -495,35 +495,146 @@
         <tbody>
             <tr>
                 <td style="width:41%; border-right:1px solid #444;">
-                  remarks comes here
+               {{ $company->terms ?   $company->terms : ''  }}
                 </td>
             </tr>
         </tbody>
 
     </table>
 
+<table class="bottom-table" style="width:100%; border-collapse: collapse; font-size:14px;">
+
+    <tr>
+        <td style="padding:4px 6px;"><strong>Bank Details</strong></td>
+        <td style="background-color:#d7d8e9; padding:4px 6px;">
+            <strong>For {{ $company->company_name }}</strong>
+        </td>
+    </tr>
+
+    <tr>
+        <!-- LEFT SIDE -->
+        <td style="width:60%; border-right:1px solid #444; vertical-align: top; padding:6px;">
+
+            <table style="width:100%; border-collapse: collapse;">
+
+                <tr>
+                    <!-- Bank Info -->
+                    <td style="width:70%; vertical-align: top;">
+
+                        <table style="width:100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="font-weight:bold; padding:2px 0;">Bank Name</td>
+                                <td style="padding:2px 4px;">:</td>
+                                <td style="padding:2px 0;">{{ $company->bank_name }}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold; padding:2px 0;">Account No</td>
+                                <td style="padding:2px 4px;">:</td>
+                                <td style="padding:2px 0;">{{ $company->account_no }}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold; padding:2px 0;">IFSC</td>
+                                <td style="padding:2px 4px;">:</td>
+                                <td style="padding:2px 0;">{{ $company->ifsc }}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold; padding:2px 0;">Branch Name</td>
+                                <td style="padding:2px 4px;">:</td>
+                                <td style="padding:2px 0;">{{ $company->branch_name }}</td>
+                            </tr>
+                        </table>
+
+                    </td>
+
+                    <!-- QR -->
+                    <td style="width:30%; text-align:center; vertical-align: middle;">
+                        <img
+                            src="{{ $company->qr_code }}"
+                            width="85"
+                            height="85"
+                            style="object-fit:contain;"
+                        />
+                    </td>
+                </tr>
+
+            </table>
+
+        </td>
+
+        <!-- RIGHT SIDE -->
+        <td style="width:40%; text-align:center; vertical-align: bottom; padding:6px;">
+            <div style="margin-top:50px;">
+                Authorized Signatory
+            </div>
+        </td>
+    </tr>
+
+</table>
 
 
+{{-- <table class="bottom-table" style="width:100%; border-collapse: collapse;">
 
-    <table class="bottom-table">
+    <tr>
+        <td><strong>Bank Details</strong></td>
+        <td style="background-color:#d7d8e9;">
+            <strong>For {{ $company->company_name }}</strong>
+        </td>
+    </tr>
 
-        <tr>
-            <td >   bank details comes here</td>
-            <td  style="background-color: #d7d8e9;"><strong>For {{ $company->company_name }}</strong></td>
-        </tr>
-        <tr>
-            <td class="terms-cell">
+    <tr>
+        <td style="width:60%; border-right:1px solid #444;  vertical-align: top;">
 
-            </td>
-            <td class="sig-cell" style="width:280px;">
-                <br>
-                <br>
-                <br>
-                <br>
-                <div ><center>Authorized Signatory</center></div>
-            </td>
-        </tr>
-    </table>
+            <table style="width:100%; border-collapse: collapse;">
+                <tr>
+                    <td style="width:65%; vertical-align: top;">
+
+                        <table style="width:100%; border-collapse: collapse;">
+                            <tr>
+                                <td style="font-weight:bold;">Bank Name</td>
+                                <td>:</td>
+                                <td>{{ $company->bank_name }}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">Account No</td>
+                                <td>:</td>
+                                <td>{{ $company->account_no }}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">IFSC</td>
+                                <td>:</td>
+                                <td>{{ $company->ifsc }}</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight:bold;">Branch Name</td>
+                                <td>:</td>
+                                <td>{{ $company->branch_name }}</td>
+                            </tr>
+                        </table>
+
+                    </td>
+
+                    <td style="width:35%; text-align:center; vertical-align: middle;">
+                        <img
+                            src="https://nexoocart.in/uploads/company_logo/company_logo_1771340568_logoo.png"
+                            alt="QR"
+                            width="100"
+                            height="120"
+                            style="object-fit:contain;"
+                        />
+                    </td>
+                </tr>
+            </table>
+
+        </td>
+
+        <td class="sig-cell" style="width:40%; text-align:center; vertical-align: bottom; padding:10px;">
+            <div style="margin-top:80px;">
+                Authorized Signatory
+            </div>
+        </td>
+    </tr>
+
+</table> --}}
 
 </div>
 </body>
