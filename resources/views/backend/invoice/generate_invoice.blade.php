@@ -285,7 +285,7 @@
             <!-- LOGO: Replace src with your actual logo path e.g. src="{{ public_path('images/logo.png') }}" -->
             <td class="header-logo-cell" style="width:20%;">
                 <img
-                    src="{{ $company->logo }}"
+                    {{-- src="{{ $company->logo }}" --}}
                     alt="Sri Kali Agencies Logo"
                     width="100"
                     height="100"
@@ -313,7 +313,7 @@
             <!-- COMPANY INFO RIGHT -->
             <td class="header-right-cell" style="width:35%;">
                 <div class="company-right-text ">
-                    Invoice: <strong> {{ $order_details->id }} </strong><br/>
+                    Invoice: <strong> {{ $company->invoice_no }} </strong><br/>
                     Date: <strong> {{ date('d-m-Y', strtotime($order_details->created_at))  }} </strong><br/>
                     Email: <strong> {{ $company->email }}</strong><br/>
                     State: <strong>{{ $company->state  }}</strong>
@@ -549,7 +549,7 @@
                     <!-- QR -->
                     <td style="width:30%; text-align:center; vertical-align: middle;">
                         <img
-                            src="{{ $company->qr_code }}"
+                            {{-- src="{{ $company->qr_code }}" --}}
                             width="85"
                             height="85"
                             style="object-fit:contain;"
@@ -571,70 +571,6 @@
 
 </table>
 
-
-{{-- <table class="bottom-table" style="width:100%; border-collapse: collapse;">
-
-    <tr>
-        <td><strong>Bank Details</strong></td>
-        <td style="background-color:#d7d8e9;">
-            <strong>For {{ $company->company_name }}</strong>
-        </td>
-    </tr>
-
-    <tr>
-        <td style="width:60%; border-right:1px solid #444;  vertical-align: top;">
-
-            <table style="width:100%; border-collapse: collapse;">
-                <tr>
-                    <td style="width:65%; vertical-align: top;">
-
-                        <table style="width:100%; border-collapse: collapse;">
-                            <tr>
-                                <td style="font-weight:bold;">Bank Name</td>
-                                <td>:</td>
-                                <td>{{ $company->bank_name }}</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight:bold;">Account No</td>
-                                <td>:</td>
-                                <td>{{ $company->account_no }}</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight:bold;">IFSC</td>
-                                <td>:</td>
-                                <td>{{ $company->ifsc }}</td>
-                            </tr>
-                            <tr>
-                                <td style="font-weight:bold;">Branch Name</td>
-                                <td>:</td>
-                                <td>{{ $company->branch_name }}</td>
-                            </tr>
-                        </table>
-
-                    </td>
-
-                    <td style="width:35%; text-align:center; vertical-align: middle;">
-                        <img
-                            src="https://nexoocart.in/uploads/company_logo/company_logo_1771340568_logoo.png"
-                            alt="QR"
-                            width="100"
-                            height="120"
-                            style="object-fit:contain;"
-                        />
-                    </td>
-                </tr>
-            </table>
-
-        </td>
-
-        <td class="sig-cell" style="width:40%; text-align:center; vertical-align: bottom; padding:10px;">
-            <div style="margin-top:80px;">
-                Authorized Signatory
-            </div>
-        </td>
-    </tr>
-
-</table> --}}
 
 </div>
 </body>

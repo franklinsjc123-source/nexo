@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\DirectOrder;
+use App\Models\Company;
 
 use Illuminate\Http\Request;
 
@@ -25,9 +26,13 @@ class OrderController extends Controller
                 $imageUrl = url('uploads/direct_order/' . $imageName);
             }
 
+            $company_details =  Company::orderBy('id','asc')->first();
+            $currentInvoice = $company_details->direct_invoice_no;
+
             $insertArray = array(
                 'shop_id'          => $shop_id,
                 'customer_id'      => $customer_id,
+                'invoice_no'       => $currentInvoice,
                 'image_url'        => $imageUrl,
 
             );
@@ -35,6 +40,13 @@ class OrderController extends Controller
             $order = DirectOrder::create($insertArray);
 
             if ($order) {
+
+            $nextInvoice = str_pad((int)$currentInvoice + 1, 3, '0', STR_PAD_LEFT);
+
+                $company_details->update([
+                        'direct_invoice_no' => $nextInvoice
+                    ]);
+
                 $success_array = array('status' => 'success', 'message' => 'Order placed successfully');
                 return response()->json(array($success_array), 200);
             } else {

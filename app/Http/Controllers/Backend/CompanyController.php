@@ -50,6 +50,8 @@ class CompanyController extends Controller
             $file->move(public_path('uploads/company_logo'), $imageName);
             $imageUrl = url('uploads/company_logo/' . $imageName);
 
+        }else{
+             $imageUrl  =  $input['old_company_logo'];
         }
 
 
@@ -61,6 +63,10 @@ class CompanyController extends Controller
             $imageName = 'qr_code_' . time() . '_' . preg_replace('/\s+/', '_', $file->getClientOriginalName());
             $file->move(public_path('uploads/qr_code'), $imageName);
             $qrImageUrl = url('uploads/qr_code/' . $imageName);
+
+        }else{
+
+             $qrImageUrl = $input['old_qr_code'];
 
         }
 
