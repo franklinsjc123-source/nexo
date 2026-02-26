@@ -285,7 +285,7 @@
             <!-- LOGO: Replace src with your actual logo path e.g. src="{{ public_path('images/logo.png') }}" -->
             <td class="header-logo-cell" style="width:20%;">
                 <img
-                    {{-- src="{{ $company->logo }}" --}}
+                    src="{{ $company->logo }}"
                     alt="Sri Kali Agencies Logo"
                     width="100"
                     height="100"
@@ -550,7 +550,7 @@
                     <!-- QR -->
                     <td style="width:30%; text-align:center; vertical-align: middle;">
                         <img
-                            {{-- src="{{ $company->qr_code }}" --}}
+                            src="{{ $company->qr_code }}"
                             width="85"
                             height="85"
                             style="object-fit:contain;"
