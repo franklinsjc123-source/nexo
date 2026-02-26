@@ -306,6 +306,7 @@
                 <div class="company-sub">
                    {{$company->company_address }}<br/>
                     Phone: <strong>{{$company->phone }}</strong><br/>
+                    FSSAI No: <strong>{{$company->fssai_no }}</strong><br/>
                     GSTIN: <strong>{{$company->gst_no }}</strong>
                 </div>
             </td>
