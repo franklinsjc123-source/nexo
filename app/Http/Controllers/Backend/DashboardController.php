@@ -45,7 +45,7 @@ class DashboardController extends Controller
             ->leftJoin('shop', function ($join) {
                 $join->whereRaw("FIND_IN_SET(category.id, shop.category)");
             })
-            ->leftJoin('products', 'products.shop', '=', 'shop.id')
+             ->leftJoin('products', 'products.category', '=', 'category.id')
             ->select(
                 'category.id',
                 'category.category_name',
