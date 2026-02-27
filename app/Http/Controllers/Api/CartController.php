@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItems;
+use App\Models\Product;
 
 use Illuminate\Http\Request;
 
@@ -13,48 +14,58 @@ class CartController extends Controller
 
     public function addToCart(Request $request)
     {
+        $product_id = $request->product_id;
+        $user_id    = $request->user_id;
+        $quantity   = $request->quantity ?? 1; 
 
-
-        $product_id = $request->input('product_id');
-        $price = $request->input('price');
-        $user_id = $request->input('user_id');
-
-        if ($product_id != '' && $price != '' && $user_id != '') {
-
-            $cart = Cart::firstOrCreate(
-                ['user_id' => $user_id],
-                ['total_amount' => 0]
-            );
-
-            $item = CartItems::where('cart_id', $cart->id)
-                ->where('product_id', $request->product_id)
-                ->first();
-
-            if ($item) {
-                $item->quantity += $request->quantity;
-                $item->total_price = $item->quantity * $item->price;
-                $item->save();
-            } else {
-                CartItems::create([
-                    'cart_id'     => $cart->id,
-                    'product_id'  => $request->product_id,
-                    'price'       => $request->price,
-                    'quantity'    => 1,
-                    'total_price' => $request->price * 1
-                ]);
-            }
-
-            $cart->total_amount = $cart->items()->sum('total_price');
-            $cart->save();
-
+        if (!$product_id || !$user_id) {
             return response()->json([
-                'status' => true,
-                'message' => 'Item added to cart'
-            ]);
-        } else {
-            $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
-            return response()->json(array($error_array), 400);
+                'status'  => false,
+                'message' => 'Parameters Missing'
+            ], 400);
         }
+
+        $product = Product::find($product_id);
+        if (!$product) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Product not found'
+            ], 404);
+        }
+
+        $price = $product->discount_price ?? $product->price;
+
+        $cart = Cart::firstOrCreate(
+            ['user_id' => $user_id],
+            ['total_amount' => 0]
+        );
+
+        $item = CartItems::where('cart_id', $cart->id)
+            ->where('product_id', $product_id)
+            ->first();
+
+        if ($item) {
+            $item->quantity += $quantity;
+            $item->total_price = $item->quantity * $item->price;
+            $item->save();
+        } else {
+            CartItems::create([
+                'cart_id'     => $cart->id,
+                'product_id'  => $product_id,
+                'price'       => $price,
+                'quantity'    => $quantity,
+                'total_price' => $price * $quantity
+            ]);
+        }
+
+        $cart->total_amount = CartItems::where('cart_id', $cart->id)->sum('total_price');
+        $cart->save();
+
+        return response()->json([
+            'status'      => true,
+            'message'     => 'Item added to cart successfully',
+            'cart_total'  => $cart->total_amount
+        ]);
     }
 
     public function viewCart(Request $request)
