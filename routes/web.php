@@ -19,6 +19,7 @@ use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\DirectOrderController;
 use App\Http\Controllers\Backend\OfferController;
 use App\Http\Controllers\Backend\ReferralController;
+use App\Http\Controllers\Backend\ReportController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -121,13 +122,13 @@ Route::middleware('auth.request')->group(function () {
 
     //direct orders Management
     Route::get("direct-orders", [DirectOrderController::class, 'directOrders'])->name('direct-orders');
-    Route::match(['get', 'post'],"direct-order-abstract", [DirectOrderController::class, 'directOrdersAbstract'])->name('direct-order-abstract');
+    Route::match(['get', 'post'], "direct-order-abstract", [DirectOrderController::class, 'directOrdersAbstract'])->name('direct-order-abstract');
     Route::post('/abstract/download', [DirectOrderController::class, 'storeDirectOrdersAbstract'])->name('abstract.download');
     Route::get("addDirectOrderBill/{id}", [DirectOrderController::class, 'addDirectOrderBill'])->name('addDirectOrderBill');
     Route::post('direct-orders-status-update', [DirectOrderController::class, 'updateOrderStatus'])->name('direct-orders-status-update');
     Route::post('storeUpdateDirectOrder', [DirectOrderController::class, 'storeUpdateDirectOrder'])->name('storeUpdateDirectOrder');
 
-    
+
     //Delivery Person Management
     Route::get("deliveryPerson", [DeliveryPersonController::class, 'deliveryPerson'])->name('deliveryPerson');
     Route::get('addDeliveryPerson/{id?}', [DeliveryPersonController::class, 'addDeliveryPerson'])->name('addDeliveryPerson');
@@ -138,4 +139,9 @@ Route::middleware('auth.request')->group(function () {
     Route::get('offers', [OfferController::class, 'offers'])->name('offers');
     Route::get('addOffer/{id?}', [OfferController::class, 'addOffer'])->name('addOffer');
     Route::post('storeUpdateOffer', [OfferController::class, 'storeUpdateOffer'])->name('storeUpdateOffer');
+
+    //Report Management
+    Route::get("orders-report", [ReportController::class, 'ordersReport'])->name('orders-report');
+    Route::get("direct-orders-report", [ReportController::class, 'directOrdersReport'])->name('direct-orders-report');
+
 });

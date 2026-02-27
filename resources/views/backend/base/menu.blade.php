@@ -449,12 +449,46 @@ use Illuminate\Support\Facades\Auth;
 
                 @if(auth()->check() && auth()->user()->hasPermission('Reports'))
 
-                 <li class="pe-slide pe-has-sub">
-                    <a href="#" class="pe-nav-link">
-                        <i class=" bi bi-file-earmark pe-nav-icon"></i>
-                        <span class="pe-nav-content">Reports </span>
+                <li class="pe-slide pe-has-sub">
+
+                    <a href="#collapseLogistics-report" class="pe-nav-link" data-bs-toggle="collapse"
+                        aria-expanded="false"
+                        aria-controls="collapseLogistics">
+                        <i class="bi bi-file-earmark  pe-nav-icon"></i>
+                        <span class="pe-nav-content"> Reports</span>
+                        <i class="ri-arrow-down-s-line pe-nav-arrow"></i>
                     </a>
+
+                    <ul class="pe-slide-menu collapse " id="collapseLogistics-report">
+
+                        <li class="slide pe-nav-content1">
+                            <a href="javascript:void(0)">Reports </a>
+                        </li>
+
+
+                            <li class="pe-slide-item">
+                                <a href="<?= route('orders-report') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['orders-report'])) active @endif">
+                                    Order Report
+                                </a>
+                            </li>
+
+
+                            <li class="pe-slide-item">
+                                <a href="<?= route('direct-orders-report') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['direct-orders-report'])) active @endif">
+                                    Direct Order Report
+                                </a>
+                            </li>
+
+
+                    </ul>
                 </li>
+
+
+
+
+
                 @endif
 
 

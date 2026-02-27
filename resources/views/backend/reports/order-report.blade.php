@@ -1,0 +1,57 @@
+@extends('backend.app_template')
+@section('title','Orders  Report')
+@section('content')
+<main class="app-wrapper">
+    <div class="container-fluid">
+
+        <div class="d-flex align-items-center mt-2 mb-2">
+            <div class="flex-shrink-0">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb justify-content-end mb-0">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Orders</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">List</li>
+                    </ol>
+                </nav>
+
+            </div>
+
+        </div>
+
+        <div class="row">
+
+            <table id="datatables" class="table table-nowrap table-hover table-bordered w-100 mt-5 colum-search">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Order Date </th>
+                        <th>Order ID </th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Order Amount</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                     <?php
+                        $i = 0;
+                            foreach ($records as $key => $row) {
+                            ?>
+                            <tr>
+                                <td><?php echo $i + 1 ?></td>
+                                <td><?php echo '' ?></td>
+                                <td><?php echo '' ?></td>
+                                <td><?php echo '' ?></td>
+                                <td><?php echo '' ?></td>
+                               
+                            </tr>
+
+                     <?php $i++;
+                                            }?>
+
+                </tbody>
+            </table>
+        </div>
+        <!-- Submit Section -->
+    </div>
+</main>
+@endsection
