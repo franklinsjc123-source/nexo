@@ -17,10 +17,9 @@ class CartController extends Controller
 
         $product_id = $request->input('product_id');
         $price = $request->input('price');
-        $quantity = $request->input('quantity');
         $user_id = $request->input('user_id');
 
-        if ($product_id != '' && $price != '' && $quantity != '' && $user_id != '') {
+        if ($product_id != '' && $price != '' && $user_id != '') {
 
             $cart = Cart::firstOrCreate(
                 ['user_id' => $user_id],
@@ -40,8 +39,8 @@ class CartController extends Controller
                     'cart_id'     => $cart->id,
                     'product_id'  => $request->product_id,
                     'price'       => $request->price,
-                    'quantity'    => $request->quantity,
-                    'total_price' => $request->price * $request->quantity
+                    'quantity'    => 1,
+                    'total_price' => $request->price * 1
                 ]);
             }
 
