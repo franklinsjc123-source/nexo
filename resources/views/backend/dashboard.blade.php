@@ -179,8 +179,8 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6">
-                            <h5 style="margin-left:-90px" >Order and Direct Orders</h5>
+                        <div class="col-md-6 mt-1">
+                            <h5 style="margin-left:-100px" >Order and Direct Orders</h5>
                             <div  style="cursor:pointer" class="chart-box">
                                 <canvas id="orderPieChart"></canvas>
                             </div>
