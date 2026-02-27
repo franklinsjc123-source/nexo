@@ -15,7 +15,7 @@ class UserController extends Controller
     public function users()
     {
 
-     if (!$this->checkPermission('User-Management')) {
+        if (!$this->checkPermission('User-Management')) {
             return view('unauthorized');
         }
 
@@ -28,10 +28,27 @@ class UserController extends Controller
     public function addUser($id = '')
     {
         $record = '';
+
         if ($id > 0) {
-            $record = User::Where('id', $id)->first();
+            $record = User::where('id', $id)->first();
+            $autoEmail = $record->email;
+        } else {
+
+            $lastUser = User::where('email', 'like', 'nexouser%@gmail.com')
+                ->orderBy('id', 'desc')
+                ->first();
+
+            if ($lastUser) {
+                preg_match('/nexouser(\d+)@gmail\.com/', $lastUser->email, $matches);
+                $nextNumber = isset($matches[1]) ? ((int)$matches[1] + 1) : 1;
+            } else {
+                $nextNumber = 1;
+            }
+
+            $autoEmail = 'nexouser' . $nextNumber . '@gmail.com';
         }
-        return view('backend.users.add_edit', compact('record', 'id'));
+
+        return view('backend.users.add_edit', compact('record', 'id', 'autoEmail'));
     }
 
     public function storeUpdateUser(Request $request)
@@ -40,7 +57,7 @@ class UserController extends Controller
         $id        = isset($input['id']) ? $input['id'] : 0;
 
         $insertArray = array(
-            'mobile'       => $input['mobile'],
+            // 'mobile'       => $input['mobile'],
             'name'       => $input['name'],
             'email'        => $input['email'],
             'auth_level'        => 2,
@@ -56,11 +73,11 @@ class UserController extends Controller
             }
         } else {
 
-            if($input['password']){
-                  $updateArray = [ 'password'     => Hash::make($input['password'])];
+            if ($input['password']) {
+                $updateArray = ['password'     => Hash::make($input['password'])];
             }
             $updateArray = array(
-                'mobile'         => isset($input['mobile'])    ?  $input['mobile']    : '',
+                // 'mobile'         => isset($input['mobile'])    ?  $input['mobile']    : '',
                 'email'         => isset($input['email'])    ?  $input['email']    : '',
                 'name'         => isset($input['name'])    ?  $input['name']    : '',
             );
