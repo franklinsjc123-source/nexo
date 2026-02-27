@@ -285,8 +285,8 @@
             <!-- LOGO: Replace src with your actual logo path e.g. src="{{ public_path('images/logo.png') }}" -->
             <td class="header-logo-cell" style="width:20%;">
                 <img
-                    src="{{ $company->logo }}"
-                    alt="Sri Kali Agencies Logo"
+                    src="{{ asset('backend_assets/images/invoice.jpg') }}"
+                    alt="LOgo"
                     width="100"
                     height="100"
                     style="display:block; border-radius:50px"
