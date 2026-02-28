@@ -14,9 +14,6 @@ class ReportController extends Controller
 
     public function ordersReport()
     {
-        if (!$this->checkPermission('Orders')) {
-            return view('unauthorized');
-        }
 
         $records   =  Order::orderBy('id', 'DESC')->get();
         return view('backend.reports.order-report', compact('records'));
@@ -25,9 +22,6 @@ class ReportController extends Controller
 
       public function directOrdersReport()
     {
-        if (!$this->checkPermission('Orders')) {
-            return view('unauthorized');
-        }
 
         $records   =  Order::orderBy('id', 'DESC')->get();
         return view('backend.reports.direct-order-report', compact('records'));

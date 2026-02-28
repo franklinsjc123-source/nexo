@@ -27,6 +27,20 @@
 
         </div>
 
+            <div class="d-flex justify-content-between align-items-center mb-2">
+
+                <h6 class="mb-0 flex-grow-1"></h6>
+
+                <div class="d-flex gap-2">
+
+                    <a href="#" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Export to Excel">
+                        <i class="bi bi-file-earmark-excel"></i> Export Excel
+                    </a>
+                </div>
+            </div>
+
+
+
 
 
         <div class="row mt-5 align-items-end">
