@@ -26,78 +26,39 @@
             </div>
 
         </div>
-        <?php if( Auth::user()->auth_level != 4) { ?>
+
 
 
         <div class="row mt-5 align-items-end">
 
             <div class="col-md-9">
-                <form method="POST" action="{{ route('direct-order-abstract') }}">
+                <form method="POST" action="{{ route('orders-report') }}">
                     @csrf
 
                     <div class="row">
 
-                        <div class="col-md-4 mb-2">
-                            <label>Year</label>
-                            <select class="form-control select2" name="year" id="yearSelect">
-                                @for($y = now()->year; $y >= 2026; $y--)
-                                    <option value="{{ $y }}" {{ (request('year') ?? now()->year) == $y ? 'selected' : '' }}>
-                                        {{ $y }}
-                                    </option>
-                                @endfor
-                            </select>
+                        <div class="col-md-4">
+                            <label>From Date</label>
+                            <input type="date" class="form-control" name="from_date" value="">
                         </div>
 
-                        <div class="col-md-4 mb-2">
-                            <label>Month</label>
-                            <select class="form-control select2" name="month" id="monthSelect">
-                                @foreach([
-                                    1=>'January',2=>'February',3=>'March',4=>'April',
-                                    5=>'May',6=>'June',7=>'July',8=>'August',
-                                    9=>'September',10=>'October',11=>'November',12=>'December'
-                                ] as $key => $month)
-                                    <option value="{{ $key }}" {{ (request('month') ?? now()->month) == $key ? 'selected' : '' }}>
-                                        {{ $month }}
-                                    </option>
-                                @endforeach
-                            </select>
+                         <div class="col-md-4">
+                            <label>To Date</label>
+                            <input type="date" class="form-control" name="to_date" value="">
                         </div>
 
-                          <div class="col-md-4 mb-2">
-                            <label>Order Status</label>
-                            <select class="form-control select2 " id="order_status" name="order_status">
-                                <option value="">All</option>
-                                <option {{ request('order_status')  == 1 ? 'selected' : '' }} value="1">New order</option>
-                                <option {{ request('order_status')  == 2 ? 'selected' : '' }} value="2">Delivered</option>
-                                <option {{ request('order_status')  == 3 ? 'selected' : '' }} value="3">Cancelled</option>
-                            </select>
+                        <div class="col-md-2 mt-5">
+                              <button class="btn btn-primary">  Search </button>
                         </div>
 
                     </div>
 
-                    <button class="btn btn-primary mt-2">
-                        Search
-                    </button>
+
                 </form>
             </div>
-
-
-            @if(request('month'))
-                <div class="col-md-3 text-end">
-                    <form method="POST" action="{{ route('abstract.download') }}">
-                        @csrf
-                        <input type="hidden" name="absract_year" value="{{ request('year') }}">
-                        <input type="hidden" name="absract_month" value="{{ request('month') }}">
-
-                        <button class="btn btn-success">
-                            <i class="bi bi-download"></i> Abstract
-                        </button>
-                    </form>
-                </div>
-            @endif
-
         </div>
-        <?php } ?>
+
+
 
 
 
@@ -111,9 +72,8 @@
                         <th>Order Date </th>
                         <th>Customer Name</th>
                         <th>Shop Name </th>
-                        <th>Image</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Order Amount</th>
+
                     </tr>
                 </thead>
                 <tbody>
@@ -126,46 +86,9 @@
                                 <td><?= date('d-m-Y', strtotime($row->created_at)) ?></td>
                                 <td><?= optional($row->userData)->name ?? '-' ?></td>
                                 <td><?= optional($row->shopData)->shop_name ?? '-' ?></td>
-                                <td>
-                                    <a href="<?= $row->image_url ?>" target="_blank">
-                                        <img src="<?= $row->image_url ?>" height="50" width="50">
-                                    </a>
-                                </td>
-                               <td>
-                                    <?php
-                                        if ($row->order_status == 1) {
-                                            $class = "warning";
-                                            $text  = "New Order";
-                                        } elseif ($row->order_status == 2) {
-                                            $class = "success";
-                                            $text  = "Delivered";
-                                        } elseif ($row->order_status == 3) {
-                                            $class = "danger";
-                                            $text  = "Cancelled";
-                                        } else {
-                                            $class = "secondary";
-                                            $text  = "Unknown";
-                                        }
-                                    ?>
-
-                                    <a href="javascript:void(0)"
-                                        class="badge bg-<?php echo $class; ?> editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>"> <?php echo $text; ?>
-                                    </a>
-                                </td>
-                                <td>
-                                    <a href="javascript:void(0)" class="btn btn-sm btn-warning editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>" data-toggle="tooltip" title="Edit">
-                                        <i class="bi bi-pencil-fill"></i>
-                                    </a>
-
-                                    <a href="{{ route('addDirectOrderBill', [$row->id]) }}" class="btn btn-sm btn-info " data-toggle="tooltip" title="View">  <i class="bi bi-eye"></i>
-                                    </a>
-
-                                    <?php if($row->total_amount > 0) {  ?>
-                                        <a data-toggle="tooltip" target="_blank" href="{{ $row->invoice_file }}" data-placement="top" title="Invoice"  class="btn btn-sm btn-secondary"><i class="bi bi-file-earmark-break"></i></a>
-                                    <?php } ?>
+                                <td></td>
 
 
-                                </td>
                             </tr>
 
                      <?php $i++; } ?>
@@ -212,12 +135,12 @@
 
     $(document).ready(function () {
 
-    $('#change_order_status').select2({
-        dropdownParent: $('#orderStatusModal'),
-        width: '100%'
-    });
+        $('#change_order_status').select2({
+            dropdownParent: $('#orderStatusModal'),
+            width: '100%'
+        });
 
-});
+    });
 
 
 

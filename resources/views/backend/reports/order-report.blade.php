@@ -17,7 +17,36 @@
 
         </div>
 
-        <div class="row">
+         <div class="row mt-5 align-items-end">
+
+            <div class="col-md-9">
+                <form method="POST" action="{{ route('direct-orders-report') }}">
+                    @csrf
+
+                    <div class="row">
+
+                        <div class="col-md-4">
+                            <label>From Date</label>
+                            <input type="date" class="form-control" name="from_date" value="">
+                        </div>
+
+                         <div class="col-md-4">
+                            <label>To Date</label>
+                            <input type="date" class="form-control" name="to_date" value="">
+                        </div>
+
+                        <div class="col-md-2 mt-5">
+                              <button class="btn btn-primary">  Search </button>
+                        </div>
+
+                    </div>
+
+
+                </form>
+            </div>
+        </div>
+
+        <div class="row mt-5">
 
             <table id="datatables" class="table table-nowrap table-hover table-bordered w-100 mt-5 colum-search">
                 <thead>
@@ -42,7 +71,7 @@
                                 <td><?php echo '' ?></td>
                                 <td><?php echo '' ?></td>
                                 <td><?php echo '' ?></td>
-                               
+
                             </tr>
 
                      <?php $i++;

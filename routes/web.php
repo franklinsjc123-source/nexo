@@ -141,7 +141,7 @@ Route::middleware('auth.request')->group(function () {
     Route::post('storeUpdateOffer', [OfferController::class, 'storeUpdateOffer'])->name('storeUpdateOffer');
 
     //Report Management
-    Route::get("orders-report", [ReportController::class, 'ordersReport'])->name('orders-report');
-    Route::get("direct-orders-report", [ReportController::class, 'directOrdersReport'])->name('direct-orders-report');
+    Route::match(['get', 'post'],"orders-report", [ReportController::class, 'ordersReport'])->name('orders-report');
+    Route::match(['get', 'post'],"direct-orders-report", [ReportController::class, 'directOrdersReport'])->name('direct-orders-report');
 
 });
