@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Referral;
 
 
 use Illuminate\Support\Facades\DB;
@@ -17,59 +18,58 @@ class AuthController extends Controller
 
 
 
-public function login(Request $request)
-{
-    $request->validate([
-        'mobile' => 'required|digits:10'
-    ]);
+    public function login(Request $request)
+    {
+        $request->validate([
+            'mobile' => 'required|digits:10'
+        ]);
 
-    $mobile = $request->mobile;
+        $mobile = $request->mobile;
 
-    $user = User::where('mobile', $mobile)->first();
+        $user = User::where('mobile', $mobile)->first();
 
-    if (!$user) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'User not found'
-        ], 404);
-    }
-
-    $apiKey = '0db8d8b3-0825-11f1-a6b2-0200cd936042';
-    $template = urlencode("OTP Verification");
-
-    $url = "https://2factor.in/API/V1/$apiKey/SMS/+91$mobile/AUTOGEN/$template";
-
-    try {
-
-        $response = Http::get($url);
-        $result = $response->json();
-
-        if (isset($result['Status']) && $result['Status'] == 'Success') {
-
-            $user->update([
-                'otp_session_id' => $result['Details']
-            ]);
-
+        if (!$user) {
             return response()->json([
-                'status' => 'success',
-                'message' => 'OTP sent successfully'
-            ], 200);
+                'status' => 'error',
+                'message' => 'User not found'
+            ], 404);
         }
 
-        return response()->json([
-            'status' => 'error',
-            'message' => 'OTP sending failed',
-            'response' => $result
-        ], 400);
+        $apiKey = '0db8d8b3-0825-11f1-a6b2-0200cd936042';
+        $template = urlencode("OTP Verification");
 
-    } catch (\Exception $e) {
+        $url = "https://2factor.in/API/V1/$apiKey/SMS/+91$mobile/AUTOGEN/$template";
 
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Something went wrong',
-        ], 500);
+        try {
+
+            $response = Http::get($url);
+            $result = $response->json();
+
+            if (isset($result['Status']) && $result['Status'] == 'Success') {
+
+                $user->update([
+                    'otp_session_id' => $result['Details']
+                ]);
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'OTP sent successfully'
+                ], 200);
+            }
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'OTP sending failed',
+                'response' => $result
+            ], 400);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Something went wrong',
+            ], 500);
+        }
     }
-}
     // public function login(Request $request)
     // {
 
@@ -121,9 +121,13 @@ public function login(Request $request)
         $mobile = $request->input('mobile');
         $referral_code = $request->input('referral_code');
 
+
         if ($name != '' &&  $email != '' &&  $mobile) {
 
             $user = User::where('mobile', $mobile)->first();
+
+            $check_referral = Referral::where('referral_code', $referral_code)->first();
+
 
             if ($user) {
 
@@ -139,6 +143,18 @@ public function login(Request $request)
                         'status'  => 'error',
                         'message' => 'Mobile number already exists'
                     ], 400);
+                }
+
+                if (!empty($referral_code)) {
+
+                    $check_referral = Referral::where('referral_code', $referral_code)->first();
+
+                    if (!$check_referral) {
+                        return response()->json([
+                            'status' => 'error',
+                            'message' => 'Invalid referral code'
+                        ], 400);
+                    }
                 }
             }
 

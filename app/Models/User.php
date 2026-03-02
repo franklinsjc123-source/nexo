@@ -25,7 +25,8 @@ class User extends Authenticatable implements LaratrustUser
         'email',
         'password',
         'auth_level',
-        'mobile'
+        'mobile',
+        'referral_code'
     ];
 
     /**
