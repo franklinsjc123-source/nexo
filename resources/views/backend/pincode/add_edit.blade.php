@@ -52,6 +52,13 @@
                                         <span class="text-danger error-message"></span>
                                     </div>
 
+
+                                     <div class="col-xl-4">
+                                         <label for="pincode" class="form-label">Delivery charge <span class="text-danger"> *</span></label>
+                                         <input type="text" value="<?php echo $pincode?>" class="form-control" id="pincode" name="pincode" placeholder="Enter Delivery charge" >
+                                        <span class="text-danger error-message"></span>
+                                    </div>
+
                                  </div>
                              </div>
 
