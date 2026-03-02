@@ -47,6 +47,20 @@
                                     </div>
                                  </div>
                              </div>
+
+
+
+                            <div class="card-body">
+                                <div class="row g-4">
+                                    <div class="col-xl-4">
+                                         <label for="area" class="form-label">Area <span class="text-danger"> *</span></label>
+                                         <input type="text"  value="<?php echo $area?>" class="form-control" id="area" name="area" placeholder="Enter Area" >
+                                        <span class="text-danger error-message"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+
                          </div>
                      </div>
                      <div class="d-flex justify-content-end gap-3 my-5">
