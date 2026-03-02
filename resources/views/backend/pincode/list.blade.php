@@ -27,6 +27,7 @@
                     <tr>
                         <th>S.No</th>
                         <th>Pincode</th>
+                        <th>Area</th>
                          <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -39,6 +40,7 @@
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
                                 <td><?php echo $row->pincode ?></td>
+                                <td><?php echo $row->area ? $row->area : '-' ?></td>
                                 <td><a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" onclick="changeStatus('<?php echo $row->id ?>','<?php echo ($row->status == 1) ? 0 : 1 ?>','PinCode')" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">
                                             <?php echo ($row->status == 1) ? 'Active' : 'In-Active' ?></a>
                                         </td>
