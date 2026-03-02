@@ -45,21 +45,15 @@
                                          <input type="text" maxlength="6" minlength="6"  value="<?php echo $pincode?>" class="form-control" id="pincode" name="pincode" placeholder="Enter Pincode" onkeyup="commonCheckExist(this,'pincode', 'pincode', this.value)">
                                         <span class="text-danger error-message"></span>
                                     </div>
-                                 </div>
-                             </div>
 
-
-
-                            <div class="card-body">
-                                <div class="row g-4">
-                                    <div class="col-xl-4">
+                                      <div class="col-xl-4">
                                          <label for="area" class="form-label">Area <span class="text-danger"> *</span></label>
                                          <input type="text"  value="<?php echo $area?>" class="form-control" id="area" name="area" placeholder="Enter Area" >
                                         <span class="text-danger error-message"></span>
                                     </div>
-                                </div>
-                            </div>
 
+                                 </div>
+                             </div>
 
                          </div>
                      </div>
