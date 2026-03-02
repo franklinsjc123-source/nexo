@@ -291,13 +291,16 @@ use Illuminate\Support\Facades\Auth;
                             <a href="javascript:void(0)">Orders </a>
                         </li>
 
-
+                        @if(auth()->check() && auth()->user()->hasPermission('Orders'))
                             <li class="pe-slide-item">
                                 <a href="<?= route('orders') ?>" class="pe-nav-link
                                         @if(request()->routeIs(['orders'])) active @endif">
                                     Orders
                                 </a>
                             </li>
+                        @endif
+
+                        @if(auth()->check() && auth()->user()->hasPermission('Direct-Order'))
 
 
                             <li class="pe-slide-item">
@@ -306,6 +309,8 @@ use Illuminate\Support\Facades\Auth;
                                     Direct  Orders
                                 </a>
                             </li>
+                        @endif
+
 
 
                     </ul>
