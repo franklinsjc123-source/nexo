@@ -41,9 +41,9 @@ use Illuminate\Support\Facades\Auth;
                         </button>
                     </div> --}}
                     <div class="dropdown pe-dropdown-mega d-none d-md-block">
-                        {{-- <button class="btn header-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button class="btn header-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-bell"></i>
-                        </button> --}}
+                        </button>
                         <div class="dropdown-menu dropdown-mega-md header-dropdown-menu pe-noti-dropdown-menu p-0">
                             <div class="p-3 border-bottom">
                                 <h6 class="d-flex align-items-center mb-0">Notification
@@ -274,7 +274,7 @@ use Illuminate\Support\Facades\Auth;
 
 
 
-                @if(auth()->check() && auth()->user()->hasPermission('Orders'))
+
                   <li class="pe-slide pe-has-sub">
 
                     <a href="#collapseLogistics-order" class="pe-nav-link" data-bs-toggle="collapse"
@@ -316,7 +316,7 @@ use Illuminate\Support\Facades\Auth;
                     </ul>
                 </li>
 
-                   @endif
+                
 
                      @if(auth()->check() && auth()->user()->hasPermission('Customers'))
                     <li class="pe-slide pe-has-sub">
