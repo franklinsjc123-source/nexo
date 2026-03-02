@@ -77,12 +77,20 @@
                      required: true
                  },
 
+                   area: {
+                     required: true
+                 },
+
 
              },
              messages: {
 
                  pincode: {
-                     required: "Please Enter Pincode"
+                     required: "Please enter pincode"
+                 },
+
+                  area: {
+                     required: "Please enter area"
                  },
 
              },
