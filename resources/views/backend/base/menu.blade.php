@@ -1,6 +1,14 @@
 <?php
 
 use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
+use App\Models\DirectOrder;
+use Carbon\Carbon;
+
+$today_order_count          = Order::whereDate('created_at',  Carbon::today())->count();
+$today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::today())->count();
+
+
 ?>
 <!-- begin::App -->
 <div id="layout-wrapper">
@@ -40,6 +48,10 @@ use Illuminate\Support\Facades\Auth;
                             <i class="bi bi-moon-stars"></i>
                         </button>
                     </div> --}}
+
+                                <?php  if(Auth::user()->auth_level  != 4 ) {  ?>
+
+
                     <div class="dropdown pe-dropdown-mega d-none d-md-block">
                         <button class="btn header-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-bell"></i>
@@ -47,29 +59,45 @@ use Illuminate\Support\Facades\Auth;
                         <div class="dropdown-menu dropdown-mega-md header-dropdown-menu pe-noti-dropdown-menu p-0">
                             <div class="p-3 border-bottom">
                                 <h6 class="d-flex align-items-center mb-0">Notification
-                                    <!-- <span class="badge bg-success rounded-circle align-middle ms-1">4</span> -->
+
                                 </h6>
                             </div>
                             <div class="p-3">
 
-                                <!-- <div class="noti-item">
-                                    <img src="<?= asset('backend_assets') ?>/images/avatar/avatar-8.jpg" alt=""
-                                        class="avatar-md">
+                                <div class="noti-item">
+
                                     <div>
                                         <a href="javascript:void(0)" class="stretched-link">
-                                            <h6 class="mb-1 text-muted"><strong
-                                                    class="fw-semibold text-body">Donald</strong> liked your post</h6>
+                                            <h6 class="mb-1 text-muted"> Orders  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="badge bg-success rounded-circle align-middle ms-1"><?= $today_order_count ?></span> </h6>
                                         </a>
-                                        <p class="text-muted mb-0">Friday, 11:29 PM</p>
+
                                     </div>
-                                    <a href="javascript:void(0)"
+                                    {{-- <a href="javascript:void(0)"
                                         class="position-absolute top-10 end-0 fs-18 z-1 link link-danger"><i
-                                            class="bi bi-x"></i></a>
-                                </div>                                                           -->
+                                            class="bi bi-x"></i>
+                                    </a> --}}
+                                </div>
+
+
+
+                                <div class="noti-item">
+
+                                    <div>
+                                        <a href="javascript:void(0)" class="stretched-link">
+                                            <h6 class="mb-1 text-muted"> Direct Orders &nbsp;&nbsp;&nbsp;   <span class="badge bg-success rounded-circle align-middle ms-1"><?=  $today_direct_order_count ?></span> </h6>
+                                        </a>
+                                    </div>
+                                        {{-- <a href="javascript:void(0)"
+                                            class="position-absolute top-10 end-0 fs-18 z-1 link link-danger"><i
+                                                class="bi bi-x"></i>
+                                        </a> --}}
+                                </div>
 
                             </div>
                         </div>
                     </div>
+
+                    <?php  } ?>
                     <?php
                     use App\Models\Company;
 
@@ -316,7 +344,7 @@ use Illuminate\Support\Facades\Auth;
                     </ul>
                 </li>
 
-                
+
 
                      @if(auth()->check() && auth()->user()->hasPermission('Customers'))
                     <li class="pe-slide pe-has-sub">
