@@ -2,11 +2,11 @@
  @section('title','Pincode Store or Update')
  @section('content')
  <?php
-     $id                  = isset($record->id) ? $record->id : '';
-    $pincode           = isset($record->pincode) ? $record->pincode:'';
-    $status           = isset($record->status) ? $record->status:'';
-
-    $type              = ($id == '')   ? 'Create' : 'Update';
+    $id             = isset($record->id) ? $record->id : '';
+    $pincode        = isset($record->pincode) ? $record->pincode:'';
+    $area           = isset($record->area) ? $record->area:'';
+    $status         = isset($record->status) ? $record->status:'';
+    $type           = ($id == '')   ? 'Create' : 'Update';
 
     ?>
  <main class="app-wrapper">
