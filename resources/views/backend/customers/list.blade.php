@@ -40,9 +40,8 @@
                                 <td><?php echo $i + 1 ?></td>
                                 <td><?php echo $row->name ?></td>
                                 <td><?php echo $row->email ?></td>
-                                <td><?php echo $row->mobile ?></td>
-                                <td>{{ optional($row->referralData)->name ?? '-' }}</td>
-
+                                <td><?php echo  $row->mobile ?></td>
+                                <td>{{ optional($row->referralData)->name  ?   optional($row->referralData)->name .'-'.  optional($row->referralData)->mobile  : '-' }}</td>
                                 <td>
                                     <a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" onclick="changeStatus('<?php echo $row->id ?>','<?php echo ($row->status == 1) ? 0 : 1 ?>','User')" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">
                                             <?php echo ($row->status == 1) ? 'Active' : 'In-Active' ?>
@@ -53,7 +52,6 @@
                                     @if(auth()->user()->hasPermission('Customers-Delete'))
                                         <a data-toggle="tooltip" data-placement="top" title="Delete" data-original-title="Delete" href="javascript:void(0)" onclick="commonDelete('<?php echo $row->id ?>','User')" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></a>
                                     @endif
-
                                 </td>
                             </tr>
 

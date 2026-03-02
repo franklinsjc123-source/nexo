@@ -24,6 +24,7 @@
     $branch_name            = isset($record->branch_name) ? $record->branch_name : '';
     $ifsc                   = isset($record->ifsc) ? $record->ifsc : '';
     $account_no             = isset($record->account_no) ? $record->account_no : '';
+    $upi_id                 = isset($record->upi_id) ? $record->upi_id : '';
     $qr_code                = isset($record->qr_code) ? $record->qr_code : '';
     $old_qr_code            = isset($record->qr_code) ? $record->qr_code : '';
     $type                   = ($id == '')   ? 'Create' : 'Update';
@@ -223,12 +224,17 @@
                                             @if($qr_code =="" )
                                              @error('qr_code') <span class="text-danger">{{$message}}</span> @enderror
                                             @endif
-                                          </div>
+                                        </div>
+
+
+                                        <div class="col-xl-4">
+                                            <label for="upi_id" class="form-label">UPI ID <span class="text-danger"> *</span></label>
+                                            <input type="text" value="<?php echo $upi_id ?>" class="form-control" id="upi_id" name="upi_id" placeholder="Enter UPI ID">
+                                            @error('upi_id') <span class="text-danger">{{$message}}</span> @enderror
+                                        </div>
 
                                     </div>
                                 </div>
-
-
 
                              </div>
                          </div>
@@ -297,6 +303,10 @@
                      required: true
                  },
 
+                  upi_id: {
+                     required: true
+                 },
+
 
 
 
@@ -355,6 +365,10 @@
                  },
                 account_no: {
                      required: "Please enter account no "
+                 },
+
+                upi_id: {
+                     required: "Please enter UPI ID "
                  },
 
              },

@@ -90,6 +90,7 @@ class CompanyController extends Controller
             'branch_name'       => isset($input['branch_name'])    ?  $input['branch_name']    : '',
             'ifsc'              => isset($input['ifsc'])    ?  $input['ifsc']    : '',
             'account_no'        => isset($input['account_no'])    ?  $input['account_no']    : '',
+            'upi_id'            => isset($input['upi_id'])    ?  $input['upi_id']    : '',
             'logo'              => $imageUrl    ?  $imageUrl   : '',
             'qr_code'           => $qrImageUrl    ?  $qrImageUrl   : '',
 

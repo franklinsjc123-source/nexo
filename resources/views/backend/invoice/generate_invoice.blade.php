@@ -543,6 +543,12 @@
                                 <td style="padding:2px 4px;">:</td>
                                 <td style="padding:2px 0;">{{ $company->branch_name }}</td>
                             </tr>
+
+                              <tr>
+                                <td style="font-weight:bold; padding:2px 0;">UPI ID</td>
+                                <td style="padding:2px 4px;">:</td>
+                                <td style="padding:2px 0;">{{ $company->upi_id }}</td>
+                            </tr>
                         </table>
 
                     </td>

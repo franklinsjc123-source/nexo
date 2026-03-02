@@ -377,7 +377,7 @@ function calculateInvoice() {
     let cgst = total_other_amount * 0.09;
     let sgst = total_other_amount * 0.09;
 
-    let advance_total = (advance_amount + cgst + sgst )  * 0.10;
+    let advance_total = (advance_amount + cgst + sgst )  * 0.30;
 
 
     let advanceField = document.getElementById('advance_amount');
