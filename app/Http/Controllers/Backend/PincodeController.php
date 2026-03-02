@@ -52,7 +52,7 @@ class PincodeController extends Controller
             $updateArray = array(
                 'pincode'         => isset($input['pincode'])    ?  $input['pincode']    : '',
                 'area'            => isset($input['area'])    ?  $input['area']    : '',
-                'delivery_charge' => isset($input['delivery_charge'])    ?  $input['aredelivery_chargea']    : '',
+                'delivery_charge' => isset($input['delivery_charge'])    ?  $input['delivery_charge']    : '',
             );
             $update = PinCode::Where('id', $id)->update($updateArray);
             return redirect()->route('pincode')->with('success', 'Pincode Updated Successfully');

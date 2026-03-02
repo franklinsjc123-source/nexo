@@ -2,11 +2,12 @@
  @section('title','Pincode Store or Update')
  @section('content')
  <?php
-    $id             = isset($record->id) ? $record->id : '';
-    $pincode        = isset($record->pincode) ? $record->pincode:'';
-    $area           = isset($record->area) ? $record->area:'';
-    $status         = isset($record->status) ? $record->status:'';
-    $type           = ($id == '')   ? 'Create' : 'Update';
+    $id              = isset($record->id) ? $record->id : '';
+    $pincode         = isset($record->pincode) ? $record->pincode:'';
+    $area            = isset($record->area) ? $record->area:'';
+    $delivery_charge = isset($record->delivery_charge) ? $record->delivery_charge:'';
+    $status          = isset($record->status) ? $record->status:'';
+    $type            = ($id == '')   ? 'Create' : 'Update';
 
     ?>
  <main class="app-wrapper">
@@ -54,8 +55,8 @@
 
 
                                      <div class="col-xl-4">
-                                         <label for="pincode" class="form-label">Delivery charge <span class="text-danger"> *</span></label>
-                                         <input type="text" value="<?php echo $pincode?>" class="form-control" id="pincode" name="pincode" placeholder="Enter Delivery charge" >
+                                         <label for="delivery_charge" class="form-label">Delivery charge <span class="text-danger"> *</span></label>
+                                         <input type="text" value="<?php echo $delivery_charge?>" class="form-control" id="delivery_charge" name="delivery_charge" placeholder="Enter Delivery charge" >
                                         <span class="text-danger error-message"></span>
                                     </div>
 
