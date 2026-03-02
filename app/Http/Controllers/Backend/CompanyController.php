@@ -70,29 +70,30 @@ class CompanyController extends Controller
 
         }
 
-        // dd($imageUrl);
 
 
         $updateArray = array(
-            'company_name'      => isset($input['company_name'])     ?  $input['company_name']     : '',
-            'phone'             => isset($input['phone'])     ?  $input['phone']     : '',
-            'email'             => isset($input['email'])     ?  $input['email']     : '',
-            'delivery_charge'   => isset($input['delivery_charge'])     ?  $input['delivery_charge']     : '',
-            'company_address'   => isset($input['company_address'])      ?  $input['company_address']      : '',
-            'pincode'           => isset($input['pincode'])  ?  $input['pincode']  : '',
-            'state'             => isset($input['state'])   ?  $input['state']   : '',
-            'fssai_no'          => isset($input['fssai_no'])    ?  $input['fssai_no']    : '',
-            'gst_no'            => isset($input['gst_no'])    ?  $input['gst_no']    : '',
-            'terms'             => isset($input['terms'])    ?  $input['terms']    : '',
-            'invoice_no'        => isset($input['invoice_no'])    ?  $input['invoice_no']    : '',
-            'direct_invoice_no' => isset($input['direct_invoice_no'])    ?  $input['direct_invoice_no']    : '',
-            'bank_name'         => isset($input['bank_name'])    ?  $input['bank_name']    : '',
-            'branch_name'       => isset($input['branch_name'])    ?  $input['branch_name']    : '',
-            'ifsc'              => isset($input['ifsc'])    ?  $input['ifsc']    : '',
-            'account_no'        => isset($input['account_no'])    ?  $input['account_no']    : '',
-            'upi_id'            => isset($input['upi_id'])    ?  $input['upi_id']    : '',
-            'logo'              => $imageUrl    ?  $imageUrl   : '',
-            'qr_code'           => $qrImageUrl    ?  $qrImageUrl   : '',
+            'company_name'            => isset($input['company_name'])     ?  $input['company_name']     : '',
+            'phone'                   => isset($input['phone'])     ?  $input['phone']     : '',
+            'email'                   => isset($input['email'])     ?  $input['email']     : '',
+            'delivery_charge'         => isset($input['delivery_charge'])     ?  $input['delivery_charge']     : '',
+            'company_address'         => isset($input['company_address'])      ?  $input['company_address']      : '',
+            'pincode'                 => isset($input['pincode'])  ?  $input['pincode']  : '',
+            'state'                   => isset($input['state'])   ?  $input['state']   : '',
+            'fssai_no'                => isset($input['fssai_no'])    ?  $input['fssai_no']    : '',
+            'gst_no'                  => isset($input['gst_no'])    ?  $input['gst_no']    : '',
+            'terms'                   => isset($input['terms'])    ?  $input['terms']    : '',
+            'free_delivery_checkbox'  => isset($input['free_delivery'])    ?  $input['free_delivery']    : '',
+            'free_delivery_reason'    => isset($input['free_delivery_reason'])    ?  $input['free_delivery_reason']    : '',
+            'invoice_no'              => isset($input['invoice_no'])    ?  $input['invoice_no']    : '',
+            'direct_invoice_no'       => isset($input['direct_invoice_no'])    ?  $input['direct_invoice_no']    : '',
+            'bank_name'               => isset($input['bank_name'])    ?  $input['bank_name']    : '',
+            'branch_name'             => isset($input['branch_name'])    ?  $input['branch_name']    : '',
+            'ifsc'                    => isset($input['ifsc'])    ?  $input['ifsc']    : '',
+            'account_no'              => isset($input['account_no'])    ?  $input['account_no']    : '',
+            'upi_id'                  => isset($input['upi_id'])    ?  $input['upi_id']    : '',
+            'logo'                    => $imageUrl    ?  $imageUrl   : '',
+            'qr_code'                 => $qrImageUrl    ?  $qrImageUrl   : '',
 
         );
 

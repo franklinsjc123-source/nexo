@@ -19,6 +19,8 @@
     $terms                  = isset($record->terms) ? $record->terms : '';
     $invoice_no             = isset($record->invoice_no) ? $record->invoice_no : '';
     $direct_invoice_no      = isset($record->direct_invoice_no) ? $record->direct_invoice_no : '';
+    $free_delivery_checkbox = isset($record->free_delivery_checkbox) ? $record->free_delivery_checkbox : '';
+    $free_delivery_reason   = isset($record->free_delivery_reason) ? $record->free_delivery_reason : '';
 
     $bank_name              = isset($record->bank_name) ? $record->bank_name : '';
     $branch_name            = isset($record->branch_name) ? $record->branch_name : '';
@@ -116,14 +118,44 @@
                                         </div>
 
 
-                                          <div class="col-xl-4">
+                                        <div class="col-xl-4">
                                             <label for="terms" class="form-label">Terms & conditions  <span class="text-danger"> </span> </label>
                                             <textarea class="form-control" id="terms" name="terms">  <?php echo $terms ?></textarea>
                                             @error('terms') <span class="text-danger">{{$message}}</span> @enderror
 
                                         </div>
 
-                                          <div class="col-xl-4">
+                                      <div class="col-xl-4 mt-3">
+                                            <label for="free_delivery_checkbox" class="form-label"> Free Delivery <span class="text-danger"> </span> </label>
+
+                                            <div class="form-check">
+                                                   <label class="form-check-label" for="free_delivery_checkbox">
+                                                    Enable
+                                                </label>
+                                                <input class="form-check-input" type="checkbox"
+                                                    id="free_delivery_checkbox"
+                                                    name="free_delivery"
+                                                    value="1" <?= $free_delivery_checkbox == 1 ?  'checked' : ''; ?>>
+
+                                            </div>
+                                        </div>
+                                       <div class="col-xl-4 mt-3" id="free_delivery_reason_div"
+                                            style="<?php echo !empty($free_delivery_reason) ? 'display:block;' : 'display:none;'; ?>">
+
+                                            <label class="form-label">
+                                                Free Delivery Reason <span class="text-danger">*</span>
+                                            </label>
+
+                                            <textarea class="form-control"
+                                                    id="free_delivery_reason"
+                                                    name="free_delivery_reason"
+                                                    placeholder="Enter Free Delivery Reason"><?php echo $free_delivery_reason ?? ''; ?></textarea>
+                                        </div>
+
+
+
+
+                                        <div class="col-xl-4">
                                             <label for="invoice_no" class="form-label">Invoice  No  <span class="text-danger"> *</span> </label>
                                             <input type="text" value="<?php echo $invoice_no ?>" class="form-control" id="invoice_no" name="invoice_no"  placeholder="Enter Invoice No">
                                         </div>
@@ -256,6 +288,31 @@
 
 
  <script>
+
+$(document).ready(function(){
+
+    // If already checked on page load
+    if($('#free_delivery_checkbox').is(':checked')){
+        $('#free_delivery_reason_div').show();
+        $('#free_delivery_reason').prop('required', true);
+    }
+
+    $('#free_delivery_checkbox').change(function(){
+
+        if($(this).is(':checked')){
+            $('#free_delivery_reason_div').slideDown();
+            $('#free_delivery_reason').prop('required', true);
+        } else {
+            $('#free_delivery_reason_div').slideUp();
+            $('#free_delivery_reason').prop('required', false);
+            $('#free_delivery_reason').val('');
+        }
+
+    });
+
+});
+
+
      $(function() {
          $("#companyForm").validate({
              rules: {
