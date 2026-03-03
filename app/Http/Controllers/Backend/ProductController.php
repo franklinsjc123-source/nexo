@@ -37,11 +37,17 @@ class ProductController extends Controller
     {
         $records            = '';
         $productAttributes  = '';
+        $productImages      = '';
 
         if ($id > 0) {
             $records            =  Product::where('id', $id)->first();
             $productAttributes  =  ProductAttributes::where('product_id', $id)->get();
+            $productImages      =  ProductImages::where('product_id', $id)->get();
+
+
         }
+
+
 
         if (Auth::user()->auth_level == 4) {
 
@@ -56,7 +62,7 @@ class ProductController extends Controller
         $shopData       =  Shop::where('status', 1)->orderBy('shop_name', 'ASC')->get();
         $unitData       =  Unit::where('status', 1)->orderBy('unit_name', 'ASC')->get();
 
-        return view('backend.products.add_edit', compact('records', 'id', 'categoryData', 'shopData', 'unitData', 'productAttributes'));
+        return view('backend.products.add_edit', compact('records', 'id', 'categoryData', 'shopData', 'unitData', 'productAttributes','productImages'));
     }
 
     public function storeUpdateProduct(Request $request)
@@ -102,8 +108,8 @@ class ProductController extends Controller
                     }
 
                     ProductImages::create([
-                        'product_id' => $insert->id,   // ✅ FIXED
-                        'image'      => $imagePath,
+                        'product_id'    => $insert->id,   // ✅ FIXED
+                        'product_image' => $imagePath,
                     ]);
                 }
             }
@@ -150,8 +156,8 @@ class ProductController extends Controller
                 }
 
                 ProductImages::create([
-                    'product_id' => $id,
-                    'image'      => $imagePath,
+                    'product_id'     => $id,
+                    'product_image'  => $imagePath,
                 ]);
             }
         }

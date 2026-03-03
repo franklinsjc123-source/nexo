@@ -160,7 +160,7 @@
                                             <label for="product_description" class="form-label">
                                                 Product Description <span class="text-danger">*</span>
                                             </label>
-                                            <textarea class="form-control" lenght="1" id="product_description" name="product_description"  placeholder="Enter Product Description"
+                                            <textarea   rows="1" class="form-control" lenght="1" id="product_description" name="product_description"  placeholder="Enter Product Description"
                                             ><?= old('product_description',$product_description) ?? '' ?></textarea>
                                             @error('product_description') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
@@ -174,20 +174,33 @@
                                             <input type="hidden" value="<?php echo $product_image ?>" class="form-control"  name="old_product_image">
                                             <input type="file" class="form-control" id="product_image" name="product_image[]" multiple>
 
-                                            @if(isset($id) && $product_image != "")
-                                                    <img class="mt-2" src="<?= $product_image ?>" alt="image description" width="200" height="100">
+                                             @if(!empty($productImages) && $productImages->count() > 0)
+                                                    <div class="mt-2 d-flex flex-wrap gap-2">
+
+                                                        @foreach($productImages as $img)
+                                                            <div style="position:relative;">
+                                                                <img src="{{ $img->product_image }}"
+                                                                    width="80"
+                                                                    height="80"
+                                                                    style="border-radius:6px; border:1px solid #ddd;">
+                                                            </div>
+                                                        @endforeach
+
+                                                    </div>
                                                 @endif
 
                                             @if($product_image =="" )
                                                 @error('product_image') <span class="text-danger">{{$message}}</span> @enderror
                                             @endif
                                         </div>
+
+
                                         <input type="hidden" id="has_old_product_image" value="<?= !empty($product_image) ? 1 : 0 ?>">
 
                                         <div id="quantityWrapper">
 
 
-                                            @if(!empty($productAttributes) && count($productAttributes) > 0)
+                                            @if(!empty($productAttributes) )
 
                                                 @foreach($productAttributes as $index => $ba)
                                                     <div class="row mt-5 quantity-row align-items-end" data-index="{{ $index }}">
@@ -307,6 +320,15 @@
      </div>
  </main>
  <script>
+
+    document.getElementById('product_image').addEventListener('change', function() {
+
+    if (this.files.length > 3) {
+        alert("You can upload maximum 3 images only.");
+        this.value = "";
+    }
+
+});
 
 $(document).on('click', '.addQuantity', function () {
 
