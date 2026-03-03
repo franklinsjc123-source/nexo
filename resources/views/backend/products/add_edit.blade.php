@@ -154,57 +154,13 @@
                                         </div>
 
 
-                                         <div class="col-xl-4">
-                                        <label class="form-label"> Unit <span class="text-danger"></span></label>
-                                        <select class="form-control select2" id="unit" name="unit">
-                                           <option value="">--select--</option>
-                                                <?php
-                                                    if (isset($unitData)) {
-                                                        foreach ($unitData as $val) { ?>
-                                                        <option <?=(old('unit', $unit) == $val->id)? 'selected':'' ?> value="<?php echo $val->id ?>"><?php echo ucwords($val->unit_name) ?></option>
-                                                <?php }
-                                                }
-                                                ?>
-
-                                        </select>
-
-                                        @error('unit') <span class="text-danger">{{$message}}</span> @enderror
-
-                                    </div>
-
-
-                                    <div class="col-xl-4">
-                                            <label for="original_price" class="form-label">
-                                                Quantity <span class="text-danger"></span>
-                                            </label>
-                                            <input type="text" class="form-control" id="qty" name="qty" placeholder="Enter Quantity" value="<?= old('qty',$qty) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9]/g,'');">
-                                            @error('qty') <span class="text-danger">{{ $message }}</span> @enderror
-                                        </div>
-
-
-
-                                          <div class="col-xl-4">
-                                            <label for="original_price" class="form-label">
-                                                Original Price <span class="text-danger">*</span>
-                                            </label>
-                                            <input type="text" class="form-control" id="original_price" name="original_price" placeholder="Enter Original Price" value="<?= old('original_price',$original_price) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9.]/g,'');">
-                                            @error('original_price') <span class="text-danger">{{ $message }}</span> @enderror
-                                        </div>
-
-                                        <div class="col-xl-4">
-                                            <label for="original_price" class="form-label">
-                                                Discount Price <span class="text-danger">*</span>
-                                            </label>
-                                            <input type="text" class="form-control" id="discount_price" name="discount_price" placeholder="Enter Discount Price" value="<?= old('discount_price',$discount_price) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9.]/g,'');">
-                                            @error('discount_price') <span class="text-danger">{{ $message }}</span> @enderror
-                                        </div>
 
 
                                         <div class="col-xl-4">
                                             <label for="product_description" class="form-label">
                                                 Product Description <span class="text-danger">*</span>
                                             </label>
-                                            <textarea class="form-control" id="product_description" name="product_description"  placeholder="Enter Product Description"
+                                            <textarea class="form-control" lenght="1" id="product_description" name="product_description"  placeholder="Enter Product Description"
                                             ><?= old('product_description',$product_description) ?? '' ?></textarea>
                                             @error('product_description') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
@@ -213,22 +169,127 @@
 
                                         <div class="col-xl-4">
 
-                                        <label for="product_image" class="form-label">product Image<span class="text-danger"> *</span>  </label>
+                                            <label for="product_image" class="form-label">product Image<span class="text-danger"> *</span>  </label>
 
-                                        <input type="hidden" value="<?php echo $product_image ?>" class="form-control"  name="old_product_image">
-                                        <input type="file" class="form-control" id="product_image" name="product_image">
+                                            <input type="hidden" value="<?php echo $product_image ?>" class="form-control"  name="old_product_image">
+                                            <input type="file" class="form-control" id="product_image" name="product_image[]" multiple>
 
-                                        @if(isset($id) && $product_image != "")
-                                                <img class="mt-2" src="<?= $product_image ?>" alt="image description" width="200" height="100">
+                                            @if(isset($id) && $product_image != "")
+                                                    <img class="mt-2" src="<?= $product_image ?>" alt="image description" width="200" height="100">
+                                                @endif
+
+                                            @if($product_image =="" )
+                                                @error('product_image') <span class="text-danger">{{$message}}</span> @enderror
+                                            @endif
+                                        </div>
+                                        <input type="hidden" id="has_old_product_image" value="<?= !empty($product_image) ? 1 : 0 ?>">
+
+                                        <div id="quantityWrapper">
+
+
+                                            @if(!empty($productAttributes) && count($productAttributes) > 0)
+
+                                                @foreach($productAttributes as $index => $ba)
+                                                    <div class="row mt-5 quantity-row align-items-end" data-index="{{ $index }}">
+
+                                                        <div class="col-xl-3">
+                                                            <label class="form-label"> Unit <span class="text-danger"></span></label>
+                                                            <select class="form-control select2"  name="unit[]">
+                                                            <option value="">--select--</option>
+                                                                    <?php
+                                                                        if (isset($unitData)) {
+                                                                            foreach ($unitData as $val) { ?>
+                                                                                <option value="{{ $val->id }}"
+                                                                                    {{ (old('unit.'.$index, $ba->unit) == $val->id) ? 'selected' : '' }}>
+                                                                                    {{ ucwords($val->unit_name) }}
+                                                                                </option>
+                                                                            <?php }
+                                                                        }
+                                                                    ?>
+
+                                                            </select>
+                                                            @error('unit') <span class="text-danger">{{$message}}</span> @enderror
+                                                        </div>
+
+
+                                                        <div class="col-xl-3">
+                                                            <label for="original_price" class="form-label">
+                                                                Original Price <span class="text-danger">*</span>
+                                                            </label>
+                                                            <input type="text" class="form-control"  name="original_price[]" placeholder="Enter Original Price" value="<?= old('original_price',$ba->original_price) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9.]/g,'');">
+                                                            @error('original_price') <span class="text-danger">{{ $message }}</span> @enderror
+                                                        </div>
+
+                                                        <div class="col-xl-3">
+                                                            <label for="original_price" class="form-label">
+                                                                Discount Price <span class="text-danger">*</span>
+                                                            </label>
+                                                            <input type="text" class="form-control"  name="discount_price[]" placeholder="Enter Discount Price" value="<?= old('discount_price',$ba->discount_price) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9.]/g,'');">
+                                                            @error('discount_price') <span class="text-danger">{{ $message }}</span> @enderror
+                                                        </div>
+
+                                                        <!-- Buttons -->
+                                                        <div class="col-md-3">
+                                                            <div class="d-flex gap-2 mt-4">
+                                                                <button type="button" class="btn btn-success addQuantity">+</button>
+                                                                <button type="button" class="btn btn-danger removeQuantity">−</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                @endforeach
+
+                                            @else
+                                                {{-- ADD MODE : empty row --}}
+                                                <div class="row mt-5 quantity-row align-items-end" data-index="0">
+
+                                                    <div class="col-xl-3">
+                                                        <label class="form-label"> Unit <span class="text-danger"></span></label>
+                                                        <select class="form-control select2"  name="unit[]">
+                                                        <option value="">--select--</option>
+                                                                <?php
+                                                                    if (isset($unitData)) {
+                                                                        foreach ($unitData as $val) { ?>
+                                                                        <option <?=(old('unit', $unit) == $val->id)? 'selected':'' ?> value="<?php echo $val->id ?>"><?php echo ucwords($val->unit_name) ?></option>
+                                                                <?php }
+                                                                }
+                                                                ?>
+
+                                                        </select>
+
+                                                        @error('unit') <span class="text-danger">{{$message}}</span> @enderror
+
+                                                    </div>
+
+
+                                                    <div class="col-xl-3">
+                                                        <label for="original_price" class="form-label">
+                                                            Original Price <span class="text-danger">*</span>
+                                                        </label>
+                                                        <input type="text" class="form-control"  name="original_price[]" placeholder="Enter Original Price" value="<?= old('original_price',$original_price) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9.]/g,'');">
+                                                        @error('original_price') <span class="text-danger">{{ $message }}</span> @enderror
+                                                    </div>
+
+                                                    <div class="col-xl-3">
+                                                        <label for="original_price" class="form-label">
+                                                            Discount Price <span class="text-danger">*</span>
+                                                        </label>
+                                                        <input type="text" class="form-control"  name="discount_price[]" placeholder="Enter Discount Price" value="<?= old('discount_price',$discount_price) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9.]/g,'');">
+                                                        @error('discount_price') <span class="text-danger">{{ $message }}</span> @enderror
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="d-flex gap-2 mt-4">
+                                                            <button type="button" class="btn btn-success addQuantity">+</button>
+                                                            <button type="button" class="btn btn-danger removeQuantity">−</button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
                                             @endif
 
-                                        @if($product_image =="" )
-                                            @error('product_image') <span class="text-danger">{{$message}}</span> @enderror
-                                        @endif
-                                    </div>
-                                          <input type="hidden" id="has_old_product_image" value="<?= !empty($product_image) ? 1 : 0 ?>">
-
-
+                                        </div>
 
                                  </div>
                              </div>
@@ -247,18 +308,43 @@
  </main>
  <script>
 
-//     $(document).on('change', '#shop', function () {
+$(document).on('click', '.addQuantity', function () {
 
-//     let isHotel = $(this).find(':selected').data('hotel');
+    let row = $(this).closest('.quantity-row');
 
-//     if (isHotel == 1) {
-//         $('#food_type_div').removeClass('d-none');
-//     } else {
-//         $('#food_type_div').addClass('d-none');
-//         $('#food_type').val('');
-//     }
+    row.find('select.select2').each(function () {
+        if ($(this).hasClass('select2-hidden-accessible')) {
+            $(this).select2('destroy');
+        }
+    });
 
-// });
+    let clone = row.clone();
+
+    clone.find('input').val('');
+    clone.find('select').val('');
+
+    clone.find('.select2-container').remove();
+    clone.find('select')
+         .removeClass('select2-hidden-accessible')
+         .removeAttr('data-select2-id')
+         .removeAttr('aria-hidden')
+         .removeAttr('tabindex');
+
+    $('#quantityWrapper').append(clone);
+
+    $('select.select2').select2({
+        width: '100%'
+    });
+});
+
+$(document).on('click', '.removeQuantity', function () {
+
+    if ($('.quantity-row').length > 1) {
+        $(this).closest('.quantity-row').remove();
+    }
+});
+
+
 
 $(document).on('change', '#shop', function () {
 
@@ -354,13 +440,7 @@ $(document).ready(function () {
                  product_description: {
                     required: true
                 },
-                //   unit: {
-                //     required: true
-                // },
 
-                // qty: {
-                //     required: true
-                // },
                   product_description: {
                     required: true
                 },

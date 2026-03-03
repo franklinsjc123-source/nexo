@@ -324,7 +324,6 @@ document.addEventListener('click', function (e) {
 
         document.getElementById('otherChargesWrapper').appendChild(clone);
 
-        // Add validation to new fields
         $(clone).find(".required-field").each(function () {
             $(this).rules("add", {
                 required: true

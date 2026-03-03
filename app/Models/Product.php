@@ -11,6 +11,11 @@ class Product extends Model
     protected $table   = 'products';
     protected $guarded = ['id'];
 
+    public function attributes()
+    {
+        return $this->hasMany(ProductAttributes::class, 'product_id');
+    }
+
     public function categoryData()
     {
         return $this->belongsTo(Category::class, 'category', 'id');
@@ -21,8 +26,5 @@ class Product extends Model
         return $this->belongsTo(Shop::class, 'shop', 'id');
     }
 
-     public function unitData()
-    {
-        return $this->belongsTo(Unit::class, 'unit', 'id');
-    }
+
 }
