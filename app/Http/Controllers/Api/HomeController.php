@@ -84,15 +84,27 @@ class HomeController extends Controller
         $shop_id = $request->input('shop_id');
         $category_id = $request->input('category_id');
 
-        $products = Product::with([
+        if (!$shop_id) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Shop ID is required'
+            ], 400);
+        }
+
+        $query = Product::with([
             'categoryData:id,category_name',
             'shopData:id,shop_name',
             'attributes.unitData:id,unit_name'
         ])
             ->where('shop', $shop_id)
-            ->where('category', $category_id)
-            ->where('status', 1)
-            ->get();
+            ->where('status', 1);
+
+        // ✅ Apply category filter only if provided
+        if (!empty($category_id)) {
+            $query->where('category', $category_id);
+        }
+
+        $products = $query->get();
 
         if ($products->isEmpty()) {
             return response()->json([
@@ -115,16 +127,16 @@ class HomeController extends Controller
                 'product_image'       => $product->product_image,
                 'status'              => $product->status,
 
-                // 🔥 Multiple attributes array
-                'quantity_data' => $product->attributes->map(function ($attr) {
-                    return [
-                        'unit_id'        => $attr->unit,
-                        'unit_name'      => optional($attr->unitData)->unit_name,
-                        'original_price' => $attr->original_price,
-                        'discount_price' => $attr->discount_price,
-                    ];
-                })->values()
-
+                'quantity_data' => $product->attributes
+                    ->where('original_price', '>', 0)   // optional filter
+                    ->map(function ($attr) {
+                        return [
+                            'unit_id'        => $attr->unit,
+                            'unit_name'      => optional($attr->unitData)->unit_name,
+                            'original_price' => $attr->original_price,
+                            'discount_price' => $attr->discount_price,
+                        ];
+                    })->values()
             ];
         });
 
