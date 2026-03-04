@@ -56,6 +56,7 @@ class ShopController extends Controller
         $gst_no     = $request->gst_no ?? '';
         $is_hotel   = $request->is_hotel ?? '';
         $address    = $request->address ?? '';
+        $rating     = $request->rating ?? '';
         $imageUrl   = $request->old_photo_path ?? '';
 
         if (is_array($request->category)) {
@@ -103,6 +104,7 @@ class ShopController extends Controller
             'end_time'      => $end_time,
             'gst_no'        => $gst_no,
             'address'       => $address,
+            'rating'        => $rating,
             'is_hotel'      => $is_hotel,
             'file_path'     => $imageUrl,
         ];

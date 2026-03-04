@@ -211,6 +211,29 @@
                                                 <span class="text-danger">{{ $message }}</span>
                                             @enderror
                                         </div>
+
+
+                                          <div class="col-xl-4">
+                                            <label class="form-label">Rating <span class="text-danger">*</span></label>
+                                            <select class="form-control select2" id="rating" name="rating"  data-placeholder="Select">
+
+                                                <option value="">--Select--</option>
+                                                <option value="0.5">0.5</option>
+                                                <option value="1.0">1.0</option>
+                                                <option value="1.5">1.5</option>
+                                                <option value="2.0">2.0</option>
+                                                <option value="2.5">2.5</option>
+                                                <option value="3.0">3.0</option>
+                                                <option value="3.5">3.5</option>
+                                                <option value="4.0">4.0</option>
+                                                <option value="4.5">4.5</option>
+                                                <option value="5.0">5.0</option>
+                                            </select>
+
+                                    </div>
+
+
+
                                 </div>
                              </div>
                          </div>
@@ -270,6 +293,10 @@
                     required: true
                 },
 
+                 rating: {
+                    required: true
+                },
+
                photo_path: {
                     required: function () {
                         return $('#has_old_photo_path').val() == 0;
@@ -302,6 +329,9 @@
 
                 address: {
                     required: "Please enter address"
+                },
+                rating: {
+                    required: "Please select rating"
                 },
 
                   slider_photo_path: {
