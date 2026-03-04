@@ -69,21 +69,23 @@ class HomeController extends Controller
         $products = Product::with([
             'categoryData:id,category_name',
             'shopData:id,shop_name',
-            'unitData:id,unit_name'
+            'attributes.unitData:id,unit_name'
         ])
-        ->where('shop', $shop_id)
-        ->where('category', $category_id)
-        ->where('status', 1)
-        ->get();
+            ->where('shop', $shop_id)
+            ->where('category', $category_id)
+            ->where('status', 1)
+            ->get();
 
         if ($products->isEmpty()) {
             return response()->json([
                 'status' => 'success',
-                'message' => 'No products found'
+                'message' => 'No products found',
+                'data' => []
             ], 200);
         }
 
         $data = $products->map(function ($product) {
+
             return [
                 'id'                  => $product->id,
                 'category_id'         => $product->category,
@@ -91,21 +93,27 @@ class HomeController extends Controller
                 'shop_id'             => $product->shop,
                 'shop_name'           => optional($product->shopData)->shop_name,
                 'product_name'        => $product->product_name,
-                'qty'                 => $product->qty,
-                'unit_id'             => $product->unit,
-                'unit_name'           => optional($product->unitData)->unit_name,
-                'original_price'      => $product->original_price,
-                'discount_price'      => $product->discount_price,
                 'product_description' => $product->product_description,
                 'product_image'       => $product->product_image,
                 'status'              => $product->status,
+
+                // 🔥 Multiple attributes array
+                'quantity_data' => $product->attributes->map(function ($attr) {
+                    return [
+                        'unit_id'        => $attr->unit,
+                        'unit_name'      => optional($attr->unitData)->unit_name,
+                        'original_price' => $attr->original_price,
+                        'discount_price' => $attr->discount_price,
+                    ];
+                })->values()
+
             ];
         });
 
         return response()->json([
-            'status' => 'success',
+            'status'  => 'success',
             'message' => 'Data received successfully',
-            'data' => $data
+            'data'    => $data
         ], 200);
     }
 }
