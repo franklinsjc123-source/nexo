@@ -42,7 +42,7 @@ class HomeController extends Controller
             $checkPincodeExistence = PinCode::where('pincode', $pincode)->where('status', 1)->exists();
 
             $category   = Category::where('status', 1)->get();
-            $shops      = Shop::where('status', 1)->inRandomOrder()->limit(8)->get();
+            $shops      = Shop::where('status', 1)->inRandomOrder()->get();
             $slider     = Slider::where('status', 1)->get();
 
             return response()->json([
