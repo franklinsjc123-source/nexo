@@ -14,6 +14,24 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
 
+
+
+
+    public function getAllCategory(Request $request)
+    {
+
+        $category   = Category::where('status', 1)->get();
+        if ($category) {
+            $success_array = array('status' => 'success', 'message' => 'Data received successfully', 'data' =>  $category);
+            return response()->json(array($success_array), 200);
+        } else {
+            $error_array = array('status' => 'error', 'message' => 'Records not found');
+            return response()->json(array($error_array), 400);
+        }
+    }
+
+
+
     public function getHomePageDetails(Request $request)
     {
 
