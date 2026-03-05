@@ -37,7 +37,6 @@ class CartController extends Controller
             ], 404);
         }
 
-        // Get price from product_attributes table
         $attribute = ProductAttributes::where('product_id', $product_id)
             ->where('unit', $unit)
             ->first();
