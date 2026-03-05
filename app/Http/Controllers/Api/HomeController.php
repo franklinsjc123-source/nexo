@@ -66,9 +66,15 @@ class HomeController extends Controller
 
     public function getAllShopsByCategory(Request $request)
     {
-
         $category_id = $request->input('category_id');
-        $shops = Shop::whereRaw("FIND_IN_SET(?, category)", [$category_id])->where('status', 1)->get();
+        if ($category_id) {
+            $shops = Shop::whereRaw("FIND_IN_SET(?, category)", [$category_id])->where('status', 1)->get();
+        } else {
+            
+            $shops = Shop::where('status', 1)->get();
+
+        }
+
 
         if ($shops->isNotEmpty()) {
             $success_array = array('status' => 'success', 'message' => 'Data received successfully', 'data' =>  $shops);
