@@ -51,6 +51,7 @@ Route::get('/home-page',[HomeController::class,"getHomePageDetails"])->name('hom
 
 
 Route::post('/placeDirectOrder',[OrderController::class,"placeDirectOrder"])->name('placeDirectOrder');
+Route::post('/placeOrder',[OrderController::class,"placeOrder"])->name('placeOrder');
 
 
 

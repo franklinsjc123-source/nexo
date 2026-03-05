@@ -6,6 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Models\DirectOrder;
 use App\Models\Company;
 
+use Razorpay\Api\Api;
+use App\Models\Cart;
+use App\Models\CartItems;
+use App\Models\Order;
+use App\Models\OrderItems;
+use Illuminate\Support\Str;
+
 use Illuminate\Http\Request;
 
 class OrderController extends Controller
@@ -26,7 +33,7 @@ class OrderController extends Controller
                 $imageUrl = url('uploads/direct_order/' . $imageName);
             }
 
-            $company_details =  Company::orderBy('id','asc')->first();
+            $company_details =  Company::orderBy('id', 'asc')->first();
             $currentInvoice = $company_details->direct_invoice_no;
 
             $insertArray = array(
@@ -41,11 +48,11 @@ class OrderController extends Controller
 
             if ($order) {
 
-            $nextInvoice = str_pad((int)$currentInvoice + 1, 3, '0', STR_PAD_LEFT);
+                $nextInvoice = str_pad((int)$currentInvoice + 1, 3, '0', STR_PAD_LEFT);
 
                 $company_details->update([
-                        'direct_invoice_no' => $nextInvoice
-                    ]);
+                    'direct_invoice_no' => $nextInvoice
+                ]);
 
                 $success_array = array('status' => 'success', 'message' => 'Order placed successfully');
                 return response()->json(array($success_array), 200);
@@ -58,5 +65,104 @@ class OrderController extends Controller
             $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
             return response()->json(array($error_array), 400);
         }
+    }
+
+
+
+
+    public function placeOrder(Request $request)
+    {
+        $user_id = $request->user_id;
+        $payment_type = $request->payment_type; // razorpay
+
+        $cart = Cart::with('items')->where('user_id', $user_id)->first();
+
+        if (!$cart || $cart->items->isEmpty()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Cart is empty'
+            ]);
+        }
+
+        $amount = $cart->total_amount;
+
+        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+
+        $razorpayOrder = $api->order->create([
+            'receipt' => Str::random(10),
+            'amount' => $amount * 100,
+            'currency' => 'INR'
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'razorpay_order_id' => $razorpayOrder['id'],
+            'amount' => $amount,
+            'key' => env('RAZORPAY_KEY')
+        ]);
+    }
+
+
+
+    public function verifyPayment(Request $request)
+    {
+        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+
+        try {
+
+            $api->utility->verifyPaymentSignature([
+                'razorpay_order_id' => $request->razorpay_order_id,
+                'razorpay_payment_id' => $request->razorpay_payment_id,
+                'razorpay_signature' => $request->razorpay_signature
+            ]);
+        } catch (\Exception $e) {
+
+            return response()->json([
+                'status' => false,
+                'message' => 'Payment verification failed'
+            ]);
+        }
+
+        $cart = Cart::with('items')->where('user_id', $request->user_id)->first();
+
+        if (!$cart) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Cart not found'
+            ]);
+        }
+
+        $order = Order::create([
+            'order_id' => 'ORD' . time(),
+            'customer_id' => $request->user_id,
+            'order_status' => 1,
+            'payment_type' => 'razorpay',
+            'amount' => $cart->total_amount,
+            'ship_amount' => 0,
+            'payment_status' => 1,
+            'is_coupon_applied' => 0
+        ]);
+
+        foreach ($cart->items as $item) {
+
+            OrderItems::create([
+                'order_id' => $order->id,
+                'product_id' => $item->product_id,
+                'product_name' => $item->product->product_name ?? '',
+                'qty' => $item->quantity,
+                'unit' => $item->unit,
+                'product_price' => $item->price,
+                'price' => $item->total_price
+            ]);
+        }
+
+        CartItems::where('cart_id', $cart->id)->delete();
+        $cart->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Order placed successfully',
+            'order_id' => $order->order_id
+        ]);
     }
 }
