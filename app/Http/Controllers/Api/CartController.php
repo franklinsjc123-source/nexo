@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItems;
 use App\Models\Product;
+use App\Models\ProductAttributes;
+
 
 use Illuminate\Http\Request;
 
@@ -16,9 +18,11 @@ class CartController extends Controller
     {
         $product_id = $request->product_id;
         $user_id    = $request->user_id;
-        $quantity   = $request->quantity ?? 1; 
+        $unit       = $request->unit;
+        $quantity   = $request->quantity ?? 1;
 
-        if (!$product_id || !$user_id) {
+
+        if (!$product_id || !$user_id || !$unit) {
             return response()->json([
                 'status'  => false,
                 'message' => 'Parameters Missing'
@@ -33,7 +37,19 @@ class CartController extends Controller
             ], 404);
         }
 
-        $price = $product->discount_price ?? $product->price;
+        // Get price from product_attributes table
+        $attribute = ProductAttributes::where('product_id', $product_id)
+            ->where('unit', $unit)
+            ->first();
+
+        if (!$attribute) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Unit not found'
+            ], 404);
+        }
+
+        $price = $attribute->discount_price ?? $attribute->original_price;
 
         $cart = Cart::firstOrCreate(
             ['user_id' => $user_id],
@@ -42,20 +58,29 @@ class CartController extends Controller
 
         $item = CartItems::where('cart_id', $cart->id)
             ->where('product_id', $product_id)
+            ->where('unit', $unit)
             ->first();
+
+
+
 
         if ($item) {
             $item->quantity += $quantity;
             $item->total_price = $item->quantity * $item->price;
             $item->save();
         } else {
+
+
             CartItems::create([
                 'cart_id'     => $cart->id,
                 'product_id'  => $product_id,
-                'price'       => $price,
+                'unit'        => $unit,
                 'quantity'    => $quantity,
+                'price'       => $price,
                 'total_price' => $price * $quantity
             ]);
+
+
         }
 
         $cart->total_amount = CartItems::where('cart_id', $cart->id)->sum('total_price');

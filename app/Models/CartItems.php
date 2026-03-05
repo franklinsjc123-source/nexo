@@ -11,6 +11,7 @@ class CartItems extends Model
         'cart_id',
         'product_id',
         'quantity',
+        'unit',
         'price',
         'total_price'
     ];

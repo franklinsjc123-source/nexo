@@ -8,6 +8,9 @@ use App\Models\Shop;
 use App\Models\Slider;
 use App\Models\Product;
 use App\Models\PinCode;
+use App\Models\Cart;
+use App\Models\CartItems;
+
 
 use Illuminate\Http\Request;
 
@@ -36,6 +39,7 @@ class HomeController extends Controller
     {
 
         $pincode = $request->input('pincode');
+        $user_id = $request->input('user_id');
 
         if ($pincode) {
 
@@ -45,11 +49,21 @@ class HomeController extends Controller
             $shops      = Shop::where('status', 1)->inRandomOrder()->get();
             $slider     = Slider::where('status', 1)->get();
 
+            if($user_id){
+               $cart = Cart::where('user_id', $user_id)->first();
+
+                if ($cart) {
+                    $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
+                }
+
+            }
+
             return response()->json([
                 'status'  => 'success',
                 'message' => 'Data received successfully',
                 'delivery' => !$checkPincodeExistence ? 'not available' : 'available.',
                 'data'    => [
+                    'cart_count' => $cart_count,
                     'categories' => $category,
                     'shops'      => $shops,
                     'sliders'    => $slider,
@@ -70,9 +84,7 @@ class HomeController extends Controller
         if ($category_id) {
             $shops = Shop::whereRaw("FIND_IN_SET(?, category)", [$category_id])->where('status', 1)->get();
         } else {
-            
             $shops = Shop::where('status', 1)->get();
-
         }
 
 
