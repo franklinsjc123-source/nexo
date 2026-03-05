@@ -177,6 +177,7 @@ class HomeController extends Controller
                             'unit_name'      => optional($attr->unitData)->unit_name,
                             'original_price' => $attr->original_price,
                             'discount_price' => $attr->discount_price,
+                            'discount_percentage' => $attr->original_price > 0 ? round((($attr->original_price - $attr->discount_price) / $attr->original_price) * 100) : 0,
                             'cart_quantity'  => $cartQuantity
                         ];
                     })->values()
