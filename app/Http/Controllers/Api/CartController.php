@@ -78,8 +78,6 @@ class CartController extends Controller
                 'price'       => $price,
                 'total_price' => $price * $quantity
             ]);
-
-
         }
 
         $cart->total_amount = CartItems::where('cart_id', $cart->id)->sum('total_price');
@@ -140,47 +138,52 @@ class CartController extends Controller
         }
     }
 
-
-
     public function updateCartItem(Request $request)
     {
-
         $item_id = $request->input('item_id');
         $quantity = $request->input('quantity');
 
-        if ($item_id != '' && $quantity != '') {
+        if (!$item_id || $quantity === null) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Parameters Missing'
+            ], 400);
+        }
 
-            $item = CartItems::findOrFail($item_id);
+        $item = CartItems::find($item_id);
 
-            if (!$item) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Item not found'
-                ], 404);
-            }
+        if (!$item) {
+            return response()->json([
+                'status'  => false,
+                'message' => 'Item not found'
+            ], 404);
+        }
 
-            $item->quantity += $quantity;
+        // ✅ Set exact quantity (not add)
+        $item->quantity = $quantity;
+
+        if ($item->quantity <= 0) {
+            $item->delete();
+        } else {
             $item->total_price = $item->quantity * $item->price;
             $item->save();
+        }
 
+        $cart = Cart::with('items')->find($item->cart_id);
 
-            $cart = Cart::with('items')->where('id', $item_id)->first();
-
-
+        if ($cart) {
             $cart->total_amount = $cart->items->sum('total_price');
             $cart->save();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Cart updated successfully'
-            ]);
-        } else {
-            $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
-            return response()->json(array($error_array), 400);
         }
+
+        return response()->json([
+            'status'      => true,
+            'message'     => 'Cart updated successfully',
+            'cart_total'  => $cart ? $cart->total_amount : 0
+        ]);
     }
 
-
+    
     public function removeCartItem(Request $request)
     {
         $item_id = $request->input('item_id');
