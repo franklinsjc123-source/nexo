@@ -112,22 +112,20 @@ class CartController extends Controller
             }
 
             $response = [
-                'id' => $cart->id,
-                'user_id' => $cart->user_id,
-                'total_amount' => $cart->total_amount,
-                'status' => $cart->status,
-                'created_at' => $cart->created_at,
-                'updated_at' => $cart->updated_at,
-                'items' => $cart->items->map(function ($item) {
+                'id'            => $cart->id,
+                'user_id'       => $cart->user_id,
+                'total_amount'  => $cart->total_amount,
+                'items'         => $cart->items->map(function ($item) {
                     return [
-                        'id' => $item->id,
-                        'cart_id' => $item->cart_id,
-                        'product_id' => $item->product_id,
-                        'product_name' => optional($item->product)->product_name,
-                        'quantity' => $item->quantity,
-                        'price' => $item->price,
-                        'total_price' => $item->total_price,
-                        'status' => $item->status,
+                        'id'            => $item->id,
+                        'cart_id'       => $item->cart_id,
+                        'product_id'    => $item->product_id,
+                        'product_name'  => optional($item->product)->product_name,
+                        'unit'          => $item->unit,
+                        'unit_name'     => optional($item->unitData)->unit_name,
+                        'quantity'      => $item->quantity,
+                        'price'         => $item->price,
+                        'total_price'   => $item->total_price,
                     ];
                 })
             ];

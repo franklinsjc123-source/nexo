@@ -27,4 +27,11 @@ class CartItems extends Model
     }
 
 
+     public function unitData()
+    {
+        return $this->belongsTo(Unit::class, 'unit', 'id');
+    }
+
+
+
 }
