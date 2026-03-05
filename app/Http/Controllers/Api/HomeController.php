@@ -62,8 +62,8 @@ class HomeController extends Controller
                 'status'  => 'success',
                 'message' => 'Data received successfully',
                 'delivery' => !$checkPincodeExistence ? 'not available' : 'available.',
+                'cart_count' => $cart_count,
                 'data'    => [
-                    'cart_count' => $cart_count,
                     'categories' => $category,
                     'shops'      => $shops,
                     'sliders'    => $slider,
