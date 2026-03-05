@@ -49,13 +49,12 @@ class HomeController extends Controller
             $shops      = Shop::where('status', 1)->inRandomOrder()->get();
             $slider     = Slider::where('status', 1)->get();
 
-            if($user_id){
-               $cart = Cart::where('user_id', $user_id)->first();
+            if ($user_id) {
+                $cart = Cart::where('user_id', $user_id)->first();
 
                 if ($cart) {
                     $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
                 }
-
             }
 
             return response()->json([
@@ -99,14 +98,33 @@ class HomeController extends Controller
 
     public function getAllProductsByShop(Request $request)
     {
-        $shop_id = $request->input('shop_id');
+        $shop_id     = $request->input('shop_id');
+        $user_id     = $request->input('user_id');
         $category_id = $request->input('category_id');
 
         if (!$shop_id) {
             return response()->json([
-                'status' => 'error',
+                'status'  => 'error',
                 'message' => 'Shop ID is required'
             ], 400);
+        }
+
+        if (!$user_id) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'User ID is required'
+            ], 400);
+        }
+
+        $cart = Cart::where('user_id', $user_id)->first();
+
+        $cartItems = [];
+        if ($cart) {
+            $cartItems = CartItems::where('cart_id', $cart->id)
+                ->get()
+                ->keyBy(function ($item) {
+                    return $item->product_id . '_' . $item->unit;
+                });
         }
 
         $query = Product::with([
@@ -117,7 +135,6 @@ class HomeController extends Controller
             ->where('shop', $shop_id)
             ->where('status', 1);
 
-        // ✅ Apply category filter only if provided
         if (!empty($category_id)) {
             $query->where('category', $category_id);
         }
@@ -126,13 +143,13 @@ class HomeController extends Controller
 
         if ($products->isEmpty()) {
             return response()->json([
-                'status' => 'success',
+                'status'  => 'success',
                 'message' => 'No products found',
-                'data' => []
+                'data'    => []
             ], 200);
         }
 
-        $data = $products->map(function ($product) {
+        $data = $products->map(function ($product) use ($cartItems) {
 
             return [
                 'id'                  => $product->id,
@@ -146,13 +163,21 @@ class HomeController extends Controller
                 'status'              => $product->status,
 
                 'quantity_data' => $product->attributes
-                    ->where('original_price', '>', 0)   // optional filter
-                    ->map(function ($attr) {
+                    ->where('original_price', '>', 0)
+                    ->map(function ($attr) use ($product, $cartItems) {
+
+                        $key = $product->id . '_' . $attr->unit;
+
+                        $cartQuantity = isset($cartItems[$key])
+                            ? $cartItems[$key]->quantity
+                            : 0;
+
                         return [
                             'unit_id'        => $attr->unit,
                             'unit_name'      => optional($attr->unitData)->unit_name,
                             'original_price' => $attr->original_price,
                             'discount_price' => $attr->discount_price,
+                            'cart_quantity'  => $cartQuantity
                         ];
                     })->values()
             ];
