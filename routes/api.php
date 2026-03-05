@@ -47,6 +47,7 @@ Route::get('/getAllProductsByShop',[HomeController::class,"getAllProductsByShop"
 Route::get('/getAllSlider',[HomeController::class,"getAllSlider"])->name('getAllSlider');
 
 Route::get('/home-page',[HomeController::class,"getHomePageDetails"])->name('home-page');
+Route::get('/productDetail',[HomeController::class,"productDetail"])->name('productDetail');
 
 
 

@@ -190,4 +190,79 @@ class HomeController extends Controller
             'data'    => $data
         ], 200);
     }
+
+
+
+    public function productDetail(Request $request)
+    {
+        $product_id = $request->input('product_id');
+        $user_id    = $request->input('user_id');
+
+        $product = Product::with(['attributes', 'images'])
+            ->where('id', $product_id)
+            ->where('status', 1)
+            ->first();
+
+        if (!$product) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Records not found'
+            ], 400);
+        }
+
+        // Get user cart
+        $cart = Cart::where('user_id', $user_id)->first();
+
+        $cartItems = [];
+        if ($cart) {
+            $cartItems = CartItems::where('cart_id', $cart->id)
+                ->get()
+                ->keyBy(function ($item) {
+                    return $item->product_id . '_' . $item->unit;
+                });
+        }
+
+        // Modify attributes
+        $attributes = $product->attributes->map(function ($attr) use ($cartItems) {
+
+            $key = $attr->product_id . '_' . $attr->unit;
+
+            $cartQuantity = isset($cartItems[$key]) ? $cartItems[$key]->quantity : 0;
+
+            $discount_percentage = 0;
+
+            if ($attr->original_price > 0) {
+                $discount_percentage = round(
+                    (($attr->original_price - $attr->discount_price) / $attr->original_price) * 100
+                );
+            }
+
+            return [
+                'id' => $attr->id,
+                'product_id' => $attr->product_id,
+                'unit' => $attr->unit,
+                'original_price' => $attr->original_price,
+                'discount_price' => $attr->discount_price,
+                'discount_percentage' => $discount_percentage,
+                'cart_quantity' => $cartQuantity
+            ];
+        });
+
+        $data = [
+            'id' => $product->id,
+            'category' => $product->category,
+            'shop' => $product->shop,
+            'product_name' => $product->product_name,
+            'product_description' => $product->product_description,
+            'product_image' => $product->product_image,
+            'attributes' => $attributes,
+            'images' => $product->images
+        ];
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data received successfully',
+            'data' => $data
+        ], 200);
+    }
 }
