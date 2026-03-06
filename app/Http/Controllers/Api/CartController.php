@@ -83,10 +83,21 @@ class CartController extends Controller
         $cart->total_amount = CartItems::where('cart_id', $cart->id)->sum('total_price');
         $cart->save();
 
+
+
+        if ($user_id) {
+            $cart = Cart::where('user_id', $user_id)->first();
+
+            if ($cart) {
+                $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
+            }
+        }
+
         return response()->json([
             'status'      => true,
             'message'     => 'Item added to cart successfully',
-            'cart_total'  => $cart->total_amount
+            'cart_total'  => $cart->total_amount,
+            'cart_count'  => $cart_count
         ]);
     }
 
@@ -183,7 +194,7 @@ class CartController extends Controller
         ]);
     }
 
-    
+
     public function removeCartItem(Request $request)
     {
         $item_id = $request->input('item_id');
