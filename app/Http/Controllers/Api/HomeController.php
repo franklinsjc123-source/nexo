@@ -17,9 +17,6 @@ use Illuminate\Http\Request;
 class HomeController extends Controller
 {
 
-
-
-
     public function getAllCategory(Request $request)
     {
 
@@ -192,7 +189,6 @@ class HomeController extends Controller
     }
 
 
-
     public function productDetail(Request $request)
     {
         $product_id = $request->input('product_id');
@@ -265,4 +261,6 @@ class HomeController extends Controller
             'data' => $data
         ], 200);
     }
+
+    
 }
