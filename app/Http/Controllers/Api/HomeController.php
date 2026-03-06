@@ -181,9 +181,22 @@ class HomeController extends Controller
             ];
         });
 
+
+        if ($user_id) {
+            $cart = Cart::where('user_id', $user_id)->first();
+
+            if ($cart) {
+                $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
+            }
+        }
+
+
+
+
         return response()->json([
             'status'  => 'success',
             'message' => 'Data received successfully',
+            'cart_count'  => $cart_count,
             'data'    => $data
         ], 200);
     }
@@ -261,6 +274,4 @@ class HomeController extends Controller
             'data' => $data
         ], 200);
     }
-
-    
 }
