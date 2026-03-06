@@ -138,8 +138,17 @@ class CartController extends Controller
                 })
             ];
 
+            if ($user_id) {
+                $cart = Cart::where('user_id', $user_id)->first();
+
+                if ($cart) {
+                    $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
+                }
+            }
+
             return response()->json([
                 'status' => 'success',
+                'cart_count'  => $cart_count,
                 'data' => $response
             ]);
         } else {
@@ -198,6 +207,7 @@ class CartController extends Controller
     public function removeCartItem(Request $request)
     {
         $item_id = $request->input('item_id');
+        $user_id = $request->input('user_id');
 
 
         if ($item_id != '') {
@@ -219,9 +229,22 @@ class CartController extends Controller
             $cart->total_amount = $cart->items()->sum('total_price');
             $cart->save();
 
+             if ($user_id) {
+                $cart = Cart::where('user_id', $user_id)->first();
+
+                if ($cart) {
+                    $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
+                }
+            }
+
+
+
+
             return response()->json([
                 'status' => true,
-                'message' => 'Item removed'
+                'message' => 'Item removed',
+                'cart_count'  => $cart_count
+
             ]);
         } else {
 
