@@ -45,7 +45,8 @@ class HomeController extends Controller
             $category   = Category::where('status', 1)->get();
             $shops      = Shop::where('status', 1)->inRandomOrder()->get();
             $slider     = Slider::where('status', 1)->get();
-
+            
+            $cart_count = 0;
             if ($user_id) {
                 $cart = Cart::where('user_id', $user_id)->first();
 
@@ -181,7 +182,7 @@ class HomeController extends Controller
             ];
         });
 
-
+        $cart_count = 0;
         if ($user_id) {
             $cart = Cart::where('user_id', $user_id)->first();
 
@@ -196,7 +197,7 @@ class HomeController extends Controller
         return response()->json([
             'status'  => 'success',
             'message' => 'Data received successfully',
-            'cart_count'  => $cart_count ? $cart_count : 0,
+            'cart_count'  => $cart_count,
             'data'    => $data
         ], 200);
     }

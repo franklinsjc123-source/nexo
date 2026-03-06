@@ -84,7 +84,7 @@ class CartController extends Controller
         $cart->save();
 
 
-
+        $cart_count = 0;
         if ($user_id) {
             $cart = Cart::where('user_id', $user_id)->first();
 
@@ -138,6 +138,7 @@ class CartController extends Controller
                 })
             ];
 
+            $cart_count = 0;
             if ($user_id) {
                 $cart = Cart::where('user_id', $user_id)->first();
 
@@ -229,17 +230,16 @@ class CartController extends Controller
             $cart->total_amount = $cart->items()->sum('total_price');
             $cart->save();
 
-             if ($user_id) {
+            $cart_count = 0;
+
+            if ($user_id) {
                 $cart = Cart::where('user_id', $user_id)->first();
 
                 if ($cart) {
                     $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
                 }
             }
-
-
-
-
+            
             return response()->json([
                 'status' => true,
                 'message' => 'Item removed',
