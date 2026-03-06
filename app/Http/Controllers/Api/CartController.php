@@ -64,7 +64,7 @@ class CartController extends Controller
 
 
         if ($item) {
-            $item->quantity += $quantity;
+            $item->quantity = $quantity;
             $item->total_price = $item->quantity * $item->price;
             $item->save();
         } else {
