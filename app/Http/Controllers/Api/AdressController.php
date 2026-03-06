@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Address;
+use App\Models\PinCode;
 
 use Illuminate\Http\Request;
 
@@ -38,6 +39,15 @@ class AdressController extends Controller
         $pincode    = $request->input('pincode');
 
         if ($user_id != '' && $name != '' && $mobile != '' && $address != '' && $pincode != '') {
+
+            $checkPincodeExistence = PinCode::where('pincode', $pincode)->where('status', 1)->exists();
+
+            if (!$checkPincodeExistence) {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => 'Delivery is not available for this pincode '
+                ], 400);
+            }
 
 
             $insertArray = array(
@@ -77,6 +87,15 @@ class AdressController extends Controller
 
         if ($id != '' && $name != '' && $mobile != '' && $address != '' && $pincode != '') {
 
+
+            $checkPincodeExistence = PinCode::where('pincode', $pincode)->where('status', 1)->exists();
+
+            if (!$checkPincodeExistence) {
+                return response()->json([
+                    'status'  => 'error',
+                    'message' => 'Delivery is not available for this pincode '
+                ], 400);
+            }
 
             $updateArray = array(
                 'name'          =>  $name,
