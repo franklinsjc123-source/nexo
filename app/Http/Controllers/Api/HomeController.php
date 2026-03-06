@@ -196,7 +196,7 @@ class HomeController extends Controller
         return response()->json([
             'status'  => 'success',
             'message' => 'Data received successfully',
-            'cart_count'  => $cart_count,
+            'cart_count'  => $cart_count ? $cart_count : 0,
             'data'    => $data
         ], 200);
     }
