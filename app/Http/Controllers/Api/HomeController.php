@@ -45,7 +45,7 @@ class HomeController extends Controller
             $category   = Category::where('status', 1)->get();
             $shops      = Shop::where('status', 1)->inRandomOrder()->get();
             $slider     = Slider::where('status', 1)->get();
-            
+
             $cart_count = 0;
             if ($user_id) {
                 $cart = Cart::where('user_id', $user_id)->first();
@@ -205,6 +205,7 @@ class HomeController extends Controller
 
     public function productDetail(Request $request)
     {
+
         $product_id = $request->input('product_id');
         $user_id    = $request->input('user_id');
 
@@ -251,6 +252,7 @@ class HomeController extends Controller
                 'id' => $attr->id,
                 'product_id' => $attr->product_id,
                 'unit' => $attr->unit,
+                'unit_name'      => optional($attr->unitData)->unit_name,
                 'original_price' => $attr->original_price,
                 'discount_price' => $attr->discount_price,
                 'discount_percentage' => $discount_percentage,
@@ -269,9 +271,22 @@ class HomeController extends Controller
             'images' => $product->images
         ];
 
+
+        $cart_count = 0;
+
+        if ($user_id) {
+            $cart = Cart::where('user_id', $user_id)->first();
+
+            if ($cart) {
+                $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
+            }
+        }
+
+
         return response()->json([
             'status' => 'success',
             'message' => 'Data received successfully',
+            'cart_count'  => $cart_count,
             'data' => $data
         ], 200);
     }
