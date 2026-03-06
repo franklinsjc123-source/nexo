@@ -10,6 +10,23 @@ use Illuminate\Http\Request;
 class AdressController extends Controller
 {
 
+    public function getAllAddress(Request $request)
+    {
+
+        $user_id    = $request->input('user_id');
+        $address   = Address::where('user_id', $user_id)->get();
+
+        if ($address->isNotEmpty()) {
+            $success_array = array('status' => 'success', 'message' => 'Data received successfully', 'data' =>  $address);
+            return response()->json(array($success_array), 200);
+        } else {
+            $error_array = array('status' => 'error', 'message' => 'Records not found');
+            return response()->json(array($error_array), 400);
+        }
+    }
+
+
+
     public function addAddress(Request $request)
     {
 
@@ -40,7 +57,6 @@ class AdressController extends Controller
                 $error_array = array('status' => 'error', 'message' => 'Address not added');
                 return response()->json(array($error_array), 400);
             }
-
         } else {
             $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
             return response()->json(array($error_array), 400);
@@ -69,7 +85,7 @@ class AdressController extends Controller
                 'pincode'       =>  $pincode,
             );
 
-            $address = Address::where('id',$id)->update($updateArray);
+            $address = Address::where('id', $id)->update($updateArray);
 
             if ($address) {
                 $success_array = array('status' => 'success', 'message' => 'Address updated successfully');
@@ -78,10 +94,39 @@ class AdressController extends Controller
                 $error_array = array('status' => 'error', 'message' => 'Address not updated');
                 return response()->json(array($error_array), 400);
             }
-
         } else {
             $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
             return response()->json(array($error_array), 400);
         }
+    }
+
+
+
+    public function deleteAddress(Request $request)
+    {
+        $address_id = $request->input('address_id');
+
+        if (!$address_id) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Address ID is required'
+            ], 400);
+        }
+
+        $address = Address::find($address_id);
+
+        if (!$address) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Address not found'
+            ], 404);
+        }
+
+        $address->delete();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Address deleted successfully'
+        ], 200);
     }
 }

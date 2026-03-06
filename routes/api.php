@@ -37,6 +37,9 @@ Route::get('remove-cart-item', [CartController::class, 'removeCartItem'])->name(
 Route::get('clear-cart', [CartController::class, 'clearCart'])->name('clear-cart');
 
 Route::post('add-address', [AdressController::class, 'addAddress'])->name('add-address');
+Route::post('edit-address', [AdressController::class, 'editAddress'])->name('edit-address');
+Route::post('get-all-address', [AdressController::class, 'getAllAddress'])->name('get-all-address');
+Route::post('delete-address', [AdressController::class, 'deleteAddress'])->name('delete-address');
 
 
 
