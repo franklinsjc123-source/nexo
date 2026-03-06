@@ -12,6 +12,7 @@ use App\Models\CartItems;
 use App\Models\Order;
 use App\Models\OrderItems;
 use Illuminate\Support\Str;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 use Illuminate\Http\Request;
 
@@ -132,15 +133,21 @@ class OrderController extends Controller
             ]);
         }
 
+        $order_id = 'ORD' . time();
+        $pdfFileName = 'Invoice_' . $order_id . '_' . date('Ymd_His') . '.pdf';
+
+        $pdfPath = public_path('uploads/order_invoice/' . $pdfFileName);
+
         $order = Order::create([
-            'order_id' => 'ORD' . time(),
+            'order_id' => $order_id,
             'customer_id' => $request->user_id,
             'order_status' => 1,
             'payment_type' => 'razorpay',
             'amount' => $cart->total_amount,
             'ship_amount' => 0,
             'payment_status' => 1,
-            'is_coupon_applied' => 0
+            'is_coupon_applied' => 0,
+            'invoice' => $pdfPath
         ]);
 
         foreach ($cart->items as $item) {
@@ -156,8 +163,34 @@ class OrderController extends Controller
             ]);
         }
 
+        $order_details = Order::where('id', $order->id)->first();
+
+        $order_items = OrderItems::with('product')
+            ->where('order_id', $order->id)
+            ->get();
+
+        $company = Company::orderBy('id', 'asc')->first();
+
+        $pdf = Pdf::loadView(
+            'backend.invoice.generate_order_invoice',
+            compact('order_items', 'order_details', 'company')
+        )
+            ->setPaper('A4', 'portrait')
+            ->setOptions([
+                'isRemoteEnabled' => true,
+            ]);
+
+        $pdf->save($pdfPath);
+
+
+
+
+
         CartItems::where('cart_id', $cart->id)->delete();
         $cart->delete();
+
+
+
 
         return response()->json([
             'status' => true,

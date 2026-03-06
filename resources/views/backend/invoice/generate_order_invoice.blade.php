@@ -337,7 +337,6 @@
         </thead>
       <tbody>
             <tr>
-                <!-- Left column: Shop details table without border on the address cell -->
                 <td style="width:50%; border-right:1px solid #444; vertical-align: top; padding: 10px;">
                 <table style="width: 100%; border-collapse: collapse;">
 
@@ -370,10 +369,8 @@
                 </table>
                 </td>
 
-                <!-- Right column: Customer address -->
                 <td style="width:50%; vertical-align: top; padding: 10px;">
-                <!-- You can replace this with dynamic customer address -->
-                Customer address comes here
+                        Customer address comes here
                 </td>
             </tr>
         </tbody>
