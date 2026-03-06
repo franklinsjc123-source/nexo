@@ -119,6 +119,7 @@ Route::middleware('auth.request')->group(function () {
 
     //orders Management
     Route::get("orders", [OrderController::class, 'orders'])->name('orders');
+    Route::post('orders-status-update', [OrderController::class, 'updateOrderStatus'])->name('orders-status-update');
 
     //direct orders Management
     Route::get("direct-orders", [DirectOrderController::class, 'directOrders'])->name('direct-orders');

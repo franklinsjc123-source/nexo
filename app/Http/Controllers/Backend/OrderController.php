@@ -23,4 +23,17 @@ class OrderController extends Controller
     }
 
 
+
+     public function updateOrderStatus(Request $request)
+    {
+        Order::where('id', $request->order_id)
+            ->update(['order_status' => $request->status]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Order status updated successfully'
+        ]);
+    }
+
+
 }

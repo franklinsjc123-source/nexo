@@ -1,6 +1,18 @@
 @extends('backend.app_template')
 @section('title','Orders  List')
 @section('content')
+
+<style>
+    .select2-container {
+    width: 100% !important;
+}
+
+.select2-container--open {
+    z-index: 9999 !important; /* Below modal (1050) */
+}
+</style>
+
+
 <main class="app-wrapper">
     <div class="container-fluid">
 
@@ -39,18 +51,39 @@
                             ?>
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
-                                <td><?php echo '' ?></td>
-                                <td><?php echo '' ?></td>
-                                <td><?php echo '' ?></td>
-                                <td><?php echo '' ?></td>
+                               <td>{{ date('d-m-Y', strtotime($row->created_at)) }}</td>
+                                <td><?php echo $row->order_id ?></td>
+                                <td><?php echo $row->customerData->name ?? '-' ?></td>
+                                <td><?php echo $row->customerData->email ?? '-' ?></td>
+                                <td><?php echo $row->amount ?></td>
                                 <td>
-                                    <a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" onclick="changeStatus('<?php echo $row->id ?>','<?php echo ($row->status == 1) ? 0 : 1 ?>','User')" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">
-                                            <?php echo ($row->status == 1) ? 'Active' : 'In-Active' ?>
+                                    <?php
+                                        if ($row->order_status == 1) {
+                                            $class = "warning";
+                                            $text  = "New Order";
+                                        } elseif ($row->order_status == 2) {
+                                            $class = "success";
+                                            $text  = "Delivered";
+                                        } elseif ($row->order_status == 3) {
+                                            $class = "danger";
+                                            $text  = "Cancelled";
+                                        } else {
+                                            $class = "secondary";
+                                            $text  = "Unknown";
+                                        }
+                                    ?>
+
+                                    <a href="javascript:void(0)"
+                                        class="badge bg-<?php echo $class; ?> editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>"> <?php echo $text; ?>
                                     </a>
                                 </td>
                                 <td>
-                                    {{-- <a data-toggle="tooltip" data-placement="top" title="Edit" href="<?php echo route('addUser',[$row->id]) ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil-fill"></i></a> --}}
-                                    <a data-toggle="tooltip" data-placement="top" title="Delete" data-original-title="Delete" href="javascript:void(0)" onclick="commonDelete('<?php echo $row->id ?>','User')" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></a>
+
+                                     <a href="javascript:void(0)" class="btn btn-sm btn-warning editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>" data-toggle="tooltip" title="Edit">
+                                        <i class="bi bi-pencil-fill"></i>
+                                    </a>
+                                    <a data-toggle="tooltip" target="_blank" href="{{ $row->invoice_file }}" data-placement="top" title="Invoice"  class="btn btn-sm btn-secondary"><i class="bi bi-file-earmark-break"></i></a>
+
                                 </td>
                             </tr>
 
@@ -63,4 +96,89 @@
         <!-- Submit Section -->
     </div>
 </main>
+
+<div class="modal fade" id="orderStatusModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Update Order Status</h5>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="order_id">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <label class="mb-2">Change Status</label>
+
+                        <select class="form-control select2 " id="change_order_status" name="change_order_status">
+                            <option value="1">New order</option>
+                            <option value="2">Delivered</option>
+                            <option value="3">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer mt-5">
+
+                  <button class="btn btn-danger" id="close-modal" >Cancel</button>
+                <button class="btn btn-primary" id="saveStatus">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+
+    $(document).on('click', '#close-modal', function () {
+
+        $('#orderStatusModal').modal('hide');
+    });
+
+
+
+    $(document).on('click', '.editOrderStatus', function () {
+
+        let orderId = $(this).data('id');
+        let status  = $(this).data('status');
+
+        $('#order_id').val(orderId);
+
+        $('#orderStatusModal').modal('show');
+
+        setTimeout(function(){
+            $('#change_order_status')
+                .val(status)
+                .trigger('change');
+        }, 200);
+
+    });
+
+
+
+    $('#saveStatus').click(function () {
+
+    let orderId = $('#order_id').val();
+    let status  = $('#change_order_status').val();
+
+    $.ajax({
+        url: "<?= route('orders-status-update') ?>",
+        type: "POST",
+        data: {
+            _token: "<?= csrf_token() ?>",
+            order_id: orderId,
+            status: status
+        },
+        success: function (res) {
+            if (res.status) {
+                $('#orderStatusModal').modal('hide');
+                location.reload();
+            }
+        }
+    });
+});
+
+
+
+</script>
 @endsection

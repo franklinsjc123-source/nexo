@@ -11,4 +11,11 @@ class Order extends Model
     protected $table   = 'orders';
     protected $guarded = ['id'];
 
+
+    public function customerData()
+    {
+        return $this->belongsTo(User::class, 'customer_id', 'id');
+    }
+
+
 }
