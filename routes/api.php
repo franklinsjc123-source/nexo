@@ -33,7 +33,7 @@ Route::post('/checkOTP',[AuthController::class,"checkOTP"])->name('checkOTP');
 Route::post('add-cart', [CartController::class, 'addToCart'])->name('add-cart');
 Route::get('view-cart', [CartController::class, 'viewCart'])->name('view-cart');
 Route::post('update-cart', [CartController::class, 'updateCartItem'])->name('update-cart');
-Route::post('remove-cart-items', [CartController::class, 'removeCartItem'])->name('remove-cart-items');
+Route::get('remove-cart-item', [CartController::class, 'removeCartItem'])->name('remove-cart-item');
 Route::get('clear-cart', [CartController::class, 'clearCart'])->name('clear-cart');
 
 Route::post('add-address', [AdressController::class, 'addAddress'])->name('add-address');
