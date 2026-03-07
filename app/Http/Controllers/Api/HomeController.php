@@ -166,9 +166,10 @@ class HomeController extends Controller
 
                         $key = $product->id . '_' . $attr->unit;
 
-                        $cartQuantity = isset($cartItems[$key])
-                            ? $cartItems[$key]->quantity
-                            : 0;
+                        $cartItem = $cartItems[$key] ?? null;
+
+                        $cartQuantity = $cartItem ? $cartItem->quantity : 0;
+                        $cartItemId   = $cartItem ? $cartItem->id : null;
 
                         return [
                             'unit_id'        => $attr->unit,
@@ -176,6 +177,7 @@ class HomeController extends Controller
                             'original_price' => $attr->original_price,
                             'discount_price' => $attr->discount_price,
                             'discount_percentage' => $attr->original_price > 0 ? round((($attr->original_price - $attr->discount_price) / $attr->original_price) * 100) : 0,
+                            'cart_item_id'   => $cartItemId,
                             'cart_quantity'  => $cartQuantity
                         ];
                     })->values()
