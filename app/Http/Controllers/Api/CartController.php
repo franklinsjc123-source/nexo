@@ -108,7 +108,7 @@ class CartController extends Controller
 
         if ($user_id != '') {
 
-            $cart = Cart::with(['items.product:id,product_name'])
+            $cart = Cart::with(['items.product:id,product_name,product_image'])
                 ->where('user_id', $user_id)
                 ->first();
 

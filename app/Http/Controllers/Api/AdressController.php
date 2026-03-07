@@ -42,6 +42,8 @@ class AdressController extends Controller
 
             $checkPincodeExistence = PinCode::where('pincode', $pincode)->where('status', 1)->exists();
 
+            $addressExists = Address::where('user_id', $user_id)->exists();
+
             if (!$checkPincodeExistence) {
                 return response()->json([
                     'status'  => 'error',
@@ -56,6 +58,7 @@ class AdressController extends Controller
                 'mobile'        =>  $mobile,
                 'address'       =>  $address,
                 'pincode'       =>  $pincode,
+                'is_default'    =>  $addressExists ? 0 : 1
             );
 
             $address = Address::create($insertArray);
@@ -146,6 +149,48 @@ class AdressController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Address deleted successfully'
+        ], 200);
+    }
+
+
+
+
+    public function setDefaultAddress(Request $request)
+    {
+        $address_id = $request->input('address_id');
+        $user_id = $request->input('user_id');
+
+        if (!$address_id || !$user_id) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Address ID and User ID are required'
+            ], 400);
+        }
+
+        $address = Address::where('id', $address_id)
+            ->where('user_id', $user_id)
+            ->first();
+
+        if (!$address) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Address not found'
+            ], 404);
+        }
+
+        // Reset all user addresses
+        Address::where('user_id', $user_id)->update([
+            'is_default' => 0
+        ]);
+
+        // Set selected address as default
+        $address->update([
+            'is_default' => 1
+        ]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Default address updated successfully'
         ], 200);
     }
 }
