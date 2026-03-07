@@ -240,7 +240,10 @@ class HomeController extends Controller
 
             $key = $attr->product_id . '_' . $attr->unit;
 
-            $cartQuantity = isset($cartItems[$key]) ? $cartItems[$key]->quantity : 0;
+              $cartItem = $cartItems[$key] ?? null;
+
+                    $cartQuantity = $cartItem ? $cartItem->quantity : 0;
+                    $cartItemId   = $cartItem ? $cartItem->id : null;
 
             $discount_percentage = 0;
 
@@ -258,6 +261,7 @@ class HomeController extends Controller
                 'original_price' => $attr->original_price,
                 'discount_price' => $attr->discount_price,
                 'discount_percentage' => $discount_percentage,
+                 'cart_item_id'   => $cartItemId,
                 'cart_quantity' => $cartQuantity
             ];
         });
