@@ -129,6 +129,7 @@ class CartController extends Controller
                         'cart_id'       => $item->cart_id,
                         'product_id'    => $item->product_id,
                         'product_name'  => optional($item->product)->product_name,
+                        'product_image' => optional($item->product)->product_image,
                         'unit'          => $item->unit,
                         'unit_name'     => optional($item->unitData)->unit_name,
                         'quantity'      => $item->quantity,
@@ -239,7 +240,7 @@ class CartController extends Controller
                     $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
                 }
             }
-            
+
             return response()->json([
                 'status' => true,
                 'message' => 'Item removed',
