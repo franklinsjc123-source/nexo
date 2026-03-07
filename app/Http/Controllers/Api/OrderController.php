@@ -24,6 +24,7 @@ class OrderController extends Controller
 
         $shop_id = $request->input('shop_id');
         $customer_id = $request->input('customer_id');
+        $delivery_id = $request->input('delivery_id');
 
         if ($shop_id != '' && $customer_id != '') {
 
@@ -40,6 +41,7 @@ class OrderController extends Controller
             $insertArray = array(
                 'shop_id'          => $shop_id,
                 'customer_id'      => $customer_id,
+                'delivery_id'      => $delivery_id,
                 'invoice_no'       => $currentInvoice,
                 'image_url'        => $imageUrl,
 
