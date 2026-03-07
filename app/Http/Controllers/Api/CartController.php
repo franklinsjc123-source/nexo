@@ -214,7 +214,7 @@ class CartController extends Controller
 
         if ($item_id != '') {
 
-            $item = CartItems::findOrFail($item_id);
+           $item = CartItems::find($item_id);
 
             if (!$item) {
                 return response()->json([
