@@ -39,7 +39,7 @@ Route::get('clear-cart', [CartController::class, 'clearCart'])->name('clear-cart
 Route::post('add-address', [AdressController::class, 'addAddress'])->name('add-address');
 Route::post('edit-address', [AdressController::class, 'editAddress'])->name('edit-address');
 Route::get('get-all-address', [AdressController::class, 'getAllAddress'])->name('get-all-address');
-Route::post('delete-address', [AdressController::class, 'deleteAddress'])->name('delete-address');
+Route::get('delete-address', [AdressController::class, 'deleteAddress'])->name('delete-address');
 Route::post('set-default-address', [AdressController::class, 'setDefaultAddress'])->name('set-default-address');
 
 

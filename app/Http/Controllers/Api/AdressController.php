@@ -144,6 +144,13 @@ class AdressController extends Controller
             ], 404);
         }
 
+        if ($address->is_default == 1) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Default address cannot be deleted'
+            ], 400);
+        }
+
         $address->delete();
 
         return response()->json([
