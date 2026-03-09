@@ -48,7 +48,8 @@ class CartController extends Controller
             ], 404);
         }
 
-        $price = $attribute->discount_price ?? $attribute->original_price;
+        $price          = $attribute->original_price ?? $attribute->original_price;
+        $discount_price = $attribute->discount_price ?? $attribute->discount_price;
 
         $cart = Cart::firstOrCreate(
             ['user_id' => $user_id],
@@ -71,12 +72,13 @@ class CartController extends Controller
 
 
             CartItems::create([
-                'cart_id'     => $cart->id,
-                'product_id'  => $product_id,
-                'unit'        => $unit,
-                'quantity'    => $quantity,
-                'price'       => $price,
-                'total_price' => $price * $quantity
+                'cart_id'          => $cart->id,
+                'product_id'       => $product_id,
+                'unit'             => $unit,
+                'quantity'         => $quantity,
+                'price'            => $price,
+                'discount_price'   => $discount_price,
+                'total_price'      => $price * $quantity
             ]);
         }
 
