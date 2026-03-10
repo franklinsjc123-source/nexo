@@ -161,7 +161,31 @@
                     </div>
                 </div>
 
+
+
+
             <?php  } ?>
+
+
+
+                <div class="col-md-6 col-xl-4 col-xxl-4">
+                <div class="card card-h-100 IntelligenceGradient text-white">
+                    <a href="{{ route('product') }}">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between gap-5 mb-5">
+                                <div>
+                                    <h4 class="text-white mb-1">Total Prouducts</h4>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <div
+                                        class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">
+                                    {{ $product_count ?? 0  }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
 
 
         </div>

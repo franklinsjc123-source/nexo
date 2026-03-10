@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\DirectOrder;
 use App\Models\DeliveryPerson;
+use App\Models\Product;
+
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -26,6 +28,7 @@ class DashboardController extends Controller
             $shop_count                 = 0;
             $customer_count             = 0;
             $order_count                = count(Order::get());
+            $product_count              = count(Product::where('shop_id', $shop_id)->get());
             $today_order_count          = Order::whereDate('created_at',  Carbon::today())->count();
             $direct_order_count         = count(DirectOrder::where('shop_id', $shop_id)->get());
             $today_direct_order_count   = DirectOrder::where('shop_id', $shop_id)->whereDate('created_at', Carbon::today())->count();
@@ -35,6 +38,7 @@ class DashboardController extends Controller
             $shop_count                 = count(Shop::where('status', 1)->get());
             $customer_count             = count(User::where('auth_level', 3)->where('status', 1)->get());
             $order_count                = count(Order::get());
+            $product_count              = count(Product::get());
             $today_order_count          = Order::whereDate('created_at',  Carbon::today())->count();
             $direct_order_count         = count(DirectOrder::get());
             $today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::today())->count();
@@ -69,6 +73,6 @@ class DashboardController extends Controller
         }
 
 
-        return view('backend.dashboard', compact('shop_count', 'customer_count', 'order_count', 'delivert_person_count', 'direct_order_count', 'delivert_person_count', 'today_direct_order_count', 'today_order_count', 'categoryLabels', 'shopCounts', 'productCounts'));
+        return view('backend.dashboard', compact('shop_count', 'customer_count', 'order_count', 'delivert_person_count', 'direct_order_count', 'delivert_person_count', 'today_direct_order_count', 'today_order_count', 'categoryLabels', 'shopCounts', 'productCounts','product_count'));
     }
 }
