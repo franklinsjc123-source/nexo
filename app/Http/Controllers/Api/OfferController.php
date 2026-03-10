@@ -31,14 +31,17 @@ class OfferController extends Controller
     }
 
 
-
     public function applyOffer(Request $request)
     {
         $user_id  = $request->input('user_id');
         $cart_id  = $request->input('cart_id');
         $offer_ids = $request->input('offer_id');
 
-        if ($user_id != '' && $offer_ids != '') {
+        if ($user_id && $offer_ids) {
+
+         OffersUsed::where('cart_id', $cart_id)
+            ->where('user_id', $user_id)
+            ->delete();
 
             $offer_ids = explode(',', $offer_ids);
 
@@ -76,22 +79,17 @@ class OfferController extends Controller
                     ], 400);
                 }
 
-                $checkOfferExistence = OffersUsed::where('user_id', $user_id)
-                    ->where('offer_id', $offer_id)
-                    ->exists();
-
-                if ($checkOfferExistence) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => 'Offer already used for ID ' . $offer_id
-                    ], 400);
-                }
-
-                OffersUsed::create([
-                    'user_id' => $user_id,
-                    'cart_id' => $cart_id,
-                    'offer_id' => $offer_id
-                ]);
+                // ✅ Insert or update automatically
+                OffersUsed::updateOrCreate(
+                    [
+                        'user_id' => $user_id,
+                        'cart_id' => $cart_id,
+                        'offer_id' => $offer_id
+                    ],
+                    [
+                        'updated_at' => now()
+                    ]
+                );
             }
 
             return response()->json([
@@ -105,7 +103,6 @@ class OfferController extends Controller
             'message' => 'Parameters Missing'
         ], 400);
     }
-
 
 
 
