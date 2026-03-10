@@ -23,11 +23,11 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
             return [
                 'category',
                 'product_name',
-                'unit',
-                'qty',
+                // 'unit',
+                // 'qty',
                 'hsn_code',
-                'original_price',
-                'discount_price',
+                // 'original_price',
+                // 'discount_price',
                 'product_description'
             ];
         } else {
@@ -36,11 +36,11 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
                 'category',
                 'shop',
                 'product_name',
-                'unit',
-                'qty',
+                // 'unit',
+                // 'qty',
                 'hsn_code',
-                'original_price',
-                'discount_price',
+                // 'original_price',
+                // 'discount_price',
                 'product_description'
             ];
         }
@@ -52,101 +52,83 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
     }
 
 
-    public function registerEvents(): array
-    {
-        return [
-            AfterSheet::class => function (AfterSheet $event) {
+   public function registerEvents(): array
+{
+    return [
+        AfterSheet::class => function (AfterSheet $event) {
 
-                $authLevel = Auth::user()->auth_level;
+            $authLevel = Auth::user()->auth_level;
 
+            if ($authLevel == 4) {
 
-                if (Auth::user()->auth_level == 4) {
-                    $shopCategories = Shop::where('user_id', auth()->id())
-                        ->value('category');
+                $shopCategories = Shop::where('user_id', auth()->id())
+                    ->value('category');
 
-                    $categories = [];
+                $categories = [];
 
-                    if ($shopCategories) {
+                if ($shopCategories) {
 
-                        $categoryIds = explode(',', $shopCategories);
-
-                        $categories = Category::where('status', 1)
-                            ->whereIn('id', $categoryIds)
-                            ->pluck('category_name')
-                            ->toArray();
-                    }
-                } else {
+                    $categoryIds = explode(',', $shopCategories);
 
                     $categories = Category::where('status', 1)
+                        ->whereIn('id', $categoryIds)
                         ->pluck('category_name')
                         ->toArray();
                 }
 
+            } else {
 
+                $categories = Category::where('status', 1)
+                    ->pluck('category_name')
+                    ->toArray();
+            }
 
-                $units = Unit::where('status', 1)
-                    ->pluck('unit_name')
+            $spreadsheet = $event->sheet->getDelegate()->getParent();
+            $listSheet = $spreadsheet->createSheet();
+            $listSheet->setTitle('lists');
+
+            // Category list
+            foreach ($categories as $i => $value) {
+                $listSheet->setCellValue('A' . ($i + 1), $value);
+            }
+
+            // Shop list
+            if ($authLevel != 4) {
+
+                $shops = Shop::where('status', 1)
+                    ->pluck('shop_name')
                     ->toArray();
 
-                $spreadsheet = $event->sheet->getDelegate()->getParent();
-                $listSheet = $spreadsheet->createSheet();
-                $listSheet->setTitle('lists');
-
-                foreach ($categories as $i => $value) {
-                    $listSheet->setCellValue('A' . ($i + 1), $value);
-                }
-
-                foreach ($units as $i => $value) {
-                    $listSheet->setCellValue('C' . ($i + 1), $value);
-                }
-
-                if ($authLevel != 4) {
-                    $shops = Shop::where('status', 1)
-                        ->pluck('shop_name')
-                        ->toArray();
-
-                    foreach ($shops as $i => $value) {
-                        $listSheet->setCellValue('B' . ($i + 1), $value);
-                    }
-                }
-
-                $listSheet->setSheetState(
-                    \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::SHEETSTATE_HIDDEN
-                );
-
-                for ($row = 2; $row <= 500; $row++) {
-
-                    // Category dropdown (Column A)
-                    $catValidation = $event->sheet->getCell("A{$row}")->getDataValidation();
-                    $catValidation->setType(DataValidation::TYPE_LIST);
-                    $catValidation->setAllowBlank(false);
-                    $catValidation->setShowDropDown(true);
-                    $catValidation->setFormula1('=lists!$A$1:$A$' . count($categories));
-
-                    if ($authLevel != 4) {
-
-                        // Shop dropdown (Column B)
-                        $shopValidation = $event->sheet->getCell("B{$row}")->getDataValidation();
-                        $shopValidation->setType(DataValidation::TYPE_LIST);
-                        $shopValidation->setAllowBlank(false);
-                        $shopValidation->setShowDropDown(true);
-                        $shopValidation->setFormula1('=lists!$B$1:$B$' . count($shops));
-
-                        $unitColumn = 'D'; // because shop column exists
-                    } else {
-                        $unitColumn = 'C'; // shop column removed
-                    }
-
-                    // Unit dropdown
-                    $unitValidation = $event->sheet->getCell("{$unitColumn}{$row}")
-                        ->getDataValidation();
-
-                    $unitValidation->setType(DataValidation::TYPE_LIST);
-                    $unitValidation->setAllowBlank(false);
-                    $unitValidation->setShowDropDown(true);
-                    $unitValidation->setFormula1('=lists!$C$1:$C$' . count($units));
+                foreach ($shops as $i => $value) {
+                    $listSheet->setCellValue('B' . ($i + 1), $value);
                 }
             }
-        ];
-    }
+
+            // Hide list sheet
+            $listSheet->setSheetState(
+                \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet::SHEETSTATE_HIDDEN
+            );
+
+            for ($row = 2; $row <= 500; $row++) {
+
+                // Category dropdown (Column A)
+                $catValidation = $event->sheet->getCell("A{$row}")->getDataValidation();
+                $catValidation->setType(DataValidation::TYPE_LIST);
+                $catValidation->setAllowBlank(false);
+                $catValidation->setShowDropDown(true);
+                $catValidation->setFormula1('=lists!$A$1:$A$' . count($categories));
+
+                if ($authLevel != 4) {
+
+                    // Shop dropdown (Column B)
+                    $shopValidation = $event->sheet->getCell("B{$row}")->getDataValidation();
+                    $shopValidation->setType(DataValidation::TYPE_LIST);
+                    $shopValidation->setAllowBlank(false);
+                    $shopValidation->setShowDropDown(true);
+                    $shopValidation->setFormula1('=lists!$B$1:$B$' . count($shops));
+                }
+            }
+        }
+    ];
+}
 }

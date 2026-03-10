@@ -41,7 +41,7 @@ class ProductImport implements ToCollection, WithHeadingRow
             }
 
             $category = Category::where('category_name', $row['category'])->first();
-            $unit     = Unit::where('unit_name', $row['unit'])->first();
+            // $unit     = Unit::where('unit_name', $row['unit'])->first();
 
             if (!$category) {
                 $this->skipped++;
@@ -66,12 +66,12 @@ class ProductImport implements ToCollection, WithHeadingRow
             Product::create([
                 'category'            => $category->id,
                 'shop'                => $final_shop_id,
-                'qty'                 => $row['qty'],
-                'unit'                => isset($unit->id) ? $unit->id : null,
+                // 'qty'                 => $row['qty'],
+                // 'unit'                => isset($unit->id) ? $unit->id : null,
                 'product_name'        => $row['product_name'],
                 'hsn_code'            => $row['hsn_code'],
-                'original_price'      => $row['original_price'],
-                'discount_price'      => $row['discount_price'],
+                // 'original_price'      => $row['original_price'],
+                // 'discount_price'      => $row['discount_price'],
                 'product_description' => $row['product_description'],
             ]);
 
