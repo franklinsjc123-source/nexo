@@ -72,13 +72,12 @@ class OrderController extends Controller
 
 
 
-
     public function placeOrder(Request $request)
     {
         $user_id = $request->user_id;
-        $payment_type = $request->payment_type; // razorpay
+        $payment_type = $request->payment_type; // razorpay / cod
 
-        $cart = Cart::with('items')->where('user_id', $user_id)->first();
+        $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
 
         if (!$cart || $cart->items->isEmpty()) {
             return response()->json([
@@ -89,21 +88,90 @@ class OrderController extends Controller
 
         $amount = $cart->total_amount;
 
-        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+        if ($payment_type == 'cod') {
 
-        $razorpayOrder = $api->order->create([
-            'receipt' => Str::random(10),
-            'amount' => $amount * 100,
-            'currency' => 'INR'
-        ]);
+            $order_id = 'ORD' . time();
+            $pdfFileName = 'Invoice_' . $order_id . '_' . date('Ymd_His') . '.pdf';
+            $pdfPath = public_path('uploads/order_invoice/' . $pdfFileName);
+
+            $order = Order::create([
+                'order_id' => $order_id,
+                'customer_id' => $user_id,
+                'order_status' => 1,
+                'payment_type' => 'cod',
+                'amount' => $amount,
+                'ship_amount' => 0,
+                'payment_status' => 0,
+                'is_coupon_applied' => 0,
+                'invoice' => $pdfPath
+            ]);
+
+            foreach ($cart->items as $item) {
+
+                OrderItems::create([
+                    'order_id' => $order->id,
+                    'product_id' => $item->product_id,
+                    'product_name' => $item->product->product_name ?? '',
+                    'qty' => $item->quantity,
+                    'unit' => $item->unit,
+                    'product_price' => $item->price,
+                    'price' => $item->total_price
+                ]);
+            }
+
+            $order_details = Order::where('id', $order->id)->first();
+
+            $order_items = OrderItems::with('product')
+                ->where('order_id', $order->id)
+                ->get();
+
+            $company = Company::orderBy('id', 'asc')->first();
+
+            $pdf = Pdf::loadView(
+                'backend.invoice.generate_order_invoice',
+                compact('order_items', 'order_details', 'company')
+            )
+                ->setPaper('A4', 'portrait')
+                ->setOptions(['isRemoteEnabled' => true]);
+
+            $pdf->save($pdfPath);
+
+            // clear cart
+            // CartItems::where('cart_id', $cart->id)->delete();
+            // $cart->delete();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Order placed successfully (Cash on Delivery)',
+                'order_id' => $order->order_id
+            ]);
+        }
+
+
+        if ($payment_type == 'razorpay') {
+
+            $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+
+            $razorpayOrder = $api->order->create([
+                'receipt' => Str::random(10),
+                'amount' => $amount * 100,
+                'currency' => 'INR'
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'razorpay_order_id' => $razorpayOrder['id'],
+                'amount' => $amount,
+                'key' => env('RAZORPAY_KEY')
+            ]);
+        }
 
         return response()->json([
-            'status' => true,
-            'razorpay_order_id' => $razorpayOrder['id'],
-            'amount' => $amount,
-            'key' => env('RAZORPAY_KEY')
+            'status' => false,
+            'message' => 'Invalid payment type'
         ]);
     }
+
 
 
 
@@ -184,15 +252,8 @@ class OrderController extends Controller
 
         $pdf->save($pdfPath);
 
-
-
-
-
         CartItems::where('cart_id', $cart->id)->delete();
         $cart->delete();
-
-
-
 
         return response()->json([
             'status' => true,

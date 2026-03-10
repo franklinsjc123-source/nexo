@@ -66,9 +66,6 @@ class CartController extends Controller
             ->where('unit', $unit)
             ->first();
 
-
-
-
         if ($item) {
             $item->quantity = $quantity;
             $item->total_price = $item->quantity * $item->price;
