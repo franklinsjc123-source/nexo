@@ -438,100 +438,72 @@ $(document).ready(function () {
         });
     }
 });
-     $(function() {
-         $("#productForm").validate({
-             rules: {
-
-                category: {
-                    required: true
-                },
-                shop: {
-                    required: true
-                },
-                product_name: {
-                    required: true
-                },
 
 
-                original_price: {
-                    required: true
-                },
-                discount_price: {
-                    required: true
-                },
-                 product_description: {
-                    required: true
-                },
+    $("#productForm").on("submit", function (e) {
 
-                  product_description: {
-                    required: true
-                },
+    let isValid = true;
+
+      let category  = $(this).find('select[name="category"]').val();
+      let shop  = $(this).find('select[name="shop"]').val();
+      let product_name  = $(this).find('input[name="product_name"]').val();
+      if (category == '') {
+            isValid = false;
+            $(this).find('select[name="category"]').after('<div><span class="text-danger error-msg"> Please select category</span></div>');
+        }
 
 
-                food_type: {
-                    required: function () {
-                        let isHotel = $('#shop').find(':selected').data('hotel');
-                        return isHotel == 1;
-                    }
-                },
+         if (shop == '') {
+            isValid = false;
+            $(this).find('select[name="shop"]').after('<div><span class="text-danger error-msg"> Please select shop</span></div>');
+        }
+
+           if (product_name == '') {
+            isValid = false;
+            $(this).find('input[name="product_name"]').after('<span class="text-danger error-msg">Please enter product name</span>');
+        }
 
 
-                product_image: {
-                    required: function () {
-                        return $('#has_old_product_image').val() == 0;
-                    }
-                }
-             },
-             messages: {
-
-                category: {
-                    required: "Please select category "
-                },
-                 shop: {
-                    required: "Please select shop "
-                },
-                product_name: {
-                    required: "Please enter product name"
-                },
 
 
-                original_price: {
-                    required: "Please enter original price"
-                },
-
-                discount_price: {
-                    required: "Please enter discount price"
-                },
-
-                product_description: {
-                    required: "Please enter product description"
-                },
 
 
-                food_type: {
-                    required: "Please select food type"
-                },
-
-                //  qty: {
-                //     required: "Please enter quantity"
-                // },
+    $(".quantity-row").each(function (index) {
 
 
-                product_image: {
-                    required: "Please upload product image"
-                }
-             },
-            errorElement: "span",
-            errorPlacement: function(error, element) {
-                error.addClass("text-danger small");
-                if (element.hasClass("select2-hidden-accessible")) {
-                    error.insertAfter(element.next('.select2'));
-                } else {
-                    error.insertAfter(element);
-                }
-            }
-         });
-     });
+
+
+        let unit = $(this).find('select[name="unit[]"]').val();
+        let originalPrice = $(this).find('input[name="original_price[]"]').val();
+        let discountPrice = $(this).find('input[name="discount_price[]"]').val();
+
+        // remove old errors
+        $(this).find(".error-msg").remove();
+
+
+
+        if (unit == '') {
+            isValid = false;
+            $(this).find('select[name="unit[]"]').after('<span class="text-danger error-msg">Please select unit</span>');
+        }
+
+        if (originalPrice == '') {
+            isValid = false;
+            $(this).find('input[name="original_price[]"]').after('<span class="text-danger error-msg">Please enter original price</span>');
+        }
+
+        if (discountPrice == '') {
+            isValid = false;
+            $(this).find('input[name="discount_price[]"]').after('<span class="text-danger error-msg">Please enter discount price</span>');
+        }
+
+    });
+
+    if (!isValid) {
+        e.preventDefault();
+    }
+
+});
 
 
  </script>
