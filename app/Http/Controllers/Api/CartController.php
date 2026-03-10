@@ -6,7 +6,12 @@ use App\Http\Controllers\Controller;
 use App\Models\Cart;
 use App\Models\CartItems;
 use App\Models\Product;
+use App\Models\Offers;
+use App\Models\OffersUsed;
+use App\Models\Address;
+
 use App\Models\ProductAttributes;
+use Carbon\Carbon;
 
 
 use Illuminate\Http\Request;
@@ -74,6 +79,7 @@ class CartController extends Controller
             CartItems::create([
                 'cart_id'          => $cart->id,
                 'product_id'       => $product_id,
+                'shop_id'          => $product->shop,
                 'unit'             => $unit,
                 'quantity'         => $quantity,
                 'price'            => $price,
@@ -121,6 +127,33 @@ class CartController extends Controller
                 ], 404);
             }
 
+            $offers = Offers::where('status', 1)
+                ->whereDate('expiry_date', '>=', Carbon::today())
+                ->get()
+                ->map(function ($offer) use ($cart, $user_id) {
+
+                    $is_used = OffersUsed::where('offer_id', $offer->id)
+                        ->where('cart_id', $cart->id)
+                        ->where('user_id', $user_id)
+                        ->exists();
+
+                    return [
+                        'id' => $offer->id,
+                        'shop_id' => $offer->shop_id,
+                        'offer_code' => $offer->offer_code,
+                        'discount_percentage' => $offer->discount_percentage,
+                        'minimum_order_amount' => $offer->minimum_order_amount,
+                        'expiry_date' => $offer->expiry_date,
+                        'is_used' => $is_used ? 1 : 0
+                    ];
+                });
+
+
+            $delivery_address = Address::where('user_id', $user_id)->where('is_default', 1)->first();
+
+
+
+
             $response = [
                 'id'            => $cart->id,
                 'user_id'       => $cart->user_id,
@@ -136,6 +169,7 @@ class CartController extends Controller
                         'unit_name'     => optional($item->unitData)->unit_name,
                         'quantity'      => $item->quantity,
                         'price'         => $item->price,
+                        'discount_price' => $item->discount_price,
                         'total_price'   => $item->total_price,
                     ];
                 })
@@ -153,6 +187,8 @@ class CartController extends Controller
             return response()->json([
                 'status' => 'success',
                 'cart_count'  => $cart_count,
+                'delivery_address'  => $delivery_address,
+                'offers'  => $offers,
                 'data' => $response
             ]);
         } else {
@@ -216,7 +252,7 @@ class CartController extends Controller
 
         if ($item_id != '') {
 
-           $item = CartItems::find($item_id);
+            $item = CartItems::find($item_id);
 
             if (!$item) {
                 return response()->json([

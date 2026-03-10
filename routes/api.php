@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CartController;
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\AdressController;
+use App\Http\Controllers\Api\OfferController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -57,6 +58,13 @@ Route::get('/productDetail',[HomeController::class,"productDetail"])->name('prod
 
 Route::post('/placeDirectOrder',[OrderController::class,"placeDirectOrder"])->name('placeDirectOrder');
 Route::post('/placeOrder',[OrderController::class,"placeOrder"])->name('placeOrder');
+
+
+
+
+Route::post('applyOffer', [OfferController::class, 'applyOffer'])->name('applyOffer');
+Route::post('removeOffer', [OfferController::class, 'removeOffer'])->name('removeOffer');
+
 
 
 
