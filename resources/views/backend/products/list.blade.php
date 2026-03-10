@@ -55,7 +55,7 @@
                         <?php } ?>
                         <th>Product Name</th>
                         <th>HSN  Code</th>
-                        <th>Attributes</th>
+                        <th> ( Unit/ Price/ Discount Price )</th>
                         {{-- <th>Original Price</th>
                         <th>Discount Price</th> --}}
                         <th>Product Image</th>
@@ -82,19 +82,19 @@
                                         @foreach($row->attributes as $attr)
                                         <tr>
                                             <td>
-                                                <span class="badge bg-secondary">
+                                                <span style="width: 100%" class="badge bg-secondary">
                                                     {{ optional($attr->unitData)->unit_name ?? '-' }}
                                                 </span>
                                             </td>
 
                                             <td>
-                                                <span class="badge bg-success">
+                                                <span  style="width: 100%"  class="badge bg-success">
                                                     ₹{{ $attr->original_price }}
                                                 </span>
                                             </td>
 
                                             <td>
-                                                <span class="badge bg-danger">
+                                                <span style="width: 100%"   class="badge bg-danger">
                                                     ₹{{ $attr->discount_price }}
                                                 </span>
                                             </td>
