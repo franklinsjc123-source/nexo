@@ -21,6 +21,16 @@
     $type                   = ($id == '')   ? 'Create' : 'Update';
 
     ?>
+
+    <style>
+      .input-error{
+    border:1px solid red !important;
+}
+
+.select2-selection.input-error{
+    border:1px solid red !important;
+}
+    </style>
  <main class="app-wrapper">
      <div class="container-fluid">
 
@@ -321,6 +331,10 @@
  </main>
  <script>
 
+    $(document).on("change",".select2",function(){
+    $(this).next('.select2').find('.select2-selection').removeClass("input-error");
+});
+
     document.getElementById('product_image').addEventListener('change', function() {
 
     if (this.files.length > 3) {
@@ -440,64 +454,86 @@ $(document).ready(function () {
 });
 
 
-    $("#productForm").on("submit", function (e) {
+   $("#productForm").on("submit", function (e) {
 
     let isValid = true;
 
-      let category  = $(this).find('select[name="category"]').val();
-      let shop  = $(this).find('select[name="shop"]').val();
-      let product_name  = $(this).find('input[name="product_name"]').val();
-      if (category == '') {
-            isValid = false;
-            $(this).find('select[name="category"]').after('<div><span class="text-danger error-msg"> Please select category</span></div>');
-        }
+    // remove old errors
+    $(".error-msg").remove();
 
-
-         if (shop == '') {
-            isValid = false;
-            $(this).find('select[name="shop"]').after('<div><span class="text-danger error-msg"> Please select shop</span></div>');
-        }
-
-           if (product_name == '') {
-            isValid = false;
-            $(this).find('input[name="product_name"]').after('<span class="text-danger error-msg">Please enter product name</span>');
-        }
+    let category = $(this).find('select[name="category"]').val();
+    let shop = $(this).find('select[name="shop"]').val();
+    let product_name = $(this).find('input[name="product_name"]').val();
+    let product_description = $(this).find('textarea[name="product_description"]').val().trim();
 
 
 
+    let imageInput = document.getElementById("product_image");
+    let hasOldImage = $("#has_old_product_image").val();
 
+    if (imageInput.files.length > 3) {
+        isValid = false;
+        $("#product_image").after('<span class="text-danger error-msg">Maximum 3 images allowed</span>');
+    }
 
+    if (imageInput.files.length == 0 && hasOldImage == 0) {
+        isValid = false;
+        $("#product_image").after('<span class="text-danger error-msg">Please upload product image</span>');
+    }
 
-    $(".quantity-row").each(function (index) {
+    if (category == '') {
+        isValid = false;
+        $(this).find('select[name="category"]')
+            .closest('.col-xl-4')
+            .append('<span class="text-danger error-msg">Please select category</span>');
+    }
 
+    if (shop == '') {
+        isValid = false;
+        $(this).find('select[name="shop"]')
+            .closest('.col-xl-4')
+            .append('<span class="text-danger error-msg">Please select shop</span>');
+    }
 
+    if (product_name == '') {
+        isValid = false;
+        $(this).find('input[name="product_name"]').after('<span class="text-danger error-msg">Please enter product name</span>');
+    }
 
+    if (product_description == '') {
+        isValid = false;
+        $(this).find('textarea[name="product_description"]')
+            .after('<span class="text-danger error-msg">Please enter product description</span>');
+    }
 
-        let unit = $(this).find('select[name="unit[]"]').val();
-        let originalPrice = $(this).find('input[name="original_price[]"]').val();
-        let discountPrice = $(this).find('input[name="discount_price[]"]').val();
+    // Validate quantity rows
+$(".quantity-row").each(function () {
 
-        // remove old errors
-        $(this).find(".error-msg").remove();
+    let unit = $(this).find('select[name="unit[]"]');
+    let originalPrice = $(this).find('input[name="original_price[]"]');
+    let discountPrice = $(this).find('input[name="discount_price[]"]');
 
+    // remove old error
+    unit.next('.select2').find('.select2-selection').removeClass("input-error");
+    originalPrice.removeClass("input-error");
+    discountPrice.removeClass("input-error");
 
+    if (unit.val() == '') {
+        isValid = false;
+        unit.next('.select2').find('.select2-selection').addClass("input-error");
+    }
 
-        if (unit == '') {
-            isValid = false;
-            $(this).find('select[name="unit[]"]').after('<span class="text-danger error-msg">Please select unit</span>');
-        }
+    if (originalPrice.val() == '') {
+        isValid = false;
+        originalPrice.addClass("input-error");
+    }
 
-        if (originalPrice == '') {
-            isValid = false;
-            $(this).find('input[name="original_price[]"]').after('<span class="text-danger error-msg">Please enter original price</span>');
-        }
+    if (discountPrice.val() == '') {
+        isValid = false;
+        discountPrice.addClass("input-error");
+    }
 
-        if (discountPrice == '') {
-            isValid = false;
-            $(this).find('input[name="discount_price[]"]').after('<span class="text-danger error-msg">Please enter discount price</span>');
-        }
-
-    });
+});
 
     if (!isValid) {
         e.preventDefault();
