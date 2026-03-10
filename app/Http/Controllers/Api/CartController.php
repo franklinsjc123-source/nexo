@@ -111,7 +111,6 @@ class CartController extends Controller
 
     public function viewCart(Request $request)
     {
-
         $user_id = $request->input('user_id');
 
         if ($user_id != '') {
@@ -127,6 +126,9 @@ class CartController extends Controller
                 ], 404);
             }
 
+            // ==============================
+            // Offers List with is_used flag
+            // ==============================
             $offers = Offers::where('status', 1)
                 ->whereDate('expiry_date', '>=', Carbon::today())
                 ->get()
@@ -149,11 +151,64 @@ class CartController extends Controller
                 });
 
 
-            $delivery_address = Address::where('user_id', $user_id)->where('is_default', 1)->first();
+            // ==============================
+            // Delivery Address
+            // ==============================
+            $delivery_address = Address::where('user_id', $user_id)
+                ->where('is_default', 1)
+                ->first();
 
 
+            // ==============================
+            // Item Price
+            // ==============================
+            $item_price = CartItems::where('cart_id', $cart->id)
+                ->sum('total_price');
 
 
+            // ==============================
+            // Applied Offers
+            // ==============================
+            $appliedOffers = OffersUsed::where('cart_id', $cart->id)
+                ->where('user_id', $user_id)
+                ->pluck('offer_id');
+
+
+            // ==============================
+            // Discount Calculation
+            // ==============================
+            $discount = 0;
+
+            foreach ($appliedOffers as $offer_id) {
+
+                $offer = Offers::find($offer_id);
+
+                if ($offer) {
+
+                    $shop_total = CartItems::where('cart_id', $cart->id)
+                        ->where('shop_id', $offer->shop_id)
+                        ->sum('total_price');
+
+                    $discount += ($shop_total * $offer->discount_percentage) / 100;
+                }
+            }
+
+
+            // ==============================
+            // Delivery Charge
+            // ==============================
+            $delivery_charge = 50;
+
+
+            // ==============================
+            // Final Amount
+            // ==============================
+            $final_amount = $item_price + $delivery_charge - $discount;
+
+
+            // ==============================
+            // Cart Items
+            // ==============================
             $response = [
                 'id'            => $cart->id,
                 'user_id'       => $cart->user_id,
@@ -175,27 +230,30 @@ class CartController extends Controller
                 })
             ];
 
-            $cart_count = 0;
-            if ($user_id) {
-                $cart = Cart::where('user_id', $user_id)->first();
 
-                if ($cart) {
-                    $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
-                }
-            }
+            // ==============================
+            // Cart Count
+            // ==============================
+            $cart_count = CartItems::where('cart_id', $cart->id)->count();
+
 
             return response()->json([
                 'status' => 'success',
-                'cart_count'  => $cart_count,
-                'delivery_address'  => $delivery_address,
-                'offers'  => $offers,
+                'cart_count' => $cart_count,
+                'item_price' => $item_price,
+                'delivery_charge' => $delivery_charge,
+                'discount' => $discount,
+                'final_amount' => $final_amount,
+                'offers' => $offers,
+                'delivery_address' => $delivery_address,
                 'data' => $response
             ]);
-        } else {
-
-            $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
-            return response()->json(array($error_array), 400);
         }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Parameters Missing'
+        ], 400);
     }
 
     public function updateCartItem(Request $request)
