@@ -52,9 +52,9 @@ class CartController extends Controller
                 'message' => 'Unit not found'
             ], 404);
         }
-        
-        $price = $attribute->original_price;
-        $discount_price = $attribute->discount_price ?? 0;
+
+        $price = $attribute->discount_price;
+        $discount_price = $attribute->original_price ?? 0;
 
         $cart = Cart::firstOrCreate(
             ['user_id' => $user_id],
