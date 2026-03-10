@@ -80,7 +80,7 @@ class CartController extends Controller
                 'unit'             => $unit,
                 'quantity'         => $quantity,
                 'price'            => $price,
-                'discount_price'   => $discount_price,
+                'discount_price'   => $item->discount_price,
                 'total_price'      => $price * $quantity
             ]);
         }
