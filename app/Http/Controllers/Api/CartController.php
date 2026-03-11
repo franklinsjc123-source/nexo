@@ -26,7 +26,6 @@ class CartController extends Controller
         $unit       = $request->unit;
         $quantity   = $request->quantity ?? 1;
 
-
         if (!$product_id || !$user_id || !$unit) {
             return response()->json([
                 'status'  => false,
@@ -35,10 +34,6 @@ class CartController extends Controller
         }
 
         $product = Product::find($product_id);
-        $shop_id = $product->shop;
-
-        print_r($product);exit;
-
 
         if (!$product) {
             return response()->json([
@@ -46,6 +41,9 @@ class CartController extends Controller
                 'message' => 'Product not found'
             ], 404);
         }
+
+        // ✅ correct shop column
+        $shop_id = $product->shop;
 
         $attribute = ProductAttributes::where('product_id', $product_id)
             ->where('unit', $unit)
@@ -72,36 +70,28 @@ class CartController extends Controller
             ->first();
 
         if ($item) {
+
             $item->quantity = $quantity;
-            $item->total_price = $item->quantity * $item->price;
+            $item->total_price = $quantity * $item->price;
             $item->save();
         } else {
 
-
             CartItems::create([
-                'cart_id'          => $cart->id,
-                'product_id'       => $product_id,
-                'shop_id'          => $shop_id,
-                'unit'             => $unit,
-                'quantity'         => $quantity,
-                'price'            => $price,
-                'discount_price'   => $discount_price,
-                'total_price'      => $price * $quantity
+                'cart_id'        => $cart->id,
+                'product_id'     => $product_id,
+                'shop_id'        => $shop_id, // ✅ correct value
+                'unit'           => $unit,
+                'quantity'       => $quantity,
+                'price'          => $price,
+                'discount_price' => $discount_price,
+                'total_price'    => $price * $quantity
             ]);
         }
 
         $cart->total_amount = CartItems::where('cart_id', $cart->id)->sum('total_price');
         $cart->save();
 
-
-        $cart_count = 0;
-        if ($user_id) {
-            $cart = Cart::where('user_id', $user_id)->first();
-
-            if ($cart) {
-                $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
-            }
-        }
+        $cart_count = CartItems::where('cart_id', $cart->id)->count();
 
         return response()->json([
             'status'      => true,
