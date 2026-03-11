@@ -28,7 +28,7 @@ class DashboardController extends Controller
             $shop_count                 = 0;
             $customer_count             = 0;
             $order_count                = count(Order::get());
-            $product_count              = count(Product::where('shop_id', $shop_id)->get());
+            $product_count              = count(Product::where('shop', $shop_id)->get());
             $today_order_count          = Order::whereDate('created_at',  Carbon::today())->count();
             $direct_order_count         = count(DirectOrder::where('shop_id', $shop_id)->get());
             $today_direct_order_count   = DirectOrder::where('shop_id', $shop_id)->whereDate('created_at', Carbon::today())->count();
