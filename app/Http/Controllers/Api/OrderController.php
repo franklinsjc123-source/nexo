@@ -17,6 +17,7 @@ use App\Models\Address;
 
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\URL;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -160,7 +161,7 @@ class OrderController extends Controller
                 $pdf->save($adminInvoicePath);
 
                 $order->update([
-                    'invoice' => $adminInvoiceName
+                    'invoice' => URL::to('/') . '/uploads/order_invoice/' .$adminInvoiceName
                 ]);
 
                 /* ---------------- SHOP INVOICE ---------------- */
@@ -191,7 +192,7 @@ class OrderController extends Controller
                     Invoice::create([
                         'order_id'     => $order->id,
                         'shop_id'      => $shop_id,
-                        'invoice_path' => $shopInvoiceName
+                        'invoice_path' => URL::to('/') . '/uploads/shop_order_invoice/' . $shopInvoiceName
                     ]);
                 }
 
