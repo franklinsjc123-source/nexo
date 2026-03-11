@@ -14,101 +14,43 @@
 <main class="app-wrapper">
     <div class="container-fluid">
 
-        <div class="row mt-5">
-            <div class="col-md-6 col-xl-4 col-xxl-4">
-                <div class="card card-h-100 webGradient text-white">
-                     <a href="{{ route('orders') }}">
-                    <div class="card-body">
 
-                        <div class="d-flex justify-content-between gap-5 mb-5">
-                            <div>
-                                <h4 class="text-white mb-1">Total Orders</h4>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <div
-                                    class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">{{ $order_count ?? 0  }}</div>
-                            </div>
-                        </div>
+        <?php  if (Auth::user()->auth_level == 1) { ?>
 
-                    </div>
-                     </a>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-xl-4 col-xxl-4">
-                <div class="card card-h-100 IntelligenceGradient text-white">
-                    <a href="{{ route('direct-orders') }}">
+            <div class="row mt-5">
+                <div class="col-md-6 col-xl-4 col-xxl-4">
+                    <div class="card card-h-100 webGradient text-white">
+                        <a href="{{ route('orders') }}">
                         <div class="card-body">
+
                             <div class="d-flex justify-content-between gap-5 mb-5">
                                 <div>
-                                    <h4 class="text-white mb-1">Total Direct Orders</h4>
+                                    <h4 class="text-white mb-1">Total Orders</h4>
                                 </div>
                                 <div class="flex-shrink-0">
                                     <div
-                                        class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">
-                                    {{ $direct_order_count ?? 0  }}</div>
+                                        class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">{{ $order_count ?? 0  }}</div>
                                 </div>
                             </div>
+
                         </div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-xl-4 col-xxl-4">
-                <div class="card card-h-100 datascienceGradient text-white">
-                     <a href="{{ route('orders') }}">
-                    <div class="card-body">
-
-                        <div class="d-flex justify-content-between gap-5 mb-5">
-                            <div>
-                                <h4 class="text-white mb-1">Today Orders</h4>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <div
-                                    class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold"> {{ $today_order_count  ?? 0 }} </div>
-                            </div>
-                        </div>
-
+                        </a>
                     </div>
-                      </a>
                 </div>
-            </div>
-
-            <div class="col-md-6 col-xl-4 col-xxl-4">
-                <div class="card card-h-100 webGradient text-white">
-                     <a href="{{ route('direct-orders') }}">
-                    <div class="card-body">
-
-                        <div class="d-flex justify-content-between gap-5 mb-5">
-                            <div>
-                                <h4 class="text-white mb-1">Today  Direct Orders </h4>
-                            </div>
-                            <div class="flex-shrink-0">
-                                <div
-                                    class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">{{ $today_direct_order_count ?? 0  }}</div>
-                            </div>
-                        </div>
-
-                    </div>
-                     </a>
-                </div>
-            </div>
-
-            <?php  if (Auth::user()->auth_level != 4) { ?>
 
 
                 <div class="col-md-6 col-xl-4 col-xxl-4">
                     <div class="card card-h-100 IntelligenceGradient text-white">
-                        <a href="{{ route('shop') }}">
+                        <a href="{{ route('orders') }}">
                         <div class="card-body">
 
                             <div class="d-flex justify-content-between gap-5 mb-5">
                                 <div>
-                                    <h4 class="text-white mb-1">Total Shops</h4>
+                                    <h4 class="text-white mb-1">Today Orders</h4>
                                 </div>
                                 <div class="flex-shrink-0">
                                     <div
-                                        class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold"> {{ $shop_count  ?? 0 }} </div>
+                                        class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold"> {{ $today_order_count  ?? 0 }} </div>
                                 </div>
                             </div>
 
@@ -120,75 +62,203 @@
 
                 <div class="col-md-6 col-xl-4 col-xxl-4">
                     <div class="card card-h-100 datascienceGradient text-white">
-                    <a href="{{ route('customers') }}">
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-between gap-5 mb-5">
-                                <div>
-                                    <h4 class="text-white mb-1">Total Customers</h4>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <div
-                                        class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">{{ $customer_count ?? 0 }}</div>
+                        <a href="{{ route('product') }}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between gap-5 mb-5">
+                                    <div>
+                                        <h4 class="text-white mb-1">Total Prouducts</h4>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">
+                                        {{ $product_count ?? 0  }}</div>
+                                    </div>
                                 </div>
                             </div>
-
-                        </div>
                         </a>
                     </div>
                 </div>
 
 
-                <div class="col-md-6 col-xl-4 col-xxl-4">
-                    <div class="card card-h-100 webGradient text-white">
-                        <a href="{{ route('deliveryPerson') }}">
-                        <div class="card-body">
-
-                            <div class="d-flex justify-content-between gap-5 mb-5">
-                                <div>
-                                    <h4 class="text-white mb-1">Delivery Persons</h4>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <div
-                                        class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">
-                                    {{ $delivert_person_count ?? 0 }}</div>
-
-                                </div>
-                            </div>
-
-                        </div>
-                        </a>
-                    </div>
-                </div>
-
-
-
-
-            <?php  } ?>
-
-
-
-                <div class="col-md-6 col-xl-4 col-xxl-4">
-                <div class="card card-h-100 IntelligenceGradient text-white">
-                    <a href="{{ route('product') }}">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between gap-5 mb-5">
-                                <div>
-                                    <h4 class="text-white mb-1">Total Prouducts</h4>
-                                </div>
-                                <div class="flex-shrink-0">
-                                    <div
-                                        class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">
-                                    {{ $product_count ?? 0  }}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
             </div>
 
 
-        </div>
+        <?php } else {  ?>
+
+             <div class="row mt-5">
+                <div class="col-md-6 col-xl-4 col-xxl-4">
+                    <div class="card card-h-100 webGradient text-white">
+                        <a href="{{ route('orders') }}">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between gap-5 mb-5">
+                                <div>
+                                    <h4 class="text-white mb-1">Total Orders</h4>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <div
+                                        class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">{{ $order_count ?? 0  }}</div>
+                                </div>
+                            </div>
+
+                        </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-4 col-xxl-4">
+                    <div class="card card-h-100 IntelligenceGradient text-white">
+                        <a href="{{ route('direct-orders') }}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between gap-5 mb-5">
+                                    <div>
+                                        <h4 class="text-white mb-1">Total Direct Orders</h4>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">
+                                        {{ $direct_order_count ?? 0  }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-4 col-xxl-4">
+                    <div class="card card-h-100 datascienceGradient text-white">
+                        <a href="{{ route('orders') }}">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between gap-5 mb-5">
+                                <div>
+                                    <h4 class="text-white mb-1">Today Orders</h4>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <div
+                                        class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold"> {{ $today_order_count  ?? 0 }} </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-xl-4 col-xxl-4">
+                    <div class="card card-h-100 webGradient text-white">
+                        <a href="{{ route('direct-orders') }}">
+                        <div class="card-body">
+
+                            <div class="d-flex justify-content-between gap-5 mb-5">
+                                <div>
+                                    <h4 class="text-white mb-1">Today  Direct Orders </h4>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <div
+                                        class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">{{ $today_direct_order_count ?? 0  }}</div>
+                                </div>
+                            </div>
+
+                        </div>
+                        </a>
+                    </div>
+                </div>
+
+
+
+
+                    <div class="col-md-6 col-xl-4 col-xxl-4">
+                        <div class="card card-h-100 IntelligenceGradient text-white">
+                            <a href="{{ route('shop') }}">
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between gap-5 mb-5">
+                                    <div>
+                                        <h4 class="text-white mb-1">Total Shops</h4>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold"> {{ $shop_count  ?? 0 }} </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6 col-xl-4 col-xxl-4">
+                        <div class="card card-h-100 datascienceGradient text-white">
+                        <a href="{{ route('customers') }}">
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between gap-5 mb-5">
+                                    <div>
+                                        <h4 class="text-white mb-1">Total Customers</h4>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">{{ $customer_count ?? 0 }}</div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6 col-xl-4 col-xxl-4">
+                        <div class="card card-h-100 webGradient text-white">
+                            <a href="{{ route('deliveryPerson') }}">
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between gap-5 mb-5">
+                                    <div>
+                                        <h4 class="text-white mb-1">Delivery Persons</h4>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">
+                                        {{ $delivert_person_count ?? 0 }}</div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            </a>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-6 col-xl-4 col-xxl-4">
+                    <div class="card card-h-100 IntelligenceGradient text-white">
+                        <a href="{{ route('product') }}">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between gap-5 mb-5">
+                                    <div>
+                                        <h4 class="text-white mb-1">Total Prouducts</h4>
+                                    </div>
+                                    <div class="flex-shrink-0">
+                                        <div
+                                            class="h-48px w-48px bg-white fs-5 rounded d-flex justify-content-center align-items-center text-black fw-semibold">
+                                        {{ $product_count ?? 0  }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+
+            </div>
+
+        <?php }  ?>
+
+
+
 
         <?php  if (Auth::user()->auth_level != 4) { ?>
             <div class="card mt-4">
