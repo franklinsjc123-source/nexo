@@ -76,8 +76,9 @@ class OrderController extends Controller
 
     public function placeOrder(Request $request)
     {
-        $user_id = $request->user_id;
-        $payment_type = $request->payment_type;
+        $user_id        = $request->user_id;
+        $delivery_id    = $request->delivery_id;
+        $payment_type   = $request->payment_type;
 
         $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
 
@@ -101,6 +102,7 @@ class OrderController extends Controller
                 $order = Order::create([
                     'order_id' => $order_number,
                     'customer_id' => $user_id,
+                    'delivery_id' => $delivery_id,
                     'order_status' => 1,
                     'payment_type' => 'cod',
                     'amount' => $amount,
