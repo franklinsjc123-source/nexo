@@ -13,11 +13,14 @@ use App\Models\Order;
 use App\Models\OrderItems;
 use App\Models\Shop;
 use App\Models\Invoice;
+use App\Models\Address;
+
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+
 class OrderController extends Controller
 {
 
@@ -74,11 +77,13 @@ class OrderController extends Controller
 
 
 
+
+
     public function placeOrder(Request $request)
     {
-        $user_id        = $request->user_id;
-        $delivery_id    = $request->delivery_id;
-        $payment_type   = $request->payment_type;
+        $user_id      = $request->user_id;
+        $delivery_id  = $request->delivery_id;
+        $payment_type = $request->payment_type;
 
         $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
 
@@ -91,6 +96,8 @@ class OrderController extends Controller
 
         $amount = $cart->total_amount;
 
+        /* ---------------- COD ORDER ---------------- */
+
         if ($payment_type == 'cod') {
 
             DB::beginTransaction();
@@ -100,29 +107,29 @@ class OrderController extends Controller
                 $order_number = 'ORD' . time();
 
                 $order = Order::create([
-                    'order_id' => $order_number,
-                    'customer_id' => $user_id,
-                    'delivery_id' => $delivery_id,
-                    'order_status' => 1,
-                    'payment_type' => 'cod',
-                    'amount' => $amount,
-                    'ship_amount' => 0,
-                    'payment_status' => 0,
+                    'order_id'        => $order_number,
+                    'customer_id'     => $user_id,
+                    'delivery_id'     => $delivery_id,
+                    'order_status'    => 1,
+                    'payment_type'    => 'cod',
+                    'amount'          => $amount,
+                    'ship_amount'     => 0,
+                    'payment_status'  => 0,
                     'is_coupon_applied' => 0
                 ]);
 
-                /* ---------------- ORDER ITEMS INSERT ---------------- */
+                /* ---------------- ORDER ITEMS ---------------- */
 
                 foreach ($cart->items as $item) {
 
                     OrderItems::create([
-                        'order_id' => $order->id,
-                        'shop_id' => $item->shop_id,
-                        'product_id' => $item->product_id,
-                        'qty' => $item->quantity,
-                        'unit' => $item->unit,
+                        'order_id'      => $order->id,
+                        'shop_id'       => $item->shop_id,
+                        'product_id'    => $item->product_id,
+                        'qty'           => $item->quantity,
+                        'unit'          => $item->unit,
                         'product_price' => $item->price,
-                        'price' => $item->total_price
+                        'price'         => $item->total_price
                     ]);
                 }
 
@@ -132,14 +139,22 @@ class OrderController extends Controller
 
                 $company = Company::first();
 
+                $delivery_address = Address::find($delivery_id);
+
                 /* ---------------- ADMIN INVOICE ---------------- */
 
                 $adminInvoiceName = 'Order_' . $order_number . '.pdf';
+
                 $adminInvoicePath = public_path('uploads/order_invoice/' . $adminInvoiceName);
 
                 $pdf = Pdf::loadView(
                     'backend.invoice.generate_order_invoice',
-                    compact('order_items', 'order', 'company')
+                    [
+                        'order_items' => $order_items,
+                        'order_details' => $order,
+                        'company' => $company,
+                        'delivery_address' => $delivery_address
+                    ]
                 )->setPaper('A4', 'portrait');
 
                 $pdf->save($adminInvoicePath);
@@ -148,7 +163,7 @@ class OrderController extends Controller
                     'invoice' => $adminInvoiceName
                 ]);
 
-                /* ---------------- SHOP WISE INVOICE ---------------- */
+                /* ---------------- SHOP INVOICE ---------------- */
 
                 $shopItems = $order_items->groupBy('shop_id');
 
@@ -166,23 +181,24 @@ class OrderController extends Controller
                             'order_items' => $items,
                             'order_details' => $order,
                             'shop_details' => $shop,
-                            'company' => $company
+                            'company' => $company,
+                            'delivery_address' => $delivery_address
                         ]
                     )->setPaper('A4', 'portrait');
 
                     $pdf->save($shopInvoicePath);
 
                     Invoice::create([
-                        'order_id' => $order->id,
-                        'shop_id' => $shop_id,
+                        'order_id'     => $order->id,
+                        'shop_id'      => $shop_id,
                         'invoice_path' => $shopInvoiceName
                     ]);
                 }
 
                 /* ---------------- CLEAR CART ---------------- */
 
-                CartItems::where('cart_id', $cart->id)->delete();
-                $cart->delete();
+                // CartItems::where('cart_id', $cart->id)->delete();
+                // $cart->delete();
 
                 DB::commit();
 
