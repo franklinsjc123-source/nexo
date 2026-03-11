@@ -35,6 +35,11 @@ class CartController extends Controller
         }
 
         $product = Product::find($product_id);
+        $shop_id = $product->shop;
+
+        print_r($product);exit;
+
+
         if (!$product) {
             return response()->json([
                 'status'  => false,
@@ -76,7 +81,7 @@ class CartController extends Controller
             CartItems::create([
                 'cart_id'          => $cart->id,
                 'product_id'       => $product_id,
-                'shop_id'          => $product->shop,
+                'shop_id'          => $shop_id,
                 'unit'             => $unit,
                 'quantity'         => $quantity,
                 'price'            => $price,
