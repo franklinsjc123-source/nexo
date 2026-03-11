@@ -11,11 +11,13 @@ use App\Models\Cart;
 use App\Models\CartItems;
 use App\Models\Order;
 use App\Models\OrderItems;
+use App\Models\Shop;
+use App\Models\Invoice;
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\DB;
 class OrderController extends Controller
 {
 
@@ -75,7 +77,7 @@ class OrderController extends Controller
     public function placeOrder(Request $request)
     {
         $user_id = $request->user_id;
-        $payment_type = $request->payment_type; // razorpay / cod
+        $payment_type = $request->payment_type;
 
         $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
 
@@ -90,63 +92,116 @@ class OrderController extends Controller
 
         if ($payment_type == 'cod') {
 
-            $order_id = 'ORD' . time();
-            $pdfFileName = 'Invoice_' . $order_id . '_' . date('Ymd_His') . '.pdf';
-            $pdfPath = public_path('uploads/order_invoice/' . $pdfFileName);
+            DB::beginTransaction();
 
-            $order = Order::create([
-                'order_id' => $order_id,
-                'customer_id' => $user_id,
-                'order_status' => 1,
-                'payment_type' => 'cod',
-                'amount' => $amount,
-                'ship_amount' => 0,
-                'payment_status' => 0,
-                'is_coupon_applied' => 0,
-                'invoice' => $pdfPath
-            ]);
+            try {
 
-            foreach ($cart->items as $item) {
+                $order_number = 'ORD' . time();
 
-                OrderItems::create([
-                    'order_id' => $order->id,
-                    'product_id' => $item->product_id,
-                    'product_name' => $item->product->product_name ?? '',
-                    'qty' => $item->quantity,
-                    'unit' => $item->unit,
-                    'product_price' => $item->price,
-                    'price' => $item->total_price
+                $order = Order::create([
+                    'order_id' => $order_number,
+                    'customer_id' => $user_id,
+                    'order_status' => 1,
+                    'payment_type' => 'cod',
+                    'amount' => $amount,
+                    'ship_amount' => 0,
+                    'payment_status' => 0,
+                    'is_coupon_applied' => 0
+                ]);
+
+                /* ---------------- ORDER ITEMS INSERT ---------------- */
+
+                foreach ($cart->items as $item) {
+
+                    OrderItems::create([
+                        'order_id' => $order->id,
+                        'shop_id' => $item->shop_id,
+                        'product_id' => $item->product_id,
+                        'product_name' => $item->product->product_name ?? '',
+                        'qty' => $item->quantity,
+                        'unit' => $item->unit,
+                        'product_price' => $item->price,
+                        'price' => $item->total_price
+                    ]);
+                }
+
+                $order_items = OrderItems::with('product')
+                    ->where('order_id', $order->id)
+                    ->get();
+
+                $company = Company::first();
+
+                /* ---------------- ADMIN INVOICE ---------------- */
+
+                $adminInvoiceName = 'Order_' . $order_number . '.pdf';
+                $adminInvoicePath = public_path('uploads/order_invoice/' . $adminInvoiceName);
+
+                $pdf = Pdf::loadView(
+                    'backend.invoice.generate_order_invoice',
+                    compact('order_items', 'order', 'company')
+                )->setPaper('A4', 'portrait');
+
+                $pdf->save($adminInvoicePath);
+
+                $order->update([
+                    'invoice' => $adminInvoiceName
+                ]);
+
+                /* ---------------- SHOP WISE INVOICE ---------------- */
+
+                $shopItems = $order_items->groupBy('shop_id');
+
+                foreach ($shopItems as $shop_id => $items) {
+
+                    $shop = Shop::find($shop_id);
+
+                    $shopInvoiceName = 'Shop_' . $order_number . '_shop_' . $shop_id . '.pdf';
+
+                    $shopInvoicePath = public_path('uploads/shop_order_invoice/' . $shopInvoiceName);
+
+                    $pdf = Pdf::loadView(
+                        'backend.invoice.generate_shop_invoice',
+                        [
+                            'order_items' => $items,
+                            'order_details' => $order,
+                            'shop_details' => $shop,
+                            'company' => $company
+                        ]
+                    )->setPaper('A4', 'portrait');
+
+                    $pdf->save($shopInvoicePath);
+
+                    Invoice::create([
+                        'order_id' => $order->id,
+                        'shop_id' => $shop_id,
+                        'invoice_path' => $shopInvoiceName
+                    ]);
+                }
+
+                /* ---------------- CLEAR CART ---------------- */
+
+                CartItems::where('cart_id', $cart->id)->delete();
+                $cart->delete();
+
+                DB::commit();
+
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Order placed successfully',
+                    'order_id' => $order_number
+                ]);
+            } catch (\Exception $e) {
+
+                DB::rollback();
+
+                return response()->json([
+                    'status' => false,
+                    'message' => $e->getMessage()
                 ]);
             }
-
-            $order_details = Order::where('id', $order->id)->first();
-
-            $order_items = OrderItems::with('product')
-                ->where('order_id', $order->id)
-                ->get();
-
-            $company = Company::orderBy('id', 'asc')->first();
-
-            $pdf = Pdf::loadView(
-                'backend.invoice.generate_order_invoice',
-                compact('order_items', 'order_details', 'company')
-            )
-                ->setPaper('A4', 'portrait')
-                ->setOptions(['isRemoteEnabled' => true]);
-
-            $pdf->save($pdfPath);
-
-            // clear cart
-            // CartItems::where('cart_id', $cart->id)->delete();
-            // $cart->delete();
-
-            return response()->json([
-                'status' => true,
-                'message' => 'Order placed successfully (Cash on Delivery)',
-                'order_id' => $order->order_id
-            ]);
         }
 
+        /* ---------------- RAZORPAY ---------------- */
 
         if ($payment_type == 'razorpay') {
 

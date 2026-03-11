@@ -371,9 +371,38 @@
                 </td>
 
                 <!-- Right column: Customer address -->
-                <td style="width:50%; vertical-align: top; padding: 10px;">
-                <!-- You can replace this with dynamic customer address -->
-                Customer address comes here
+                 <td style="width:50%; vertical-align: top; padding: 10px;">
+
+                         <table style="width: 100%; border-collapse: collapse;">
+
+                     <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Shop</td>
+                    <td style="border: none; ">:</td>
+                    <td style="border: none; padding: 4px;">{{ $delivery_address->name }}</td>
+                    </tr>
+
+                     <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Mobile</td>
+                    <td style="border: none; ">:</td>
+                    <td style="border: none; padding: 4px;">{{  $delivery_address->mobile }}</td>
+                    </tr>
+
+                    <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Address</td>
+                    <td style="border: none; ">:</td>
+
+                    <td style="border: none; padding: 4px;">{{ $delivery_address->address }}</td>
+                    </tr>
+                    <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Pincode</td>
+                    <td style="border: none; ">:</td>
+
+
+                    <td style="border: none; padding: 4px;">{{ $delivery_address->pincode }}</td>
+                    </tr>
+
+                </table>
+
                 </td>
             </tr>
         </tbody>

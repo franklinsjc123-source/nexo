@@ -104,8 +104,8 @@
                                 </td>
                                 <td>
                                     <?php if($row->product_image ) { ?>
-                                        <img class="mt-2" src="<?= $row->product_image ?>" alt="image description" width="50" height="50">
-                                    <?php }  ?>
+                                    <img class="mt-2"
+                                        src="<?= !empty($row->product_image) ? $row->product_image : asset('backend_assets/images/no_Image.png') ?>" alt="image" width="50" height="50">                                <?php }  ?>
 
                                 </td>
                                 <td><a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" onclick="changeStatus('<?php echo $row->id ?>','<?php echo ($row->status == 1) ? 0 : 1 ?>','Product')" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">

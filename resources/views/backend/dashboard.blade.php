@@ -15,7 +15,7 @@
     <div class="container-fluid">
 
 
-        <?php  if (Auth::user()->auth_level == 1) { ?>
+        <?php  if (Auth::user()->auth_level == 4) { ?>
 
             <div class="row mt-5">
                 <div class="col-md-6 col-xl-4 col-xxl-4">

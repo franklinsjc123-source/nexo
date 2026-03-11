@@ -331,13 +331,13 @@
 
           <thead>
             <tr>
-                <th>Customer Bill To:</th>
+                {{-- <th>Customer Bill To:</th> --}}
                 <th>Shipping Address:</th>
             </tr>
         </thead>
       <tbody>
             <tr>
-                <td style="width:50%; border-right:1px solid #444; vertical-align: top; padding: 10px;">
+                {{-- <td style="width:50%; border-right:1px solid #444; vertical-align: top; padding: 10px;">
                 <table style="width: 100%; border-collapse: collapse;">
 
                      <tr>
@@ -367,10 +367,40 @@
                     <td style="border: none; padding: 4px;">{{ $shop_details->gst_no }}</td>
                     </tr>
                 </table>
-                </td>
+                </td> --}}
 
                 <td style="width:50%; vertical-align: top; padding: 10px;">
-                        Customer address comes here
+
+                         <table style="width: 100%; border-collapse: collapse;">
+
+                     <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Shop</td>
+                    <td style="border: none; ">:</td>
+                    <td style="border: none; padding: 4px;">{{ $delivery_address->name }}</td>
+                    </tr>
+
+                     <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Mobile</td>
+                    <td style="border: none; ">:</td>
+                    <td style="border: none; padding: 4px;">{{  $delivery_address->mobile }}</td>
+                    </tr>
+
+                    <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Address</td>
+                    <td style="border: none; ">:</td>
+
+                    <td style="border: none; padding: 4px;">{{ $delivery_address->address }}</td>
+                    </tr>
+                    <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Pincode</td>
+                    <td style="border: none; ">:</td>
+
+
+                    <td style="border: none; padding: 4px;">{{ $delivery_address->pincode }}</td>
+                    </tr>
+
+                </table>
+
                 </td>
             </tr>
         </tbody>

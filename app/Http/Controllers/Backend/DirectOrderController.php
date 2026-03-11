@@ -8,6 +8,7 @@ use App\Models\DirectOrderItems;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Shop;
 use App\Models\Company;
+use App\Models\Address;
 
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\URL;
@@ -113,11 +114,13 @@ class DirectOrderController extends Controller
         $order_items = DirectOrderItems::where('order_id', $id)->get();
 
         $company = Company::orderBy('id', 'asc')->first();
+        $delivery_address = Address::where('id', $order_details->delivery_id)->first();
+
 
 
         $pdf = Pdf::loadView(
             'backend.invoice.generate_invoice',
-            compact('order_items', 'order_details','company','shop_details')
+            compact('order_items', 'order_details','company','shop_details','delivery_address')
         )
             ->setPaper('A4', 'portrait')
             ->setOptions([
