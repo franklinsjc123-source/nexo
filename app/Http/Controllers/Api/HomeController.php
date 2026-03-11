@@ -58,7 +58,7 @@ class HomeController extends Controller
             return response()->json([
                 'status'  => 'success',
                 'message' => 'Data received successfully',
-                'delivery' => !$checkPincodeExistence ? 'not available' : 'available.',
+                'delivery' => !$checkPincodeExistence ? 'Not available' : 'Available',
                 'cart_count' => $cart_count,
                 'data'    => [
                     'categories' => $category,
