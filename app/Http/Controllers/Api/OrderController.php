@@ -131,8 +131,6 @@ class OrderController extends Controller
     }
 
 
-
-
     public function getAllShopOrders(Request $request)
     {
         $user_id = $request->input('user_id');
@@ -164,7 +162,7 @@ class OrderController extends Controller
                 $items = $order->items->where('shop_id', $shop_id);
 
                 $total_qty = $items->sum('qty');
-                $total_amount = $items->sum('price'); 
+                $total_amount = $items->sum('price');
             } else {
                 $total_qty = $order->items->sum('qty');
                 $total_amount = $order->items->sum('price');
@@ -187,7 +185,6 @@ class OrderController extends Controller
             'data'    => $data
         ], 200);
     }
-
 
 
     public function getShopOrderDetails(Request $request)
@@ -261,6 +258,41 @@ class OrderController extends Controller
             'data' => $data
         ], 200);
     }
+
+    public function changeOrderStatus(Request $request)
+    {
+        $order_id     = $request->order_id;
+        $order_status = $request->order_status;
+
+        if (!$order_id || $order_status === null) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order ID and Order Status are required'
+            ], 400);
+        }
+
+        $order = Order::where('id', $order_id)->first();
+
+        if (!$order) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order not found'
+            ], 404);
+        }
+
+        $order->order_status = $order_status;
+        $order->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order status updated successfully'
+        ], 200);
+    }
+
+
+
+
+
 
 
 

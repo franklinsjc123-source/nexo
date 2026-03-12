@@ -62,6 +62,9 @@ Route::get('/getOrderDetails',[OrderController::class,"getOrderDetails"])->name(
 Route::get('/getAllShopOrders',[OrderController::class,"getAllShopOrders"])->name('getAllShopOrders');
 Route::get('/getShopOrderDetails',[OrderController::class,"getShopOrderDetails"])->name('getShopOrderDetails');
 
+Route::get('/changeOrderStatus',[OrderController::class,"changeOrderStatus"])->name('changeOrderStatus');
+
+
 
 Route::post('applyOffer', [OfferController::class, 'applyOffer'])->name('applyOffer');
 Route::post('removeOffer', [OfferController::class, 'removeOffer'])->name('removeOffer');
