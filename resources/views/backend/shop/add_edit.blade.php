@@ -19,6 +19,8 @@
     $address                = isset($records->address) ? $records->address : '';
     $photo_path             = isset($records->file_path) ? $records->file_path:'';
     $status                 = isset($records->status) ? $records->status:'';
+    $rating                 = isset($records->rating) ? $records->rating:'';
+
     $type                   = ($id == '')   ? 'Create' : 'Update';
 
     ?>
@@ -218,16 +220,16 @@
                                             <select class="form-control select2" id="rating" name="rating"  data-placeholder="Select">
 
                                                 <option value="">--Select--</option>
-                                                <option value="0.5">0.5</option>
-                                                <option value="1.0">1.0</option>
-                                                <option value="1.5">1.5</option>
-                                                <option value="2.0">2.0</option>
-                                                <option value="2.5">2.5</option>
-                                                <option value="3.0">3.0</option>
-                                                <option value="3.5">3.5</option>
-                                                <option value="4.0">4.0</option>
-                                                <option value="4.5">4.5</option>
-                                                <option value="5.0">5.0</option>
+                                                <option value="0.5" {{ $rating == 0.5 ? 'selected' : '' }}>0.5</option>
+                                                <option value="1.0" {{ $rating == 1.0 ? 'selected' : '' }}>1.0</option>
+                                                <option value="1.5" {{ $rating == 1.5 ? 'selected' : '' }}>1.5</option>
+                                                <option value="2.0" {{ $rating == 2.0 ? 'selected' : '' }}>2.0</option>
+                                                <option value="2.5" {{ $rating == 2.5 ? 'selected' : '' }}>2.5</option>
+                                                <option value="3.0" {{ $rating == 3.0 ? 'selected' : '' }}>3.0</option>
+                                                <option value="3.5" {{ $rating == 3.5 ? 'selected' : '' }}>3.5</option>
+                                                <option value="4.0" {{ $rating == 4.0 ? 'selected' : '' }}>4.0</option>
+                                                <option value="4.5" {{ $rating == 4.5 ? 'selected' : '' }}>4.5</option>
+                                                <option value="5.0" {{ $rating == 5.0 ? 'selected' : '' }}>5.0</option>
                                             </select>
 
                                     </div>
