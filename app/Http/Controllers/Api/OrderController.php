@@ -407,7 +407,7 @@ class OrderController extends Controller
                     ->where('order_id', $order->id)
                     ->get();
 
-                
+
                 $company = Company::first();
 
                 $delivery_address = Address::find($delivery_id);
@@ -465,8 +465,8 @@ class OrderController extends Controller
                 }
 
 
-                // CartItems::where('cart_id', $cart->id)->delete();
-                // $cart->delete();
+                CartItems::where('cart_id', $cart->id)->delete();
+                $cart->delete();
 
                 DB::commit();
 
