@@ -285,7 +285,7 @@
             <!-- LOGO: Replace src with your actual logo path e.g. src="{{ public_path('images/logo.png') }}" -->
             <td class="header-logo-cell" style="width:20%;">
                 <img
-                    src="{{ public_path('backend_assets/images/invoice.jpg') }}"
+                    src="https://nexoocart.in/backend_assets/images/invoice.jpg"
                     alt="LOgo"
                     width="100"
                     height="100"
@@ -499,7 +499,7 @@
                       <tr>
                         <td >Advance</td>
                         <td class="rb-colon">:</td>
-                        <td class="rb-val text-right" ><span style="font-family:  DejaVu Sans, sans-serif;">₹</span> <b style="color:blue">{{ number_format ( ($total_amount +  ( $total_amount*0.18 )) * 0.10,2) }} </b> </td>
+                        <td class="rb-val text-right" ><span style="font-family:  DejaVu Sans, sans-serif;">₹</span> <b style="color:blue">{{ number_format ( ($total_amount +  ( $total_amount*0.18 )) * 0.30,2) }} </b> </td>
                     </tr>
                     <tr>
                         <td  style="white-space: nowrap;" >Delivery Charges</td>
