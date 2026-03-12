@@ -412,7 +412,7 @@ class OrderController extends Controller
                 $delivery_address = Address::find($delivery_id);
 
 
-                $adminInvoiceName = 'Order_' . $order_number . '.pdf';
+                $adminInvoiceName = 'Order_' . $order_number . date('Ymd_His') . '.pdf';
 
                 $adminInvoicePath = public_path('uploads/order_invoice/' . $adminInvoiceName);
 
@@ -439,7 +439,7 @@ class OrderController extends Controller
 
                     $shop = Shop::find($shop_id);
 
-                    $shopInvoiceName = 'Shop_' . $order_number . '_shop_' . $shop_id . '.pdf';
+                    $shopInvoiceName = 'Shop_' . $order_number . '_shop_' . $shop_id . date('Ymd_His') . '.pdf';
 
                     $shopInvoicePath = public_path('uploads/shop_order_invoice/' . $shopInvoiceName);
 
