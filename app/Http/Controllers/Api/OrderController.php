@@ -95,7 +95,7 @@ class OrderController extends Controller
             $products[] = [
                 'product_name' => $item->product->product_name ?? '',
                 'qty'          => $item->qty,
-                'unit'         => $item->unit,
+                'unit'         =>  $item->unitData->unit_name ?? '',
                 'price'        => $item->product_price,
                 'total_amount' => $item->price
             ];

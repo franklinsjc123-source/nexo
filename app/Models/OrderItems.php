@@ -12,9 +12,13 @@ class OrderItems extends Model
     protected $guarded = ['id'];
 
 
-       public function product()
+    public function product()
     {
         return $this->belongsTo(Product::class, 'product_id');
     }
 
+    public function unitData()
+    {
+        return $this->belongsTo(Unit::class, 'unit'); // unit = unit_id
+    }
 }
