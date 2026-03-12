@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Shop;
 use App\Models\User;
 use App\Models\Order;
+use App\Models\OrderItems;
 use App\Models\DirectOrder;
 use App\Models\DeliveryPerson;
 use App\Models\Product;
@@ -27,9 +28,9 @@ class DashboardController extends Controller
 
             $shop_count                 = 0;
             $customer_count             = 0;
-            $order_count                = count(Order::get());
+            $order_count                = $order_count = OrderItems::where('shop_id', $shop_id)->distinct('order_id')->count('order_id');
             $product_count              = count(Product::where('shop', $shop_id)->get());
-            $today_order_count          = Order::where('shop', $shop_id)->whereDate('created_at',  Carbon::today())->count();
+            $today_order_count          = OrderItems::join('orders', 'orders.id', '=', 'order_items.order_id')->where('order_items.shop_id', $shop_id)->whereDate('orders.created_at', Carbon::today())->distinct('order_items.order_id')->count('order_items.order_id');;
             $direct_order_count         = count(DirectOrder::where('shop_id', $shop_id)->get());
             $today_direct_order_count   = DirectOrder::where('shop_id', $shop_id)->whereDate('created_at', Carbon::today())->count();
             $delivert_person_count      = 0;
