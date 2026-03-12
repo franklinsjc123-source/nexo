@@ -164,7 +164,7 @@ class OrderController extends Controller
                 $items = $order->items->where('shop_id', $shop_id);
 
                 $total_qty = $items->sum('qty');
-                $total_amount = $items->sum('price'); // shop-wise amount
+                $total_amount = $items->sum('price'); 
             } else {
                 $total_qty = $order->items->sum('qty');
                 $total_amount = $order->items->sum('price');
@@ -218,7 +218,6 @@ class OrderController extends Controller
 
         foreach ($order->items as $item) {
 
-            // shop filter
             if ($shop_id && $item->shop_id != $shop_id) {
                 continue;
             }
