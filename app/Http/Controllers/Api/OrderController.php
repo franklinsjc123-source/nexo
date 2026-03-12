@@ -49,6 +49,7 @@ class OrderController extends Controller
             $total_qty = $order->items->sum('qty');
 
             $data[] = [
+                'id'             => $order->id,
                 'order_id'       => $order->order_id,
                 'total_quantity' => $total_qty,
                 'order_status'   => $order->order_status,
@@ -71,8 +72,10 @@ class OrderController extends Controller
         $order_id = $request->order_id;
 
         $order = Order::with(['items.product'])
-            ->where('order_id', $order_id)
+            ->where('id', $order_id)
             ->first();
+
+
 
         if (!$order) {
             return response()->json([
@@ -81,12 +84,17 @@ class OrderController extends Controller
             ], 404);
         }
 
-        $address = Address::find($order->delivery_id);
+
+        $address = Address::where('id', $order->delivery_id)
+            ->select('name', 'mobile', 'address', 'pincode')
+            ->first();
 
         $products = [];
+        $shop_names = [];
         $total_qty = 0;
 
         foreach ($order->items as $item) {
+
 
             $products[] = [
                 'product_name' => $item->product->product_name ?? '',
@@ -97,10 +105,19 @@ class OrderController extends Controller
             ];
 
             $total_qty += $item->qty;
+
+            // collect shop names
+            $shop = Shop::find($item->shop_id);
+            if ($shop) {
+                $shop_names[] = $shop->shop_name;
+            }
         }
+
+        $shop_names = implode(', ', array_unique($shop_names));
 
         $data = [
             'order_id'        => $order->order_id,
+            'shop_names'      => $shop_names,
             'payment_mode'    => $order->payment_type,
             'order_status'    => $order->order_status,
             'delivery_fee'    => $order->ship_amount,
