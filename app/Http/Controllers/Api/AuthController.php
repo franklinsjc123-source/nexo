@@ -162,6 +162,7 @@ class AuthController extends Controller
                 'name'          => $name,
                 'email'         => $email,
                 'mobile'        => $mobile,
+                'otp'           => '1234',
                 'referral_code' => $referral_code,
                 'auth_level'    => 3,
                 'created_at'    => now()
