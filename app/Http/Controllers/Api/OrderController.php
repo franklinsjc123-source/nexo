@@ -368,7 +368,6 @@ class OrderController extends Controller
 
         $amount = $cart->total_amount;
 
-        /* ---------------- COD ORDER ---------------- */
 
         if ($payment_type == 'cod') {
 
@@ -390,7 +389,6 @@ class OrderController extends Controller
                     'is_coupon_applied' => 0
                 ]);
 
-                /* ---------------- ORDER ITEMS ---------------- */
 
                 foreach ($cart->items as $item) {
 
@@ -413,7 +411,6 @@ class OrderController extends Controller
 
                 $delivery_address = Address::find($delivery_id);
 
-                /* ---------------- ADMIN INVOICE ---------------- */
 
                 $adminInvoiceName = 'Order_' . $order_number . '.pdf';
 
@@ -435,7 +432,6 @@ class OrderController extends Controller
                     'invoice' => URL::to('/') . '/uploads/order_invoice/' . $adminInvoiceName
                 ]);
 
-                /* ---------------- SHOP INVOICE ---------------- */
 
                 $shopItems = $order_items->groupBy('shop_id');
 
@@ -467,10 +463,9 @@ class OrderController extends Controller
                     ]);
                 }
 
-                /* ---------------- CLEAR CART ---------------- */
 
-                CartItems::where('cart_id', $cart->id)->delete();
-                $cart->delete();
+                // CartItems::where('cart_id', $cart->id)->delete();
+                // $cart->delete();
 
                 DB::commit();
 
@@ -490,7 +485,6 @@ class OrderController extends Controller
             }
         }
 
-        /* ---------------- RAZORPAY ---------------- */
 
         if ($payment_type == 'razorpay') {
 
