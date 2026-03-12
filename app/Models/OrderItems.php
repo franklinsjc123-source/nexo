@@ -19,6 +19,6 @@ class OrderItems extends Model
 
     public function unitData()
     {
-        return $this->belongsTo(Unit::class, 'unit'); // unit = unit_id
+        return $this->belongsTo(Unit::class, 'unit'); 
     }
 }
