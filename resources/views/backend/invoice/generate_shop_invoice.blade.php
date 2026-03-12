@@ -285,7 +285,7 @@
             <!-- LOGO: Replace src with your actual logo path e.g. src="{{ public_path('images/logo.png') }}" -->
             <td class="header-logo-cell" style="width:20%;">
                 <img
-                    src="https://nexoocart.in/backend_assets/images/invoice.jpg"
+                   src="{{ public_path('backend_assets/images/invoice.jpg') }}"
                     alt="LOgo"
                     width="100"
                     height="100"
