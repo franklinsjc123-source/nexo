@@ -24,7 +24,7 @@
         <tr style="border:none !important;">
 
             <td width="10%" style="border:none;">
-                <img  src="{{ public_path('backend_assets/images/invoice.jpg') }}" style="  border-radius: 50px; height :80px; width:80px">
+                <img  src="https://nexoocart.in/backend_assets/images/invoice.jpg" style="  border-radius: 50px; height :80px; width:80px">
             </td>
 
             <td width="60%" style="border:none; text-align:center;">
