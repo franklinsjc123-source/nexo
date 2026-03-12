@@ -415,14 +415,16 @@
     <table class="items-table " style="margin-top:10px">
         <thead>
             <tr>
-                <th style="width:28px;">#</th>
+                <th style="width:28px;">S.No</th>
                 <th>Item Name</th>
                 <th style="width:100px;">HSN/ SAC</th>
+                <th   style="width:100px; text-align:right">Price</th>
+
                 <th   style="width:100px; text-align:right">Quantity</th>
                 <th style="width:100px; text-align:right">Amount(<span style="font-family: DejaVu Sans, sans-serif;">₹</span>)</th>
             </tr>
         </thead>
-        <tbody>
+         <tbody>
             <!-- Item Row -->
 
             <?php
@@ -430,14 +432,19 @@
             $total_amount = 0;
 
             foreach($order_items as $key=>$io) {
-                    $total_amount  = $total_amount +  $io->amount;
+                    $total_amount  = $total_amount +  $io->price;
                 ?>
             <tr>
                 <td>{{  $key+1 }}</td>
-                <td class="text-left">{{  $io->product_name }}</td>
-                <td class="text-left">{{  $io->hsn_code }}</td>
-                <td  class="text-right"  >{{  $io->quantity }}</td>
-                <td class="text-right"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{  $io->amount }}</td>
+
+               <td class="text-left">
+                    {{ optional($io->product)->product_name ?? '-' }}
+                    ( {{ optional($io->unitData)->unit_name ?? '-' }} )
+                </td>
+                <td class="text-left">{{  $io->product->hsn_code ?? '-' }}</td>
+                <td  class="text-right"  >{{  $io->product_price ?? '-' }}</td>
+                <td  class="text-right"  >{{  $io->qty ?? '-' }}</td>
+                <td class="text-right"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{  $io->price }}</td>
             </tr>
             <?php  } ?>
 
@@ -446,6 +453,7 @@
             <tr class="total-row">
                 <td colspan="2" style="border:1px solid #444; font-weight:bold;">Total</td>
                 <td  style="border:1px solid #444;"></td>
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($total_amount,2) }}</td>
             </tr>
@@ -496,16 +504,7 @@
                       <td colspan="3" >{{ $order_details->amount_in_words }}</td>
                     </tr>
 
-                      <tr>
-                        <td >Advance</td>
-                        <td class="rb-colon">:</td>
-                        <td class="rb-val text-right" ><span style="font-family:  DejaVu Sans, sans-serif;">₹</span> <b style="color:blue">{{ number_format ( ($total_amount +  ( $total_amount*0.18 )) * 0.10,2) }} </b> </td>
-                    </tr>
-                    <tr>
-                        <td  style="white-space: nowrap;" >Delivery Charges</td>
-                        <td  class="rb-colon" >:</td>
-                        <td  class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹</span>  <b style="color:blue">{{ number_format($order_details->delivery_amount,2)}}  </b> </td>
-                    </tr>
+                   
 
                 </table>
             </td>

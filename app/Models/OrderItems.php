@@ -19,6 +19,11 @@ class OrderItems extends Model
 
     public function unitData()
     {
-        return $this->belongsTo(Unit::class, 'unit'); 
+        return $this->belongsTo(Unit::class, 'unit');
+    }
+
+     public function shopData()
+    {
+        return $this->belongsTo(Shop::class, 'shop_id');
     }
 }

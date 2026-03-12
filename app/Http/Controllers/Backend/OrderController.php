@@ -26,13 +26,18 @@ class OrderController extends Controller
 
             $shop_id = Shop::where('user_id', auth()->id())->value('id');
 
-            $records = Order::whereHas('items', function ($q) use ($shop_id) {
-                $q->where('shop_id', $shop_id);
-            })
-                ->orderBy('id', 'DESC')
+            $records = Order::select('orders.*', 'shop_invoice.invoice_path')
+                ->join('order_items', 'order_items.order_id', '=', 'orders.id')
+                ->leftJoin('shop_invoice', function ($join) use ($shop_id) {
+                    $join->on('shop_invoice.order_id', '=', 'orders.id')
+                        ->where('shop_invoice.shop_id', '=', $shop_id);
+                })
+                ->where('order_items.shop_id', $shop_id)
+                ->orderBy('orders.id', 'DESC')
+                ->distinct()
                 ->get();
 
-                
+
         } else {
             $records   =  Order::orderBy('id', 'DESC')->get();
         }

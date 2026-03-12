@@ -407,6 +407,7 @@ class OrderController extends Controller
                     ->where('order_id', $order->id)
                     ->get();
 
+                
                 $company = Company::first();
 
                 $delivery_address = Address::find($delivery_id);

@@ -415,7 +415,7 @@
     <table class="items-table " style="margin-top:10px">
         <thead>
             <tr>
-                <th style="width:28px;">#</th>
+                <th style="width:28px;">S.No</th>
                 <th>Item Name</th>
                 <th style="width:100px;">HSN/ SAC</th>
                 <th   style="width:100px; text-align:right">Quantity</th>
