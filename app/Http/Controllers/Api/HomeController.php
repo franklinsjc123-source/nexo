@@ -156,8 +156,6 @@ class HomeController extends Controller
 
         $data = $products->map(function ($product) use ($cartItems) {
 
-            $quantity_data = [];
-
             if ($product->attributes && $product->attributes->count() > 0) {
 
                 $quantity_data = $product->attributes
@@ -168,9 +166,6 @@ class HomeController extends Controller
 
                         $cartItem = $cartItems[$key] ?? null;
 
-                        $cartQuantity = $cartItem ? $cartItem->quantity : 0;
-                        $cartItemId   = $cartItem ? $cartItem->id : null;
-
                         return [
                             'unit_id'        => $attr->unit,
                             'unit_name'      => optional($attr->unitData)->unit_name,
@@ -179,10 +174,22 @@ class HomeController extends Controller
                             'discount_percentage' => $attr->original_price > 0
                                 ? round((($attr->original_price - $attr->discount_price) / $attr->original_price) * 100)
                                 : 0,
-                            'cart_item_id'   => $cartItemId,
-                            'cart_quantity'  => $cartQuantity
+                            'cart_item_id'   => $cartItem ? $cartItem->id : null,
+                            'cart_quantity'  => $cartItem ? $cartItem->quantity : 0
                         ];
                     })->values();
+            } else {
+
+                // If no attributes exist
+                $quantity_data = [[
+                    'unit_id'        => null,
+                    'unit_name'      => null,
+                    'original_price' => 0,
+                    'discount_price' => 0,
+                    'discount_percentage' => 0,
+                    'cart_item_id'   => null,
+                    'cart_quantity'  => 0
+                ]];
             }
 
             return [
