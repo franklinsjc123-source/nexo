@@ -75,15 +75,12 @@ class OrderController extends Controller
             ->where('id', $order_id)
             ->first();
 
-
-
         if (!$order) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Order not found'
             ], 404);
         }
-
 
         $address = Address::where('id', $order->delivery_id)
             ->select('name', 'mobile', 'address', 'pincode')
@@ -95,7 +92,6 @@ class OrderController extends Controller
 
         foreach ($order->items as $item) {
 
-
             $products[] = [
                 'product_name' => $item->product->product_name ?? '',
                 'qty'          => $item->qty,
@@ -106,7 +102,132 @@ class OrderController extends Controller
 
             $total_qty += $item->qty;
 
-            // collect shop names
+            $shop = Shop::find($item->shop_id);
+            if ($shop) {
+                $shop_names[] = $shop->shop_name;
+            }
+        }
+
+        $shop_names = implode(', ', array_unique($shop_names));
+
+        $data = [
+            'order_id'        => $order->order_id,
+            'shop_names'      => $shop_names,
+            'payment_mode'    => $order->payment_type,
+            'order_status'    => $order->order_status,
+            'delivery_fee'    => $order->ship_amount,
+            'total_quantity'  => $total_qty,
+            'total_amount'    => $order->amount,
+            'date'            => date('d-m-Y', strtotime($order->created_at)),
+            'delivery_address' => $address,
+            'products'        => $products
+        ];
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order details fetched successfully',
+            'data' => $data
+        ], 200);
+    }
+
+
+
+
+    public function getAllShopOrders(Request $request)
+    {
+        $user_id = $request->input('user_id');
+        $shop_id = Shop::where('user_id', $user_id )->value('id');
+
+        $query = Order::with(['items']);
+
+        if ($shop_id) {
+            $query->whereHas('items', function ($q) use ($shop_id) {
+                $q->where('shop_id', $shop_id);
+            });
+        }
+
+        $orders = $query->orderBy('id', 'DESC')->get();
+
+        if ($orders->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Records not found'
+            ], 400);
+        }
+
+        $data = [];
+
+        foreach ($orders as $order) {
+
+            if ($shop_id) {
+                $total_qty = $order->items->where('shop_id', $shop_id)->sum('qty');
+            } else {
+                $total_qty = $order->items->sum('qty');
+            }
+
+            $data[] = [
+                'id'             => $order->id,
+                'order_id'       => $order->order_id,
+                'total_quantity' => $total_qty,
+                'order_status'   => $order->order_status,
+                'payment_type'   => $order->payment_type,
+                'amount'         => $order->amount,
+                'date'           => date('d-m-Y', strtotime($order->created_at))
+            ];
+        }
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Data received successfully',
+            'data'    => $data
+        ], 200);
+    }
+
+
+
+
+    public function getShopOrderDetails(Request $request)
+    {
+        $order_id   = $request->input('order_id');
+        $user_id    = $request->input('user_id');
+        $shop_id    = Shop::where('user_id', $user_id )->value('id');
+
+        $order = Order::with(['items.product'])
+            ->where('id', $order_id)
+            ->first();
+
+        if (!$order) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order not found'
+            ], 404);
+        }
+
+        $address = Address::where('id', $order->delivery_id)
+            ->select('name', 'mobile', 'address', 'pincode')
+            ->first();
+
+        $products = [];
+        $shop_names = [];
+        $total_qty = 0;
+
+        foreach ($order->items as $item) {
+
+            // shop filter
+            if ($shop_id && $item->shop_id != $shop_id) {
+                continue;
+            }
+
+            $products[] = [
+                'product_name' => optional($item->product)->product_name,
+                'qty'          => $item->qty,
+                'unit'         => $item->unit,
+                'price'        => $item->product_price,
+                'total_amount' => $item->price
+            ];
+
+            $total_qty += $item->qty;
+
             $shop = Shop::find($item->shop_id);
             if ($shop) {
                 $shop_names[] = $shop->shop_name;
