@@ -29,11 +29,11 @@ class DashboardController extends Controller
             $customer_count             = 0;
             $order_count                = count(Order::get());
             $product_count              = count(Product::where('shop', $shop_id)->get());
-            $today_order_count          = Order::whereDate('created_at',  Carbon::today())->count();
+            $today_order_count          = Order::where('shop', $shop_id)->whereDate('created_at',  Carbon::today())->count();
             $direct_order_count         = count(DirectOrder::where('shop_id', $shop_id)->get());
             $today_direct_order_count   = DirectOrder::where('shop_id', $shop_id)->whereDate('created_at', Carbon::today())->count();
             $delivert_person_count      = 0;
-            
+
         } else {
 
             $shop_count                 = count(Shop::where('status', 1)->get());
