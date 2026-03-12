@@ -57,6 +57,8 @@ Route::get('/productDetail',[HomeController::class,"productDetail"])->name('prod
 
 Route::post('/placeDirectOrder',[OrderController::class,"placeDirectOrder"])->name('placeDirectOrder');
 Route::post('/placeOrder',[OrderController::class,"placeOrder"])->name('placeOrder');
+Route::get('/getAllOrders',[OrderController::class,"getAllOrders"])->name('getAllOrders');
+Route::get('/getOrderDetails',[OrderController::class,"getOrderDetails"])->name('getOrderDetails');
 
 
 Route::post('applyOffer', [OfferController::class, 'applyOffer'])->name('applyOffer');

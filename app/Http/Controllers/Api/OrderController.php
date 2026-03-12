@@ -25,6 +25,101 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller
 {
 
+
+    public function getAllOrders(Request $request)
+    {
+        $user_id = $request->input('user_id');
+
+        $orders = Order::with('items')
+            ->where('customer_id', $user_id)
+            ->orderBy('id', 'DESC')
+            ->get();
+
+        if ($orders->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Records not found'
+            ], 400);
+        }
+
+        $data = [];
+
+        foreach ($orders as $order) {
+
+            $total_qty = $order->items->sum('qty');
+
+            $data[] = [
+                'order_id'       => $order->order_id,
+                'total_quantity' => $total_qty,
+                'order_status'   => $order->order_status,
+                'payment_type'   => $order->payment_type,
+                'amount'         => $order->amount,
+                'date'           => date('d-m-Y', strtotime($order->created_at))
+            ];
+        }
+
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Data received successfully',
+            'data'    => $data
+        ], 200);
+    }
+
+
+    public function getOrderDetails(Request $request)
+    {
+        $order_id = $request->order_id;
+
+        $order = Order::with(['items.product'])
+            ->where('order_id', $order_id)
+            ->first();
+
+        if (!$order) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order not found'
+            ], 404);
+        }
+
+        $address = Address::find($order->delivery_id);
+
+        $products = [];
+        $total_qty = 0;
+
+        foreach ($order->items as $item) {
+
+            $products[] = [
+                'product_name' => $item->product->product_name ?? '',
+                'qty'          => $item->qty,
+                'unit'         => $item->unit,
+                'price'        => $item->product_price,
+                'total_amount' => $item->price
+            ];
+
+            $total_qty += $item->qty;
+        }
+
+        $data = [
+            'order_id'        => $order->order_id,
+            'payment_mode'    => $order->payment_type,
+            'order_status'    => $order->order_status,
+            'delivery_fee'    => $order->ship_amount,
+            'total_quantity'  => $total_qty,
+            'total_amount'    => $order->amount,
+            'date'            => date('d-m-Y', strtotime($order->created_at)),
+            'delivery_address' => $address,
+            'products'        => $products
+        ];
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order details fetched successfully',
+            'data' => $data
+        ], 200);
+    }
+
+
+
     public function placeDirectOrder(Request $request)
     {
 
@@ -161,7 +256,7 @@ class OrderController extends Controller
                 $pdf->save($adminInvoicePath);
 
                 $order->update([
-                    'invoice' => URL::to('/') . '/uploads/order_invoice/' .$adminInvoiceName
+                    'invoice' => URL::to('/') . '/uploads/order_invoice/' . $adminInvoiceName
                 ]);
 
                 /* ---------------- SHOP INVOICE ---------------- */
