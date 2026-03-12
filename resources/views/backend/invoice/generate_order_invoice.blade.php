@@ -467,9 +467,7 @@
     <table class="summary-table">
         <tr>
             <td class="summary-left-cell">
-               <strong> Note:</strong><br>
-                Delivery charges are charged separately and are not included in the base invoice amount. The total amount payable shall be the invoice value plus applicable delivery charges.
-
+              
             </td>
             <td class="summary-right-outer" style="width:344px; border-left:1px solid #444; padding:0;">
                 <table class="summary-inner">
