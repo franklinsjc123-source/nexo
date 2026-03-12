@@ -210,6 +210,7 @@ class OrderController extends Controller
         $products = [];
         $shop_names = [];
         $total_qty = 0;
+        $total_amount = 0;
 
         foreach ($order->items as $item) {
 
@@ -227,6 +228,8 @@ class OrderController extends Controller
             ];
 
             $total_qty += $item->qty;
+            $total_amount += $item->price;
+
 
             $shop = Shop::find($item->shop_id);
             if ($shop) {
@@ -243,7 +246,7 @@ class OrderController extends Controller
             'order_status'    => $order->order_status,
             'delivery_fee'    => $order->ship_amount,
             'total_quantity'  => $total_qty,
-            'total_amount'    => $order->amount,
+            'total_amount'    => $total_amount,
             'date'            => date('d-m-Y', strtotime($order->created_at)),
             'delivery_address' => $address,
             'products'        => $products
