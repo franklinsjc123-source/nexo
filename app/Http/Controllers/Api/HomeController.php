@@ -114,9 +114,12 @@ class HomeController extends Controller
             ], 400);
         }
 
+        /* ---------------- CART ---------------- */
+
         $cart = Cart::where('user_id', $user_id)->first();
 
         $cartItems = [];
+
         if ($cart) {
             $cartItems = CartItems::where('cart_id', $cart->id)
                 ->get()
@@ -124,6 +127,8 @@ class HomeController extends Controller
                     return $item->product_id . '_' . $item->unit;
                 });
         }
+
+        /* ---------------- PRODUCTS ---------------- */
 
         $query = Product::with([
             'categoryData:id,category_name',
@@ -147,20 +152,15 @@ class HomeController extends Controller
             ], 200);
         }
 
+        /* ---------------- PRODUCT FORMAT ---------------- */
+
         $data = $products->map(function ($product) use ($cartItems) {
 
-            return [
-                'id'                  => $product->id,
-                'category_id'         => $product->category,
-                'category_name'       => optional($product->categoryData)->category_name,
-                'shop_id'             => $product->shop,
-                'shop_name'           => optional($product->shopData)->shop_name,
-                'product_name'        => $product->product_name,
-                'product_description' => $product->product_description,
-                'product_image'       => $product->product_image,
-                'status'              => $product->status,
+            $quantity_data = [];
 
-                'quantity_data' => $product->attributes
+            if ($product->attributes && $product->attributes->count() > 0) {
+
+                $quantity_data = $product->attributes
                     ->where('original_price', '>', 0)
                     ->map(function ($attr) use ($product, $cartItems) {
 
@@ -176,33 +176,156 @@ class HomeController extends Controller
                             'unit_name'      => optional($attr->unitData)->unit_name,
                             'original_price' => $attr->original_price,
                             'discount_price' => $attr->discount_price,
-                            'discount_percentage' => $attr->original_price > 0 ? round((($attr->original_price - $attr->discount_price) / $attr->original_price) * 100) : 0,
+                            'discount_percentage' => $attr->original_price > 0
+                                ? round((($attr->original_price - $attr->discount_price) / $attr->original_price) * 100)
+                                : 0,
                             'cart_item_id'   => $cartItemId,
                             'cart_quantity'  => $cartQuantity
                         ];
-                    })->values()
+                    })->values();
+            }
+
+            return [
+                'id'                  => $product->id,
+                'category_id'         => $product->category,
+                'category_name'       => optional($product->categoryData)->category_name,
+                'shop_id'             => $product->shop,
+                'shop_name'           => optional($product->shopData)->shop_name,
+                'product_name'        => $product->product_name,
+                'product_description' => $product->product_description,
+                'product_image'       => $product->product_image,
+                'status'              => $product->status,
+                'quantity_data'       => $quantity_data
             ];
         });
 
-        $cart_count = 0;
-        if ($user_id) {
-            $cart = Cart::where('user_id', $user_id)->first();
+        /* ---------------- CART COUNT ---------------- */
 
-            if ($cart) {
-                $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
-            }
-        }
+        $cart_count = $cart ? CartItems::where('cart_id', $cart->id)->count() : 0;
 
-
-
+        /* ---------------- RESPONSE ---------------- */
 
         return response()->json([
-            'status'  => 'success',
-            'message' => 'Data received successfully',
+            'status'      => 'success',
+            'message'     => 'Data received successfully',
             'cart_count'  => $cart_count,
-            'data'    => $data
+            'data'        => $data
         ], 200);
     }
+
+
+
+
+
+    // public function getAllProductsByShop(Request $request)
+    // {
+    //     $shop_id     = $request->input('shop_id');
+    //     $user_id     = $request->input('user_id');
+    //     $category_id = $request->input('category_id');
+
+    //     if (!$shop_id) {
+    //         return response()->json([
+    //             'status'  => 'error',
+    //             'message' => 'Shop ID is required'
+    //         ], 400);
+    //     }
+
+    //     if (!$user_id) {
+    //         return response()->json([
+    //             'status'  => 'error',
+    //             'message' => 'User ID is required'
+    //         ], 400);
+    //     }
+
+    //     $cart = Cart::where('user_id', $user_id)->first();
+
+    //     $cartItems = [];
+    //     if ($cart) {
+    //         $cartItems = CartItems::where('cart_id', $cart->id)
+    //             ->get()
+    //             ->keyBy(function ($item) {
+    //                 return $item->product_id . '_' . $item->unit;
+    //             });
+    //     }
+
+    //     $query = Product::with([
+    //         'categoryData:id,category_name',
+    //         'shopData:id,shop_name',
+    //         'attributes.unitData:id,unit_name'
+    //     ])
+    //         ->where('shop', $shop_id)
+    //         ->where('status', 1);
+
+    //     if (!empty($category_id)) {
+    //         $query->where('category', $category_id);
+    //     }
+
+    //     $products = $query->get();
+
+    //     if ($products->isEmpty()) {
+    //         return response()->json([
+    //             'status'  => 'success',
+    //             'message' => 'No products found',
+    //             'data'    => []
+    //         ], 200);
+    //     }
+
+    //     $data = $products->map(function ($product) use ($cartItems) {
+
+    //         return [
+    //             'id'                  => $product->id,
+    //             'category_id'         => $product->category,
+    //             'category_name'       => optional($product->categoryData)->category_name,
+    //             'shop_id'             => $product->shop,
+    //             'shop_name'           => optional($product->shopData)->shop_name,
+    //             'product_name'        => $product->product_name,
+    //             'product_description' => $product->product_description,
+    //             'product_image'       => $product->product_image,
+    //             'status'              => $product->status,
+
+    //             'quantity_data' => $product->attributes
+    //                 ->where('original_price', '>', 0)
+    //                 ->map(function ($attr) use ($product, $cartItems) {
+
+    //                     $key = $product->id . '_' . $attr->unit;
+
+    //                     $cartItem = $cartItems[$key] ?? null;
+
+    //                     $cartQuantity = $cartItem ? $cartItem->quantity : 0;
+    //                     $cartItemId   = $cartItem ? $cartItem->id : null;
+
+    //                     return [
+    //                         'unit_id'        => $attr->unit,
+    //                         'unit_name'      => optional($attr->unitData)->unit_name,
+    //                         'original_price' => $attr->original_price,
+    //                         'discount_price' => $attr->discount_price,
+    //                         'discount_percentage' => $attr->original_price > 0 ? round((($attr->original_price - $attr->discount_price) / $attr->original_price) * 100) : 0,
+    //                         'cart_item_id'   => $cartItemId,
+    //                         'cart_quantity'  => $cartQuantity
+    //                     ];
+    //                 })->values()
+    //         ];
+    //     });
+
+    //     $cart_count = 0;
+    //     if ($user_id) {
+    //         $cart = Cart::where('user_id', $user_id)->first();
+
+    //         if ($cart) {
+    //             $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
+    //         }
+    //     }
+
+
+
+
+    //     return response()->json([
+    //         'status'  => 'success',
+    //         'message' => 'Data received successfully',
+    //         'cart_count'  => $cart_count,
+    //         'data'    => $data
+    //     ], 200);
+    // }
 
 
     public function productDetail(Request $request)
@@ -240,10 +363,10 @@ class HomeController extends Controller
 
             $key = $attr->product_id . '_' . $attr->unit;
 
-              $cartItem = $cartItems[$key] ?? null;
+            $cartItem = $cartItems[$key] ?? null;
 
-                    $cartQuantity = $cartItem ? $cartItem->quantity : 0;
-                    $cartItemId   = $cartItem ? $cartItem->id : null;
+            $cartQuantity = $cartItem ? $cartItem->quantity : 0;
+            $cartItemId   = $cartItem ? $cartItem->id : null;
 
             $discount_percentage = 0;
 
@@ -261,7 +384,7 @@ class HomeController extends Controller
                 'original_price' => $attr->original_price,
                 'discount_price' => $attr->discount_price,
                 'discount_percentage' => $discount_percentage,
-                 'cart_item_id'   => $cartItemId,
+                'cart_item_id'   => $cartItemId,
                 'cart_quantity' => $cartQuantity
             ];
         });
