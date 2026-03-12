@@ -59,6 +59,8 @@ Route::post('/placeDirectOrder',[OrderController::class,"placeDirectOrder"])->na
 Route::post('/placeOrder',[OrderController::class,"placeOrder"])->name('placeOrder');
 Route::get('/getAllOrders',[OrderController::class,"getAllOrders"])->name('getAllOrders');
 Route::get('/getOrderDetails',[OrderController::class,"getOrderDetails"])->name('getOrderDetails');
+Route::get('/getAllShopOrders',[OrderController::class,"getAllShopOrders"])->name('getAllShopOrders');
+Route::get('/getShopOrderDetails',[OrderController::class,"getShopOrderDetails"])->name('getShopOrderDetails');
 
 
 Route::post('applyOffer', [OfferController::class, 'applyOffer'])->name('applyOffer');
