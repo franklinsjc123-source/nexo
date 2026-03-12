@@ -338,40 +338,7 @@
       <tbody>
             <tr>
                 <td style="width:50%; border-right:1px solid #444; vertical-align: top; padding: 10px;">
-                {{-- <table style="width: 100%; border-collapse: collapse;">
-
-                     <tr>
-                    <td style="border: none; padding: 4px; font-weight: bold;">Shop</td>
-                    <td style="border: none; ">:</td>
-                    <td style="border: none; padding: 4px;">{{ $shop_details->shop_name }}</td>
-                    </tr>
-
-                    <tr>
-                    <td style="border: none; padding: 4px; font-weight: bold;">Address</td>
-                    <td style="border: none; ">:</td>
-
-                    <td style="border: none; padding: 4px;">{{ $shop_details->address }}</td>
-                    </tr>
-                    <tr>
-                    <td style="border: none; padding: 4px; font-weight: bold;">Contact</td>
-                    <td style="border: none; ">:</td>
-
-
-                    <td style="border: none; padding: 4px;">{{ $shop_details->contact_no }}</td>
-                    </tr>
-                    <tr>
-                    <td style="border: none; padding: 4px; font-weight: bold;">GST No</td>
-                    <td style="border: none; ">:</td>
-
-
-                    <td style="border: none; padding: 4px;">{{ $shop_details->gst_no }}</td>
-                    </tr>
-                </table> --}}
-                </td>
-
-                <td style="width:50%; vertical-align: top; padding: 10px;">
-
-                         <table style="width: 100%; border-collapse: collapse;">
+                <table style="width: 100%; border-collapse: collapse;">
 
                      <tr>
                     <td style="border: none; padding: 4px; font-weight: bold;">Shop</td>
@@ -400,6 +367,41 @@
                     </tr>
 
                 </table>
+
+
+                </td>
+
+                <td style="width:50%; vertical-align: top; padding: 10px;">
+                    {{-- <table style="width: 100%; border-collapse: collapse;">
+
+                     <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Shop</td>
+                    <td style="border: none; ">:</td>
+                    <td style="border: none; padding: 4px;">{{ $shop_details->shop_name }}</td>
+                    </tr>
+
+                    <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Address</td>
+                    <td style="border: none; ">:</td>
+
+                    <td style="border: none; padding: 4px;">{{ $shop_details->address }}</td>
+                    </tr>
+                    <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Contact</td>
+                    <td style="border: none; ">:</td>
+
+
+                    <td style="border: none; padding: 4px;">{{ $shop_details->contact_no }}</td>
+                    </tr>
+                    <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">GST No</td>
+                    <td style="border: none; ">:</td>
+
+
+                    <td style="border: none; padding: 4px;">{{ $shop_details->gst_no }}</td>
+                    </tr>
+                </table> --}}
+
 
                 </td>
             </tr>
