@@ -136,7 +136,8 @@ class OrderController extends Controller
     public function getAllShopOrders(Request $request)
     {
         $user_id = $request->input('user_id');
-        $shop_id = Shop::where('user_id', $user_id )->value('id');
+
+        $shop_id = Shop::where('user_id', $user_id)->value('id');
 
         $query = Order::with(['items']);
 
@@ -160,9 +161,13 @@ class OrderController extends Controller
         foreach ($orders as $order) {
 
             if ($shop_id) {
-                $total_qty = $order->items->where('shop_id', $shop_id)->sum('qty');
+                $items = $order->items->where('shop_id', $shop_id);
+
+                $total_qty = $items->sum('qty');
+                $total_amount = $items->sum('price'); // shop-wise amount
             } else {
                 $total_qty = $order->items->sum('qty');
+                $total_amount = $order->items->sum('price');
             }
 
             $data[] = [
@@ -171,7 +176,7 @@ class OrderController extends Controller
                 'total_quantity' => $total_qty,
                 'order_status'   => $order->order_status,
                 'payment_type'   => $order->payment_type,
-                'amount'         => $order->amount,
+                'amount'         => $total_amount,
                 'date'           => date('d-m-Y', strtotime($order->created_at))
             ];
         }
@@ -185,12 +190,11 @@ class OrderController extends Controller
 
 
 
-
     public function getShopOrderDetails(Request $request)
     {
         $order_id   = $request->input('order_id');
         $user_id    = $request->input('user_id');
-        $shop_id    = Shop::where('user_id', $user_id )->value('id');
+        $shop_id    = Shop::where('user_id', $user_id)->value('id');
 
         $order = Order::with(['items.product'])
             ->where('id', $order_id)
