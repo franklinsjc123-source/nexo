@@ -121,8 +121,12 @@ class CartController extends Controller
             // ==============================
             // Offers List with is_used flag
             // ==============================
+
+            $shop_ids = $cart->items->pluck('shop_id')->unique()->toArray();
+
             $offers = Offers::where('status', 1)
                 ->whereDate('expiry_date', '>=', Carbon::today())
+                 ->whereIn('shop_id', $shop_ids)
                 ->get()
                 ->map(function ($offer) use ($cart, $user_id) {
 
