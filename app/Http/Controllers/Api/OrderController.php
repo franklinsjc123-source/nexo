@@ -357,6 +357,7 @@ class OrderController extends Controller
         $user_id      = $request->user_id;
         $delivery_id  = $request->delivery_id;
         $payment_type = $request->payment_type;
+        $discount     = $request->discount ?  $request->discount : 0;
 
         $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
 
@@ -399,9 +400,50 @@ class OrderController extends Controller
             }
         }
 
+        $delivery_charge = 0;
+
+        foreach ($categoryTotals as $category_id => $total) {
+
+            $category = Category::find($category_id);
+
+            if (!$category) {
+                continue;
+            }
+
+            $category_name = strtolower($category->category_name);
+
+            if ($category_name == 'grocery') {
+
+                if ($total > 1000) {
+                    $delivery_charge += ($total * 8) / 100;
+                } else {
+                    $delivery_charge += ($total * 10) / 100;
+                }
+            }
+
+            elseif ($category_name == 'medicine') {
+
+                if ($total > 500) {
+                    $delivery_charge += ($total * 8) / 100;
+                } else {
+                    $delivery_charge += 50;
+                }
+            }
+
+            elseif (in_array($category_name, ['fruits', 'vegetables', 'hotel', 'bakery'])) {
+
+                $delivery_charge += 50;
+            }
+
+            else {
+
+                $delivery_charge += 50;
+            }
+        }
 
 
-        $amount = $cart->total_amount;
+
+        $amount = $cart->total_amount - $discount;
 
 
         if ($payment_type == 'cod') {
@@ -413,15 +455,16 @@ class OrderController extends Controller
                 $order_number = 'ORD' . time();
 
                 $order = Order::create([
-                    'order_id'        => $order_number,
-                    'customer_id'     => $user_id,
-                    'delivery_id'     => $delivery_id,
-                    'order_status'    => 1,
-                    'payment_type'    => 'cod',
-                    'amount'          => $amount,
-                    'ship_amount'     => 0,
-                    'payment_status'  => 0,
-                    'is_coupon_applied' => 0
+                    'order_id'              => $order_number,
+                    'customer_id'           => $user_id,
+                    'delivery_id'           => $delivery_id,
+                    'order_status'          => 1,
+                    'payment_type'          => 'cod',
+                    'amount'                => $amount,
+                    'ship_amount'           => $delivery_charge,
+                    'payment_status'        => 0,
+                    'is_coupon_applied'     => $discount  > 0 ? 1 : 0,
+                    'coupon_applied_amount' => $discount ?  $discount : 0
                 ]);
 
 
