@@ -42,7 +42,9 @@ class CartController extends Controller
             ], 404);
         }
 
-        // ✅ correct shop column
+
+
+
         $shop_id = $product->shop;
 
         $attribute = ProductAttributes::where('product_id', $product_id)
@@ -63,6 +65,25 @@ class CartController extends Controller
             ['user_id' => $user_id],
             ['total_amount' => 0]
         );
+
+
+        $shopCount = CartItems::where('cart_id', $cart->id)
+            ->distinct('shop_id')
+            ->count('shop_id');
+
+        $shopExists = CartItems::where('cart_id', $cart->id)
+            ->where('shop_id', $shop_id)
+            ->exists();
+
+        if (!$shopExists && $shopCount >= 2) {
+            return response()->json([
+                'status' => false,
+                'message' => 'You can only add products from 2 different shops in one cart'
+            ], 400);
+        }
+
+
+
 
         $item = CartItems::where('cart_id', $cart->id)
             ->where('product_id', $product_id)
@@ -126,7 +147,7 @@ class CartController extends Controller
 
             $offers = Offers::where('status', 1)
                 ->whereDate('expiry_date', '>=', Carbon::today())
-                 ->whereIn('shop_id', $shop_ids)
+                ->whereIn('shop_id', $shop_ids)
                 ->get()
                 ->map(function ($offer) use ($cart, $user_id) {
 
