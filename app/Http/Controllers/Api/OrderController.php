@@ -14,6 +14,7 @@ use App\Models\OrderItems;
 use App\Models\Shop;
 use App\Models\Invoice;
 use App\Models\Address;
+use App\Models\Category;
 
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -359,12 +360,46 @@ class OrderController extends Controller
 
         $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
 
+
+
         if (!$cart || $cart->items->isEmpty()) {
             return response()->json([
                 'status' => false,
                 'message' => 'Cart is empty'
             ]);
         }
+
+
+
+        $categoryTotals = [];
+
+        foreach ($cart->items as $item) {
+
+            $category_id = $item->product->category;
+
+
+            if (!isset($categoryTotals[$category_id])) {
+                $categoryTotals[$category_id] = 0;
+            }
+
+            $categoryTotals[$category_id] += $item->total_price;
+        }
+
+        foreach ($categoryTotals as $category_id => $total) {
+
+            $category = Category::find($category_id);
+
+            if ($category && $total < $category->min_order_value) {
+
+                return response()->json([
+                    'status' => false,
+                    'message' => $category->category_name .
+                        " minimum order value is ₹" . $category->min_order_value
+                ]);
+            }
+        }
+
+
 
         $amount = $cart->total_amount;
 
@@ -465,8 +500,8 @@ class OrderController extends Controller
                 }
 
 
-                CartItems::where('cart_id', $cart->id)->delete();
-                $cart->delete();
+                // CartItems::where('cart_id', $cart->id)->delete();
+                // $cart->delete();
 
                 DB::commit();
 
