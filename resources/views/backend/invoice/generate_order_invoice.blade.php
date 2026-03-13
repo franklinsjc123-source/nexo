@@ -467,7 +467,7 @@
     <table class="summary-table">
         <tr>
             <td class="summary-left-cell">
-              
+
             </td>
             <td class="summary-right-outer" style="width:344px; border-left:1px solid #444; padding:0;">
                 <table class="summary-inner">
@@ -511,7 +511,7 @@
                     <tr>
                         <td  style="white-space: nowrap;" >Delivery Charges</td>
                         <td  class="rb-colon" >:</td>
-                        <td  class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹</span>  <b style="color:blue">{{ number_format($order_details->delivery_amount,2)}}  </b> </td>
+                        <td  class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹</span>  <b style="color:blue">{{ number_format($order_details->ship_amount,2)}}  </b> </td>
                     </tr>
 
                 </table>

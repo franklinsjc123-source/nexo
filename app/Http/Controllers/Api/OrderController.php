@@ -419,23 +419,17 @@ class OrderController extends Controller
                 } else {
                     $delivery_charge += ($total * 10) / 100;
                 }
-            }
-
-            elseif ($category_name == 'medicine') {
+            } elseif ($category_name == 'medicine') {
 
                 if ($total > 500) {
                     $delivery_charge += ($total * 8) / 100;
                 } else {
                     $delivery_charge += 50;
                 }
-            }
-
-            elseif (in_array($category_name, ['fruits', 'vegetables', 'hotel', 'bakery'])) {
+            } elseif (in_array($category_name, ['fruits', 'vegetables', 'hotel', 'bakery'])) {
 
                 $delivery_charge += 50;
-            }
-
-            else {
+            } else {
 
                 $delivery_charge += 50;
             }
@@ -444,6 +438,8 @@ class OrderController extends Controller
 
 
         $amount = $cart->total_amount - $discount;
+
+        $amount_in_words =  $this->amountToWords($amount);
 
 
         if ($payment_type == 'cod') {
@@ -464,7 +460,9 @@ class OrderController extends Controller
                     'ship_amount'           => $delivery_charge,
                     'payment_status'        => 0,
                     'is_coupon_applied'     => $discount  > 0 ? 1 : 0,
-                    'coupon_applied_amount' => $discount ?  $discount : 0
+                    'coupon_applied_amount' => $discount ?  $discount : 0,
+                    'amount_in_words'       => $amount_in_words
+
                 ]);
 
 
@@ -678,4 +676,87 @@ class OrderController extends Controller
             'order_id' => $order->order_id
         ]);
     }
+
+
+      function amountToWords($amount)
+    {
+        $rupees = floor($amount);
+        $paise  = round(($amount - $rupees) * 100);
+
+        $words = [
+            0 => '',
+            1 => 'one',
+            2 => 'two',
+            3 => 'three',
+            4 => 'four',
+            5 => 'five',
+            6 => 'six',
+            7 => 'seven',
+            8 => 'eight',
+            9 => 'nine',
+            10 => 'ten',
+            11 => 'eleven',
+            12 => 'twelve',
+            13 => 'thirteen',
+            14 => 'fourteen',
+            15 => 'fifteen',
+            16 => 'sixteen',
+            17 => 'seventeen',
+            18 => 'eighteen',
+            19 => 'nineteen',
+            20 => 'twenty',
+            30 => 'thirty',
+            40 => 'forty',
+            50 => 'fifty',
+            60 => 'sixty',
+            70 => 'seventy',
+            80 => 'eighty',
+            90 => 'ninety'
+        ];
+
+        $units = ['', 'thousand', 'lakh', 'crore'];
+
+        $str = [];
+        $unitIndex = 0;
+
+        // First 3 digits
+        $firstPart = $rupees % 1000;
+        $rupees = floor($rupees / 1000);
+
+        if ($firstPart) {
+            $str[] = $this->convertThreeDigit($firstPart, $words);
+        }
+
+        // Remaining 2-digit groups
+        while ($rupees > 0) {
+            $number = $rupees % 100;
+            $rupees = floor($rupees / 100);
+
+            if ($number) {
+                $str[] = $this->convertTwoDigit($number, $words) . ' ' . $units[++$unitIndex];
+            } else {
+                $unitIndex++;
+            }
+        }
+
+        $rupeesWords = trim(implode(' ', array_reverse($str)));
+        $rupeesWords = ucfirst($rupeesWords) . ' Rupees';
+
+        // Paise
+        if ($paise > 0) {
+            if ($paise < 21) {
+                $paiseWords = ' And ' . ucfirst($words[$paise]) . ' Paise';
+            } else {
+                $paiseWords = ' And ' .
+                    ucfirst($words[floor($paise / 10) * 10] . ' ' . $words[$paise % 10]) .
+                    ' Paise';
+            }
+        } else {
+            $paiseWords = '';
+        }
+
+        return trim($rupeesWords . $paiseWords . ' Only');
+    }
+
+    
 }
