@@ -139,9 +139,6 @@ class CartController extends Controller
                 ], 404);
             }
 
-            // ==============================
-            // Offers List with is_used flag
-            // ==============================
 
             $shop_ids = $cart->items->pluck('shop_id')->unique()->toArray();
 
@@ -167,33 +164,17 @@ class CartController extends Controller
                     ];
                 });
 
-
-            // ==============================
-            // Delivery Address
-            // ==============================
             $delivery_address = Address::where('user_id', $user_id)
                 ->where('is_default', 1)
                 ->first();
 
-
-            // ==============================
-            // Item Price
-            // ==============================
             $item_price = CartItems::where('cart_id', $cart->id)
                 ->sum('total_price');
 
-
-            // ==============================
-            // Applied Offers
-            // ==============================
             $appliedOffers = OffersUsed::where('cart_id', $cart->id)
                 ->where('user_id', $user_id)
                 ->pluck('offer_id');
 
-
-            // ==============================
-            // Discount Calculation
-            // ==============================
             $discount = 0;
 
             foreach ($appliedOffers as $offer_id) {
@@ -206,26 +187,24 @@ class CartController extends Controller
                         ->where('shop_id', $offer->shop_id)
                         ->sum('total_price');
 
-                    $discount += ($shop_total * $offer->discount_percentage) / 100;
+                    if ($shop_total >= $offer->minimum_order_amount) {
+
+                        $discount += ($shop_total * $offer->discount_percentage) / 100;
+                    } else {
+
+                        OffersUsed::where('offer_id', $offer_id)
+                            ->where('cart_id', $cart->id)
+                            ->delete();
+                    }
                 }
             }
 
 
-            // ==============================
-            // Delivery Charge
-            // ==============================
             $delivery_charge = 50;
 
-
-            // ==============================
-            // Final Amount
-            // ==============================
             $final_amount = $item_price + $delivery_charge - $discount;
 
 
-            // ==============================
-            // Cart Items
-            // ==============================
             $response = [
                 'id'            => $cart->id,
                 'user_id'       => $cart->user_id,
@@ -248,9 +227,6 @@ class CartController extends Controller
             ];
 
 
-            // ==============================
-            // Cart Count
-            // ==============================
             $cart_count = CartItems::where('cart_id', $cart->id)->count();
 
 
