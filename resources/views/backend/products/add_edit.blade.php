@@ -211,9 +211,8 @@
 
 
 
+                                           @if(!empty($productAttributes) && count($productAttributes) > 0)
 
-                                           @if($productAttributes->isNotEmpty())
-                                                
 
                                                 @foreach($productAttributes as $index => $ba)
                                                     <div class="row mt-5 quantity-row align-items-end" data-index="{{ $index }}">
