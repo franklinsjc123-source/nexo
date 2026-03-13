@@ -466,7 +466,7 @@
     <table class="summary-table">
         <tr>
             <td class="summary-left-cell">
-            
+
 
             </td>
             <td class="summary-right-outer" style="width:344px; border-left:1px solid #444; padding:0;">
@@ -500,7 +500,7 @@
                     </tr>
 
                      <tr>
-                      <td colspan="3" >{{ $order_details->amount_in_words }}</td>
+                      <td colspan="3" >{{ $shop_amount_words }}</td>
                     </tr>
 
 

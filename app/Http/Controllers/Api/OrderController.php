@@ -395,8 +395,8 @@ class OrderController extends Controller
                 return response()->json([
                     'status' => false,
                     'message' => $category->category_name .
-                        " minimum order value is ₹" . $category->min_order_value
-                ]);
+                        " minimum order amount is ₹" . $category->min_order_value
+                ],400);
             }
         }
 
@@ -516,6 +516,9 @@ class OrderController extends Controller
 
                     $shop = Shop::find($shop_id);
 
+                     $shop_total = $items->sum('price');
+                     $shop_amount_words = $this->amountToWords($shop_total);
+
                     $shopInvoiceName = 'Shop_' . $order_number . '_shop_' . $shop_id . date('Ymd_His') . '.pdf';
 
                     $shopInvoicePath = public_path('uploads/shop_order_invoice/' . $shopInvoiceName);
@@ -527,7 +530,8 @@ class OrderController extends Controller
                             'order_details' => $order,
                             'shop_details' => $shop,
                             'company' => $company,
-                            'delivery_address' => $delivery_address
+                            'delivery_address' => $delivery_address,
+                            'shop_amount_words' => $shop_amount_words,
                         ]
                     )->setPaper('A4', 'portrait');
 
@@ -758,5 +762,5 @@ class OrderController extends Controller
         return trim($rupeesWords . $paiseWords . ' Only');
     }
 
-    
+
 }
