@@ -5,7 +5,7 @@ namespace App\Imports;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Shop;
-use App\Models\Unit;
+use App\Models\Tax;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Collection;
@@ -40,8 +40,8 @@ class ProductImport implements ToCollection, WithHeadingRow
                 continue;
             }
 
-            $category = Category::where('category_name', $row['category'])->first();
-            // $unit     = Unit::where('unit_name', $row['unit'])->first();
+            $category           = Category::where('category_name', $row['category'])->first();
+            $tax_percentage     = Tax::where('tax_percentage', $row['tax_percentage'])->first();
 
             if (!$category) {
                 $this->skipped++;
@@ -66,7 +66,7 @@ class ProductImport implements ToCollection, WithHeadingRow
             Product::create([
                 'category'            => $category->id,
                 'shop'                => $final_shop_id,
-                // 'qty'                 => $row['qty'],
+                'tax_percentage'      => $tax_percentage->tax_percentage,
                 // 'unit'                => isset($unit->id) ? $unit->id : null,
                 'product_name'        => $row['product_name'],
                 'hsn_code'            => $row['hsn_code'],
