@@ -20,6 +20,7 @@ use App\Http\Controllers\Backend\DirectOrderController;
 use App\Http\Controllers\Backend\OfferController;
 use App\Http\Controllers\Backend\ReferralController;
 use App\Http\Controllers\Backend\ReportController;
+use App\Http\Controllers\Backend\TaxController;
 
 
 use Illuminate\Support\Facades\Route;
@@ -58,6 +59,11 @@ Route::middleware('auth.request')->group(function () {
     Route::get('unit', [UnitController::class, 'unit'])->name('unit');
     Route::get('addUnit/{id?}', [UnitController::class, 'addUnit'])->name('addUnit');
     Route::post('storeUpdateUnit', [UnitController::class, 'storeUpdateUnit'])->name('storeUpdateUnit');
+
+    //tax
+    Route::get("tax", [TaxController::class, 'tax'])->name('tax');
+    Route::get('addTax/{id?}', [TaxController::class, 'addTax'])->name('addTax');
+    Route::post('storeUpdateTax', [TaxController::class, 'storeUpdateTax'])->name('storeUpdateTax');
 
 
     //Usesr Management
@@ -122,7 +128,7 @@ Route::middleware('auth.request')->group(function () {
     Route::post('orders-status-update', [OrderController::class, 'updateOrderStatus'])->name('orders-status-update');
     Route::post('/get-order-items', [OrderController::class, 'getOrderItems']);
 
-    
+
     //direct orders Management
     Route::get("direct-orders", [DirectOrderController::class, 'directOrders'])->name('direct-orders');
     Route::match(['get', 'post'], "direct-order-abstract", [DirectOrderController::class, 'directOrdersAbstract'])->name('direct-order-abstract');

@@ -100,9 +100,8 @@ class PermissionController extends Controller
                 ->where('auth_level', 4)
                 ->get(['name', 'id']);
 
-            // ✅ Only specific categories for auth_level 4
             $permissions = Permission::leftJoin('permission_category as pc', 'pc.id', '=', 'permissions.category')
-               ->whereIn('pc.id', [2, 3, 4])
+               ->whereIn('pc.id', [2, 3, 4] )
                 ->whereNotIn('permissions.name', [
                 'Category',
                 'Category-Edit',
@@ -126,7 +125,6 @@ class PermissionController extends Controller
                 ->whereIn('auth_level', [1, 2])
                 ->get(['name', 'id']);
 
-            // ✅ Show all categories for other users
             $permissions = Permission::leftJoin('permission_category as pc', 'pc.id', '=', 'permissions.category')
                 ->orderBy('pc.id')
                 ->orderBy('permissions.name')

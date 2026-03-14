@@ -204,6 +204,7 @@ $today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::toda
                             auth()->user()->hasPermission('Shop') ||
                             auth()->user()->hasPermission('Product') ||
                             auth()->user()->hasPermission('Unit') ||
+                            auth()->user()->hasPermission('Tax') ||
                             auth()->user()->hasPermission('Product-Upload') ||
                             Auth::user()->auth_level == 1
                         );
@@ -266,6 +267,18 @@ $today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::toda
                                     </a>
                                 </li>
                             @endif
+
+
+
+                            @if(auth()->check() && auth()->user()->hasPermission('Tax'))
+                                <li class="pe-slide-item">
+                                    <a href="<?= route('tax') ?>" class="pe-nav-link
+                                            @if(request()->routeIs(['tax', 'addTax'])) active @endif">
+                                        Tax 
+                                    </a>
+                                </li>
+                            @endif
+
 
 
                             @if(auth()->check() && auth()->user()->hasPermission('Product-Upload'))
