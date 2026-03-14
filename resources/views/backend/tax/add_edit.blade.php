@@ -41,7 +41,7 @@
                                  <div class="row g-4">
                                     <div class="col-xl-4">
                                          <label for="tax_percentage" class="form-label">Tax Percentage <span class="text-danger"> *</span></label>
-                                         <input type="text"  value="<?php echo $tax_percentage?>" class="form-control" id="tax_percentage" name="tax_percentage" placeholder="Enter tax percentage" onkeyup="commonCheckExist(this,'tax','tax_percentage', this.value, {{ $id ?? 'null' }})"  >
+                                         <input type="text"  value="<?php echo $tax_percentage?>" class="form-control" id="tax_percentage" name="tax_percentage" placeholder="Enter tax percentage" oninput="this.value = this.value.replace(/[^0-9]/g,'');" onkeyup="commonCheckExist(this,'tax','tax_percentage', this.value, {{ $id ?? 'null' }})"  >
                                         <span class="text-danger error-message"></span>
                                     </div>
                                  </div>
