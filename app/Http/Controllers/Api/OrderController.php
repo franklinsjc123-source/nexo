@@ -97,6 +97,7 @@ class OrderController extends Controller
                 'amount' => $order['amount'],
                 'order_status' => $order['order_status'],
                 'payment_type' => $order['payment_type'],
+                'image_url' =>  $order['image_url'],
                 'order_type' => $order['type'],
                 'date' => date('d-m-Y', strtotime($order['created_at'])),
             ];
