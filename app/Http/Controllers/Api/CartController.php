@@ -221,7 +221,6 @@ class CartController extends Controller
                         'quantity'      => $item->quantity,
                         'price'         => $item->price,
                         'discount_price'=> $item->discount_price,
-                        'tax_amount'    => "80.00",
                         'total_price'   => $item->total_price,
                     ];
                 })
@@ -236,6 +235,7 @@ class CartController extends Controller
                 'cart_count' => $cart_count,
                 'item_price' => $item_price,
                 'delivery_charge' => $delivery_charge,
+                'tax_amount'    => "80.00",
                 'discount' => $discount,
                 'final_amount' => $final_amount,
                 'offers' => $offers,
