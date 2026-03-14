@@ -72,7 +72,7 @@ class OrderController extends Controller
                     'order_id' => $order->invoice_no,
                     'amount' => $order->total_invoice_amount,
                     'order_status' => $order->order_status,
-                    'payment_type' => 'direct',
+                    'payment_type' => 'Cash On Delivery',
                     'image_url' => $order->image_url,
                     'type' => 'direct_order',
                     'created_at' => $order->created_at
