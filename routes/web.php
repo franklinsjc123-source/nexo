@@ -120,7 +120,9 @@ Route::middleware('auth.request')->group(function () {
     //orders Management
     Route::get("orders", [OrderController::class, 'orders'])->name('orders');
     Route::post('orders-status-update', [OrderController::class, 'updateOrderStatus'])->name('orders-status-update');
+    Route::post('/get-order-items', [OrderController::class, 'getOrderItems']);
 
+    
     //direct orders Management
     Route::get("direct-orders", [DirectOrderController::class, 'directOrders'])->name('direct-orders');
     Route::match(['get', 'post'], "direct-order-abstract", [DirectOrderController::class, 'directOrdersAbstract'])->name('direct-order-abstract');
@@ -142,7 +144,6 @@ Route::middleware('auth.request')->group(function () {
     Route::post('storeUpdateOffer', [OfferController::class, 'storeUpdateOffer'])->name('storeUpdateOffer');
 
     //Report Management
-    Route::match(['get', 'post'],"orders-report", [ReportController::class, 'ordersReport'])->name('orders-report');
-    Route::match(['get', 'post'],"direct-orders-report", [ReportController::class, 'directOrdersReport'])->name('direct-orders-report');
-
+    Route::match(['get', 'post'], "orders-report", [ReportController::class, 'ordersReport'])->name('orders-report');
+    Route::match(['get', 'post'], "direct-orders-report", [ReportController::class, 'directOrdersReport'])->name('direct-orders-report');
 });

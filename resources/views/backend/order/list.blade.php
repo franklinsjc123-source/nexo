@@ -82,9 +82,7 @@
                                 </td>
                                 <td>
 
-                                     <a href="javascript:void(0)" class="btn btn-sm btn-info editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>" data-toggle="tooltip" title="Edit">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
+                                    <a href="javascript:void(0)" class="btn btn-sm btn-info viewOrderItems" data-id="<?= $row->id ?>"> <i class="bi bi-eye"></i> </a>
 
                                     <?php  if(Auth::user()->auth_level  == 4 ) { ?>
                                         <a data-toggle="tooltip" target="_blank" href="{{ $row->invoice_path }}" data-placement="top" title="Invoice"  class="btn btn-sm btn-secondary"><i class="bi bi-file-earmark-break"></i></a>
@@ -132,6 +130,40 @@
                   <button class="btn btn-danger" id="close-modal" >Cancel</button>
                 <button class="btn btn-primary" id="saveStatus">Update</button>
             </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="orderItemsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title">Order Items</h5>
+            </div>
+
+            <div class="modal-body">
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>S.No</th>
+                            <th>Product</th>
+                            <th>Unit</th>
+                            <th>Product Price</th>
+                            <th>Quantity</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="order_items_body">
+                    </tbody>
+
+                </table>
+
+            </div>
+
         </div>
     </div>
 </div>
@@ -197,6 +229,48 @@
             }
         }
     });
+});
+
+
+$(document).on("click", ".viewOrderItems", function () {
+
+    let order_id = $(this).data("id");
+
+    $.ajax({
+        url: "/get-order-items",
+        type: "POST",
+        data: {
+            order_id: order_id,
+            _token: $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (response) {
+
+            let html = "";
+            let i = 1;
+
+            response.data.forEach(function(item){
+
+                html += `
+                <tr>
+                    <td>${i}</td>
+                    <td>${item.product ? item.product.product_name : ''}</td>
+                    <td>${item.unit_data ? item.unit_data.unit_name : ''}</td>
+                    <td>${item.product_price}</td>
+                    <td>${item.qty}</td>
+                    <td>${item.price}</td>
+                </tr>
+                `;
+
+                i++;
+            });
+
+            $("#order_items_body").html(html);
+
+            $("#orderItemsModal").modal("show");
+
+        }
+    });
+
 });
 
 

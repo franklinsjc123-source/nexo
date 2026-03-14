@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\OrderItems;
 use App\Models\Shop;
 
 use Illuminate\Http\Request;
@@ -36,8 +37,6 @@ class OrderController extends Controller
                 ->orderBy('orders.id', 'DESC')
                 ->distinct()
                 ->get();
-
-
         } else {
             $records   =  Order::orderBy('id', 'DESC')->get();
         }
@@ -57,6 +56,28 @@ class OrderController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Order status updated successfully'
+        ]);
+    }
+
+    public function getOrderItems(Request $request)
+    {
+        $order_id = $request->order_id;
+
+        $auth_level = Auth::user()->auth_level;
+
+        $query = OrderItems::with(['product', 'unitData'])
+            ->where('order_id', $order_id);
+
+        if ($auth_level == 4) {
+            $shop_id = Shop::where('user_id', auth()->id())->value('id');
+            $query->where('shop_id', $shop_id);
+        }
+
+        $items = $query->get();
+
+        return response()->json([
+            'status' => true,
+            'data'   => $items
         ]);
     }
 }
