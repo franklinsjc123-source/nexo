@@ -161,6 +161,7 @@ class HomeController extends Controller
                 'product_name'        => $product->product_name,
                 'product_description' => $product->product_description,
                 'product_image'       => $product->product_image,
+                'food_type'           => $product->food_type,
                 'status'              => $product->status,
 
                 'quantity_data' => $product->attributes
