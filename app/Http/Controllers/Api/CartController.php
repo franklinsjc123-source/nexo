@@ -220,7 +220,8 @@ class CartController extends Controller
                         'unit_name'     => optional($item->unitData)->unit_name,
                         'quantity'      => $item->quantity,
                         'price'         => $item->price,
-                        'discount_price' => $item->discount_price,
+                        'discount_price'=> $item->discount_price,
+                        'tax_amount'    => "80.00",
                         'total_price'   => $item->total_price,
                     ];
                 })
