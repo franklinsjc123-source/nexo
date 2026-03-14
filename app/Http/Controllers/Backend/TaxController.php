@@ -21,7 +21,7 @@ class TaxController extends Controller
         return view('backend.tax.list', compact('records'));
     }
 
-    public function addUnit($id = '')
+    public function addTax($id = '')
     {
         $record = '';
         if ($id > 0) {
@@ -30,7 +30,7 @@ class TaxController extends Controller
         return view('backend.tax.add_edit', compact('record', 'id'));
     }
 
-    public function storeUpdateUnit(Request $request)
+    public function storeUpdateTax(Request $request)
     {
         $input     = $request->all();
         $id        = isset($input['id']) ? $input['id'] : 0;
