@@ -503,7 +503,7 @@
                       <td colspan="3" >{{ $order_details->amount_in_words }}</td>
                     </tr>
 
-                      <tr>
+                    <tr>
                         <td >Advance</td>
                         <td class="rb-colon">:</td>
                         <td class="rb-val text-right" ><span style="font-family:  DejaVu Sans, sans-serif;">₹</span> <b style="color:blue">{{ number_format ( ($total_amount +  ( $total_amount*0.18 )) * 0.10,2) }} </b> </td>

@@ -57,6 +57,49 @@ if (!function_exists('sendRequestNotification')) {
 }
 
 
+if (!function_exists('sendPushNotificationToUser')) {
+
+    function sendPushNotificationToUser($deviceToken, $title = '', $msg = '')
+    {
+        if (empty($deviceToken)) {
+            return ['error' => 'No device token provided'];
+        }
+
+        $payload = [
+            'message' => [
+                'token' => $deviceToken,
+                'data' => [
+                    'title'   => $title,
+                    'message' => $msg
+                ],
+                'android' => [
+                    "priority" => "HIGH",
+                ]
+            ]
+        ];
+
+        $headers = [
+            'Authorization: Bearer ' . getAccessToken(),
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/findflicker-bec16/messages:send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
+
+        $response = curl_exec($ch);
+        curl_close($ch);
+
+        return json_decode($response, true);
+    }
+}
+
+
 function getAccessToken()
 {
     $credentialsPath = storage_path('app/firebase-service-account.json');

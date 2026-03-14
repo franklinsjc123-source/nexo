@@ -120,6 +120,7 @@ class AuthController extends Controller
         $email = $request->input('email');
         $mobile = $request->input('mobile');
         $referral_code = $request->input('referral_code');
+        $device_id = $request->input('device_id');
 
 
         if ($name != '' &&  $email != '' &&  $mobile) {
@@ -165,11 +166,22 @@ class AuthController extends Controller
                 'otp'           => '1234',
                 'referral_code' => $referral_code,
                 'auth_level'    => 3,
+                'device_id'     => $device_id,
                 'created_at'    => now()
 
             );
 
             $user = User::create($insertArray);
+
+            // Send push notification to the newly registered user
+            if (!empty($device_id)) {
+                try {
+                    sendPushNotificationToUser($device_id, 'Welcome to NexOCart!', 'You have registered successfully. Start exploring now!');
+                } catch (\Exception $e) {
+                    // Log the error but don't fail the registration
+                    \Log::error('Push notification failed for user ' . $user->id . ': ' . $e->getMessage());
+                }
+            }
 
             $success_array = array('status' => 'success', 'message' => 'Register Successfully', 'user_id' => $user->id);
             return response()->json(array($success_array), 200);
