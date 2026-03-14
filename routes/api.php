@@ -71,4 +71,7 @@ Route::post('applyOffer', [OfferController::class, 'applyOffer'])->name('applyOf
 Route::post('removeOffer', [OfferController::class, 'removeOffer'])->name('removeOffer');
 
 
+
+Route::post('/deliveryLogin',[DeliveryController::class,"deliveryLogin"])->name('deliveryLogin');
 Route::get('/getAllNewOrders',[DeliveryController::class,"getAllNewOrders"])->name('getAllNewOrders');
+Route::get('/getDeliveryHistory',[DeliveryController::class,"getDeliveryHistory"])->name('getDeliveryHistory');
