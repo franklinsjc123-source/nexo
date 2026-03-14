@@ -67,6 +67,7 @@ class DeliveryController extends Controller
             $error_array = array('status' => 'error', 'message' => 'Records not found');
             return response()->json(array($error_array), 400);
         }
+        
     }
 
 
