@@ -763,4 +763,30 @@ class OrderController extends Controller
     }
 
 
+       function convertTwoDigit($num, $words)
+    {
+        if ($num < 21) {
+            return $words[$num];
+        }
+        return $words[floor($num / 10) * 10] . ' ' . $words[$num % 10];
+    }
+
+    function convertThreeDigit($num, $words)
+    {
+        $hundred = floor($num / 100);
+        $rest = $num % 100;
+
+        if ($hundred && $rest) {
+            return $words[$hundred] . ' hundred ' . $this->convertTwoDigit($rest, $words);
+        }
+
+        if ($hundred) {
+            return $words[$hundred] . ' hundred';
+        }
+
+        return $this->convertTwoDigit($rest, $words);
+    }
+
+
+
 }
