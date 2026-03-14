@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\AdressController;
 use App\Http\Controllers\Api\OfferController;
+use App\Http\Controllers\Api\DeliveryController;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -70,5 +71,4 @@ Route::post('applyOffer', [OfferController::class, 'applyOffer'])->name('applyOf
 Route::post('removeOffer', [OfferController::class, 'removeOffer'])->name('removeOffer');
 
 
-
-
+Route::get('/getAllNewOrders',[DeliveryController::class,"getAllNewOrders"])->name('getAllNewOrders');
