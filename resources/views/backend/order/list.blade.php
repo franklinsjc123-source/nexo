@@ -82,9 +82,9 @@
                                 </td>
                                 <td>
 
-                                     {{-- <a href="javascript:void(0)" class="btn btn-sm btn-warning editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>" data-toggle="tooltip" title="Edit">
-                                        <i class="bi bi-pencil-fill"></i>
-                                    </a> --}}
+                                     <a href="javascript:void(0)" class="btn btn-sm btn-info editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>" data-toggle="tooltip" title="Edit">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
 
                                     <?php  if(Auth::user()->auth_level  == 4 ) { ?>
                                         <a data-toggle="tooltip" target="_blank" href="{{ $row->invoice_path }}" data-placement="top" title="Invoice"  class="btn btn-sm btn-secondary"><i class="bi bi-file-earmark-break"></i></a>
