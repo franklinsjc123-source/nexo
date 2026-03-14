@@ -49,6 +49,7 @@ class OrderController extends Controller
                     'amount' => $order->amount,
                     'order_status' => $order->order_status,
                     'payment_type' => $order->payment_type,
+                    'image_url' => '',
                     'type' => 'cart_order',
                     'created_at' => $order->created_at
                 ];
@@ -71,6 +72,7 @@ class OrderController extends Controller
                     'amount' => $order->total_invoice_amount,
                     'order_status' => $order->order_status,
                     'payment_type' => 'direct',
+                    'image_url' => $order->image_url,
                     'type' => 'direct_order',
                     'created_at' => $order->created_at
                 ];
