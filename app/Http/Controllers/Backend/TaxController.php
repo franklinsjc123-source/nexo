@@ -50,10 +50,10 @@ class TaxController extends Controller
             }
         } else {
             $updateArray = array(
-                'tax_percentage'         => isset($input['unit_name'])    ?  $input['unit_name']    : '',
+                'tax_percentage'         => isset($input['tax_percentage'])    ?  $input['tax_percentage']    : '',
             );
             $update = Tax::Where('id', $id)->update($updateArray);
-            return redirect()->route('unit')->with('success', 'Tax Updated Successfully');
+            return redirect()->route('tax')->with('success', 'Tax Updated Successfully');
         }
 
     }
