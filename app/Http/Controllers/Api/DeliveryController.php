@@ -55,19 +55,60 @@ class DeliveryController extends Controller
 
 
 
-    public function getAllNewOrders()
+    public function getAllNewOrders(Request $request)
     {
+        $deliver_person_id = $request->deliver_person_id;
 
-        $orders = Order::where('deliver_person_id', 0)->whereDate('created_at', today())->get();
+        $orders = Order::whereIn('deliver_person_id', [0, $deliver_person_id])
+            ->orderBy('id', 'desc')
+            ->get();
 
         if ($orders->isNotEmpty()) {
-            $success_array = array('status' => 'success', 'message' => 'Data received successfully', 'data' =>  $orders);
-            return response()->json(array($success_array), 200);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Data received successfully',
+                'data' => $orders
+            ], 200);
         } else {
-            $error_array = array('status' => 'error', 'message' => 'Records not found');
-            return response()->json(array($error_array), 400);
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Records not found'
+            ], 400);
         }
-        
+    }
+
+    public function takenOrder(Request $request)
+    {
+        $deliver_person_id = $request->deliver_person_id;
+        $order_id = $request->order_id;
+
+        $order = Order::where('id', $order_id)->first();
+
+        if (!$order) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order not found'
+            ], 404);
+        }
+
+        if ($order->deliver_person_id == 0) {
+
+            $order->deliver_person_id = $deliver_person_id;
+            $order->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Order taken successfully'
+            ], 200);
+        } else {
+
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order already taken'
+            ], 400);
+        }
     }
 
 
