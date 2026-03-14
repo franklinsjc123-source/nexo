@@ -144,26 +144,38 @@
         $('#orderStatusModal').modal('hide');
     });
 
+   $(document).on('click', '.editOrderStatus', function () {
 
+    var auth_level = "{{ auth()->user()->auth_level }}";
 
-    $(document).on('click', '.editOrderStatus', function () {
+    let orderId = $(this).data('id');
+    let status  = $(this).data('status');
 
-        let orderId = $(this).data('id');
-        let status  = $(this).data('status');
+    $('#order_id').val(orderId);
 
-        $('#order_id').val(orderId);
+    // reset options
+    $('#change_order_status option').prop('disabled', false);
 
-        $('#orderStatusModal').modal('show');
+    // set current status
+    $('#change_order_status').val(status).trigger('change');
 
-        setTimeout(function(){
-            $('#change_order_status')
-                .val(status)
-                .trigger('change');
-        }, 200);
+    // SHOP USER (auth_level = 4)
+    if(auth_level == 4){
 
-    });
+        // if order already Delivered or Cancelled
+        if(status == 2 || status == 3){
+            $('#change_order_status option').prop('disabled', true);
+        }else{
+            // allow only Dispatched
+            $('#change_order_status option').prop('disabled', true);
+            $('#change_order_status option[value="4"]').prop('disabled', false);
+        }
 
+    }
 
+    $('#orderStatusModal').modal('show');
+
+});
 
     $('#saveStatus').click(function () {
 
