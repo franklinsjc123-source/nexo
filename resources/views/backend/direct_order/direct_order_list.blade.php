@@ -142,6 +142,9 @@
                                         } elseif ($row->order_status == 3) {
                                             $class = "danger";
                                             $text  = "Cancelled";
+                                        } elseif ($row->order_status == 4) {
+                                            $class = "secondary";
+                                            $text  = "Dispatched";
                                         } else {
                                             $class = "secondary";
                                             $text  = "Unknown";
@@ -191,6 +194,7 @@
 
                         <select class="form-control select2 " id="change_order_status" name="change_order_status">
                             <option value="1">New order</option>
+                            <option value="4">Dispatched</option>
                             <option value="2">Delivered</option>
                             <option value="3">Cancelled</option>
                         </select>

@@ -67,6 +67,9 @@
                                         } elseif ($row->order_status == 3) {
                                             $class = "danger";
                                             $text  = "Cancelled";
+                                        }  elseif ($row->order_status == 4) {
+                                            $class = "secondary";
+                                            $text  = "Dispatched";
                                         } else {
                                             $class = "secondary";
                                             $text  = "Unknown";
@@ -79,9 +82,9 @@
                                 </td>
                                 <td>
 
-                                     <a href="javascript:void(0)" class="btn btn-sm btn-warning editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>" data-toggle="tooltip" title="Edit">
+                                     {{-- <a href="javascript:void(0)" class="btn btn-sm btn-warning editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>" data-toggle="tooltip" title="Edit">
                                         <i class="bi bi-pencil-fill"></i>
-                                    </a>
+                                    </a> --}}
 
                                     <?php  if(Auth::user()->auth_level  == 4 ) { ?>
                                         <a data-toggle="tooltip" target="_blank" href="{{ $row->invoice_path }}" data-placement="top" title="Invoice"  class="btn btn-sm btn-secondary"><i class="bi bi-file-earmark-break"></i></a>
@@ -117,6 +120,7 @@
 
                         <select class="form-control select2 " id="change_order_status" name="change_order_status">
                             <option value="1">New order</option>
+                            <option value="4">Dispatched</option>
                             <option value="2">Delivered</option>
                             <option value="3">Cancelled</option>
                         </select>
