@@ -44,9 +44,9 @@ class TaxController extends Controller
         if ($id == 0 || $id == '') {
             $insert = Tax::create($dataArr);
             if ($insert['id'] > 0) {
-                return redirect()->route('unit')->with('success', 'Tax Saved Successfully');
+                return redirect()->route('tax')->with('success', 'Tax Saved Successfully');
             } else {
-                return redirect()->route('unit')->with('error', 'Something went wrong!');
+                return redirect()->route('tax')->with('error', 'Something went wrong!');
             }
         } else {
             $updateArray = array(
