@@ -62,6 +62,7 @@ class OrderController extends Controller
                 'invoice_no',
                 'total_invoice_amount',
                 'order_status',
+                'image_url',
                 'created_at'
             )
             ->get()
