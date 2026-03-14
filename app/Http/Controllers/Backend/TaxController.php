@@ -14,7 +14,7 @@ class TaxController extends Controller
 
     public function tax()
     {
-         if (!$this->checkPermission('tax')) {
+         if (!$this->checkPermission('Tax')) {
             return view('unauthorized');
         }
         $records   =  Tax::orderBy('id', 'ASC')->get();
@@ -40,7 +40,7 @@ class TaxController extends Controller
             if ($key != 'id')
                 $dataArr[$key] = $val;
         }
-        
+
         if ($id == 0 || $id == '') {
             $insert = Tax::create($dataArr);
             if ($insert['id'] > 0) {
