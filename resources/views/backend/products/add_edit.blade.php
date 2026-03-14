@@ -16,6 +16,7 @@
     $discount_price         = isset($records->discount_price) ? $records->discount_price : '';
     $end_time               = isset($records->end_time) ? $records->end_time : '';
     $product_description    = isset($records->product_description) ? $records->product_description : '';
+    $tax_percentage         = isset($records->tax_percentage) ? $records->tax_percentage : '';
     $product_image          = isset($records->product_image) ? $records->product_image:'';
     $status                 = isset($records->status) ? $records->status:'';
     $type                   = ($id == '')   ? 'Create' : 'Update';
@@ -161,6 +162,22 @@
                                             </label>
                                             <input type="text" class="form-control" id="hsn_code" name="hsn_code"  maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g,'');"  placeholder="Enter HSN Code" value="<?= old('hsn_code',$hsn_code) ?? '' ?>"  >
                                             @error('hsn_code') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+                                        <div class="col-xl-4">
+                                            <label class="form-label"> Tax percentage <span class="text-danger"></span></label>
+                                            <select class="form-control select2" id="tax_percentage" name="tax_percentage">
+                                                <option value="">--select--</option>
+                                                    <?php
+                                                        if (isset($taxData)) {
+                                                            foreach ($taxData as $val) { ?>
+                                                            <option <?=(old('tax_percentage', $tax_percentage) == $val->id)? 'selected':'' ?> value="<?php echo $val->id ?>"><?php echo ucwords($val->tax_percentage)  . '%' ?></option>
+                                                    <?php }
+                                                    }
+                                                    ?>
+                                            </select>
+
+                                            @error('tax_percentage') <span class="text-danger">{{$message}}</span> @enderror
+
                                         </div>
 
 

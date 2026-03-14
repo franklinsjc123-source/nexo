@@ -9,6 +9,8 @@ use App\Models\ProductAttributes;
 use App\Models\ProductImages;
 use App\Models\Category;
 use App\Models\Unit;
+use App\Models\Tax;
+
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Http\Traits\PermissionCheckTrait;
@@ -61,8 +63,9 @@ class ProductController extends Controller
 
         $shopData       =  Shop::where('status', 1)->orderBy('shop_name', 'ASC')->get();
         $unitData       =  Unit::where('status', 1)->orderBy('unit_name', 'ASC')->get();
+        $taxData        =  Tax::where('status', 1)->orderBy('tax_percentage', 'ASC')->get();
 
-        return view('backend.products.add_edit', compact('records', 'id', 'categoryData', 'shopData', 'unitData', 'productAttributes','productImages'));
+        return view('backend.products.add_edit', compact('records', 'id', 'categoryData', 'shopData', 'unitData', 'productAttributes','productImages','taxData'));
     }
 
     public function storeUpdateProduct(Request $request)
@@ -73,6 +76,7 @@ class ProductController extends Controller
         $product_name        = $request->product_name ?? '';
         $hsn_code            = $request->hsn_code ?? '';
         $food_type           = $request->food_type ?? '';
+        $tax_percentage      = $request->tax_percentage ?? '';
         $product_description = $request->product_description ?? '';
 
         $data = [
@@ -82,6 +86,7 @@ class ProductController extends Controller
             'food_type'           => $food_type,
             'hsn_code'            => $hsn_code,
             'product_description' => $product_description,
+            'tax_percentage'      => $tax_percentage,
             'created_by'          => auth()->id(),
         ];
 

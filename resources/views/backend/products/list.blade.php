@@ -55,6 +55,7 @@
                         <?php } ?>
                         <th>Product Name</th>
                         <th>HSN  Code</th>
+                        <th>Tax %</th>
                         <th> ( Unit/ Price/ Discount Price )</th>
                         {{-- <th>Original Price</th>
                         <th>Discount Price</th> --}}
@@ -77,6 +78,7 @@
 
                                 <td><?= $row->product_name ?></td>
                                 <td><?= $row->hsn_code ?></td>
+                                <td><?= $row->tax_percentage .'%' ?></td>
                                 <td>
                                     <table style="border" class="price-inner-table">
                                         @foreach($row->attributes as $attr)
