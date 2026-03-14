@@ -31,42 +31,81 @@ class OrderController extends Controller
     {
         $user_id = $request->input('user_id');
 
-        $orders = Order::with('items')
-            ->where('customer_id', $user_id)
-            ->orderBy('id', 'DESC')
-            ->get();
+        // Normal Orders
+        $orders = Order::where('customer_id', $user_id)
+            ->select(
+                'id',
+                'order_id',
+                'amount',
+                'order_status',
+                'payment_type',
+                'created_at'
+            )
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'id' => $order->id,
+                    'order_id' => $order->order_id,
+                    'amount' => $order->amount,
+                    'order_status' => $order->order_status,
+                    'payment_type' => $order->payment_type,
+                    'type' => 'cart_order',
+                    'created_at' => $order->created_at
+                ];
+            });
 
-        if ($orders->isEmpty()) {
+        // Direct Orders
+        $directOrders = DirectOrder::where('customer_id', $user_id)
+            ->select(
+                'id',
+                'invoice_no',
+                'total_invoice_amount',
+                'order_status',
+                'created_at'
+            )
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'id' => $order->id,
+                    'order_id' => $order->invoice_no,
+                    'amount' => $order->total_invoice_amount,
+                    'order_status' => $order->order_status,
+                    'payment_type' => 'direct',
+                    'type' => 'direct_order',
+                    'created_at' => $order->created_at
+                ];
+            });
+
+        // Merge Orders
+        $allOrders = $orders->merge($directOrders)
+            ->sortByDesc('created_at')
+            ->values();
+
+        if ($allOrders->isEmpty()) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Records not found'
             ], 400);
         }
 
-        $data = [];
-
-        foreach ($orders as $order) {
-
-            $total_qty = $order->items->sum('qty');
-
-            $data[] = [
-                'id'             => $order->id,
-                'order_id'       => $order->order_id,
-                'total_quantity' => $total_qty,
-                'order_status'   => $order->order_status,
-                'payment_type'   => $order->payment_type,
-                'amount'         => $order->amount,
-                'date'           => date('d-m-Y', strtotime($order->created_at))
+        $data = $allOrders->map(function ($order) {
+            return [
+                'id' => $order['id'],
+                'order_id' => $order['order_id'],
+                'amount' => $order['amount'],
+                'order_status' => $order['order_status'],
+                'payment_type' => $order['payment_type'],
+                'order_type' => $order['type'],
+                'date' => date('d-m-Y', strtotime($order['created_at'])),
             ];
-        }
+        });
 
         return response()->json([
-            'status'  => 'success',
+            'status' => 'success',
             'message' => 'Data received successfully',
-            'data'    => $data
-        ], 200);
+            'data' => $data
+        ]);
     }
-
 
     public function getOrderDetails(Request $request)
     {
@@ -396,7 +435,7 @@ class OrderController extends Controller
                     'status' => false,
                     'message' => $category->category_name .
                         " minimum order amount is ₹" . $category->min_order_value
-                ],400);
+                ], 400);
             }
         }
 
@@ -516,8 +555,8 @@ class OrderController extends Controller
 
                     $shop = Shop::find($shop_id);
 
-                     $shop_total = $items->sum('price');
-                     $shop_amount_words = $this->amountToWords($shop_total);
+                    $shop_total = $items->sum('price');
+                    $shop_amount_words = $this->amountToWords($shop_total);
 
                     $shopInvoiceName = 'Shop_' . $order_number . '_shop_' . $shop_id . date('Ymd_His') . '.pdf';
 
@@ -682,7 +721,7 @@ class OrderController extends Controller
     }
 
 
-      function amountToWords($amount)
+    function amountToWords($amount)
     {
         $rupees = floor($amount);
         $paise  = round(($amount - $rupees) * 100);
@@ -763,7 +802,7 @@ class OrderController extends Controller
     }
 
 
-       function convertTwoDigit($num, $words)
+    function convertTwoDigit($num, $words)
     {
         if ($num < 21) {
             return $words[$num];
@@ -786,7 +825,4 @@ class OrderController extends Controller
 
         return $this->convertTwoDigit($rest, $words);
     }
-
-
-
 }
