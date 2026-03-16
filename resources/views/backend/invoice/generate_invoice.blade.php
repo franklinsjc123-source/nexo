@@ -464,28 +464,35 @@
             </td>
             <td class="summary-right-outer" style="width:344px; border-left:1px solid #444; padding:0;">
                 <table class="summary-inner">
-                    <tr>
+                    {{-- <tr>
                         <td>Sub Total</td>
                         <td class="colon-col">:</td>
                         <td class="val-col"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($total_amount,2) }}</td>
-                    </tr>
+                    </tr> --}}
+
 
                      <tr>
+                       <td style="white-space: nowrap;">GST Value</td>
+                        <td class="colon-col">:</td>
+                        <td class="val-col"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($order_details->total_tax_amount ,2)}}</td>
+                    </tr>
+
+                     {{-- <tr>
                        <td style="white-space: nowrap;">SGST @9%</td>
                         <td class="colon-col">:</td>
                         <td class="val-col"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($total_amount * 0.09 , 2)}}</td>
-                    </tr>
+                    </tr> --}}
 
 
-                     <tr>
+                     {{-- <tr>
                         <td style="white-space: nowrap;">CGST  @9%</td>
                         <td class="colon-col">:</td>
                         <td class="val-col"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($total_amount * 0.09 ,2)}}</td>
-                    </tr>
+                    </tr> --}}
                     <tr>
                         <td style="width:50%" ><strong>Total</strong></td>
                         <td class="colon-col">:</td>
-                        <td class="val-col"><strong><span style="font-family: DejaVu Sans, sans-serif;">₹</span>{{ number_format($total_amount +  ( $total_amount*0.18 ),2) }}</strong></td>
+                        <td class="val-col"><strong><span style="font-family: DejaVu Sans, sans-serif;">₹</span>{{ $order_details->total_invoice_amount }} </strong></td>
                     </tr>
 
                     <tr>
@@ -499,7 +506,7 @@
                       <tr>
                         <td >Advance</td>
                         <td class="rb-colon">:</td>
-                        <td class="rb-val text-right" ><span style="font-family:  DejaVu Sans, sans-serif;">₹</span> <b style="color:blue">{{ number_format ( ($total_amount +  ( $total_amount*0.18 )) * 0.30,2) }} </b> </td>
+                        <td class="rb-val text-right" ><span style="font-family:  DejaVu Sans, sans-serif;">₹</span> <b style="color:blue">{{ number_format  ($order_details->advance_amount,2) }} </b> </td>
                     </tr>
                     <tr>
                         <td  style="white-space: nowrap;" >Delivery Charges</td>

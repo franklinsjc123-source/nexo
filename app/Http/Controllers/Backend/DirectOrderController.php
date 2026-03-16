@@ -89,12 +89,8 @@ class DirectOrderController extends Controller
         $pdfPath = public_path('uploads/direct_order_invoice/' . $pdfFileName);
 
 
-
-
-
-
-        $total_amount =  ($request->total_amount * 0.18)  +  $request->total_amount;
-        $amount_in_words =  $this->amountToWords($total_amount);
+        // $total_amount =  ($request->total_invoice_amount * 0.18)  +  $request->total_amount;
+        $amount_in_words =  $this->amountToWords($request->total_invoice_amount);
 
         DirectOrder::where('id', $id)->update([
             'total_amount' => $request->total_amount,
@@ -103,8 +99,8 @@ class DirectOrderController extends Controller
             'amount_in_words' => $amount_in_words,
             'cgst' => $request->total_amount * 0.09,
             'sgst' => $request->total_amount * 0.09,
-            'total_tax_amount' => $request->total_amount * 0.18,
-            'total_invoice_amount' => $total_amount,
+            'total_tax_amount' => $request->total_tax_amount,
+            'total_invoice_amount' => $request->total_invoice_amount,
             'invoice_file' => URL::to('/') . '/uploads/direct_order_invoice/' . $pdfFileName
         ]);
 

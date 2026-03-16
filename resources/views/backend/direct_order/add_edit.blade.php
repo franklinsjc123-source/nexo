@@ -161,7 +161,18 @@
 
                                         </div>
 
-                                          <div class="col-xl-8 mt-3">
+                                           <div class="col-xl-8 mt-3">
+                                            <label style="float:right; margin-top:7px" class="form-label fw-semibold">GST Value </label>
+
+                                        </div>
+
+                                         <div class="col-xl-4 mt-3">
+                                            <input type="text" class="form-control" id="total_tax_amount" name="total_tax_amount" placeholder=" Amount" value="{{ $record->total_tax_amount ?? '' }}" maxlength="20" oninput="this.value = this.value.replace(/[^0-9.]/g,''); limitDecimal(this); calculateInvoice();" >
+
+                                        </div>
+
+
+                                          {{-- <div class="col-xl-8 mt-3">
                                             <label style="float:right; margin-top:7px" class="form-label fw-semibold">CGST </label>
 
                                         </div>
@@ -169,11 +180,11 @@
                                          <div class="col-xl-4 mt-3">
                                             <input type="text" class="form-control" id="cgst" name="cgst" placeholder=" Amount" value="{{ $record->cgst ?? '' }}" maxlength="20" readonly>
 
-                                        </div>
+                                        </div> --}}
 
 
 
-                                        <div class="col-xl-8 mt-3">
+                                        {{-- <div class="col-xl-8 mt-3">
                                             <label style="float:right; margin-top:7px" class="form-label fw-semibold">SGST </label>
 
                                         </div>
@@ -181,7 +192,7 @@
                                          <div class="col-xl-4 mt-3">
                                             <input type="text" class="form-control" id="sgst" name="sgst" placeholder=" Amount" value="{{ $record->sgst ?? '' }}" maxlength="20" readonly>
 
-                                        </div>
+                                        </div> --}}
 
 
 
@@ -361,8 +372,9 @@ document.addEventListener('click', function (e) {
 function calculateInvoice() {
 
     let total_other_amount = 0;
+    let total_tax_amount = parseFloat(document.getElementById('total_tax_amount')?.value) || 0;
 
-    // Sum all other amounts
+
     document.querySelectorAll('.other-amount').forEach(el => {
         total_other_amount += parseFloat(el.value) || 0;
     });
@@ -371,12 +383,15 @@ function calculateInvoice() {
     $('#total_amount').val(total_other_amount.toFixed(2));
 
 
+
+
+
     let advance_amount = total_other_amount ;
 
-    let cgst = total_other_amount * 0.09;
-    let sgst = total_other_amount * 0.09;
+    // let cgst = total_other_amount * 0.09;
+    // let sgst = total_other_amount * 0.09;
 
-    let advance_total = (advance_amount + cgst + sgst )  * 0.30;
+    let advance_total = (advance_amount + total_tax_amount )  * 0.30;
 
 
     let advanceField = document.getElementById('advance_amount');
@@ -385,19 +400,19 @@ function calculateInvoice() {
     }
 
 
-    if (document.getElementById('cgst')) {
-        document.getElementById('cgst').value = cgst.toFixed(2);
-    }
+    // if (document.getElementById('cgst')) {
+    //     document.getElementById('cgst').value = cgst.toFixed(2);
+    // }
 
-    if (document.getElementById('sgst')) {
-        document.getElementById('sgst').value = sgst.toFixed(2);
-    }
+    // if (document.getElementById('sgst')) {
+    //     document.getElementById('sgst').value = sgst.toFixed(2);
+    // }
 
     // Get advance & delivery
     let delivery_amount = parseFloat(document.getElementById('delivery_amount')?.value) || 0;
 
     // Final total calculation
-    let total_invoice_amount = total_other_amount + cgst + sgst + delivery_amount ;
+    let total_invoice_amount = total_other_amount + total_tax_amount + delivery_amount ;
 
     // Set total invoice
     let totalField = document.getElementById('total_invoice_amount');
