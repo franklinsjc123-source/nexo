@@ -285,7 +285,7 @@
             <!-- LOGO: Replace src with your actual logo path e.g. src="{{ public_path('images/logo.png') }}" -->
             <td class="header-logo-cell" style="width:20%;">
                 <img
-                   src="{{ public_path('backend_assets/images/invoice.jpg') }}"
+                   src="{{ public_path('backend_assets/images/invoice.svg') }}"
                     alt="LOgo"
                     width="100"
                     height="100"
@@ -416,12 +416,12 @@
         <thead>
             <tr>
                 <th style="width:28px;">S.No</th>
-                <th>Item Name</th>
-                <th style="width:100px;">HSN/ SAC</th>
-                <th   style="width:100px; text-align:right">Price</th>
-
-                <th   style="width:100px; text-align:right">Quantity</th>
-                <th style="width:100px; text-align:right">Amount(<span style="font-family: DejaVu Sans, sans-serif;">₹</span>)</th>
+                <th style="width:100px;" >Item Name</th>
+                <th style="width:50px;">HSN/ SAC</th>
+                <th style="width:50px;">Tax % </th>
+                <th   style="width:50px; text-align:right">Price</th>
+                <th   style="width:50px; text-align:right">Quantity</th>
+                <th style="width:50px; text-align:right">Amount(<span style="font-family: DejaVu Sans, sans-serif;">₹</span>)</th>
             </tr>
         </thead>
          <tbody>
@@ -442,6 +442,7 @@
                     ( {{ optional($io->unitData)->unit_name ?? '-' }} )
                 </td>
                 <td class="text-left">{{  $io->product->hsn_code ?? '-' }}</td>
+                <td class="text-left">{{  $io->product->taxData->tax_percentage ?? '-' }}</td>
                 <td  class="text-right"  >{{  $io->product_price ?? '-' }}</td>
                 <td  class="text-right"  >{{  $io->qty ?? '-' }}</td>
                 <td class="text-right"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{  $io->price }}</td>
@@ -451,8 +452,8 @@
 
             <!-- Total Row -->
             <tr class="total-row">
-                <td colspan="2" style="border:1px solid #444; font-weight:bold;">Total</td>
-                <td  style="border:1px solid #444;"></td>
+                <td colspan="4" style="border:1px solid #444; font-weight:bold;">Total</td>
+                {{-- <td  style="border:1px solid #444;"></td> --}}
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($total_amount,2) }}</td>
@@ -471,7 +472,7 @@
             </td>
             <td class="summary-right-outer" style="width:344px; border-left:1px solid #444; padding:0;">
                 <table class="summary-inner">
-                    <tr>
+                    {{-- <tr>
                         <td>Sub Total</td>
                         <td class="colon-col">:</td>
                         <td class="val-col"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($total_amount,2) }}</td>
@@ -493,7 +494,7 @@
                         <td style="width:50%" ><strong>Total</strong></td>
                         <td class="colon-col">:</td>
                         <td class="val-col"><strong><span style="font-family: DejaVu Sans, sans-serif;">₹</span>{{ number_format($total_amount +  ( $total_amount*0.18 ),2) }}</strong></td>
-                    </tr>
+                    </tr> --}}
 
                     <tr>
                       <td colspan="3" style="background-color: #d7d8e9;"><strong>Invoice Amount In Words :</strong></td>
