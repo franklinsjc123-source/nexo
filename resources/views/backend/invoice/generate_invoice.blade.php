@@ -492,7 +492,7 @@
                     <tr>
                         <td style="width:50%" ><strong>Total</strong></td>
                         <td class="colon-col">:</td>
-                        <td class="val-col"><strong><span style="font-family: DejaVu Sans, sans-serif;">₹</span>{{ $order_details->total_invoice_amount }} </strong></td>
+                        <td class="val-col"><strong><span style="font-family: DejaVu Sans, sans-serif;">₹ </span>{{ $order_details->total_invoice_amount }} </strong></td>
                     </tr>
 
                     <tr>
@@ -506,12 +506,12 @@
                       <tr>
                         <td >Advance</td>
                         <td class="rb-colon">:</td>
-                        <td class="rb-val text-right" ><span style="font-family:  DejaVu Sans, sans-serif;">₹</span> <b style="color:blue">{{ number_format  ($order_details->advance_amount,2) }} </b> </td>
+                        <td class="rb-val text-right" ><span style="font-family:  DejaVu Sans, sans-serif;">₹ </span> <b style="color:blue">{{ number_format  ($order_details->advance_amount,2) }} </b> </td>
                     </tr>
                     <tr>
                         <td  style="white-space: nowrap;" >Delivery Charges</td>
                         <td  class="rb-colon" >:</td>
-                        <td  class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹</span>  <b style="color:blue">{{ number_format($order_details->delivery_amount,2)}}  </b> </td>
+                        <td  class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹ </span>  <b style="color:blue">{{ number_format($order_details->delivery_amount,2)}}  </b> </td>
                     </tr>
 
                 </table>
