@@ -122,12 +122,14 @@ class ProductController extends Controller
 
             if ($request->unit) {
 
+
                 foreach ($request->unit as $i => $unit) {
 
                     ProductAttributes::create([
                         'product_id'     => $insert->id,
                         'unit'           => $unit ?? 0,
                         'original_price' => $request->original_price[$i] ?? 0,
+                        'actual_price'   => $request->actual_price[$i] ?? 0,
                         'discount_price' => $request->discount_price[$i] ?? 0,
                     ]);
                 }
@@ -177,6 +179,7 @@ class ProductController extends Controller
                     'product_id'     => $id,
                     'unit'           => $unit ?? 0,
                     'original_price' => $request->original_price[$i] ?? 0,
+                    'actual_price'   => $request->actual_price[$i] ?? 0,
                     'discount_price' => $request->discount_price[$i] ?? 0,
                 ]);
             }

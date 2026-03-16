@@ -32,4 +32,10 @@ class Product extends Model
     }
 
 
+    public function taxData()
+    {
+        return $this->belongsTo(Tax::class, 'tax_percentage', 'id');
+    }
+
+
 }

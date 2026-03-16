@@ -158,7 +158,7 @@
 
                                          <div class="col-xl-4">
                                             <label for="contact_no" class="form-label">
-                                                HSN Code <span class="text-danger"></span>
+                                                HSN/SAC Code <span class="text-danger"></span>
                                             </label>
                                             <input type="text" class="form-control" id="hsn_code" name="hsn_code"  maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g,'');"  placeholder="Enter HSN Code" value="<?= old('hsn_code',$hsn_code) ?? '' ?>"  >
                                             @error('hsn_code') <span class="text-danger">{{ $message }}</span> @enderror
@@ -170,7 +170,7 @@
                                                     <?php
                                                         if (isset($taxData)) {
                                                             foreach ($taxData as $val) { ?>
-                                                            <option <?=(old('tax_percentage', $tax_percentage) == $val->id)? 'selected':'' ?> value="<?php echo $val->id ?>"><?php echo ucwords($val->tax_percentage)  . '%' ?></option>
+                                                            <option  data-tax="<?php echo $val->tax_percentage ?>"  <?=(old('tax_percentage', $tax_percentage) == $val->id)? 'selected':'' ?> value="<?php echo $val->id ?>"> <?php echo ucwords($val->tax_percentage)  . '%' ?> </option>
                                                     <?php }
                                                     }
                                                     ?>
@@ -254,7 +254,7 @@
                                                         </div>
 
 
-                                                        <div class="col-xl-3">
+                                                        <div class="col-xl-2">
                                                             <label for="original_price" class="form-label">
                                                                 Original Price <span class="text-danger">*</span>
                                                             </label>
@@ -262,12 +262,14 @@
                                                             @error('original_price') <span class="text-danger">{{ $message }}</span> @enderror
                                                         </div>
 
-                                                        <div class="col-xl-3">
-                                                            <label for="original_price" class="form-label">
-                                                                Discount Price <span class="text-danger">*</span>
-                                                            </label>
-                                                            <input type="text" class="form-control"  name="discount_price[]" placeholder="Enter Discount Price" value="<?= old('discount_price',$ba->discount_price) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9.]/g,'');">
-                                                            @error('discount_price') <span class="text-danger">{{ $message }}</span> @enderror
+                                                        <div class="col-xl-2">
+                                                            <label class="form-label">Actual Price <span class="text-danger">*</span></label>
+                                                            <input type="text" class="form-control actual_price" name="actual_price[]"  value="<?= old('actual_price',$ba->actual_price) ?? '' ?>" placeholder="Enter Actual Price">
+                                                        </div>
+
+                                                        <div class="col-xl-2">
+                                                            <label class="form-label">Discount Price</label>
+                                                            <input type="text" class="form-control discount_price" name="discount_price[]"  value="<?= old('discount_price',$ba->discount_price) ?? '' ?>"  readonly>
                                                         </div>
 
                                                         <!-- Buttons -->
@@ -304,7 +306,7 @@
                                                     </div>
 
 
-                                                    <div class="col-xl-3">
+                                                    <div class="col-xl-2">
                                                         <label for="original_price" class="form-label">
                                                             Original Price <span class="text-danger">*</span>
                                                         </label>
@@ -312,12 +314,14 @@
                                                         @error('original_price') <span class="text-danger">{{ $message }}</span> @enderror
                                                     </div>
 
-                                                    <div class="col-xl-3">
-                                                        <label for="original_price" class="form-label">
-                                                            Discount Price <span class="text-danger">*</span>
-                                                        </label>
-                                                        <input type="text" class="form-control"  name="discount_price[]" placeholder="Enter Discount Price" value="<?= old('discount_price',$discount_price) ?? '' ?>" oninput="this.value = this.value.replace(/[^0-9.]/g,'');">
-                                                        @error('discount_price') <span class="text-danger">{{ $message }}</span> @enderror
+                                                    <div class="col-xl-2">
+                                                        <label class="form-label">Actual Price <span class="text-danger">*</span></label>
+                                                        <input type="text" class="form-control actual_price" name="actual_price[]" placeholder="Enter Actual Price" oninput="this.value = this.value.replace(/[^0-9.]/g,'');">
+                                                    </div>
+
+                                                    <div class="col-xl-2">
+                                                        <label class="form-label">Discount Price</label>
+                                                        <input type="text" class="form-control discount_price" name="discount_price[]" readonly>
                                                     </div>
 
                                                     <div class="col-md-3">
@@ -440,6 +444,40 @@ $(document).on('change', '#shop', function () {
     }
 });
 
+
+$("#tax_percentage").on("change", function () {
+
+    $(".quantity-row").each(function () {
+
+        let actualPrice = parseFloat($(this).find(".actual_price").val()) || 0;
+        let taxPercent = parseFloat($("#tax_percentage option:selected").data("tax")) || 0;
+
+        let taxAmount = (actualPrice * taxPercent) / 100;
+
+        let discountPrice = actualPrice + taxAmount;
+
+        $(this).find(".discount_price").val(discountPrice.toFixed(2));
+    });
+
+});
+
+
+$(document).on('input', '.actual_price', function () {
+
+    let row = $(this).closest('.quantity-row');
+
+    let actualPrice = parseFloat($(this).val()) || 0;
+    let taxPercent = parseFloat($("#tax_percentage option:selected").data("tax")) || 0;
+
+    let taxAmount = (actualPrice * taxPercent) / 100;
+
+    let discountPrice = actualPrice + taxAmount;
+
+    row.find('.discount_price').val(discountPrice.toFixed(2));
+});
+
+
+
 $(document).ready(function () {
 
     let categoryId = $('#category').val();
@@ -530,12 +568,14 @@ $(".quantity-row").each(function () {
 
     let unit = $(this).find('select[name="unit[]"]');
     let originalPrice = $(this).find('input[name="original_price[]"]');
+    let actualPrice = $(this).find('input[name="actual_price[]"]');
     let discountPrice = $(this).find('input[name="discount_price[]"]');
 
     // remove old error
     unit.next('.select2').find('.select2-selection').removeClass("input-error");
     originalPrice.removeClass("input-error");
     discountPrice.removeClass("input-error");
+    actualPrice.removeClass("input-error");
 
     if (unit.val() == '') {
         isValid = false;
@@ -545,6 +585,11 @@ $(".quantity-row").each(function () {
     if (originalPrice.val() == '') {
         isValid = false;
         originalPrice.addClass("input-error");
+    }
+
+    if (actualPrice.val() == '') {
+        isValid = false;
+        actualPrice.addClass("input-error");
     }
 
     if (discountPrice.val() == '') {
