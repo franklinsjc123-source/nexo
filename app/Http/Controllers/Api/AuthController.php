@@ -17,9 +17,6 @@ use Illuminate\Support\Facades\Http;
 class AuthController extends Controller
 {
 
-
-
-
     public function login(Request $request)
     {
 
@@ -47,7 +44,7 @@ class AuthController extends Controller
 
                 $message = "Your NexOcart verification code is $otp. Do not share this OTP with anyone.";
 
-                $this->sendNotification($user->id, 'NexOcart OTP Verification', $message);
+                $this->sendNotification($user->id, 'NexOcart OTP Verification', 'dkfjhlkfjslfskfj');
 
 
                 $success_array = array('status' => 'success', 'message' => 'OTP send successfully', 'otp' => '1234');
@@ -236,6 +233,8 @@ class AuthController extends Controller
     {
         $firebaseToken = User::Where('id', $userid)->first('token_id');
 
+        dd($firebaseToken);
+
         $NotificationData = ['title' => $title, 'body'  => $msg];
         $titles           = ['title' => $title, 'body'  => $msg];
         $data             = [
@@ -267,6 +266,7 @@ class AuthController extends Controller
         }
         return response()->json(['response' => $responseData]);
     }
+
 
     public function getAccessToken()
     {
