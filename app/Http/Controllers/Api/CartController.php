@@ -178,6 +178,7 @@ class CartController extends Controller
                 ->pluck('offer_id');
 
             $discount = 0;
+
             foreach ($appliedOffers as $offer_id) {
 
                 $offer = Offers::find($offer_id);
@@ -244,7 +245,7 @@ class CartController extends Controller
 
 
 
-            $delivery_charge = round($delivery_charge + $pincode_charge , 2) ;
+            $delivery_charge = round($delivery_charge + $pincode_charge) ;
 
 
 
