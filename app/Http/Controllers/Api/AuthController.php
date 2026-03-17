@@ -69,7 +69,7 @@ class AuthController extends Controller
         $email = $request->input('email');
         $mobile = $request->input('mobile');
         $referral_code = $request->input('referral_code');
-        $device_id = $request->input('device_id');
+        $token_id = $request->input('token_id');
 
 
         if ($name != '' &&  $email != '' &&  $mobile) {
@@ -115,7 +115,7 @@ class AuthController extends Controller
                 'otp'           => '1234',
                 'referral_code' => $referral_code,
                 'auth_level'    => 3,
-                'device_id'     => $device_id,
+                'token_id'      => $token_id,
                 'created_at'    => now()
 
             );
