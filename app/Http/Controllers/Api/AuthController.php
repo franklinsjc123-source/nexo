@@ -42,6 +42,8 @@ class AuthController extends Controller
 
                 $otp = rand(1000, 9999);
 
+                dd($user->id);
+
                 $message = "Your NexOcart verification code is $otp. Do not share this OTP with anyone.";
 
                 $this->sendNotification($user->id, 'NexOcart OTP Verification', 'dkfjhlkfjslfskfj');
