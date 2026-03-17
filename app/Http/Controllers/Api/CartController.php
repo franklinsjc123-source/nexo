@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Offers;
 use App\Models\OffersUsed;
 use App\Models\Address;
+use App\Models\PinCode;
 
 use App\Models\ProductAttributes;
 use Carbon\Carbon;
@@ -236,7 +237,17 @@ class CartController extends Controller
                 }
             }
 
-            $delivery_charge = round($delivery_charge, 2);
+            if ($delivery_address) {
+
+                $pincode_charge = PinCode::where('pincode', $delivery_address->pincode)->value('delivery_charge');
+            }
+
+
+
+            $delivery_charge = round($delivery_charge + $pincode_charge , 2) ;
+
+
+
 
 
 
