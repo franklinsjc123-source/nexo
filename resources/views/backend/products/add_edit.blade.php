@@ -455,6 +455,8 @@ $("#tax_percentage").on("change", function () {
         let taxAmount = (actualPrice * taxPercent) / 100;
 
         let discountPrice = actualPrice + taxAmount;
+          discountPrice = Math.round(discountPrice);
+
 
         $(this).find(".discount_price").val(discountPrice.toFixed(2));
     });
@@ -472,6 +474,8 @@ $(document).on('input', '.actual_price', function () {
     let taxAmount = (actualPrice * taxPercent) / 100;
 
     let discountPrice = actualPrice + taxAmount;
+      discountPrice = Math.round(discountPrice);
+
 
     row.find('.discount_price').val(discountPrice.toFixed(2));
 });
