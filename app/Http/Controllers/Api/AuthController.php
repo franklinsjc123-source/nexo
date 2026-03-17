@@ -42,7 +42,7 @@ class AuthController extends Controller
 
                 $otp = rand(1000, 9999);
 
-                dd($user->id);
+
 
                 $message = "Your NexOcart verification code is $otp. Do not share this OTP with anyone.";
 
@@ -233,9 +233,10 @@ class AuthController extends Controller
 
     public function sendNotification($userid, $title, $msg)
     {
+
         $firebaseToken = User::Where('id', $userid)->first('token_id');
 
-        dd($firebaseToken);
+        print_r($firebaseToken);exit;
 
         $NotificationData = ['title' => $title, 'body'  => $msg];
         $titles           = ['title' => $title, 'body'  => $msg];
