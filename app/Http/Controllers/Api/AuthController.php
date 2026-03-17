@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Referral;
+use Google_Client;
 
 
 use Illuminate\Support\Facades\DB;
@@ -18,98 +19,46 @@ class AuthController extends Controller
 
 
 
+
     public function login(Request $request)
     {
-        $request->validate([
-            'mobile' => 'required|digits:10'
-        ]);
 
-        $mobile = $request->mobile;
+        $mobile = $request->input('mobile');
+        $token_id = $request->input('token_id');
 
-        $user = User::where('mobile', $mobile)->first();
+        if ($mobile) {
 
-        if (!$user) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'User not found'
-            ], 404);
-        }
+            $user = User::where('mobile', $mobile)->first();
 
-        $apiKey = '0db8d8b3-0825-11f1-a6b2-0200cd936042';
-        $template = urlencode("OTP Verification");
+            if (!$user) {
+                return response()->json(['status' => 'User not found'], 400);
+            } else {
 
-        $url = "https://2factor.in/API/V1/$apiKey/SMS/+91$mobile/AUTOGEN/$template";
+                $otp =  1234;
 
-        try {
+                $updateArray =  array(
+                    'otp' =>  $otp,
+                    'token_id' =>  $token_id,
+                );
 
-            $response = Http::get($url);
-            $result = $response->json();
+                User::where('id', $user->id)->update($updateArray);
 
-            if (isset($result['Status']) && $result['Status'] == 'Success') {
+                $otp = rand(1000, 9999);
 
-                $user->update([
-                    'otp_session_id' => $result['Details']
-                ]);
+                $message = "Your NexOcart verification code is $otp. Do not share this OTP with anyone.";
 
-                return response()->json([
-                    'status' => 'success',
-                    'message' => 'OTP sent successfully'
-                ], 200);
+                $this->sendNotification($user->id, 'NexOcart OTP Verification', $message);
+
+
+                $success_array = array('status' => 'success', 'message' => 'OTP send successfully', 'otp' => '1234');
+                return response()->json(array($success_array), 200);
             }
+        } else {
 
-            return response()->json([
-                'status' => 'error',
-                'message' => 'OTP sending failed',
-                'response' => $result
-            ], 400);
-        } catch (\Exception $e) {
-
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Something went wrong',
-            ], 500);
+            $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
+            return response()->json(array($error_array), 400);
         }
     }
-    // public function login(Request $request)
-    // {
-
-    //     $mobile = $request->input('mobile');
-
-    //     if ($mobile) {
-
-    //         $user = User::where('mobile', $mobile)->first();
-
-    //         if (!$user) {
-    //             return response()->json(['status' => 'User not found'], 400);
-    //         } else {
-
-    //             $otp =  1234;
-
-    //             $updateArray =  array(
-    //                 'otp' =>  $otp
-    //             );
-
-    //             User::where('id', $user->id)->update($updateArray);
-
-    //             $url = "https://2factor.in/API/V1/0db8d8b3-0825-11f1-a6b2-0200cd936042/SMS/+91$mobile/$otp/OTP1";
-    //             $curl = curl_init();
-    //             curl_setopt($curl, CURLOPT_URL, $url);
-    //             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    //             curl_setopt($curl, CURLOPT_HEADER, false);
-    //             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-    //             $data = curl_exec($curl);
-    //             curl_close($curl);
-
-    //             $success_array = array('status' => 'success', 'message' => 'OTP send successfully', 'otp' => '1234');
-    //             return response()->json(array($success_array), 200);
-
-    //         }
-    //     } else {
-
-    //         $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
-    //         return response()->json(array($error_array), 400);
-    //     }
-    // }
 
 
 
@@ -280,5 +229,52 @@ class AuthController extends Controller
             $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
             return response()->json(array($error_array), 400);
         }
+    }
+
+
+    public function sendNotification($userid, $title, $msg)
+    {
+        $firebaseToken = User::Where('id', $userid)->first('token_id');
+
+        $NotificationData = ['title' => $title, 'body'  => $msg];
+        $titles           = ['title' => $title, 'body'  => $msg];
+        $data             = [
+            'message' => [
+                'token' => $firebaseToken['token_id'],
+                'notification' => $titles,
+                'data' => $NotificationData
+            ]
+        ];
+        $dataString = json_encode($data);
+        $headers = [
+            'Authorization: Bearer ' . $this->getAccessToken(),
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/nexocart-3f870/messages:send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        $response = curl_exec($ch);
+        $responseData = json_decode($response, true);
+        if (isset($responseData['error'])) {
+            return response()->json(['error' => $responseData['error']], 500);
+        }
+        return response()->json(['response' => $responseData]);
+    }
+
+    public function getAccessToken()
+    {
+        $credentialsPath = storage_path('app/firebase-service-account.json');
+        $client = new Google_Client();
+        $client->setAuthConfig($credentialsPath);
+        $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
+        $token = $client->fetchAccessTokenWithAssertion();
+        return $token['access_token'];
     }
 }
