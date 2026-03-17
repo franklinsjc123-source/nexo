@@ -12,6 +12,7 @@ use App\Models\Address;
 
 use App\Models\ProductAttributes;
 use Carbon\Carbon;
+use App\Models\Category;
 
 
 use Illuminate\Http\Request;
@@ -199,8 +200,56 @@ class CartController extends Controller
                 }
             }
 
+            $categoryTotals = [];
 
-            $delivery_charge = 50;
+            foreach ($cart->items as $item) {
+
+                $category_id = $item->product->category;
+
+                if (!isset($categoryTotals[$category_id])) {
+                    $categoryTotals[$category_id] = 0;
+                }
+
+                $categoryTotals[$category_id] += $item->total_price;
+            }
+
+
+            $delivery_charge = 0;
+
+            foreach ($categoryTotals as $category_id => $total) {
+
+                $category = Category::find($category_id);
+
+                if (!$category) {
+                    continue;
+                }
+
+                $category_name = strtolower($category->category_name);
+
+                if ($category_name == 'grocery') {
+
+                    if ($total > 1000) {
+                        $delivery_charge += ($total * 8) / 100;
+                    } else {
+                        $delivery_charge += ($total * 10) / 100;
+                    }
+                } elseif ($category_name == 'medicine') {
+
+                    if ($total > 500) {
+                        $delivery_charge += ($total * 8) / 100;
+                    } else {
+                        $delivery_charge += 50;
+                    }
+                } elseif (in_array($category_name, ['fruits', 'vegetables', 'hotel', 'bakery'])) {
+
+                    $delivery_charge += 50;
+                } else {
+
+                    $delivery_charge += 50;
+                }
+            }
+
+
 
             $final_amount = $item_price + $delivery_charge - $discount;
 
@@ -220,7 +269,7 @@ class CartController extends Controller
                         'unit_name'     => optional($item->unitData)->unit_name,
                         'quantity'      => $item->quantity,
                         'price'         => $item->price,
-                        'discount_price'=> $item->discount_price,
+                        'discount_price' => $item->discount_price,
                         'total_price'   => $item->total_price,
                     ];
                 })
