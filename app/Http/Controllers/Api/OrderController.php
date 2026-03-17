@@ -588,8 +588,8 @@ class OrderController extends Controller
                 }
 
 
-                // CartItems::where('cart_id', $cart->id)->delete();
-                // $cart->delete();
+                CartItems::where('cart_id', $cart->id)->delete();
+                $cart->delete();
 
                 DB::commit();
 
