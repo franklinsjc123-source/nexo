@@ -492,7 +492,7 @@
                     <tr>
                         <td style="width:50%" ><strong>Total</strong></td>
                         <td class="colon-col">:</td>
-                        <td class="val-col"><strong><span style="font-family: DejaVu Sans, sans-serif;">₹ </span>{{ $order_details->total_invoice_amount }} </strong></td>
+                        <td class="val-col"><strong><span style="font-family: DejaVu Sans, sans-serif;">₹ </span>{{ $order_details->total_amount + $order_details->total_tax_amount }} </strong></td>
                     </tr>
 
                     <tr>

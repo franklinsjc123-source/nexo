@@ -396,7 +396,7 @@ function calculateInvoice() {
 
     let advanceField = document.getElementById('advance_amount');
     if (advanceField) {
-        advanceField.value = advance_total.toFixed(2);
+        advanceField.value = Math.round(advance_total);
     }
 
 
