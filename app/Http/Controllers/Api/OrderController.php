@@ -15,6 +15,7 @@ use App\Models\Shop;
 use App\Models\Invoice;
 use App\Models\Address;
 use App\Models\Category;
+use App\Models\PinCode;
 
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -46,7 +47,7 @@ class OrderController extends Controller
                 return [
                     'id' => $order->id,
                     'order_id' => $order->order_id,
-                    'amount' => $order->amount,
+                    'amount' => $order->amount +  $order->ship_amount,
                     'order_status' => $order->order_status,
                     'payment_type' => $order->payment_type,
                     'image_url' => '',
@@ -161,7 +162,7 @@ class OrderController extends Controller
             'order_status'    => $order->order_status,
             'delivery_fee'    => $order->ship_amount,
             'total_quantity'  => $total_qty,
-            'total_amount'    => $order->amount,
+            'total_amount'    => $order->amount + $order->ship_amount,
             'date'            => date('d-m-Y', strtotime($order->created_at)),
             'delivery_address' => $address,
             'products'        => $products
@@ -477,6 +478,15 @@ class OrderController extends Controller
                 $delivery_charge += 50;
             }
         }
+
+        $delivery_address = Address::where('id', $delivery_id)->first();
+
+
+        if ($delivery_address) {
+
+            $pincode_charge = PinCode::where('pincode', $delivery_address->pincode)->value('delivery_charge');
+        }
+        $delivery_charge = round($delivery_charge + $pincode_charge);
 
 
 
