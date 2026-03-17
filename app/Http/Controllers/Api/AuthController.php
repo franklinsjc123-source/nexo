@@ -236,7 +236,7 @@ class AuthController extends Controller
 
         $firebaseToken = User::Where('id', $userid)->first('token_id');
 
-        print_r($firebaseToken);exit;
+        // print_r($firebaseToken);exit;
 
         $NotificationData = ['title' => $title, 'body'  => $msg];
         $titles           = ['title' => $title, 'body'  => $msg];
