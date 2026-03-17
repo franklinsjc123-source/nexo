@@ -218,12 +218,12 @@ class CartController extends Controller
 
                     if ($category_name === 'grocery') {
 
-                        $delivery_charge += ($price > 1000)
+                        $delivery_charge += ($price >= 1000)
                             ? ($price * 8) / 100
                             : ($price * 10) / 100;
                     } elseif ($category_name === 'medicine') {
 
-                        $delivery_charge += ($price > 500)
+                        $delivery_charge += ($price >= 500)
                             ? ($price * 8) / 100
                             : 50;
                     } elseif (in_array($category_name, ['fruits', 'vegetables', 'hotel', 'bakery'])) {
