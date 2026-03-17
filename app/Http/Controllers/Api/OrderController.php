@@ -38,6 +38,7 @@ class OrderController extends Controller
                 'id',
                 'order_id',
                 'amount',
+                'ship_amount',
                 'order_status',
                 'payment_type',
                 'created_at'
@@ -162,7 +163,7 @@ class OrderController extends Controller
             'order_status'    => $order->order_status,
             'delivery_fee'    => $order->ship_amount,
             'total_quantity'  => $total_qty,
-            'total_amount'    => $order->amount + $order->ship_amount,
+            'total_amount'    => $order->amount ,
             'date'            => date('d-m-Y', strtotime($order->created_at)),
             'delivery_address' => $address,
             'products'        => $products
