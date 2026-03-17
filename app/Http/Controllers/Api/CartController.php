@@ -203,68 +203,40 @@ class CartController extends Controller
 
             $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
 
-            foreach ($cart->items as $item) {
+            if ($cart && $cart->items->isNotEmpty()) {
 
-                $category_id = $item->product->category;
+                foreach ($cart->items as $item) {
 
+                    if (!$item->product) continue;
 
-                if (!isset($categoryTotals[$category_id])) {
-                    $categoryTotals[$category_id] = 0;
-                }
+                    $category = Category::find($item->product->category);
 
-                $categoryTotals[$category_id] += $item->total_price;
-            }
+                    if (!$category) continue;
 
-            foreach ($categoryTotals as $category_id => $total) {
+                    $category_name = strtolower(trim($category->category_name));
+                    $price = $item->total_price;
 
-                $category = Category::find($category_id);
+                    if ($category_name === 'grocery') {
 
-                if ($category && $total < $category->min_order_value) {
+                        $delivery_charge += ($price > 1000)
+                            ? ($price * 8) / 100
+                            : ($price * 10) / 100;
+                    } elseif ($category_name === 'medicine') {
 
-                    return response()->json([
-                        'status' => false,
-                        'message' => $category->category_name .
-                            " minimum order amount is ₹" . $category->min_order_value
-                    ], 400);
-                }
-            }
+                        $delivery_charge += ($price > 500)
+                            ? ($price * 8) / 100
+                            : 50;
+                    } elseif (in_array($category_name, ['fruits', 'vegetables', 'hotel', 'bakery'])) {
 
-            $delivery_charge = 0;
-
-            foreach ($categoryTotals as $category_id => $total) {
-
-                $category = Category::find($category_id);
-
-                if (!$category) {
-                    continue;
-                }
-
-                $category_name = strtolower($category->category_name);
-
-                if ($category_name == 'grocery') {
-
-                    if ($total > 1000) {
-                        $delivery_charge += ($total * 8) / 100;
+                        $delivery_charge += 50;
                     } else {
-                        $delivery_charge += ($total * 10) / 100;
-                    }
-                } elseif ($category_name == 'medicine') {
 
-                    if ($total > 500) {
-                        $delivery_charge += ($total * 8) / 100;
-                    } else {
                         $delivery_charge += 50;
                     }
-                } elseif (in_array($category_name, ['fruits', 'vegetables', 'hotel', 'bakery'])) {
-
-                    $delivery_charge += 50;
-                } else {
-
-                    $delivery_charge += 50;
                 }
             }
 
-
+            $delivery_charge = round($delivery_charge, 2);
 
 
 
