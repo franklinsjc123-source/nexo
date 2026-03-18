@@ -239,6 +239,7 @@ class CartController extends Controller
                 }
             }
 
+             $pincode_charge = 0;
             if ($delivery_address) {
 
                 $pincode_charge = PinCode::where('pincode', $delivery_address->pincode)->value('delivery_charge');
