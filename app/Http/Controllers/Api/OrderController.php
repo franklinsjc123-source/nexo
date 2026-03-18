@@ -607,7 +607,7 @@ class OrderController extends Controller
                 DB::commit();
 
                 $deliery_persons = DeliveryPerson::whereNotNull('device_id')->get();
-                $message = "New delivery assigned. Please check.";
+                $message = "New order ready for pickup and delivery.";
 
                 foreach ($deliery_persons as $delivery_person) {
 
@@ -899,6 +899,7 @@ class OrderController extends Controller
 
         $NotificationData = ['title' => $title, 'body'  => $msg];
         $titles           = ['title' => $title, 'body'  => $msg];
+
         $data             = [
             'message' => [
                 'token' => $device_id,
@@ -906,6 +907,7 @@ class OrderController extends Controller
                 'data' => $NotificationData
             ]
         ];
+
         $dataString = json_encode($data);
         $headers = [
             'Authorization: Bearer ' . $this->getAccessToken(),
@@ -927,6 +929,8 @@ class OrderController extends Controller
             return response()->json(['error' => $responseData['error']], 500);
         }
         return response()->json(['response' => $responseData]);
+
+
     }
 
 
