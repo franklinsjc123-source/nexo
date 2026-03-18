@@ -30,8 +30,7 @@ class AuthController extends Controller
             if (!$user) {
                 return response()->json(['status' => 'User not found'], 400);
             } else {
-
-                $otp =  1234;
+                 $otp = rand(1000, 9999);
 
                 $updateArray =  array(
                     'otp' =>  $otp,
@@ -39,8 +38,6 @@ class AuthController extends Controller
                 );
 
                 User::where('id', $user->id)->update($updateArray);
-
-                $otp = rand(1000, 9999);
 
 
 
