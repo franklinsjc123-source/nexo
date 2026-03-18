@@ -476,7 +476,8 @@ class OrderController extends Controller
 
         $delivery_address = Address::where('id', $delivery_id)->first();
 
-
+        $pincode_charge = 0;
+        
         if ($delivery_address) {
 
             $pincode_charge = PinCode::where('pincode', $delivery_address->pincode)->value('delivery_charge');
@@ -571,7 +572,6 @@ class OrderController extends Controller
                     $this->sendNotificationForShops($shop_user_id, 'New Order - NexoCart', $message);
 
 
-
                     $shop_total = $items->sum('price');
                     $shop_amount_words = $this->amountToWords($shop_total);
 
@@ -611,7 +611,7 @@ class OrderController extends Controller
 
                 foreach ($deliery_persons as $delivery_person) {
 
-                    $this->sendNotificationforDeliveryPersons( $delivery_person->device_id, 'New Order - NexoCart', $message );
+                    $this->sendNotificationforDeliveryPersons($delivery_person->device_id, 'New Order - NexoCart', $message);
                 }
 
 
@@ -858,7 +858,7 @@ class OrderController extends Controller
 
         $firebaseToken = User::Where('id', $userid)->first('token_id');
 
-        print_r(   $firebaseToken['token_id'] );exit;
+
 
         $NotificationData = ['title' => $title, 'body'  => $msg];
         $titles           = ['title' => $title, 'body'  => $msg];
@@ -931,8 +931,6 @@ class OrderController extends Controller
             return response()->json(['error' => $responseData['error']], 500);
         }
         return response()->json(['response' => $responseData]);
-
-
     }
 
 
