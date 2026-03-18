@@ -15,6 +15,7 @@ use App\Models\Shop;
 use App\Models\Invoice;
 use App\Models\Address;
 use App\Models\Category;
+use App\Models\DeliveryPerson;
 use App\Models\PinCode;
 use App\Models\User;
 
@@ -567,7 +568,7 @@ class OrderController extends Controller
 
                     $message = "New order received from Order #" . $order_number;
 
-                    $this->sendNotificationoForShops($shop_user_id, 'New Order - NexoCart', $message);
+                    $this->sendNotification($shop_user_id, 'New Order - NexoCart', $message);
 
 
 
@@ -605,9 +606,13 @@ class OrderController extends Controller
 
                 DB::commit();
 
-                $message = "";
+                $deliery_persons = DeliveryPerson::whereNotNull('device_id')->get();
+                $message = "New delivery assigned. Please check.";
 
+                foreach ($deliery_persons as $delivery_person) {
 
+                    $this->sendNotificationforDeliveryPersons( $delivery_person->device_id, 'New Order - NexoCart', $message );
+                }
 
 
                 return response()->json([
@@ -884,6 +889,47 @@ class OrderController extends Controller
         }
         return response()->json(['response' => $responseData]);
     }
+
+
+
+
+
+    public function sendNotificationforDeliveryPersons($device_id, $title, $msg)
+    {
+
+        $NotificationData = ['title' => $title, 'body'  => $msg];
+        $titles           = ['title' => $title, 'body'  => $msg];
+        $data             = [
+            'message' => [
+                'token' => $device_id,
+                'notification' => $titles,
+                'data' => $NotificationData
+            ]
+        ];
+        $dataString = json_encode($data);
+        $headers = [
+            'Authorization: Bearer ' . $this->getAccessToken(),
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/nexocart-3f870/messages:send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        $response = curl_exec($ch);
+        $responseData = json_decode($response, true);
+        if (isset($responseData['error'])) {
+            return response()->json(['error' => $responseData['error']], 500);
+        }
+        return response()->json(['response' => $responseData]);
+    }
+
+
 
 
     public function getAccessToken()
