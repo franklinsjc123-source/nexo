@@ -80,7 +80,8 @@ class CartController extends Controller
         if (!$shopExists && $shopCount >= 2) {
             return response()->json([
                 'status' => false,
-                'message' => 'You can only add products from 2 different shops in one cart'
+                'message' => 'You can only add products from 2 different shops in one cart',
+                'shop_count' =>  $shopCount
             ], 400);
         }
 
