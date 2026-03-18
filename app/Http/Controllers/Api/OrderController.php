@@ -16,6 +16,9 @@ use App\Models\Invoice;
 use App\Models\Address;
 use App\Models\Category;
 use App\Models\PinCode;
+use App\Models\User;
+
+
 
 use Illuminate\Support\Str;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -23,6 +26,7 @@ use Illuminate\Support\Facades\URL;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Google_Client;
 
 class OrderController extends Controller
 {
@@ -163,7 +167,7 @@ class OrderController extends Controller
             'order_status'    => $order->order_status,
             'delivery_fee'    => $order->ship_amount,
             'total_quantity'  => $total_qty,
-            'total_amount'    => $order->amount ,
+            'total_amount'    => $order->amount,
             'date'            => date('d-m-Y', strtotime($order->created_at)),
             'delivery_address' => $address,
             'products'        => $products
@@ -570,6 +574,14 @@ class OrderController extends Controller
 
                     $shop = Shop::find($shop_id);
 
+                    $shop_user_id = $shop->user_id;
+
+                    $message = "New order received from Order #" . $order_number;
+
+                    $this->sendNotificationoForShops($shop_user_id, 'New Order - NexoCart', $message);
+
+
+
                     $shop_total = $items->sum('price');
                     $shop_amount_words = $this->amountToWords($shop_total);
 
@@ -603,6 +615,11 @@ class OrderController extends Controller
                 $cart->delete();
 
                 DB::commit();
+
+                $message = "";
+
+
+
 
                 return response()->json([
                     'status' => true,
@@ -839,5 +856,54 @@ class OrderController extends Controller
         }
 
         return $this->convertTwoDigit($rest, $words);
+    }
+
+
+    public function sendNotificationoForShops($userid, $title, $msg)
+    {
+
+        $firebaseToken = User::Where('id', $userid)->first('token_id');
+
+        $NotificationData = ['title' => $title, 'body'  => $msg];
+        $titles           = ['title' => $title, 'body'  => $msg];
+        $data             = [
+            'message' => [
+                'token' => $firebaseToken['token_id'],
+                'notification' => $titles,
+                'data' => $NotificationData
+            ]
+        ];
+        $dataString = json_encode($data);
+        $headers = [
+            'Authorization: Bearer ' . $this->getAccessToken(),
+            'Content-Type: application/json',
+        ];
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/nexocart-3f870/messages:send');
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+
+        $response = curl_exec($ch);
+        $responseData = json_decode($response, true);
+        if (isset($responseData['error'])) {
+            return response()->json(['error' => $responseData['error']], 500);
+        }
+        return response()->json(['response' => $responseData]);
+    }
+
+
+    public function getAccessToken()
+    {
+        $credentialsPath = storage_path('app/firebase-service-account.json');
+        $client = new Google_Client();
+        $client->setAuthConfig($credentialsPath);
+        $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
+        $token = $client->fetchAccessTokenWithAssertion();
+        return $token['access_token'];
     }
 }
