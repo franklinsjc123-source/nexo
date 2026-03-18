@@ -568,7 +568,7 @@ class OrderController extends Controller
 
                     $message = "New order received from Order #" . $order_number;
 
-                    $this->sendNotification($shop_user_id, 'New Order - NexoCart', $message);
+                    $this->sendNotificationForShops($shop_user_id, 'New Order - NexoCart', $message);
 
 
 
@@ -853,7 +853,7 @@ class OrderController extends Controller
     }
 
 
-    public function sendNotificationoForShops($userid, $title, $msg)
+    public function sendNotificationForShops($userid, $title, $msg)
     {
 
         $firebaseToken = User::Where('id', $userid)->first('token_id');
