@@ -36,7 +36,6 @@ class OrderController extends Controller
     {
         $user_id = $request->input('user_id');
 
-        // Normal Orders
         $orders = Order::where('customer_id', $user_id)
             ->select(
                 'id',
@@ -47,21 +46,8 @@ class OrderController extends Controller
                 'payment_type',
                 'created_at'
             )
-            ->get()
-            ->map(function ($order) {
-                return [
-                    'id' => $order->id,
-                    'order_id' => $order->order_id,
-                    'amount' => $order->amount +  $order->ship_amount,
-                    'order_status' => $order->order_status,
-                    'payment_type' => $order->payment_type,
-                    'image_url' => '',
-                    'type' => 'cart_order',
-                    'created_at' => $order->created_at
-                ];
-            });
+            ->get();
 
-        // Direct Orders
         $directOrders = DirectOrder::where('customer_id', $user_id)
             ->select(
                 'id',
@@ -71,22 +57,9 @@ class OrderController extends Controller
                 'image_url',
                 'created_at'
             )
-            ->get()
-            ->map(function ($order) {
-                return [
-                    'id' => $order->id,
-                    'order_id' => $order->invoice_no,
-                    'amount' => $order->total_invoice_amount,
-                    'order_status' => $order->order_status,
-                    'payment_type' => 'Cash on Delivery',
-                    'image_url' => $order->image_url,
-                    'type' => 'direct_order',
-                    'created_at' => $order->created_at
-                ];
-            });
+            ->get();
 
-        // Merge Orders
-        $allOrders = $orders->merge($directOrders)
+        $allOrders = $orders->concat($directOrders)
             ->sortByDesc('created_at')
             ->values();
 
@@ -98,16 +71,32 @@ class OrderController extends Controller
         }
 
         $data = $allOrders->map(function ($order) {
-            return [
-                'id' => $order['id'],
-                'order_id' => $order['order_id'],
-                'amount' => $order['amount'],
-                'order_status' => $order['order_status'],
-                'payment_type' => $order['payment_type'],
-                'image_url' =>  $order['image_url'],
-                'order_type' => $order['type'],
-                'date' => date('d-m-Y', strtotime($order['created_at'])),
-            ];
+
+            if (isset($order->order_id)) {
+                // Normal Order
+                return [
+                    'id' => $order->id,
+                    'order_id' => $order->order_id,
+                    'amount' => $order->amount + $order->ship_amount,
+                    'order_status' => $order->order_status,
+                    'payment_type' => $order->payment_type,
+                    'image_url' => '',
+                    'order_type' => 'cart_order',
+                    'date' => date('d-m-Y', strtotime($order->created_at)),
+                ];
+            } else {
+                // Direct Order
+                return [
+                    'id' => $order->id,
+                    'order_id' => $order->invoice_no,
+                    'amount' => $order->total_invoice_amount,
+                    'order_status' => $order->order_status,
+                    'payment_type' => 'Cash on Delivery',
+                    'image_url' => $order->image_url,
+                    'order_type' => 'direct_order',
+                    'date' => date('d-m-Y', strtotime($order->created_at)),
+                ];
+            }
         });
 
         return response()->json([
