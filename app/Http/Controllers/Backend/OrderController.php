@@ -35,6 +35,7 @@ class OrderController extends Controller
                 })
                 ->where('order_items.shop_id', $shop_id)
                 ->orderBy('orders.id', 'DESC')
+                ->groupBy('orders.id')
                 ->distinct()
                 ->get();
         } else {
