@@ -238,12 +238,11 @@ class CartController extends Controller
                         $delivery_charge += 50;
                     }
                 }
-
             }
 
 
             $pincode_charge = 0;
-            
+
             if ($delivery_address) {
 
                 $pincode_charge = PinCode::where('pincode', $delivery_address->pincode)->value('delivery_charge');
@@ -290,9 +289,9 @@ class CartController extends Controller
                 'status' => 'success',
                 'cart_count' => $cart_count,
                 'item_price' => $item_price,
-                'delivery_charge' => $delivery_charge,
-                'discount' => $discount,
-                'final_amount' => $final_amount,
+                'delivery_charge' => round($delivery_charge, 2),
+                'discount' => round($discount, 2),
+                'final_amount' => round($final_amount, 2),
                 'offers' => $offers,
                 'delivery_address' => $delivery_address,
                 'data' => $response
