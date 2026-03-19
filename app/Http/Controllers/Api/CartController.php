@@ -238,6 +238,7 @@ class CartController extends Controller
                         $delivery_charge += 50;
                     }
                 }
+
             }
 
 
@@ -289,9 +290,9 @@ class CartController extends Controller
                 'status' => 'success',
                 'cart_count' => $cart_count,
                 'item_price' => $item_price,
-                'delivery_charge' => round($delivery_charge, 2),
-                'discount' => round($discount, 2),
-                'final_amount' => round($final_amount, 2),
+                'delivery_charge' => $delivery_charge,
+                'discount' => $discount,
+                'final_amount' => $final_amount,
                 'offers' => $offers,
                 'delivery_address' => $delivery_address,
                 'data' => $response
