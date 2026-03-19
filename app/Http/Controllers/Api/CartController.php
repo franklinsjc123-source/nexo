@@ -241,6 +241,8 @@ class CartController extends Controller
                         $delivery_charge += 50;
                     }
                 }
+
+                print_r( $price );exit;
             }
             $pincode_charge = 0;
             if ($delivery_address) {
