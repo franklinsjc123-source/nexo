@@ -206,40 +206,43 @@ class CartController extends Controller
 
             $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
 
+            $delivery_charge = 0;
+
             if ($cart && $cart->items->isNotEmpty()) {
 
                 foreach ($cart->items as $item) {
 
                     if (!$item->product) continue;
 
-                    $category = Category::find($item->product->category);
+                    $category_id = (int) $item->product->category;
+                    $price = (float) $item->total_price;
 
-                    if (!$category) continue;
+                    if ($category_id == 7) {
 
-                    $category_id = strtolower(trim($category->id));
-                    $price = $item->total_price;
-
-                    if ($category_id === 7 ) {
-
-                        $delivery_charge += ($price >= 1000)
+                        $delivery_charge += ($price > 999)
                             ? ($price * 8) / 100
                             : ($price * 10) / 100;
-                    } elseif ($category_id === 9 ) {
+                    }
 
-                        $delivery_charge += ($price >= 500)
+                    elseif ($category_id == 9) {
+
+                        $delivery_charge += ($price > 499)
                             ? ($price * 8) / 100
                             : 50;
-                    } elseif (in_array($category_id, [10,11,12,13])) {
+                    }
+
+                    elseif (in_array($category_id, [10, 11, 12, 13])) {
 
                         $delivery_charge += 50;
-                    } else {
+                    }
+
+                    else {
 
                         $delivery_charge += 50;
                     }
                 }
             }
-
-             $pincode_charge = 0;
+            $pincode_charge = 0;
             if ($delivery_address) {
 
                 $pincode_charge = PinCode::where('pincode', $delivery_address->pincode)->value('delivery_charge');
@@ -247,7 +250,7 @@ class CartController extends Controller
 
 
 
-            $delivery_charge = round($delivery_charge + $pincode_charge) ;
+            $delivery_charge = round($delivery_charge + $pincode_charge);
 
 
 
