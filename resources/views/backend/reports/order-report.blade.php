@@ -27,7 +27,7 @@
                     <i class="bi bi-file-earmark-excel"></i> Export Excel
                 </a>
             </div>
-            
+
         </div>
 
          <div class="row mt-5 align-items-end">
@@ -69,7 +69,9 @@
                         <th>Order ID </th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Payment Type</th>
                         <th>Order Amount</th>
+                        <th>Status</th>
 
                     </tr>
                 </thead>
@@ -80,15 +82,41 @@
                             ?>
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
-                                <td><?php echo '' ?></td>
-                                <td><?php echo '' ?></td>
-                                <td><?php echo '' ?></td>
-                                <td><?php echo '' ?></td>
+                                <td>{{ date('d-m-Y', strtotime($row->created_at)) }}</td>
+                                <td><?php echo $row->order_id ?></td>
+                                <td><?php echo $row->customerData->name ?? '-' ?></td>
+                                <td><?php echo $row->customerData->email ?? '-' ?></td>
+                                <td><?php echo $row->payment_type ?></td>
+                                <td><?php echo $row->amount ?></td>
+                                <td>
+                                    <?php
+                                        if ($row->order_status == 1) {
+                                            $class = "warning";
+                                            $text  = "New Order";
+                                        } elseif ($row->order_status == 2) {
+                                            $class = "success";
+                                            $text  = "Delivered";
+                                        } elseif ($row->order_status == 3) {
+                                            $class = "danger";
+                                            $text  = "Cancelled";
+                                        }  elseif ($row->order_status == 4) {
+                                            $class = "secondary";
+                                            $text  = "Dispatched";
+                                        } else {
+                                            $class = "secondary";
+                                            $text  = "Unknown";
+                                        }
+                                    ?>
+
+                                    <a href="javascript:void(0)"
+                                        class="badge bg-<?php echo $class; ?> " data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>"> <?php echo $text; ?>
+                                    </a>
+                                </td>
 
                             </tr>
 
                      <?php $i++;
-                                            }?>
+                            }?>
 
                 </tbody>
             </table>

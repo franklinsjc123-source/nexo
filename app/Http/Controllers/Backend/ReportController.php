@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Models\Order;
+use App\Models\DirectOrder;
 
 use Illuminate\Http\Request;
 use App\Http\Traits\PermissionCheckTrait;
@@ -23,7 +24,7 @@ class ReportController extends Controller
       public function directOrdersReport()
     {
 
-        $records   =  Order::orderBy('id', 'DESC')->get();
+        $records   =  DirectOrder::orderBy('id', 'DESC')->get();
         return view('backend.reports.direct-order-report', compact('records'));
     }
 

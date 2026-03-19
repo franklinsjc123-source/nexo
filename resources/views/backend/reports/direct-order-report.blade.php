@@ -86,7 +86,8 @@
                         <th>Order Date </th>
                         <th>Customer Name</th>
                         <th>Shop Name </th>
-                        <th>Order Amount</th>
+                        <th>Image</th>
+                        <th>Status</th>
 
                     </tr>
                 </thead>
@@ -100,8 +101,35 @@
                                 <td><?= date('d-m-Y', strtotime($row->created_at)) ?></td>
                                 <td><?= optional($row->userData)->name ?? '-' ?></td>
                                 <td><?= optional($row->shopData)->shop_name ?? '-' ?></td>
-                                <td></td>
+                                <td>
+                                    <a href="<?= $row->image_url ?>" target="_blank">
+                                        <img src="<?= $row->image_url ?>" height="50" width="50">
+                                    </a>
+                                </td>
+                               <td>
+                                    <?php
+                                        if ($row->order_status == 1) {
+                                            $class = "warning";
+                                            $text  = "New Order";
+                                        } elseif ($row->order_status == 2) {
+                                            $class = "success";
+                                            $text  = "Delivered";
+                                        } elseif ($row->order_status == 3) {
+                                            $class = "danger";
+                                            $text  = "Cancelled";
+                                        } elseif ($row->order_status == 4) {
+                                            $class = "secondary";
+                                            $text  = "Dispatched";
+                                        } else {
+                                            $class = "secondary";
+                                            $text  = "Unknown";
+                                        }
+                                    ?>
 
+                                    <a href="javascript:void(0)"
+                                        class="badge bg-<?php echo $class; ?>" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>"> <?php echo $text; ?>
+                                    </a>
+                                </td>
 
                             </tr>
 
