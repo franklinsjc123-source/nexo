@@ -210,41 +210,40 @@ class CartController extends Controller
 
             if ($cart && $cart->items->isNotEmpty()) {
 
+                $category_totals = [];
+
                 foreach ($cart->items as $item) {
 
                     if (!$item->product) continue;
 
                     $category_id = (int) $item->product->category;
-                    $price = (float) $item->total_price;
+
+                    $category_totals[$category_id] = ($category_totals[$category_id] ?? 0) + $item->total_price;
+                }
+
+                foreach ($category_totals as $category_id => $total_price) {
 
                     if ($category_id == 7) {
 
-                        $delivery_charge += ($price > 999)
-                            ? ($price * 8) / 100
-                            : ($price * 10) / 100;
-                    }
+                        $delivery_charge += ($total_price > 999)
+                            ? ($total_price * 8) / 100
+                            : ($total_price * 10) / 100;
+                    } elseif ($category_id == 9) {
 
-                    elseif ($category_id == 9) {
-
-                        $delivery_charge += ($price > 499)
-                            ? ($price * 8) / 100
+                        $delivery_charge += ($total_price > 499)
+                            ? ($total_price * 8) / 100
                             : 50;
-                    }
-
-                    elseif (in_array($category_id, [10, 11, 12, 13])) {
-
-                        $delivery_charge += 50;
-                    }
-
-                    else {
+                    } else {
 
                         $delivery_charge += 50;
                     }
                 }
 
-                print_r( $price );exit;
             }
+
+
             $pincode_charge = 0;
+            
             if ($delivery_address) {
 
                 $pincode_charge = PinCode::where('pincode', $delivery_address->pincode)->value('delivery_charge');
