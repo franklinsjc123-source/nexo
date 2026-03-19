@@ -378,27 +378,27 @@
                      <tr>
                     <td style="border: none; padding: 4px; font-weight: bold;">Shop</td>
                     <td style="border: none; ">:</td>
-                    <td style="border: none; padding: 4px;">{{ $delivery_address->name }}</td>
+                    <td style="border: none; padding: 4px;">{{ $delivery_address->name ?? '' }}</td>
                     </tr>
 
                      <tr>
                     <td style="border: none; padding: 4px; font-weight: bold;">Mobile</td>
                     <td style="border: none; ">:</td>
-                    <td style="border: none; padding: 4px;">{{  $delivery_address->mobile }}</td>
+                    <td style="border: none; padding: 4px;">{{  $delivery_address->mobile ?? '' }}</td>
                     </tr>
 
                     <tr>
                     <td style="border: none; padding: 4px; font-weight: bold;">Address</td>
                     <td style="border: none; ">:</td>
 
-                    <td style="border: none; padding: 4px;">{{ $delivery_address->address }}</td>
+                    <td style="border: none; padding: 4px;">{{ $delivery_address->address ?? '' }}</td>
                     </tr>
 
                     <tr>
                     <td style="border: none; padding: 4px; font-weight: bold;">Landmark</td>
                     <td style="border: none; ">:</td>
 
-                    <td style="border: none; padding: 4px;">{{ $delivery_address->landmark }}</td>
+                    <td style="border: none; padding: 4px;">{{ $delivery_address->landmark ?? '' }}</td>
                     </tr>
 
                     <tr>
@@ -406,7 +406,7 @@
                     <td style="border: none; ">:</td>
 
 
-                    <td style="border: none; padding: 4px;">{{ $delivery_address->pincode }}</td>
+                    <td style="border: none; padding: 4px;">{{ $delivery_address->pincode ?? '' }}</td>
                     </tr>
 
                 </table>
