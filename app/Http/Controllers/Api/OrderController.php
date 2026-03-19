@@ -18,7 +18,7 @@ use App\Models\Category;
 use App\Models\DeliveryPerson;
 use App\Models\PinCode;
 use App\Models\User;
-
+use Carbon\Carbon;
 
 
 use Illuminate\Support\Str;
@@ -396,6 +396,8 @@ class OrderController extends Controller
         $customer_id = $request->input('customer_id');
         $delivery_id = $request->input('delivery_id');
 
+        $now = Carbon::now('Asia/Kolkata')->format('d-m-Y h:i A');
+
         if ($shop_id != '' && $customer_id != '') {
 
             if ($request->hasFile('order_image')) {
@@ -414,6 +416,7 @@ class OrderController extends Controller
                 'delivery_id'      => $delivery_id,
                 'invoice_no'       => $currentInvoice,
                 'image_url'        => $imageUrl,
+                'created_at'       =>  $now,
 
             );
 
