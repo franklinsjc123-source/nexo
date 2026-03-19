@@ -123,7 +123,7 @@
                             ?>
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
-                                <td><?= date('d-m-Y', strtotime($row->created_at)) ?></td>
+                               <td><?= date('d-m-Y h:i A', strtotime($row->created_at)) ?></td>
                                 <td><?= optional($row->userData)->name ?? '-' ?></td>
                                 <td><?= optional($row->shopData)->shop_name ?? '-' ?></td>
                                 <td>
