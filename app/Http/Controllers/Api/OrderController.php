@@ -594,6 +594,21 @@ class OrderController extends Controller
 
                 $company = Company::first();
 
+
+                $currentInvoice = $company->invoice_no ?? 'NCO-0000';
+
+                $number = (int) str_replace('NCO-', '', $currentInvoice);
+
+                $nextNumber = $number + 1;
+
+                $nextInvoice = 'NCO-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+
+                $company->update([
+                    'invoice_no' => $nextInvoice
+                ]);
+
+
+
                 $delivery_address = Address::find($delivery_id);
 
 
