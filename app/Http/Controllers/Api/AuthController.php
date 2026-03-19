@@ -83,7 +83,7 @@ class AuthController extends Controller
                 $this->sendNotification($user->id, 'NexOcart OTP Verification',  $message);
 
 
-                $success_array = array('status' => 'success', 'message' => 'OTP send successfully', 'otp' => '1234');
+                $success_array = array('status' => 'success', 'message' => 'OTP send successfully', );
                 return response()->json(array($success_array), 200);
             }
         } else {
