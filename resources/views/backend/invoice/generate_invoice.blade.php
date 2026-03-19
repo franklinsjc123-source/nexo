@@ -288,7 +288,7 @@
                     src="https://nexoocart.in/backend_assets/images/invoice.svg"
                     alt="LOgo"
                     width="100"
-                    height="200"
+                    height="100"
                     style="display:block; border-radius:50px"
                 />
                 <!--
