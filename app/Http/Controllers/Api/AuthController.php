@@ -56,6 +56,45 @@ class AuthController extends Controller
 
 
 
+
+
+     public function resendOTP(Request $request)
+    {
+
+        $mobile = $request->input('mobile');
+
+        if ($mobile) {
+
+            $user = User::where('mobile', $mobile)->first();
+
+            if (!$user) {
+                return response()->json(['status' => 'User not found'], 400);
+            } else {
+                 $otp = rand(1000, 9999);
+
+                $updateArray =  array(
+                    'otp' =>  $otp,
+                );
+
+                User::where('id', $user->id)->update($updateArray);
+
+                $message = "Your NexOcart verification code is $otp. Do not share this OTP with anyone.";
+
+                $this->sendNotification($user->id, 'NexOcart OTP Verification',  $message);
+
+
+                $success_array = array('status' => 'success', 'message' => 'OTP send successfully', 'otp' => '1234');
+                return response()->json(array($success_array), 200);
+            }
+        } else {
+
+            $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
+            return response()->json(array($error_array), 400);
+        }
+    }
+
+
+
     public function register(Request $request)
     {
 
@@ -106,7 +145,7 @@ class AuthController extends Controller
                 'name'          => $name,
                 'email'         => $email,
                 'mobile'        => $mobile,
-                'otp'           => '1234',
+                'otp'           => '',
                 'referral_code' => $referral_code,
                 'auth_level'    => 3,
                 'token_id'      => $token_id,

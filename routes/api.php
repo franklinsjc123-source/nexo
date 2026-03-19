@@ -31,6 +31,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login',[AuthController::class,"login"])->name('login');
 Route::post('/register',[AuthController::class,"register"])->name('register');
 Route::post('/checkOTP',[AuthController::class,"checkOTP"])->name('checkOTP');
+Route::post('/resendOTP',[AuthController::class,"resendOTP"])->name('resendOTP');
+
 
 Route::post('add-cart', [CartController::class, 'addToCart'])->name('add-cart');
 Route::get('view-cart', [CartController::class, 'viewCart'])->name('view-cart');
