@@ -460,7 +460,7 @@
 
 
             <tr class="total-row">
-                <td colspan="5" style="border:1px solid #444; font-weight:bold;">Subtotal</td>
+                <td colspan="4" style="border:1px solid #444; font-weight:bold;">Subtotal</td>
                 {{-- <td  style="border:1px solid #444;"></td> --}}
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
@@ -469,7 +469,7 @@
 
 
              <tr class="total-row">
-                <td colspan="5" style="border:1px solid #444; font-weight:bold;">Discount</td>
+                <td colspan="4" style="border:1px solid #444; font-weight:bold;">Discount</td>
                 {{-- <td  style="border:1px solid #444;"></td> --}}
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
@@ -485,7 +485,7 @@
                 {{-- <td  style="border:1px solid #444;"></td> --}}
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
-                <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($total_amount,2) }}</td>
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($order_details->amount,2) }}</td>
             </tr>
         </tbody>
     </table>
