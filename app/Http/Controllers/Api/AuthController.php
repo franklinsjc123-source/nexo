@@ -21,7 +21,7 @@ class AuthController extends Controller
     {
 
         $mobile = $request->input('mobile');
-        // $token_id = $request->input('token_id');
+        $token_id = $request->input('token_id');
 
         if ($mobile) {
 
@@ -34,7 +34,7 @@ class AuthController extends Controller
 
                 $updateArray =  array(
                     'otp' =>  $otp,
-                    // 'token_id' =>  $token_id,
+                    'token_id' =>  $token_id,
                 );
 
                 User::where('id', $user->id)->update($updateArray);
