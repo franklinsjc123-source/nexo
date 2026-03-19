@@ -36,6 +36,7 @@ class AdressController extends Controller
         $name       = $request->input('name');
         $mobile     = $request->input('mobile');
         $address    = $request->input('address');
+        $landmark   = $request->input('landmark');
         $pincode    = $request->input('pincode');
 
         if ($user_id != '' && $name != '' && $mobile != '' && $address != '' && $pincode != '') {
@@ -57,6 +58,7 @@ class AdressController extends Controller
                 'name'          =>  $name,
                 'mobile'        =>  $mobile,
                 'address'       =>  $address,
+                'landmark'      =>  $landmark,
                 'pincode'       =>  $pincode,
                 'is_default'    =>  $addressExists ? 0 : 1
             );
@@ -86,6 +88,7 @@ class AdressController extends Controller
         $name       = $request->input('name');
         $mobile     = $request->input('mobile');
         $address    = $request->input('address');
+        $landmark   = $request->input('landmark');
         $pincode    = $request->input('pincode');
 
         if ($id != '' && $name != '' && $mobile != '' && $address != '' && $pincode != '') {
@@ -104,6 +107,7 @@ class AdressController extends Controller
                 'name'          =>  $name,
                 'mobile'        =>  $mobile,
                 'address'       =>  $address,
+                'landmark'      =>  $landmark,
                 'pincode'       =>  $pincode,
             );
 

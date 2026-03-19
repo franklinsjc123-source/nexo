@@ -393,6 +393,14 @@
 
                     <td style="border: none; padding: 4px;">{{ $delivery_address->address }}</td>
                     </tr>
+
+                    <tr>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Landmark</td>
+                    <td style="border: none; ">:</td>
+
+                    <td style="border: none; padding: 4px;">{{ $delivery_address->landmark }}</td>
+                    </tr>
+
                     <tr>
                     <td style="border: none; padding: 4px; font-weight: bold;">Pincode</td>
                     <td style="border: none; ">:</td>
