@@ -216,20 +216,20 @@ class CartController extends Controller
 
                     if (!$category) continue;
 
-                    $category_name = strtolower(trim($category->category_name));
+                    $category_id = strtolower(trim($category->id));
                     $price = $item->total_price;
 
-                    if ($category_name === 'grocery') {
+                    if ($category_id === 7 ) {
 
                         $delivery_charge += ($price >= 1000)
                             ? ($price * 8) / 100
                             : ($price * 10) / 100;
-                    } elseif ($category_name === 'medicine') {
+                    } elseif ($category_id === 9 ) {
 
                         $delivery_charge += ($price >= 500)
                             ? ($price * 8) / 100
                             : 50;
-                    } elseif (in_array($category_name, ['fruits', 'vegetables', 'hotel', 'bakery'])) {
+                    } elseif (in_array($category_id, [10,11,12,13])) {
 
                         $delivery_charge += 50;
                     } else {
@@ -287,7 +287,6 @@ class CartController extends Controller
                 'cart_count' => $cart_count,
                 'item_price' => $item_price,
                 'delivery_charge' => $delivery_charge,
-                'tax_amount'    => "80.00",
                 'discount' => $discount,
                 'final_amount' => $final_amount,
                 'offers' => $offers,
