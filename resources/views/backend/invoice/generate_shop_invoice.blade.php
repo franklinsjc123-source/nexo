@@ -458,6 +458,27 @@
             <?php  } ?>
 
 
+
+            <tr class="total-row">
+                <td colspan="5" style="border:1px solid #444; font-weight:bold;">Subtotal</td>
+                {{-- <td  style="border:1px solid #444;"></td> --}}
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($total_amount,2) }}</td>
+            </tr>
+
+
+             <tr class="total-row">
+                <td colspan="5" style="border:1px solid #444; font-weight:bold;">Discount</td>
+                {{-- <td  style="border:1px solid #444;"></td> --}}
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($order_details->coupon_applied_amount,2) }}</td>
+            </tr>
+
+
+
+
             <!-- Total Row -->
             <tr class="total-row">
                 <td colspan="4" style="border:1px solid #444; font-weight:bold;">Total</td>
@@ -508,7 +529,7 @@
                       <td colspan="3" style="background-color: #d7d8e9;"><strong>Invoice Amount In Words :</strong></td>
                     </tr>
 
-                     <tr>
+                    <tr>
                       <td colspan="3" >{{ $shop_amount_words }}</td>
                     </tr>
 
