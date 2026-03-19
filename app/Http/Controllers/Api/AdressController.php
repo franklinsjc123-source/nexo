@@ -178,6 +178,10 @@ class AdressController extends Controller
             ], 400);
         }
 
+        Address::where('user_id', $user_id)->update([
+            'is_default' => 0
+        ]);
+
         $address = Address::where('id', $address_id)
             ->where('user_id', $user_id)
             ->first();
@@ -188,11 +192,6 @@ class AdressController extends Controller
                 'message' => 'Address not found'
             ], 404);
         }
-
-        // Reset all user addresses
-        Address::where('user_id', $user_id)->update([
-            'is_default' => 0
-        ]);
 
         // Set selected address as default
         $address->update([
