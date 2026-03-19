@@ -332,6 +332,59 @@ class OrderController extends Controller
 
 
 
+    public function OrderCancel(Request $request)
+    {
+        $order_id     = $request->order_id;
+
+        if (!$order_id) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order ID is required'
+            ], 400);
+        }
+
+        $order = Order::where('id', $order_id)->first();
+
+        if (!$order) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order not found'
+            ], 404);
+        }
+
+        $order->order_status = 3;
+        $order->save();
+
+
+        $order_items = OrderItems::with('product')
+            ->where('order_id', $order->id)
+            ->get();
+
+
+
+        $shopItems = $order_items->groupBy('shop_id');
+
+        foreach ($shopItems as $shop_id => $items) {
+
+            $shop = Shop::find($shop_id);
+
+            $shop_user_id = $shop->user_id;
+
+            $message = "Order #" . $order->order_id . " has been cancelled by customer.";
+
+            $this->sendNotificationForShops($shop_user_id, 'Order Cancelled - NexOcart', $message);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order status updated successfully'
+        ], 200);
+    }
+
+
+
+
+
 
 
 
@@ -477,7 +530,7 @@ class OrderController extends Controller
         $delivery_address = Address::where('id', $delivery_id)->first();
 
         $pincode_charge = 0;
-        
+
         if ($delivery_address) {
 
             $pincode_charge = PinCode::where('pincode', $delivery_address->pincode)->value('delivery_charge');

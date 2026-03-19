@@ -66,6 +66,7 @@ Route::get('/getAllShopOrders',[OrderController::class,"getAllShopOrders"])->nam
 Route::get('/getShopOrderDetails',[OrderController::class,"getShopOrderDetails"])->name('getShopOrderDetails');
 
 Route::get('/changeOrderStatus',[OrderController::class,"changeOrderStatus"])->name('changeOrderStatus');
+Route::get('/OrderCancel',[OrderController::class,"OrderCancel"])->name('OrderCancel');
 
 
 
