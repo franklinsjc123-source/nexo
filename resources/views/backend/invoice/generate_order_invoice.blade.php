@@ -454,12 +454,32 @@
 
             <!-- Total Row -->
             <tr class="total-row">
-                <td colspan="5" style="border:1px solid #444; font-weight:bold;">Total</td>
+                <td colspan="5" style="border:1px solid #444; font-weight:bold;">Subtotal</td>
                 {{-- <td  style="border:1px solid #444;"></td> --}}
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($total_amount,2) }}</td>
             </tr>
+
+
+             <tr class="total-row">
+                <td colspan="5" style="border:1px solid #444; font-weight:bold;">Discount</td>
+                {{-- <td  style="border:1px solid #444;"></td> --}}
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($order_details->coupon_applied_amount,2) }}</td>
+            </tr>
+
+            <tr class="total-row">
+                <td colspan="5" style="border:1px solid #444; font-weight:bold;">Total</td>
+                {{-- <td  style="border:1px solid #444;"></td> --}}
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($order_details->amount,2) }}</td>
+            </tr>
+
+
+
         </tbody>
     </table>
 
@@ -510,7 +530,7 @@
                     <tr>
                         <td >Advance</td>
                         <td class="rb-colon">:</td>
-                        <td class="rb-val text-right" ><span style="font-family:  DejaVu Sans, sans-serif;">₹</span> <b style="color:blue">{{ number_format ( ($total_amount) * 0.30,2) }} </b> </td>
+                        <td class="rb-val text-right" ><span style="font-family:  DejaVu Sans, sans-serif;">₹</span> <b style="color:blue">{{ number_format ( ($order_details->amount) * 0.30,2) }} </b> </td>
                     </tr>
                     <tr>
                         <td  style="white-space: nowrap;" >Delivery Charges</td>
