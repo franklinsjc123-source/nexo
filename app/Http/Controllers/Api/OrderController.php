@@ -262,7 +262,7 @@ class OrderController extends Controller
             $products[] = [
                 'product_name' => optional($item->product)->product_name,
                 'qty'          => $item->qty,
-                'unit'         => $item->unit,
+                'unit'         => $item->unitData->unit_name ?? '',
                 'price'        => $item->product_price,
                 'total_amount' => $item->price
             ];
@@ -288,7 +288,7 @@ class OrderController extends Controller
             'total_quantity'  => $total_qty,
             'total_amount'    => $total_amount,
             'date'            => date('d-m-Y', strtotime($order->created_at)),
-            'delivery_address' => $address,
+            'delivery_address'=> $address,
             'products'        => $products
         ];
 
