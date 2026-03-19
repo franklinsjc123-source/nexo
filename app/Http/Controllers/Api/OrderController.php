@@ -288,7 +288,7 @@ class OrderController extends Controller
             'total_quantity'  => $total_qty,
             'total_amount'    => $total_amount,
             'date'            => date('d-m-Y', strtotime($order->created_at)),
-            'delivery_address'=> $address,
+            'delivery_address' => $address,
             'products'        => $products
         ];
 
@@ -421,7 +421,13 @@ class OrderController extends Controller
 
             if ($order) {
 
-                $nextInvoice = str_pad((int)$currentInvoice + 1, 3, '0', STR_PAD_LEFT);
+                $currentInvoice = $company_details->direct_invoice_no ?? 'NCD-0000';
+
+                $number = (int) str_replace('NCD-', '', $currentInvoice);
+
+                $nextNumber = $number + 1;
+
+                $nextInvoice = 'NCD-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
 
                 $company_details->update([
                     'direct_invoice_no' => $nextInvoice
