@@ -575,7 +575,7 @@ class OrderController extends Controller
                     'amount'                => $amount,
                     'ship_amount'           => $delivery_charge,
                     'payment_status'        => 0,
-                    'offer_ids'             => $offer_ids,
+                    'offer_ids'             => $offer_applied_ids,
                     'is_coupon_applied'     => $discount  > 0 ? 1 : 0,
                     'coupon_applied_amount' => $discount ?  $discount : 0,
                     'amount_in_words'       => $amount_in_words
