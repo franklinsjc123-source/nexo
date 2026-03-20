@@ -660,25 +660,30 @@ class OrderController extends Controller
 
                     $discount_amount = 0;
 
-                    $offer_used = OffersUsed::whereIn('offer_id', $offer_ids)->get();
+                    if ($offer_ids) {
 
-                    $offers = Offers::whereIn('id', $offer_ids)->get()->keyBy('id');
+                        $offer_used = OffersUsed::whereIn('offer_id', $offer_ids)->get();
 
-                    foreach ($offer_used as $offer) {
+                        $offers = Offers::whereIn('id', $offer_ids)->get()->keyBy('id');
 
-                        $offerDetails = $offers[$offer->offer_id] ?? null;
+                        foreach ($offer_used as $offer) {
 
-                        if (!$offerDetails) {
-                            continue;
-                        }
+                            $offerDetails = $offers[$offer->offer_id] ?? null;
 
-                        if ($offerDetails->shop_id == $shop_id) {
+                            if (!$offerDetails) {
+                                continue;
+                            }
 
-                            $discount_percentage = $offerDetails->discount_percentage ?? 0;
+                            if ($offerDetails->shop_id == $shop_id) {
 
-                            $discount_amount += ($shop_total * $discount_percentage) / 100;
+                                $discount_percentage = $offerDetails->discount_percentage ?? 0;
+
+                                $discount_amount += ($shop_total * $discount_percentage) / 100;
+                            }
                         }
                     }
+
+
 
                     $final_shop_total = $shop_total - $discount_amount;
 
