@@ -711,15 +711,12 @@ class OrderController extends Controller
 
                     $discount_amount = 0;
 
-                    if (!empty($offer_applied_ids)) {
+                    $offer_used = OffersUsed::where('cart_id', $order->cart_id)->get();
 
-                        // Convert comma separated string to array
-                        $offer_ids_array = explode(',', $offer_applied_ids);
+                    if ($offer_used->isNotEmpty()) {
 
-                        // Get used offers
-                        $offer_used = OffersUsed::whereIn('offer_id', $offer_ids_array)->get();
+                        $offer_ids_array = $offer_used->pluck('offer_id')->toArray();
 
-                        // Get offers
                         $offers = Offers::whereIn('id', $offer_ids_array)->get()->keyBy('id');
 
                         foreach ($offer_used as $offer) {
@@ -730,10 +727,8 @@ class OrderController extends Controller
                                 continue;
                             }
 
-                            // ✅ Check shop match
                             if ($offerDetails->shop_id == $shop_id) {
 
-                                // ✅ Check minimum order condition
                                 if ($shop_total >= $offerDetails->minimum_order_amount) {
 
                                     $discount_percentage = $offerDetails->discount_percentage ?? 0;
@@ -744,10 +739,7 @@ class OrderController extends Controller
                         }
                     }
 
-
-
                     $final_shop_total = $shop_total - $discount_amount;
-
 
 
                     $shop_amount_words = $this->amountToWords($final_shop_total);

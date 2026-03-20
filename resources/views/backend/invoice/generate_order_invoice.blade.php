@@ -341,7 +341,7 @@
                 <table style="width: 100%; border-collapse: collapse;">
 
                      <tr>
-                    <td style="border: none; padding: 4px; font-weight: bold;">Shop</td>
+                    <td style="border: none; padding: 4px; font-weight: bold;">Name</td>
                     <td style="border: none; ">:</td>
                     <td style="border: none; padding: 4px;">{{ $delivery_address->name }}</td>
                     </tr>
