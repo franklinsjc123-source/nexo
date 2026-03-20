@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItems;
 use App\Models\Shop;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use App\Http\Traits\PermissionCheckTrait;
@@ -27,16 +28,19 @@ class OrderController extends Controller
 
             $shop_id = Shop::where('user_id', auth()->id())->value('id');
 
-            $records = Order::select('orders.*', 'shop_invoice.invoice_path')
+            $records = Order::select(
+                'orders.*',
+                'shop_invoice.invoice_path',
+                DB::raw('SUM(order_items.price) as shop_total')
+            )
                 ->join('order_items', 'order_items.order_id', '=', 'orders.id')
                 ->leftJoin('shop_invoice', function ($join) use ($shop_id) {
                     $join->on('shop_invoice.order_id', '=', 'orders.id')
                         ->where('shop_invoice.shop_id', '=', $shop_id);
                 })
                 ->where('order_items.shop_id', $shop_id)
+                ->groupBy('orders.id', 'shop_invoice.invoice_path')
                 ->orderBy('orders.id', 'DESC')
-                ->groupBy('orders.id')
-                ->distinct()
                 ->get();
         } else {
             $records   =  Order::orderBy('id', 'DESC')->get();
