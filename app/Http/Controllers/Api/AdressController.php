@@ -198,9 +198,7 @@ class AdressController extends Controller
             'is_default' => 1
         ]);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Default address updated successfully'
-        ], 200);
+        $success_array = array('status' => 'success', 'message' => 'Default address updated successfully');
+        return response()->json(array($success_array), 200);
     }
 }
