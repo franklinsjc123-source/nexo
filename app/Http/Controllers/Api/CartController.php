@@ -44,9 +44,6 @@ class CartController extends Controller
             ], 404);
         }
 
-
-
-
         $shop_id = $product->shop;
 
         $attribute = ProductAttributes::where('product_id', $product_id)
@@ -248,17 +245,9 @@ class CartController extends Controller
                 $pincode_charge = PinCode::where('pincode', $delivery_address->pincode)->value('delivery_charge');
             }
 
-
-
             $delivery_charge = round($delivery_charge + $pincode_charge);
 
-
-
-
-
-
             $final_amount = $item_price + $delivery_charge - $discount;
-
 
             $response = [
                 'id'            => $cart->id,
