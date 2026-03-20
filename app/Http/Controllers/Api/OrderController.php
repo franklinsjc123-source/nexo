@@ -711,7 +711,9 @@ class OrderController extends Controller
 
                     $discount_amount = 0;
 
-                    $offer_used = OffersUsed::where('cart_id', $order->cart_id)->get();
+                    $offer_used = OffersUsed::where('cart_id', $cart->id)->get();
+
+                // print_r( $offer_used);exit;
 
                     if ($offer_used->isNotEmpty()) {
 
@@ -771,8 +773,8 @@ class OrderController extends Controller
                 }
 
 
-                CartItems::where('cart_id', $cart->id)->delete();
-                $cart->delete();
+                // CartItems::where('cart_id', $cart->id)->delete();
+                // $cart->delete();
 
                 DB::commit();
 
