@@ -18,6 +18,9 @@ use App\Models\Category;
 use App\Models\DeliveryPerson;
 use App\Models\PinCode;
 use App\Models\User;
+use App\Models\OffersUsed;
+use App\Models\Offers;
+
 use Carbon\Carbon;
 
 
@@ -458,7 +461,9 @@ class OrderController extends Controller
         $user_id      = $request->user_id;
         $delivery_id  = $request->delivery_id;
         $payment_type = $request->payment_type;
+        $offer_ids    = $request->offer_ids;
         $discount     = $request->discount ?  $request->discount : 0;
+
 
         $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
 
@@ -570,6 +575,7 @@ class OrderController extends Controller
                     'amount'                => $amount,
                     'ship_amount'           => $delivery_charge,
                     'payment_status'        => 0,
+                    'offer_ids'             => $offer_ids,
                     'is_coupon_applied'     => $discount  > 0 ? 1 : 0,
                     'coupon_applied_amount' => $discount ?  $discount : 0,
                     'amount_in_words'       => $amount_in_words
@@ -644,13 +650,41 @@ class OrderController extends Controller
 
                     $shop_user_id = $shop->user_id;
 
+
+
                     $message = "New order received from Order #" . $order_number;
 
                     $this->sendNotificationForShops($shop_user_id, 'New Order - NexoCart', $message);
 
-
                     $shop_total = $items->sum('price');
-                    $shop_amount_words = $this->amountToWords($shop_total);
+
+                    $discount_amount = 0;
+
+                    $offer_used = OffersUsed::whereIn('offer_id', $offer_ids)->get();
+
+                    $offers = Offers::whereIn('id', $offer_ids)->get()->keyBy('id');
+
+                    foreach ($offer_used as $offer) {
+
+                        $offerDetails = $offers[$offer->offer_id] ?? null;
+
+                        if (!$offerDetails) {
+                            continue;
+                        }
+
+                        if ($offerDetails->shop_id == $shop_id) {
+
+                            $discount_percentage = $offerDetails->discount_percentage ?? 0;
+
+                            $discount_amount += ($shop_total * $discount_percentage) / 100;
+                        }
+                    }
+
+                    $final_shop_total = $shop_total - $discount_amount;
+
+
+
+                    $shop_amount_words = $this->amountToWords($final_shop_total);
 
                     $shopInvoiceName = 'Shop_' . $order_number . '_shop_' . $shop_id . date('Ymd_His') . '.pdf';
 
@@ -665,6 +699,7 @@ class OrderController extends Controller
                             'company' => $company,
                             'delivery_address' => $delivery_address,
                             'shop_amount_words' => $shop_amount_words,
+                            'discount_amount' => $discount_amount,
                         ]
                     )->setPaper('A4', 'portrait');
 
@@ -678,8 +713,8 @@ class OrderController extends Controller
                 }
 
 
-                // CartItems::where('cart_id', $cart->id)->delete();
-                // $cart->delete();
+                CartItems::where('cart_id', $cart->id)->delete();
+                $cart->delete();
 
                 DB::commit();
 
