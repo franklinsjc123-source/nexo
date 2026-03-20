@@ -285,7 +285,7 @@ class OrderController extends Controller
         }
 
         $shop_names = implode(', ', array_unique($shop_names));
-        
+
         $discount_amount = 0;
         if (!empty($order->offer_applied_ids)) {
 
@@ -347,6 +347,8 @@ class OrderController extends Controller
         $order_id     = $request->order_id;
         $order_status = $request->order_status;
 
+        $now = Carbon::now('Asia/Kolkata');
+
         if (!$order_id || $order_status === null) {
             return response()->json([
                 'status' => 'error',
@@ -364,6 +366,15 @@ class OrderController extends Controller
         }
 
         $order->order_status = $order_status;
+
+        if ($order_status == 2) {
+            $order->delivery_date = $now;
+        } elseif ($order_status == 3) {
+            $order->cancel_date = $now;
+        } elseif ($order_status == 4) {
+            $order->shipped_date = $now;
+        }
+
         $order->save();
 
         return response()->json([
