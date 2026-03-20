@@ -208,6 +208,8 @@ class OrderController extends Controller
             if ($shop_id) {
                 $items = $order->items->where('shop_id', $shop_id);
 
+                $total_product_count = $items->groupBy('product_id')->count();
+
                 $total_qty = $items->sum('qty');
                 $total_amount = $items->sum('price');
             } else {
@@ -218,7 +220,7 @@ class OrderController extends Controller
             $data[] = [
                 'id'             => $order->id,
                 'order_id'       => $order->order_id,
-                'total_quantity' => $total_qty,
+                'total_quantity' => $total_product_count ? $total_product_count :$total_qty ,
                 'order_status'   => $order->order_status,
                 'payment_type'   => $order->payment_type,
                 'amount'         => $total_amount,
