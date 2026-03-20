@@ -161,10 +161,10 @@ class OrderController extends Controller
             'payment_mode'    => $order->payment_type,
             'order_status'    => $order->order_status,
             'sub_total'       => $sub_total,
-            'discount'        => $order->coupon_applied_amount ,
+            'discount'        => $order->coupon_applied_amount,
             'delivery_fee'    => $order->ship_amount,
             'total_quantity'  => $total_qty,
-            'total_amount'    => $order->amount + $order->ship_amount  ,
+            'total_amount'    => $order->amount + $order->ship_amount,
             'date'            => date('d-m-Y', strtotime($order->created_at)),
             'delivery_address' => $address,
             'products'        => $products
@@ -286,6 +286,40 @@ class OrderController extends Controller
 
         $shop_names = implode(', ', array_unique($shop_names));
 
+        if (!empty($order->offer_applied_ids)) {
+
+            $offer_ids_array = explode(',', $order->offer_applied_ids);
+
+            $offer_used = OffersUsed::whereIn('offer_id', $offer_ids_array)->get();
+
+            $offers = Offers::whereIn('id', $offer_ids_array)->get()->keyBy('id');
+
+            foreach ($offer_used as $offer) {
+
+                $offerDetails = $offers[$offer->offer_id] ?? null;
+
+                if (!$offerDetails) {
+                    continue;
+                }
+
+                if ($offerDetails->shop_id == $shop_id) {
+
+                    if ($total_amount >= $offerDetails->minimum_order_amount) {
+
+                        $discount_percentage = $offerDetails->discount_percentage ?? 0;
+
+                        $discount_amount += ($total_amount * $discount_percentage) / 100;
+                    }
+                }
+            }
+        }
+
+
+
+        $final_shop_total = $total_amount - $discount_amount;
+
+
+
         $data = [
             'order_id'        => $order->order_id,
             'shop_names'      => $shop_names,
@@ -293,7 +327,8 @@ class OrderController extends Controller
             'order_status'    => $order->order_status,
             'delivery_fee'    => $order->ship_amount,
             'total_quantity'  => $total_qty,
-            'total_amount'    => $total_amount,
+            'discount'        => $discount_amount,
+            'total_amount'    => $final_shop_total,
             'date'            => date('d-m-Y', strtotime($order->created_at)),
             'delivery_address' => $address,
             'products'        => $products
