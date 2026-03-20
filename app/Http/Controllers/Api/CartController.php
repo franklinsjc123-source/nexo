@@ -238,7 +238,6 @@ class CartController extends Controller
                         $delivery_charge += 50;
                     }
                 }
-
             }
 
 
@@ -429,5 +428,26 @@ class CartController extends Controller
             $error_array = array('status' => 'error', 'message' => 'Parameters Missing');
             return response()->json(array($error_array), 400);
         }
+    }
+
+    public function getCartCount(Request $request)
+    {
+
+        $user_id    = $request->input('user_id');
+
+        $cart_count = 0;
+        if ($user_id) {
+            $cart = Cart::where('user_id', $user_id)->first();
+
+            if ($cart) {
+                $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
+            }
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data received successfully',
+            'cart_count'  => $cart_count,
+        ], 200);
     }
 }

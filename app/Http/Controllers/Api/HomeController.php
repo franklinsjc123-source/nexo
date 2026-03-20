@@ -300,4 +300,6 @@ class HomeController extends Controller
             'data' => $data
         ], 200);
     }
+
+    
 }
