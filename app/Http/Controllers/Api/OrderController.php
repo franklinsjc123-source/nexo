@@ -769,7 +769,8 @@ class OrderController extends Controller
                         'order_id'              => $order->id,
                         'shop_id'               => $shop_id,
                         'final_shop_total'      => $final_shop_total,
-                        'invoice_path' => URL::to('/') . '/uploads/shop_order_invoice/' . $shopInvoiceName
+                        'shop_discount'         => $discount_amount,
+                        'invoice_path'          => URL::to('/') . '/uploads/shop_order_invoice/' . $shopInvoiceName
                     ]);
                 }
 
