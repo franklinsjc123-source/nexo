@@ -160,7 +160,7 @@ class OrderController extends Controller
             'shop_names'      => $shop_names,
             'payment_mode'    => $order->payment_type,
             'order_status'    => $order->order_status,
-            'sub_total'       => $order->sub_total,
+            'sub_total'       => $sub_total,
             'discount'        => $order->coupon_applied_amount ,
             'delivery_fee'    => $order->ship_amount,
             'total_quantity'  => $total_qty,
