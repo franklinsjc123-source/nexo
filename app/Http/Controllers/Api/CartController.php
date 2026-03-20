@@ -448,6 +448,7 @@ class CartController extends Controller
             'status' => 'success',
             'message' => 'Data received successfully',
             'cart_count'  => $cart_count,
+            'cart_amount'  => $cart->total_amount ,
         ], 200);
     }
 }
