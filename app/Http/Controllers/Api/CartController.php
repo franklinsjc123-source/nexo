@@ -274,7 +274,7 @@ class CartController extends Controller
             $cart_count = CartItems::where('cart_id', $cart->id)->count();
 
             $applied_offer_ids = OffersUsed::where('cart_id', $cart->id)
-                ->pluck('offer_id')
+                ->pluck('id')
                 ->toArray();
 
             $applied_offers = implode(',', $applied_offer_ids);
@@ -285,7 +285,7 @@ class CartController extends Controller
                 'status' => 'success',
                 'cart_count' => $cart_count,
                 'item_price' => $item_price,
-                'applied_offers' => $applied_offers, 
+                'applied_offers' => $applied_offers,
                 'delivery_charge' => $delivery_charge,
                 'discount' => $discount,
                 'final_amount' => $final_amount,
