@@ -441,14 +441,20 @@ class CartController extends Controller
 
             if ($cart) {
                 $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Data received successfully',
+                    'cart_count'  => $cart_count,
+                    'cart_amount'  => $cart->total_amount ? $cart->total_amount  : 0,
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Cart empty',
+                    'cart_count'  => 0,
+                    'cart_amount'  => 0,
+                ], 400);
             }
         }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Data received successfully',
-            'cart_count'  => $cart_count,
-            'cart_amount'  => $cart->total_amount ,
-        ], 200);
     }
 }
