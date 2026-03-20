@@ -132,6 +132,7 @@ class OrderController extends Controller
         $products = [];
         $shop_names = [];
         $total_qty = 0;
+        $sub_total = 0;
 
         foreach ($order->items as $item) {
 
@@ -144,6 +145,7 @@ class OrderController extends Controller
             ];
 
             $total_qty += $item->qty;
+            $sub_total +=  $item->price;
 
             $shop = Shop::find($item->shop_id);
             if ($shop) {
@@ -158,6 +160,8 @@ class OrderController extends Controller
             'shop_names'      => $shop_names,
             'payment_mode'    => $order->payment_type,
             'order_status'    => $order->order_status,
+            'sub_total'       => $order->sub_total,
+            'discount'        => $order->coupon_applied_amount ,
             'delivery_fee'    => $order->ship_amount,
             'total_quantity'  => $total_qty,
             'total_amount'    => $order->amount + $order->ship_amount  ,
