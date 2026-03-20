@@ -285,7 +285,8 @@ class OrderController extends Controller
         }
 
         $shop_names = implode(', ', array_unique($shop_names));
-
+        
+        $discount_amount = 0;
         if (!empty($order->offer_applied_ids)) {
 
             $offer_ids_array = explode(',', $order->offer_applied_ids);
