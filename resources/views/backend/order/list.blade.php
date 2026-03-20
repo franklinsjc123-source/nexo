@@ -57,10 +57,10 @@
                                 <td><?php echo $row->customerData->email ?? '-' ?></td>
                                 <td>
                                     <?php
-                                    if(Auth::user()->auth_level  == 4 ) {
-                                            echo $row->final_shop_total;
+                                      if (Auth::user()->auth_level == 4) {
+                                            echo number_format(round($row->final_shop_total), 2);
                                         } else {
-                                            echo $row->amount + $row->ship_amount;
+                                            echo number_format(round($row->amount + $row->ship_amount), 2);
                                         }
                                     ?>
                                 </td>
