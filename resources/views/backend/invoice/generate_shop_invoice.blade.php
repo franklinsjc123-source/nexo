@@ -464,7 +464,7 @@
                 {{-- <td  style="border:1px solid #444;"></td> --}}
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
-                <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ round(number_format($total_amount,2)) }}</td>
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format(round($total_amount, 2), 2) }}</td>
             </tr>
 
 
@@ -473,7 +473,7 @@
                 {{-- <td  style="border:1px solid #444;"></td> --}}
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
-                <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ round(number_format($discount_amount,2)) }}</td>
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format(round($discount_amount, 2), 2) }} </td>
             </tr>
 
 
@@ -485,8 +485,10 @@
                 {{-- <td  style="border:1px solid #444;"></td> --}}
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
                 <td class="text-right" style="border:1px solid #444; font-weight:bold;"></td>
-                <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ round(number_format($total_amount - $discount_amount,2)) }}</td>
+                <td class="text-right" style="border:1px solid #444; font-weight:bold;"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format(round($total_amount - $discount_amount, 2), 2) }}</td>
             </tr>
+
+            
         </tbody>
     </table>
 
