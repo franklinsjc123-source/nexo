@@ -55,7 +55,7 @@
                                 <td><?php echo $row->order_id ?></td>
                                 <td><?php echo $row->customerData->name ?? '-' ?></td>
                                 <td><?php echo $row->customerData->email ?? '-' ?></td>
-                                <td><?php echo $row->amount ?></td>
+                                <td><?php echo $row->amount + $row->ship_amount  ?></td>
                                 <td>
                                     <?php
                                         if ($row->order_status == 1) {
@@ -79,7 +79,9 @@
                                     <a href="javascript:void(0)"
                                         class="badge bg-<?php echo $class; ?> editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>"> <?php echo $text; ?>
                                     </a>
+                                    
                                 </td>
+
                                 <td>
 
                                     <a href="javascript:void(0)" class="btn btn-sm btn-info viewOrderItems" data-id="<?= $row->id ?>"> <i class="bi bi-eye"></i> </a>
