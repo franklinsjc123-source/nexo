@@ -58,7 +58,7 @@
                                 <td>
                                     <?php
                                     if(Auth::user()->auth_level  == 4 ) {
-                                            echo $row->amount;
+                                            echo $row->shop_total;
                                         } else {
                                             echo $row->amount + $row->ship_amount;
                                         }
