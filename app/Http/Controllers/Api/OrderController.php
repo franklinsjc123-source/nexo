@@ -377,10 +377,10 @@ class OrderController extends Controller
 
         $order->save();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Order status updated successfully'
-        ], 200);
+
+
+        $success_array = array('status' => 'success', 'message' => 'Order status updated successfully');
+        return response()->json(array($success_array), 200);
     }
 
 
