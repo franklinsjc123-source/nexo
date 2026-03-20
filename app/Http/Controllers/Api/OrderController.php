@@ -458,11 +458,11 @@ class OrderController extends Controller
 
     public function placeOrder(Request $request)
     {
-        $user_id      = $request->user_id;
-        $delivery_id  = $request->delivery_id;
-        $payment_type = $request->payment_type;
-        $offer_ids    = $request->offer_ids;
-        $discount     = $request->discount ?  $request->discount : 0;
+        $user_id            = $request->user_id;
+        $delivery_id        = $request->delivery_id;
+        $payment_type       = $request->payment_type;
+        $offer_applied_ids  = $request->offer_ids;
+        $discount           = $request->discount ?  $request->discount : 0;
 
 
         $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
@@ -660,11 +660,16 @@ class OrderController extends Controller
 
                     $discount_amount = 0;
 
-                    if ($offer_ids) {
+                    if (!empty($offer_applied_ids)) {
 
-                        $offer_used = OffersUsed::whereIn('offer_id', $offer_ids)->get();
+                        // Convert comma separated string to array
+                        $offer_ids_array = explode(',', $offer_applied_ids);
 
-                        $offers = Offers::whereIn('id', $offer_ids)->get()->keyBy('id');
+                        // Get used offers
+                        $offer_used = OffersUsed::whereIn('offer_id', $offer_ids_array)->get();
+
+                        // Get offers
+                        $offers = Offers::whereIn('id', $offer_ids_array)->get()->keyBy('id');
 
                         foreach ($offer_used as $offer) {
 
@@ -674,11 +679,16 @@ class OrderController extends Controller
                                 continue;
                             }
 
+                            // ✅ Check shop match
                             if ($offerDetails->shop_id == $shop_id) {
 
-                                $discount_percentage = $offerDetails->discount_percentage ?? 0;
+                                // ✅ Check minimum order condition
+                                if ($shop_total >= $offerDetails->minimum_order_amount) {
 
-                                $discount_amount += ($shop_total * $discount_percentage) / 100;
+                                    $discount_percentage = $offerDetails->discount_percentage ?? 0;
+
+                                    $discount_amount += ($shop_total * $discount_percentage) / 100;
+                                }
                             }
                         }
                     }
