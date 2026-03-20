@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Shop;
+
 use App\Models\Referral;
 use Google_Client;
 
@@ -30,7 +32,7 @@ class AuthController extends Controller
             if (!$user) {
                 return response()->json(['status' => 'User not found'], 400);
             } else {
-                 $otp = rand(1000, 9999);
+                $otp = rand(1000, 9999);
 
                 $updateArray =  array(
                     'otp' =>  $otp,
@@ -58,7 +60,7 @@ class AuthController extends Controller
 
 
 
-     public function resendOTP(Request $request)
+    public function resendOTP(Request $request)
     {
 
         $mobile = $request->input('mobile');
@@ -70,7 +72,7 @@ class AuthController extends Controller
             if (!$user) {
                 return response()->json(['status' => 'User not found'], 400);
             } else {
-                 $otp = rand(1000, 9999);
+                $otp = rand(1000, 9999);
 
                 $updateArray =  array(
                     'otp' =>  $otp,
@@ -83,7 +85,7 @@ class AuthController extends Controller
                 $this->sendNotification($user->id, 'NexOcart OTP Verification',  $message);
 
 
-                $success_array = array('status' => 'success', 'message' => 'OTP send successfully', );
+                $success_array = array('status' => 'success', 'message' => 'OTP send successfully');
                 return response()->json(array($success_array), 200);
             }
         } else {
@@ -192,7 +194,10 @@ class AuthController extends Controller
                     'is_verified' => 1
                 );
                 User::where('id', $user_id)->update($updateArray);
+
                 $user_data    = User::where('id',  $user_id)->first();
+                $shop_name    = Shop::where('user_id',  $user_id)->value('shop_name');
+                $user_data['shop_name'] = $shop_name ?? "";
 
                 $success_array = array('status' => 'success', 'message' => 'Otp verified successfully', 'data' => $user_data);
                 return response()->json(array($success_array), 200);
