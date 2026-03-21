@@ -43,7 +43,7 @@ class HomeController extends Controller
             $checkPincodeExistence = PinCode::where('pincode', $pincode)->where('status', 1)->exists();
 
             $category   = Category::where('status', 1)->get();
-            $shops      = Shop::where('status', 1)->inRandomOrder()->get();
+            $shops      = Shop::where('status', 1)->whereRaw("category NOT LIKE '%,%'")->inRandomOrder()->get();
             $slider     = Slider::where('status', 1)->get();
 
             $cart_count = 0;
@@ -301,5 +301,5 @@ class HomeController extends Controller
         ], 200);
     }
 
-    
+
 }
