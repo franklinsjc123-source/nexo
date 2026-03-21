@@ -379,8 +379,6 @@ class OrderController extends Controller
 
         $order->save();
 
-
-
         $success_array = array('status' => 'success', 'message' => 'Order status updated successfully');
         return response()->json(array($success_array), 200);
     }
@@ -777,8 +775,8 @@ class OrderController extends Controller
                 }
 
 
-                // CartItems::where('cart_id', $cart->id)->delete();
-                // $cart->delete();
+                CartItems::where('cart_id', $cart->id)->delete();
+                $cart->delete();
 
                 DB::commit();
 
