@@ -79,7 +79,15 @@ class HomeController extends Controller
     {
         $category_id = $request->input('category_id');
         if ($category_id) {
-            $shops = Shop::whereRaw("FIND_IN_SET(?, category)", [$category_id])->where('status', 1)->get();
+            
+            $shops = Shop::whereRaw("FIND_IN_SET(?, category)", [$category_id])
+                ->where('status', 1)
+                ->get()
+                ->map(function ($shop) use ($category_id) {
+                    $shop->category = (string)$category_id;
+                    return $shop;
+                });
+
         } else {
             $shops = Shop::where('status', 1)->get();
         }
@@ -300,6 +308,4 @@ class HomeController extends Controller
             'data' => $data
         ], 200);
     }
-
-
 }
