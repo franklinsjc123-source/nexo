@@ -41,6 +41,7 @@ class OrderController extends Controller
         $user_id = $request->input('user_id');
 
         $orders = Order::where('customer_id', $user_id)
+            ->with('items.shopData')
             ->select(
                 'id',
                 'order_id',
@@ -53,6 +54,7 @@ class OrderController extends Controller
             ->get();
 
         $directOrders = DirectOrder::where('customer_id', $user_id)
+            ->with('shopData')
             ->select(
                 'id',
                 'invoice_no',
@@ -77,10 +79,18 @@ class OrderController extends Controller
         $data = $allOrders->map(function ($order) {
 
             if (isset($order->order_id)) {
-                // Normal Order
+
+                $shopNames = collect($order->items)
+                    ->pluck('shopData.shop_name')
+                    ->filter()
+                    ->unique()
+                    ->values()
+                    ->implode(', ');
+
                 return [
                     'id' => $order->id,
                     'order_id' => $order->order_id,
+                    'shop_name' => $shopNames,
                     'amount' => $order->amount + $order->ship_amount,
                     'order_status' => $order->order_status,
                     'payment_type' => $order->payment_type,
@@ -89,10 +99,13 @@ class OrderController extends Controller
                     'date' => date('d-m-Y', strtotime($order->created_at)),
                 ];
             } else {
-                // Direct Order
+
+                $shopName = optional($order->shopData)->shop_name;
+
                 return [
                     'id' => $order->id,
                     'order_id' => $order->invoice_no,
+                    'shop_name' => $shopName,
                     'amount' => $order->total_invoice_amount,
                     'order_status' => $order->order_status,
                     'payment_type' => 'Cash on Delivery',
@@ -220,7 +233,7 @@ class OrderController extends Controller
             $data[] = [
                 'id'             => $order->id,
                 'order_id'       => $order->order_id,
-                'total_quantity' => $total_product_count ? $total_product_count :$total_qty ,
+                'total_quantity' => $total_product_count ? $total_product_count : $total_qty,
                 'order_status'   => $order->order_status,
                 'payment_type'   => $order->payment_type,
                 'amount'         => $total_amount,
@@ -713,7 +726,7 @@ class OrderController extends Controller
 
                     $offer_used = OffersUsed::where('cart_id', $cart->id)->get();
 
-                // print_r( $offer_used);exit;
+                    // print_r( $offer_used);exit;
 
                     if ($offer_used->isNotEmpty()) {
 
