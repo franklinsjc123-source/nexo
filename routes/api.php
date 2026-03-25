@@ -81,3 +81,5 @@ Route::post('/deliveryLogin',[DeliveryController::class,"deliveryLogin"])->name(
 Route::get('/getAllNewOrders',[DeliveryController::class,"getAllNewOrders"])->name('getAllNewOrders');
 Route::get('/getDeliveryHistory',[DeliveryController::class,"getDeliveryHistory"])->name('getDeliveryHistory');
 Route::post('/takenOrder',[DeliveryController::class,"takenOrder"])->name('takenOrder');
+Route::post('/declineOrder',[DeliveryController::class,"declineOrder"])->name('declineOrder');
+
