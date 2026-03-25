@@ -17,6 +17,7 @@ class DeliveryController extends Controller
     {
         $mobile = $request->mobile;
         $password = $request->password;
+        $token_id = $request->token_id;
 
         $delivery = DeliveryPerson::where('mobile', $mobile)->first();
 
@@ -41,6 +42,14 @@ class DeliveryController extends Controller
             ]);
         }
 
+        $updateArray =  array(
+            'device_id' =>  $token_id,
+        );
+
+        DeliveryPerson::where('id', $delivery->id)->update($updateArray);
+
+
+
         return response()->json([
             'status' => true,
             'message' => 'Login successful',
@@ -48,7 +57,7 @@ class DeliveryController extends Controller
                 'id' => $delivery->id,
                 'name' => $delivery->name,
                 'mobile' => $delivery->mobile,
-                'email' => $delivery->email
+                'email' => $delivery->email,
             ]
         ]);
     }
