@@ -25,21 +25,21 @@ class DeliveryController extends Controller
             return response()->json([
                 'status' => false,
                 'message' => 'Mobile number not found'
-            ]);
+            ], 400);
         }
 
         if (!Hash::check($password, $delivery->password)) {
             return response()->json([
                 'status' => false,
                 'message' => 'Invalid password'
-            ]);
+            ], 400);
         }
 
         if ($delivery->status != 1) {
             return response()->json([
                 'status' => false,
                 'message' => 'Account inactive'
-            ]);
+            ], 400);
         }
 
         $updateArray =  array(
