@@ -68,7 +68,8 @@ class DeliveryController extends Controller
     {
         $deliver_person_id = $request->deliver_person_id;
 
-        $orders = Order::whereIn('deliver_person_id', [0, $deliver_person_id])->with('items.shopData')
+        $orders = Order::whereIn('deliver_person_id', [0, $deliver_person_id])
+            ->with('items.shopData')
             ->select(
                 'id',
                 'order_id',
@@ -81,20 +82,40 @@ class DeliveryController extends Controller
             ->orderBy('id', 'desc')
             ->get();
 
-        if ($orders->isNotEmpty()) {
-
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Data received successfully',
-                'data' => $orders
-            ], 200);
-        } else {
-
+        if ($orders->isEmpty()) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Records not found'
             ], 400);
         }
+
+        // ✅ LOOP ALL ORDERS
+        $data = $orders->map(function ($order) {
+
+            $shopNames = collect($order->items)
+                ->pluck('shopData.shop_name')
+                ->filter()
+                ->unique()
+                ->values()
+                ->implode(', ');
+
+            return [
+                'id' => $order->id,
+                'order_id' => $order->order_id,
+                'shop_name' => $shopNames,
+                'amount' => (float)$order->amount + (float)$order->ship_amount,
+                'order_status' => $order->order_status,
+                'payment_type' => $order->payment_type,
+                'image_url' => '',
+                'order_type' => 'cart_order',
+                'date' => date('d-m-Y', strtotime($order->created_at)),
+            ];
+        });
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
+        ], 200);
     }
 
     public function takenOrder(Request $request)
