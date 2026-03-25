@@ -91,7 +91,13 @@ class DeliveryController extends Controller
             ], 400);
         }
 
-        $data = $orders->map(function ($order) {
+        $declinedOrderIds = DeclineOrder::where('deliver_person_id', $deliver_person_id)
+            ->pluck('order_id')
+            ->toArray();
+
+
+
+        $data = $orders->map(function ($order) use ($declinedOrderIds) {
 
             $total_product_count = collect($order->items)
                 ->groupBy('product_id')
@@ -109,12 +115,14 @@ class DeliveryController extends Controller
                 'order_id' => $order->order_id,
                 'shop_name' => $shopNames,
                 'total_quantity' => $total_product_count,
-                'amount' => (float)$order->amount + (float)$order->ship_amount,
+                'amount' => (float)$order->amount + (float)($order->ship_amount ?? 0),
                 'order_status' => $order->order_status,
                 'payment_type' => $order->payment_type,
                 'image_url' => '',
                 'order_type' => 'cart_order',
                 'date' => date('d-m-Y', strtotime($order->created_at)),
+                'is_declined' => in_array($order->id, $declinedOrderIds) ? 1 : 0,
+                
             ];
         });
 
