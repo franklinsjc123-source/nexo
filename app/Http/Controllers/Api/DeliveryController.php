@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\DeliveryPerson;
+use App\Models\DeclineOrder;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 use Illuminate\Http\Request;
 
@@ -89,12 +91,11 @@ class DeliveryController extends Controller
             ], 400);
         }
 
-        // ✅ LOOP ALL ORDERS
         $data = $orders->map(function ($order) {
 
-              $total_product_count = collect($order->items)
-            ->groupBy('product_id')
-            ->count();
+            $total_product_count = collect($order->items)
+                ->groupBy('product_id')
+                ->count();
 
             $shopNames = collect($order->items)
                 ->pluck('shopData.shop_name')
@@ -153,6 +154,39 @@ class DeliveryController extends Controller
                 'message' => 'Order already taken'
             ], 400);
         }
+    }
+
+
+
+    public function declineOrder(Request $request)
+    {
+        $deliver_person_id = $request->deliver_person_id;
+        $order_id = $request->order_id;
+        $now = Carbon::now('Asia/Kolkata')->format('d-m-Y h:i A');
+
+        $order = Order::where('id', $order_id)->first();
+
+        if (!$order) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Order not found'
+            ], 400);
+        }
+
+        DeclineOrder::create([
+            'order_id' => $order->id,
+            'deliver_person_id' => $deliver_person_id,
+            'created_at'       =>  $now,
+
+        ]);
+
+        $order->deliver_person_id = 0;
+        $order->save();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order declined successfully'
+        ], 200);
     }
 
 
