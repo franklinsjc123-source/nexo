@@ -92,6 +92,10 @@ class DeliveryController extends Controller
         // ✅ LOOP ALL ORDERS
         $data = $orders->map(function ($order) {
 
+              $total_product_count = collect($order->items)
+            ->groupBy('product_id')
+            ->count();
+
             $shopNames = collect($order->items)
                 ->pluck('shopData.shop_name')
                 ->filter()
@@ -103,6 +107,7 @@ class DeliveryController extends Controller
                 'id' => $order->id,
                 'order_id' => $order->order_id,
                 'shop_name' => $shopNames,
+                'total_quantity' => $total_product_count,
                 'amount' => (float)$order->amount + (float)$order->ship_amount,
                 'order_status' => $order->order_status,
                 'payment_type' => $order->payment_type,
