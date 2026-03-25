@@ -68,7 +68,16 @@ class DeliveryController extends Controller
     {
         $deliver_person_id = $request->deliver_person_id;
 
-        $orders = Order::whereIn('deliver_person_id', [0, $deliver_person_id])
+        $orders = Order::whereIn('deliver_person_id', [0, $deliver_person_id])->with('items.shopData')
+            ->select(
+                'id',
+                'order_id',
+                'amount',
+                'ship_amount',
+                'order_status',
+                'payment_type',
+                'created_at'
+            )
             ->orderBy('id', 'desc')
             ->get();
 
