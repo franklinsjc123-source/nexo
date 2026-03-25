@@ -1105,7 +1105,7 @@ class OrderController extends Controller
 
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/nexocart-3f870/messages:send');
+        curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/nxodriver/messages:send');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -1125,7 +1125,7 @@ class OrderController extends Controller
 
     public function getAccessToken()
     {
-        $credentialsPath = storage_path('app/firebase-service-account.json');
+        $credentialsPath = storage_path('app/firebase-service-account-delivery.json');
         $client = new Google_Client();
         $client->setAuthConfig($credentialsPath);
         $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
