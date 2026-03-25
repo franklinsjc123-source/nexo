@@ -91,7 +91,7 @@ class DeliveryController extends Controller
             ], 400);
         }
 
-        $declinedOrderIds = DeclineOrder::where('deliver_person_id', $deliver_person_id)
+        $declinedOrderIds = DeclineOrder::where('delivery_person_id', $deliver_person_id)
             ->pluck('order_id')
             ->toArray();
 
@@ -122,7 +122,7 @@ class DeliveryController extends Controller
                 'order_type' => 'cart_order',
                 'date' => date('d-m-Y', strtotime($order->created_at)),
                 'is_declined' => in_array($order->id, $declinedOrderIds) ? 1 : 0,
-                
+
             ];
         });
 

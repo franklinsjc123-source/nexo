@@ -139,7 +139,7 @@ class OrderController extends Controller
         }
 
         $address = Address::where('id', $order->delivery_id)
-            ->select('name', 'mobile', 'address', 'pincode')
+            ->select('name', 'mobile', 'address', 'pincode','landmark')
             ->first();
 
         $products = [];
@@ -267,7 +267,7 @@ class OrderController extends Controller
         }
 
         $address = Address::where('id', $order->delivery_id)
-            ->select('name', 'mobile', 'address', 'pincode')
+            ->select('name', 'mobile', 'address', 'pincode','landmark')
             ->first();
 
         $products = [];
