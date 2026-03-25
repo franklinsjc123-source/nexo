@@ -134,7 +134,7 @@ class DeliveryController extends Controller
             return response()->json([
                 'status' => 'error',
                 'message' => 'Order not found'
-            ], 404);
+            ], 400);
         }
 
         if ($order->deliver_person_id == 0) {
