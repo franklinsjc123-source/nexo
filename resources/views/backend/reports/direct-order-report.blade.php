@@ -33,9 +33,19 @@
 
                 <div class="d-flex gap-2">
 
-                    <a href="#" class="btn btn-success btn-sm" data-toggle="tooltip" data-placement="top" title="Export to Excel">
-                        <i class="bi bi-file-earmark-excel"></i> Export Excel
-                    </a>
+                     <a href="javascript:void(0)"
+                    class="btn btn-success btn-sm excelBtn"
+                    data-table="direct_order_report"
+                    title="Export to Excel">
+                        <i class="bi bi-file-earmark-excel"></i> Excel
+                </a>
+
+                <a href="javascript:void(0)"
+                    class="btn btn-success btn-sm pdfBtn"
+                    data-table="direct_order_report"
+                    title="Export to PDF">
+                        <i class="bi bi-file-earmark-pdf"></i> PDF
+                </a>
                 </div>
             </div>
 
@@ -46,19 +56,19 @@
         <div class="row mt-5 align-items-end">
 
             <div class="col-md-9">
-                <form method="POST" action="{{ route('orders-report') }}">
+                <form method="POST" action="{{ route('direct-orders-report') }}">
                     @csrf
 
                     <div class="row">
 
                         <div class="col-md-4">
                             <label>From Date</label>
-                            <input type="date" class="form-control" name="from_date" value="">
+                            <input type="date" class="form-control" name="from_date" value="{{ request('from_date') }}">
                         </div>
 
                          <div class="col-md-4">
                             <label>To Date</label>
-                            <input type="date" class="form-control" name="to_date" value="">
+                            <input type="date" class="form-control" name="to_date" value="{{ request('to_date') }}">
                         </div>
 
                         <div class="col-md-2 mt-5">
@@ -79,7 +89,7 @@
 
         <div class="row mt-5">
 
-            <table id="datatables" class="table table-nowrap table-hover table-bordered w-100 mt-5 colum-search">
+            <table id="direct_order_report" class="table table-nowrap table-hover table-bordered w-100 mt-5 colum-search">
                 <thead>
                     <tr>
                         <th>S.No</th>
