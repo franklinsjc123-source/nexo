@@ -53,31 +53,32 @@
 
 
 
-        <div class="row mt-5 align-items-end">
-
-            <div class="col-md-9">
+        <div class="card mt-4 shadow-sm border-0">
+            <div class="card-body">
                 <form method="POST" action="{{ route('direct-orders-report') }}">
                     @csrf
-
-                    <div class="row">
-
+                    <div class="row align-items-end g-3">
                         <div class="col-md-4">
-                            <label>From Date</label>
+                            <label class="form-label fw-bold">From Date</label>
                             <input type="date" class="form-control" name="from_date" value="{{ request('from_date') }}">
                         </div>
 
-                         <div class="col-md-4">
-                            <label>To Date</label>
+                        <div class="col-md-4">
+                            <label class="form-label fw-bold">To Date</label>
                             <input type="date" class="form-control" name="to_date" value="{{ request('to_date') }}">
                         </div>
 
-                        <div class="col-md-2 mt-5">
-                              <button class="btn btn-primary">  Search </button>
+                        <div class="col-md-4">
+                            <div class="d-flex gap-2">
+                                <button type="submit" class="btn btn-primary px-4">
+                                    <i class="bi bi-search me-1"></i> Search
+                                </button>
+                                <a href="{{ route('direct-orders-report') }}" class="btn btn-light px-4">
+                                    <i class="bi bi-arrow-clockwise me-1"></i> Reset
+                                </a>
+                            </div>
                         </div>
-
                     </div>
-
-
                 </form>
             </div>
         </div>
