@@ -20,6 +20,7 @@ use App\Models\PinCode;
 use App\Models\User;
 use App\Models\OffersUsed;
 use App\Models\Offers;
+use App\Models\DeclineOrder;
 
 use Carbon\Carbon;
 
@@ -126,6 +127,7 @@ class OrderController extends Controller
     public function getOrderDetails(Request $request)
     {
         $order_id = $request->order_id;
+        $deliver_person_id = $request->deliver_person_id;
 
         $order = Order::with(['items.product'])
             ->where('id', $order_id)
@@ -146,6 +148,10 @@ class OrderController extends Controller
         $shop_names = [];
         $total_qty = 0;
         $sub_total = 0;
+
+        $declinedOrderIds = DeclineOrder::where('delivery_person_id', $deliver_person_id)
+        ->pluck('order_id')
+        ->toArray();
 
         foreach ($order->items as $item) {
 
@@ -170,6 +176,7 @@ class OrderController extends Controller
 
         $data = [
             'order_id'        => $order->order_id,
+            'is_declined'     => in_array($order->id, $declinedOrderIds) ? 1 : 0,
             'shop_names'      => $shop_names,
             'payment_mode'    => $order->payment_type,
             'order_status'    => $order->order_status,
