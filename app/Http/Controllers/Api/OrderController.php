@@ -139,7 +139,7 @@ class OrderController extends Controller
         }
 
         $address = Address::where('id', $order->delivery_id)
-            ->select('name', 'mobile', 'address', 'pincode','landmark')
+            ->select('name', 'mobile', 'address', 'pincode', 'landmark')
             ->first();
 
         $products = [];
@@ -267,7 +267,7 @@ class OrderController extends Controller
         }
 
         $address = Address::where('id', $order->delivery_id)
-            ->select('name', 'mobile', 'address', 'pincode','landmark')
+            ->select('name', 'mobile', 'address', 'pincode', 'landmark')
             ->first();
 
         $products = [];
@@ -361,6 +361,7 @@ class OrderController extends Controller
     {
         $order_id     = $request->order_id;
         $order_status = $request->order_status;
+        $shop_id      = $request->shop_id;
 
         $now = Carbon::now('Asia/Kolkata');
 
@@ -380,20 +381,36 @@ class OrderController extends Controller
             ], 404);
         }
 
-        $order->order_status = $order_status;
-
         if ($order_status == 2) {
+            $order->order_status = 2;
             $order->delivery_date = $now;
         } elseif ($order_status == 3) {
+            $order->order_status = 3;
             $order->cancel_date = $now;
         } elseif ($order_status == 4) {
-            $order->shipped_date = $now;
+
+            Invoice::where('order_id', $order_id)
+                ->where('shop_id', $shop_id)
+                ->update(['is_dispatched' => 1]);
+
+            $total_shops = Invoice::where('order_id', $order_id)->count();
+
+            $dispatched_shops = Invoice::where('order_id', $order_id)
+                ->where('is_dispatched', 1)
+                ->count();
+
+            if ($total_shops == $dispatched_shops) {
+                $order->order_status = 4;
+                $order->shipped_date = $now;
+            }
         }
 
         $order->save();
 
-        $success_array = array('status' => 'success', 'message' => 'Order status updated successfully');
-        return response()->json(array($success_array), 200);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Order status updated successfully'
+        ], 200);
     }
 
 
