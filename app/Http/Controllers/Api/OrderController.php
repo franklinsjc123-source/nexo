@@ -1064,14 +1064,13 @@ class OrderController extends Controller
 
 
 
-        $NotificationData = ['title' => $title, 'body'  => $msg];
+        $NotificationData = ['title' => $title, 'body'  => $msg,  'shop_id' => (string)$userid ];
         $titles           = ['title' => $title, 'body'  => $msg];
         $data             = [
             'message' => [
                 'token' => $firebaseToken['token_id'],
                 'notification' => $titles,
                 'data' => $NotificationData,
-                'shop_id' => (string)$userid   
             ]
         ];
         $dataString = json_encode($data);
