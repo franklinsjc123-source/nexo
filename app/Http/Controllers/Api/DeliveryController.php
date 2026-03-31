@@ -188,8 +188,7 @@ class DeliveryController extends Controller
 
         ]);
 
-        $order->deliver_person_id = 0;
-        $order->save();
+       
 
         return response()->json([
             'status' => 'success',
