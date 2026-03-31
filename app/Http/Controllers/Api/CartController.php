@@ -45,7 +45,9 @@ class CartController extends Controller
         }
 
         $shop_id = $product->shop;
+        $category_id = $product->category_id;
 
+        
         $attribute = ProductAttributes::where('product_id', $product_id)
             ->where('unit', $unit)
             ->first();
@@ -64,6 +66,37 @@ class CartController extends Controller
             ['user_id' => $user_id],
             ['total_amount' => 0]
         );
+
+
+         $foodCategoryId = 10;
+
+        $existingCategories = CartItems::where('cart_id', $cart->id)
+            ->join('products', 'cart_items.product_id', '=', 'products.id')
+            ->pluck('products.category_id')
+            ->unique()
+            ->toArray();
+
+        if (!empty($existingCategories)) {
+
+            // If Food already exists → block other category
+            if (in_array($foodCategoryId, $existingCategories) && $category_id != $foodCategoryId) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You cannot add other category products when Food items are in cart'
+                ], 400);
+            }
+
+            // If other category exists → block Food
+            if (!in_array($foodCategoryId, $existingCategories) && $category_id == $foodCategoryId) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'You cannot add Food items when other category products are in cart'
+                ], 400);
+            }
+        }
+
+
+
 
 
         $shopCount = CartItems::where('cart_id', $cart->id)
