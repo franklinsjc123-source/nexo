@@ -150,8 +150,8 @@ class OrderController extends Controller
         $sub_total = 0;
 
         $declinedOrderIds = DeclineOrder::where('delivery_person_id', $deliver_person_id)
-        ->pluck('order_id')
-        ->toArray();
+            ->pluck('order_id')
+            ->toArray();
 
         foreach ($order->items as $item) {
 
@@ -875,86 +875,171 @@ class OrderController extends Controller
         $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
 
         try {
-
             $api->utility->verifyPaymentSignature([
                 'razorpay_order_id' => $request->razorpay_order_id,
                 'razorpay_payment_id' => $request->razorpay_payment_id,
                 'razorpay_signature' => $request->razorpay_signature
             ]);
         } catch (\Exception $e) {
-
             return response()->json([
                 'status' => false,
                 'message' => 'Payment verification failed'
             ]);
         }
 
-        $cart = Cart::with('items')->where('user_id', $request->user_id)->first();
+        $user_id     = $request->user_id;
+        $delivery_id = $request->delivery_id;
+        $discount    = $request->discount ?? 0;
+        $offer_ids   = $request->offer_ids;
 
-        if (!$cart) {
+        $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
+
+        if (!$cart || $cart->items->isEmpty()) {
             return response()->json([
                 'status' => false,
-                'message' => 'Cart not found'
+                'message' => 'Cart is empty'
             ]);
         }
 
-        $order_id = 'ORD' . time();
-        $pdfFileName = 'Invoice_' . $order_id . '_' . date('Ymd_His') . '.pdf';
 
-        $pdfPath = public_path('uploads/order_invoice/' . $pdfFileName);
 
-        $order = Order::create([
-            'order_id' => $order_id,
-            'customer_id' => $request->user_id,
-            'order_status' => 1,
-            'payment_type' => 'razorpay',
-            'amount' => $cart->total_amount,
-            'ship_amount' => 0,
-            'payment_status' => 1,
-            'is_coupon_applied' => 0,
-            'invoice' => $pdfPath
-        ]);
+        $categoryTotals = [];
 
         foreach ($cart->items as $item) {
+            $category_id = $item->product->category;
 
-            OrderItems::create([
-                'order_id' => $order->id,
-                'product_id' => $item->product_id,
-                'product_name' => $item->product->product_name ?? '',
-                'qty' => $item->quantity,
-                'unit' => $item->unit,
-                'product_price' => $item->price,
-                'price' => $item->total_price
-            ]);
+            if (!isset($categoryTotals[$category_id])) {
+                $categoryTotals[$category_id] = 0;
+            }
+
+            $categoryTotals[$category_id] += $item->total_price;
         }
 
-        $order_details = Order::where('id', $order->id)->first();
+        foreach ($categoryTotals as $category_id => $total) {
 
-        $order_items = OrderItems::with('product')
-            ->where('order_id', $order->id)
-            ->get();
+            $category = Category::find($category_id);
 
-        $company = Company::orderBy('id', 'asc')->first();
+            if ($category && $total < $category->min_order_value) {
+                return response()->json([
+                    'status' => false,
+                    'message' => $category->category_name .
+                        " minimum order amount is ₹" . $category->min_order_value
+                ], 400);
+            }
+        }
 
-        $pdf = Pdf::loadView(
-            'backend.invoice.generate_order_invoice',
-            compact('order_items', 'order_details', 'company')
-        )
-            ->setPaper('A4', 'portrait')
-            ->setOptions([
-                'isRemoteEnabled' => true,
+
+
+        $delivery_charge = 0;
+
+        foreach ($categoryTotals as $category_id => $total) {
+
+            $category = Category::find($category_id);
+            if (!$category) continue;
+
+            $name = strtolower($category->category_name);
+
+            if ($name == 'grocery') {
+                $delivery_charge += ($total > 1000) ? ($total * 8) / 100 : ($total * 10) / 100;
+            } elseif ($name == 'medicine') {
+                $delivery_charge += ($total > 500) ? ($total * 8) / 100 : 50;
+            } else {
+                $delivery_charge += 50;
+            }
+        }
+
+        $address = Address::find($delivery_id);
+        $pincode_charge = 0;
+
+        if ($address) {
+            $pincode_charge = PinCode::where('pincode', $address->pincode)->value('delivery_charge');
+        }
+
+        $delivery_charge = round($delivery_charge + $pincode_charge);
+
+        $amount = $cart->total_amount - $discount;
+        $amount_words = $this->amountToWords($amount);
+
+
+
+        DB::beginTransaction();
+
+        try {
+
+            $order_number = 'ORD' . time();
+
+            $order = Order::create([
+                'order_id'              => $order_number,
+                'customer_id'           => $user_id,
+                'delivery_id'           => $delivery_id,
+                'order_status'          => 1,
+                'payment_type'          => 'razorpay',
+                'amount'                => $amount,
+                'ship_amount'           => $delivery_charge,
+                'payment_status'        => 1, // ✅ PAID
+                'offer_ids'             => $offer_ids,
+                'is_coupon_applied'     => $discount > 0 ? 1 : 0,
+                'coupon_applied_amount' => $discount,
+                'amount_in_words'       => $amount_words
             ]);
 
-        $pdf->save($pdfPath);
+            foreach ($cart->items as $item) {
 
-        CartItems::where('cart_id', $cart->id)->delete();
-        $cart->delete();
+                OrderItems::create([
+                    'order_id'      => $order->id,
+                    'shop_id'       => $item->shop_id,
+                    'product_id'    => $item->product_id,
+                    'qty'           => $item->quantity,
+                    'unit'          => $item->unit,
+                    'product_price' => $item->price,
+                    'price'         => $item->total_price
+                ]);
+            }
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Order placed successfully',
-            'order_id' => $order->order_id
-        ]);
+
+
+            $order_items = OrderItems::with('product')
+                ->where('order_id', $order->id)
+                ->get();
+
+            $company = Company::first();
+
+            $delivery_address = Address::find($delivery_id);
+
+            $invoiceName = 'Order_' . $order_number . date('Ymd_His') . '.pdf';
+
+            $pdf = Pdf::loadView(
+                'backend.invoice.generate_order_invoice',
+                compact('order_items', 'order', 'company', 'delivery_address')
+            )->setPaper('A4', 'portrait');
+
+            $pdf->save(public_path('uploads/order_invoice/' . $invoiceName));
+
+            $order->update([
+                'invoice' => URL::to('/') . '/uploads/order_invoice/' . $invoiceName
+            ]);
+
+   
+
+            CartItems::where('cart_id', $cart->id)->delete();
+            $cart->delete();
+
+            DB::commit();
+
+            return response()->json([
+                'status' => true,
+                'message' => 'Order placed successfully',
+                'order_id' => $order_number
+            ]);
+        } catch (\Exception $e) {
+
+            DB::rollback();
+
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage()
+            ]);
+        }
     }
 
 
@@ -1071,7 +1156,7 @@ class OrderController extends Controller
 
 
 
-        $NotificationData = ['title' => $title, 'body'  => $msg,  'shop_id' => (string)$userid ];
+        $NotificationData = ['title' => $title, 'body'  => $msg,  'shop_id' => (string)$userid];
         $titles           = ['title' => $title, 'body'  => $msg];
         $data             = [
             'message' => [
