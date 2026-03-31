@@ -168,7 +168,7 @@ class DeliveryController extends Controller
 
     public function declineOrder(Request $request)
     {
-        $deliver_person_id = $request->deliver_person_id;
+        $delivery_person_id = $request->delivery_person_id;
         $order_id = $request->order_id;
         $now = Carbon::now('Asia/Kolkata')->format('d-m-Y h:i A');
 
@@ -183,12 +183,12 @@ class DeliveryController extends Controller
 
         DeclineOrder::create([
             'order_id' => $order->id,
-            'deliver_person_id' => $deliver_person_id,
+            'delivery_person_id' => $delivery_person_id,
             'created_at'       =>  $now,
 
         ]);
 
-       
+
 
         return response()->json([
             'status' => 'success',
