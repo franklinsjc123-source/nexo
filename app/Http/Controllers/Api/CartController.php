@@ -142,8 +142,8 @@ class CartController extends Controller
             ]);
         }
 
-        // $cart->total_amount = CartItems::where('cart_id', $cart->id)->sum('total_price');
-        // $cart->save();
+        $cart->total_amount = CartItems::where('cart_id', $cart->id)->sum('total_price');
+        $cart->save();
 
         $cart_count = CartItems::where('cart_id', $cart->id)->count();
 
