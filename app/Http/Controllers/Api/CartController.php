@@ -47,7 +47,7 @@ class CartController extends Controller
         $shop_id = $product->shop;
         $category_id = $product->category_id;
 
-        
+
         $attribute = ProductAttributes::where('product_id', $product_id)
             ->where('unit', $unit)
             ->first();
@@ -72,7 +72,7 @@ class CartController extends Controller
 
         $existingCategories = CartItems::where('cart_id', $cart->id)
             ->join('products', 'cart_items.product_id', '=', 'products.id')
-            ->pluck('products.category_id')
+            ->pluck('products.category')
             ->unique()
             ->toArray();
 
