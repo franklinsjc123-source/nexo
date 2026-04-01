@@ -1160,7 +1160,7 @@ class OrderController extends Controller
         $data             = [
             'message' => [
                 'token' => $firebaseToken['token_id'],
-                // 'notification' => $titles,
+                'notification' => $titles,
                 'data' => $NotificationData
             ]
         ];
