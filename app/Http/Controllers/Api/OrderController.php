@@ -1154,14 +1154,13 @@ class OrderController extends Controller
 
         $firebaseToken = User::Where('id', $userid)->first('token_id');
 
-dd($firebaseToken);
 
         $NotificationData = ['title' => $title, 'body'  => $msg,  'shop_id' => (string)$userid];
         $titles           = ['title' => $title, 'body'  => $msg];
         $data             = [
             'message' => [
                 'token' => $firebaseToken['token_id'],
-                'notification' => $titles,
+                // 'notification' => $titles,
                 'data' => $NotificationData,
             ]
         ];
