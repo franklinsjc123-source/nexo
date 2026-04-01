@@ -1019,7 +1019,7 @@ class OrderController extends Controller
                 'invoice' => URL::to('/') . '/uploads/order_invoice/' . $invoiceName
             ]);
 
-   
+
 
             CartItems::where('cart_id', $cart->id)->delete();
             $cart->delete();
@@ -1154,7 +1154,7 @@ class OrderController extends Controller
 
         $firebaseToken = User::Where('id', $userid)->first('token_id');
 
-
+dd($firebaseToken);
 
         $NotificationData = ['title' => $title, 'body'  => $msg,  'shop_id' => (string)$userid];
         $titles           = ['title' => $title, 'body'  => $msg];
