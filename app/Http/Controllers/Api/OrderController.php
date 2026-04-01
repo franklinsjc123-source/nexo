@@ -1151,11 +1151,10 @@ class OrderController extends Controller
 
     public function sendNotificationForShops($userid, $title, $msg)
     {
+        print_r($userid);exit;
 
         $firebaseToken = User::Where('id', $userid)->first('token_id');
 
-
-        dd(  $firebaseToken );
 
 
         $NotificationData = ['title' => $title, 'body'  => $msg,  'shop_id' => (string)$userid];
@@ -1163,7 +1162,7 @@ class OrderController extends Controller
         $data             = [
             'message' => [
                 'token' => $firebaseToken['token_id'],
-                // 'notification' => $titles,
+                'notification' => $titles,
                 'data' => $NotificationData,
             ]
         ];
