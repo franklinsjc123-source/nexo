@@ -40,7 +40,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Order Amount</th>
-                        <th>Delivery Person</th>
+                        <th>Delivered By</th>
                          <th>Status</th>
                         <th>Action</th>
                     </tr>
