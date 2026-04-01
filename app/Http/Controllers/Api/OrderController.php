@@ -1154,7 +1154,7 @@ class OrderController extends Controller
 
         $token_id = User::where('id', $userid)->value('token_id');
 
-        print_r($token_id);exit;
+        print_r($userid);exit;
 
 
         $NotificationData = ['title' => $title, 'body'  => $msg,  'shop_id' => (string)$userid];
