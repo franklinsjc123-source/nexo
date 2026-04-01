@@ -176,7 +176,7 @@ class OrderController extends Controller
 
         $data = [
             'order_id'        => $order->order_id,
-            'is_declined'     => in_array($order->id, $declinedOrderIds) ? 1 : 0,
+            'is_declined' => $order->deliver_person_id == $deliver_person_id ? 2 : (in_array($order->id, $declinedOrderIds) ? 1 : 0),
             'shop_names'      => $shop_names,
             'payment_mode'    => $order->payment_type,
             'order_status'    => $order->order_status,
