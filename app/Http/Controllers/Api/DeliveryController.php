@@ -121,7 +121,7 @@ class DeliveryController extends Controller
                 'image_url' => '',
                 'order_type' => 'cart_order',
                 'date' => date('d-m-Y', strtotime($order->created_at)),
-                'is_declined' => in_array($order->id, $declinedOrderIds) ? 1 : 0,
+                'is_declined' => $order->deliver_person_id == $deliver_person_id ? 2 : (in_array($order->id, $declinedOrderIds) ? 1 : 0),
 
             ];
         });
