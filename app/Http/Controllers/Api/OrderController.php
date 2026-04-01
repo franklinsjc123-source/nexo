@@ -1154,7 +1154,6 @@ class OrderController extends Controller
 
         $firebaseToken = User::where('id', $userid)->first('token_id');
 
-    print_r( $firebaseToken['token_id'],);exit;
 
         $NotificationData = ['title' => $title, 'body'  => $msg];
         $titles           = ['title' => $title, 'body'  => $msg];
@@ -1208,7 +1207,7 @@ class OrderController extends Controller
 
         $dataString = json_encode($data);
         $headers = [
-            'Authorization: Bearer ' . $this->getAccessToken(),
+            'Authorization: Bearer ' . $this->getAccessTokenDelivery(),
             'Content-Type: application/json',
         ];
 
@@ -1230,9 +1229,20 @@ class OrderController extends Controller
     }
 
 
+      public function getAccessToken()
+    {
+        $credentialsPath = storage_path('app/firebase-service-account.json');
+        $client = new Google_Client();
+        $client->setAuthConfig($credentialsPath);
+        $client->addScope('https://www.googleapis.com/auth/firebase.messaging');
+        $token = $client->fetchAccessTokenWithAssertion();
+        return $token['access_token'];
+    }
 
 
-    public function getAccessToken()
+
+
+    public function getAccessTokenDelivery()
     {
         $credentialsPath = storage_path('app/firebase-service-account-delivery.json');
         $client = new Google_Client();
