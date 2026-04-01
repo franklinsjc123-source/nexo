@@ -1151,10 +1151,10 @@ class OrderController extends Controller
 
     public function sendNotificationForShops($userid, $title, $msg)
     {
-        print_r($userid);exit;
 
         $firebaseToken = User::Where('id', $userid)->first('token_id');
 
+        print_r($firebaseToken['token_id']);exit;
 
 
         $NotificationData = ['title' => $title, 'body'  => $msg,  'shop_id' => (string)$userid];
