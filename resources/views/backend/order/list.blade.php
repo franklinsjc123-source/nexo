@@ -40,6 +40,7 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Order Amount</th>
+                        <th>Delivery Person</th>
                          <th>Status</th>
                         <th>Action</th>
                     </tr>
@@ -64,6 +65,9 @@
                                         }
                                     ?>
                                 </td>
+
+                                <td><?php echo $row->deliveryPerson->name ?? '-' ?></td>
+
                                 <td>
                                     <?php
                                         if ($row->order_status == 1) {
