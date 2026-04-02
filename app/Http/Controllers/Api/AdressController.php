@@ -33,6 +33,7 @@ class AdressController extends Controller
 
 
         $user_id    = $request->input('user_id');
+        $type       = $request->input('type');
         $name       = $request->input('name');
         $mobile     = $request->input('mobile');
         $address    = $request->input('address');
@@ -55,6 +56,7 @@ class AdressController extends Controller
 
             $insertArray = array(
                 'user_id'       =>  $user_id,
+                'type'          =>  $type,
                 'name'          =>  $name,
                 'mobile'        =>  $mobile,
                 'address'       =>  $address,
@@ -85,6 +87,7 @@ class AdressController extends Controller
     {
 
         $id         = $request->input('id');
+        $type       = $request->input('type');
         $name       = $request->input('name');
         $mobile     = $request->input('mobile');
         $address    = $request->input('address');
@@ -97,14 +100,13 @@ class AdressController extends Controller
             $checkPincodeExistence = PinCode::where('pincode', $pincode)->where('status', 1)->exists();
 
             if (!$checkPincodeExistence) {
-                return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Delivery is not available for this pincode '
-                ], 400);
+                $error_array = array('status' => 'error', 'message' => 'Delivery is not available for this pincode');
+                return response()->json(array($error_array), 400);
             }
 
             $updateArray = array(
                 'name'          =>  $name,
+                'type'          =>  $type,
                 'mobile'        =>  $mobile,
                 'address'       =>  $address,
                 'landmark'      =>  $landmark,
