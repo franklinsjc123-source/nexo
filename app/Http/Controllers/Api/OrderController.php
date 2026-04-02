@@ -354,6 +354,7 @@ class OrderController extends Controller
             'order_id'        => $order->order_id,
             'shop_names'      => $shop_names,
             'payment_mode'    => $order->payment_type,
+            'delivery_person' => $order->deliver_person_id,
             'order_status'    => $order->order_status,
             'is_dispatched'   => $is_dispatched,
             'delivery_fee'    => $order->ship_amount,
