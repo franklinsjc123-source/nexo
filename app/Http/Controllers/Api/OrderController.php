@@ -141,7 +141,7 @@ class OrderController extends Controller
         }
 
         $address = Address::where('id', $order->delivery_id)
-            ->select('name', 'mobile', 'address', 'pincode', 'landmark','type')
+            ->select('name', 'mobile', 'address', 'pincode', 'landmark', 'type')
             ->first();
 
         $products = [];
@@ -274,7 +274,7 @@ class OrderController extends Controller
         }
 
         $address = Address::where('id', $order->delivery_id)
-            ->select('name', 'mobile', 'address', 'pincode', 'landmark','type')
+            ->select('name', 'mobile', 'address', 'pincode', 'landmark', 'type')
             ->first();
 
         $products = [];
@@ -338,6 +338,13 @@ class OrderController extends Controller
         }
 
 
+        $shopStatus = Invoice::where('order_id', $order->id)
+            ->where('shop_id', $shop_id)
+            ->first();
+
+        $is_dispatched = $shopStatus->is_dispatched ?? 0;
+
+
 
         $final_shop_total = $total_amount - $discount_amount;
 
@@ -348,6 +355,7 @@ class OrderController extends Controller
             'shop_names'      => $shop_names,
             'payment_mode'    => $order->payment_type,
             'order_status'    => $order->order_status,
+            'is_dispatched'   => $is_dispatched,
             'delivery_fee'    => $order->ship_amount,
             'total_quantity'  => $total_qty,
             'discount'        => $discount_amount,
@@ -373,19 +381,17 @@ class OrderController extends Controller
         $now = Carbon::now('Asia/Kolkata');
 
         if (!$order_id || $order_status === null) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Order ID and Order Status are required'
-            ], 400);
+
+            $error_array = array('status' => 'error', 'message' => 'Order ID and Order Status are required');
+            return response()->json(array($error_array), 400);
         }
 
         $order = Order::where('id', $order_id)->first();
 
         if (!$order) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Order not found'
-            ], 404);
+
+            $error_array = array('status' => 'error', 'message' => 'Order not found');
+            return response()->json(array($error_array), 400);
         }
 
         if ($order_status == 2) {
@@ -414,10 +420,9 @@ class OrderController extends Controller
 
         $order->save();
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Order status updated successfully'
-        ], 200);
+
+        $success_array = array('status' => 'success', 'message' => 'Order status updated successfully');
+        return response()->json(array($success_array), 200);
     }
 
 
@@ -1155,7 +1160,7 @@ class OrderController extends Controller
         $firebaseToken = User::where('id', $userid)->first('token_id');
 
 
-        $NotificationData = ['title' => $title, 'body'  => $msg , 'shop_id' => (string)$userid];
+        $NotificationData = ['title' => $title, 'body'  => $msg, 'shop_id' => (string)$userid];
         $titles           = ['title' => $title, 'body'  => $msg];
         $data             = [
             'message' => [
@@ -1229,7 +1234,7 @@ class OrderController extends Controller
     }
 
 
-      public function getAccessToken()
+    public function getAccessToken()
     {
         $credentialsPath = storage_path('app/firebase-service-account.json');
         $client = new Google_Client();
