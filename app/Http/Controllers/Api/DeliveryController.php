@@ -66,73 +66,80 @@ class DeliveryController extends Controller
 
 
 
-   public function getAllNewOrders(Request $request)
-{
-    $deliver_person_id = $request->deliver_person_id;
+    public function getAllNewOrders(Request $request)
+    {
+        $deliver_person_id = $request->deliver_person_id;
 
-    $orders = Order::whereIn('deliver_person_id', [0, $deliver_person_id])
-        ->with('items.shopData')
-        ->select(
-            'id',
-            'order_id',
-            'amount',
-            'ship_amount',
-            'order_status',
-            'payment_type',
-            'deliver_person_id',
-            'created_at'
-        )
-        ->orderBy('id', 'desc')
-        ->get();
+        $orders = Order::whereIn('deliver_person_id', [0, $deliver_person_id])
+            ->with('items.shopData')
+            ->select(
+                'id',
+                'order_id',
+                'amount',
+                'ship_amount',
+                'order_status',
+                'payment_type',
+                'deliver_person_id',
+                'created_at'
+            )
+            ->orderBy('id', 'desc')
+            ->get();
 
-    if ($orders->isEmpty()) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Records not found'
-        ], 400);
-    }
+        if ($orders->isEmpty()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Records not found'
+            ], 400);
+        }
 
-    $declinedOrderIds = DeclineOrder::where('delivery_person_id', $deliver_person_id)
-        ->pluck('order_id')
-        ->toArray();
+        $declinedOrderIds = DeclineOrder::where('delivery_person_id', $deliver_person_id)
+            ->pluck('order_id')
+            ->toArray();
 
-    $data = $orders->map(function ($order) use ($declinedOrderIds, $deliver_person_id) {
+        $data = $orders->map(function ($order) use ($declinedOrderIds, $deliver_person_id) {
 
-        $total_product_count = collect($order->items)
-            ->groupBy('product_id')
-            ->count();
-
-        $shopNames = collect($order->items)
-            ->pluck('shopData.shop_name')
-            ->filter()
-            ->unique()
-            ->values()
-            ->implode(', ');
-
-        return [
-            'id' => $order->id,
-            'order_id' => $order->order_id,
-            'shop_name' => $shopNames,
-            'total_quantity' => $total_product_count,
-            'amount' => (float)$order->amount + (float)($order->ship_amount ?? 0),
-            'order_status' => $order->order_status,
-            'payment_type' => $order->payment_type,
-            'image_url' => '',
-            'order_type' => 'cart_order',
-            'date' => date('d-m-Y', strtotime($order->created_at)),
-
-            // ✅ FIXED
-            'is_declined' => $order->deliver_person_id == $deliver_person_id
+            $is_declined = $order->deliver_person_id == $deliver_person_id
                 ? 2
-                : (in_array($order->id, $declinedOrderIds) ? 1 : 0),
-        ];
-    });
+                : (in_array($order->id, $declinedOrderIds) ? 1 : 0);
 
-    return response()->json([
-        'status' => 'success',
-        'data' => $data
-    ], 200);
-}
+            // ❌ SKIP declined orders
+            if ($is_declined == 1) {
+                return null;
+            }
+
+            $total_product_count = collect($order->items)
+                ->groupBy('product_id')
+                ->count();
+
+            $shopNames = collect($order->items)
+                ->pluck('shopData.shop_name')
+                ->filter()
+                ->unique()
+                ->values()
+                ->implode(', ');
+
+            return [
+                'id' => $order->id,
+                'order_id' => $order->order_id,
+                'shop_name' => $shopNames,
+                'total_quantity' => $total_product_count,
+                'amount' => (float)$order->amount + (float)($order->ship_amount ?? 0),
+                'order_status' => $order->order_status,
+                'payment_type' => $order->payment_type,
+                'image_url' => '',
+                'order_type' => 'cart_order',
+                'date' => date('d-m-Y', strtotime($order->created_at)),
+                'is_declined' => $is_declined, // keep same structure
+            ];
+        })
+            ->filter() // ✅ remove null values
+            ->values(); // ✅ reindex array
+
+        return response()->json([
+            'status' => 'success',
+            'data' => $data
+        ], 200);
+    }
 
     public function takenOrder(Request $request)
     {
