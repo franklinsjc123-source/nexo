@@ -47,10 +47,8 @@ class AdressController extends Controller
             $addressExists = Address::where('user_id', $user_id)->exists();
 
             if (!$checkPincodeExistence) {
-                return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Delivery is not available for this pincode '
-                ], 400);
+                $error_array = array('status' => 'error', 'message' => 'Delivery is not available for this pincode');
+                return response()->json(array($error_array), 400);
             }
 
 
