@@ -70,7 +70,11 @@
 
                                 <td>
                                     <?php
-                                        if ($row->order_status == 1) {
+
+                                        if ($row->order_status == 4 || $row->is_dispatched == 1 ) {
+                                            $class = "secondary";
+                                            $text  = "Dispatched";
+                                        } else if ($row->order_status == 1) {
                                             $class = "warning";
                                             $text  = "New Order";
                                         } elseif ($row->order_status == 2) {
@@ -79,9 +83,6 @@
                                         } elseif ($row->order_status == 3) {
                                             $class = "danger";
                                             $text  = "Cancelled";
-                                        }  elseif ($row->order_status == 4 || $row->is_dispatched == 1 ) {
-                                            $class = "secondary";
-                                            $text  = "Dispatched";
                                         } else {
                                             $class = "secondary";
                                             $text  = "Unknown";
