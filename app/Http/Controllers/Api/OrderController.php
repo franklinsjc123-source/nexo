@@ -382,9 +382,9 @@ class OrderController extends Controller
 
         $now = Carbon::now('Asia/Kolkata');
 
-        if (!$order_id || $order_status === null) {
+        if (!$order_id || $order_status === null || $shop_id ) {
 
-            $error_array = array('status' => 'error', 'message' => 'Order ID and Order Status are required');
+            $error_array = array('status' => 'error', 'message' => 'Order ID , Order Status , Shop ID are required');
             return response()->json(array($error_array), 400);
         }
 
