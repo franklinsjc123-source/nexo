@@ -30,7 +30,7 @@ class OrderController extends Controller
 
             $records = Order::select(
                 'orders.*',
-                'shop_invoice.invoice_path', 'shop_invoice.final_shop_total',
+                'shop_invoice.invoice_path', 'shop_invoice.final_shop_total','shop_invoice.is_dispatched',
                 DB::raw('SUM(order_items.price) as shop_total')
             )
                 ->join('order_items', 'order_items.order_id', '=', 'orders.id')
