@@ -376,7 +376,9 @@ class OrderController extends Controller
     {
         $order_id     = $request->order_id;
         $order_status = $request->order_status;
-        $shop_id      = $request->shop_id;
+        $user_id      = $request->shop_id;
+
+        $shop_id    = Shop::where('user_id', $user_id)->value('id');
 
         $now = Carbon::now('Asia/Kolkata');
 
