@@ -194,7 +194,10 @@ class OrderController extends Controller
             'delivery_fee'       => $order->ship_amount,
             'total_quantity'     => $total_qty,
             'total_amount'       => $order->amount + $order->ship_amount,
-            'date'               => date('d-m-Y', strtotime($order->created_at)),
+            'date'               => $order->created_at ? date('d-m-Y h:i a', strtotime($order->created_at)) : null,
+            'shipped_date'       => $order->shipped_date ? date('d-m-Y h:i a', strtotime($order->shipped_date)) : null,
+            'delivery_date'      => $order->delivery_date ? date('d-m-Y h:i a', strtotime($order->delivery_date)) : null,
+            'cancel_date'        => $order->cancel_date? date('d-m-Y h:i a', strtotime($order->cancel_date)) : null,
             'delivery_address'   => $address,
             'products'           => $products
         ];
