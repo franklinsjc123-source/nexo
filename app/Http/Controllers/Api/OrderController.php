@@ -175,19 +175,20 @@ class OrderController extends Controller
         $shop_names = implode(', ', array_unique($shop_names));
 
         $data = [
-            'order_id'        => $order->order_id,
-            'is_declined' => $order->deliver_person_id == $deliver_person_id ? 2 : (in_array($order->id, $declinedOrderIds) ? 1 : 0),
-            'shop_names'      => $shop_names,
-            'payment_mode'    => $order->payment_type,
-            'order_status'    => $order->order_status,
-            'sub_total'       => $sub_total,
-            'discount'        => $order->coupon_applied_amount,
-            'delivery_fee'    => $order->ship_amount,
-            'total_quantity'  => $total_qty,
-            'total_amount'    => $order->amount + $order->ship_amount,
-            'date'            => date('d-m-Y', strtotime($order->created_at)),
-            'delivery_address' => $address,
-            'products'        => $products
+            'order_id'           => $order->order_id,
+            'is_declined'        => $order->deliver_person_id == $deliver_person_id ? 2 : (in_array($order->id, $declinedOrderIds) ? 1 : 0),
+            'shop_names'         => $shop_names,
+            'deliver_person_id'  => $order->deliver_person_id,
+            'payment_mode'       => $order->payment_type,
+            'order_status'       => $order->order_status,
+            'sub_total'          => $sub_total,
+            'discount'           => $order->coupon_applied_amount,
+            'delivery_fee'       => $order->ship_amount,
+            'total_quantity'     => $total_qty,
+            'total_amount'       => $order->amount + $order->ship_amount,
+            'date'               => date('d-m-Y', strtotime($order->created_at)),
+            'delivery_address'   => $address,
+            'products'           => $products
         ];
 
         return response()->json([
