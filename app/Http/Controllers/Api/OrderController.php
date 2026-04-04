@@ -108,7 +108,7 @@ class OrderController extends Controller
                 ];
             } else {
 
-                $shopName = optional($order->shopData)->shop_name;
+                $shopName = optional($order->shopData)->shop_name ?? '';
 
                 return [
                     'id' => $order->id,
