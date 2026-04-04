@@ -59,6 +59,7 @@ class OrderController extends Controller
             ->select(
                 'id',
                 'invoice_no',
+                'shop_id',
                 'total_invoice_amount',
                 'order_status',
                 'image_url',
