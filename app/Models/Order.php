@@ -24,9 +24,13 @@ class Order extends Model
     }
 
 
-     public function deliveryPerson()
+    public function deliveryPerson()
     {
         return $this->belongsTo(DeliveryPerson::class, 'deliver_person_id', 'id');
     }
 
+    public function shopInvoices()
+    {
+        return $this->hasMany(Invoice::class, 'order_id', 'id');
+    }
 }

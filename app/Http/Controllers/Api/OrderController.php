@@ -42,7 +42,7 @@ class OrderController extends Controller
         $user_id = $request->input('user_id');
 
         $orders = Order::where('customer_id', $user_id)
-            ->with('items.shopData')
+            ->with('items.shopData', 'shopInvoices')
             ->select(
                 'id',
                 'order_id',
@@ -88,12 +88,19 @@ class OrderController extends Controller
                     ->values()
                     ->implode(', ');
 
+                $is_dispatched = 0;
+
+                if ($order->shopInvoices && $order->shopInvoices->count() > 0) {
+                    $is_dispatched = $order->shopInvoices->contains('is_dispatched', 1) ? 1 : 0;
+                }
+
                 return [
                     'id' => $order->id,
                     'order_id' => $order->order_id,
                     'shop_name' => $shopNames,
                     'amount' => $order->amount + $order->ship_amount,
                     'order_status' => $order->order_status,
+                    'is_dispatched' => $is_dispatched,
                     'payment_type' => $order->payment_type,
                     'image_url' => '',
                     'order_type' => 'cart_order',
@@ -384,7 +391,7 @@ class OrderController extends Controller
 
         $now = Carbon::now('Asia/Kolkata');
 
-        if (!$order_id || $order_status === null  ) {
+        if (!$order_id || $order_status === null) {
 
             $error_array = array('status' => 'error', 'message' => 'Order ID , Order Status , Shop ID are required');
             return response()->json(array($error_array), 400);
