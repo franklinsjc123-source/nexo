@@ -34,7 +34,6 @@ class DashboardController extends Controller
             $direct_order_count         = count(DirectOrder::where('shop_id', $shop_id)->get());
             $today_direct_order_count   = DirectOrder::where('shop_id', $shop_id)->whereDate('created_at', Carbon::today())->count();
             $delivert_person_count      = 0;
-
         } else {
 
             $shop_count                 = count(Shop::where('status', 1)->get());
@@ -51,7 +50,7 @@ class DashboardController extends Controller
             ->leftJoin('shop', function ($join) {
                 $join->whereRaw("FIND_IN_SET(category.id, shop.category)");
             })
-             ->leftJoin('products', 'products.category', '=', 'category.id')
+            ->leftJoin('products', 'products.category', '=', 'category.id')
             ->select(
                 'category.id',
                 'category.category_name',
@@ -75,6 +74,11 @@ class DashboardController extends Controller
         }
 
 
-        return view('backend.dashboard', compact('shop_count', 'customer_count', 'order_count', 'delivert_person_count', 'direct_order_count', 'delivert_person_count', 'today_direct_order_count', 'today_order_count', 'categoryLabels', 'shopCounts', 'productCounts','product_count'));
+        return view('backend.dashboard', compact('shop_count', 'customer_count', 'order_count', 'delivert_person_count', 'direct_order_count', 'delivert_person_count', 'today_direct_order_count', 'today_order_count', 'categoryLabels', 'shopCounts', 'productCounts', 'product_count'));
+    }
+
+    public function privacy_policy()
+    {
+        return view('privacy-policy');
     }
 }

@@ -31,6 +31,7 @@ Route::get('/refresh-session', function () {
     return response()->json(['status' => 'session refreshed']);
 });
 
+Route::get("privacy-policy", [DashboardController::class, 'privacy_policy'])->name('privacy-policy');
 
 
 
