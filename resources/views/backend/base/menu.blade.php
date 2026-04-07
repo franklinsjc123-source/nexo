@@ -40,14 +40,17 @@ $today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::toda
                 <div class="flex-shrink-0 d-flex align-items-center gap-1">
 
 
-                    {{-- <div class="dark-mode-btn" id="toggleMode">
+<span id="currentTime" style="font-size: 20px; font-weight: bold; margin-right:10px"></span>
+
+
+                    <div class="dark-mode-btn" id="toggleMode">
                         <button class="btn header-btn active" id="lightModeBtn">
                             <i class="bi bi-brightness-high"></i>
                         </button>
                         <button class="btn header-btn" id="darkModeBtn">
                             <i class="bi bi-moon-stars"></i>
                         </button>
-                    </div> --}}
+                    </div>
 
                                 <?php  if(Auth::user()->auth_level  != 4 ) {  ?>
 
@@ -274,7 +277,7 @@ $today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::toda
                                 <li class="pe-slide-item">
                                     <a href="<?= route('tax') ?>" class="pe-nav-link
                                             @if(request()->routeIs(['tax', 'addTax'])) active @endif">
-                                        Tax 
+                                        Tax
                                     </a>
                                 </li>
                             @endif
@@ -567,5 +570,35 @@ backdrop?.addEventListener("click", () => {
     sidebar.classList.remove("show");
     backdrop.classList.remove("show");
 });
+</script>
+
+<script>
+function updateTime() {
+    const now = new Date();
+
+    let hours = now.getHours();
+    let minutes = now.getMinutes();
+    let seconds = now.getSeconds();
+
+    // AM/PM format
+    let ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12;
+    hours = hours ? hours : 12; // 0 becomes 12
+
+    // Add leading zero
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+    seconds = seconds < 10 ? '0' + seconds : seconds;
+
+    let timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+
+    document.getElementById('currentTime').innerText = timeString;
+}
+
+// Update every second
+setInterval(updateTime, 1000);
+
+// Run immediately
+updateTime();
 </script>
 
