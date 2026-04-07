@@ -32,6 +32,7 @@ Route::get('/refresh-session', function () {
 });
 
 Route::get("privacy-policy", [DashboardController::class, 'privacy_policy'])->name('privacy-policy');
+Route::get("account-deletion", [DashboardController::class, 'account_deletion'])->name('account-deletion');
 
 
 

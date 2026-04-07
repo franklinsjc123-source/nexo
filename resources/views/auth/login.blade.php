@@ -47,7 +47,7 @@
                         </div>
                     </div>
                 </div>
-                <p class="position-relative text-center fs-12 mb-0">© 2026 NEXO CART</p>
+                <p class="position-relative text-center fs-12 mb-0">© 2026 NEXO CART | <a href="{{ route('privacy-policy') }}" class="text-muted">Privacy Policy</a> | <a href="{{ route('account-deletion') }}" class="text-muted">Account Deletion</a></p>
             </div>
         </div>
     </div>

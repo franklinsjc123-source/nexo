@@ -81,4 +81,9 @@ class DashboardController extends Controller
     {
         return view('privacy-policy');
     }
+
+    public function account_deletion()
+    {
+        return view('account-deletion');
+    }
 }
