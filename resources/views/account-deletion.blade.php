@@ -8,6 +8,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- SweetAlert2 -->
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
     <style>
         :root {
             --primary: #4f46e5;
@@ -18,6 +20,7 @@
             --bg-page: #f8fafc;
             --white: #ffffff;
             --accent: #10b981;
+            --danger: #ef4444;
         }
 
         body {
@@ -105,43 +108,49 @@
             margin-right: 12px;
         }
 
-        .step-list {
-            list-style: none;
-            padding: 0;
+        .deletion-form {
+            background: #fff5f5;
+            border-radius: 1rem;
+            padding: 2rem;
+            border: 1px solid #fee2e2;
             margin-bottom: 2.5rem;
         }
 
-        .step-item {
-            display: flex;
-            align-items: center;
-            background: #f1f5f9;
-            margin-bottom: 1rem;
-            padding: 1.25rem;
-            border-radius: 1rem;
-            transition: transform 0.2s ease, background 0.2s ease;
-            text-decoration: none;
-            color: var(--text-dark);
+        .form-label {
+            font-weight: 600;
+            margin-bottom: 0.75rem;
         }
 
-        .step-item:hover {
-            transform: translateX(10px);
-            background: #eef2ff;
-            color: var(--primary);
+        .form-control {
+            border-radius: 0.75rem;
+            padding: 0.8rem 1.2rem;
+            border: 2px solid #e2e8f0;
+            font-size: 1.1rem;
+            transition: all 0.2s ease;
         }
 
-        .step-number {
-            width: 32px;
-            height: 32px;
-            background: var(--primary);
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+        .btn-delete {
+            background: var(--danger);
             color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.9rem;
             font-weight: 700;
-            margin-right: 1.25rem;
-            flex-shrink: 0;
+            border-radius: 0.75rem;
+            padding: 0.8rem 2rem;
+            border: none;
+            width: 100%;
+            transition: all 0.2s ease;
+            margin-top: 1.5rem;
+        }
+
+        .btn-delete:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.2);
+            color: white;
         }
 
         .divider {
@@ -172,35 +181,10 @@
             background: #e2e8f0;
         }
 
-        .contact-card {
-            background: #fdf2f2;
-            border-radius: 1rem;
-            padding: 2rem;
-            text-align: center;
-            border: 1px solid #fee2e2;
-        }
-
-        .contact-card h3 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: #b91c1c;
-        }
-
-        .contact-email {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--primary);
-            text-decoration: none;
-            display: block;
-            margin: 1rem 0;
-        }
-
         .data-info {
             background: #fcfcfc;
             border-radius: 1rem;
             padding: 2rem;
-            margin-top: 3.5rem;
             border: 1px dashed #e2e8f0;
         }
 
@@ -252,45 +236,30 @@
         <div class="container">
             <img src="{{ asset('backend_assets/images/logo.jpg') }}" alt="Nexocart Logo" class="app-logo">
             <h1>Nexocart</h1>
-            <p>Account Deletion Request & Data Privacy Information</p>
+            <p>Account Deletion Request</p>
         </div>
     </section>
 
     <div class="main-container">
         <div class="card shadow-lg">
-            <h2 class="section-title">How to delete your account</h2>
-            <div class="step-list">
-                <div class="step-item">
-                    <span class="step-number">1</span>
-                    <span>Open the Nexocart app on your device</span>
+            <h2 class="section-title">Delete your account</h2>
+            <p class="text-muted mb-4">Please enter your registered mobile number below to delete your account and all associated data.</p>
+            
+            <form action="{{ route('post-account-deletion') }}" method="POST" class="deletion-form" id="deleteForm">
+                @csrf
+                <div class="mb-3">
+                    <label for="mobile" class="form-label">Phone Number (10 Digits)</label>
+                    <input type="text" name="mobile" id="mobile" class="form-control" placeholder="E.g. 9876543210" required maxlength="10">
+                    @error('mobile')
+                        <div class="text-danger mt-2 small">{{ $message }}</div>
+                    @enderror
                 </div>
-                <div class="step-item">
-                    <span class="step-number">2</span>
-                    <span>Go to Profile / Settings menu</span>
-                </div>
-                <div class="step-item">
-                    <span class="step-number">3</span>
-                    <span>Tap on "Delete Account" option</span>
-                </div>
-                <div class="step-item">
-                    <span class="step-number">4</span>
-                    <span>Confirm your request to proceed</span>
-                </div>
-            </div>
-
-            <div class="divider">
-                <span>OR</span>
-            </div>
-
-            <div class="contact-card">
-                <h3>Request via Email</h3>
-                <p class="text-muted small">If you cannot access the app, you can send us a request directly.</p>
-                <a href="mailto:support@nexocart.com" class="contact-email">support@nexocart.com</a>
-                <p class="mb-0 text-muted small">Please include your registered mobile number or email address in your request.</p>
-            </div>
+                
+                <button type="button" class="btn btn-delete" onclick="confirmDelete()">Permanently Delete Account</button>
+            </form>
 
             <div class="data-info">
-                <h3 class="data-info-title">Data Deletion Details</h3>
+                <h3 class="data-info-title">Important Information</h3>
                 <div class="data-item">
                     <span class="data-item-icon">✓</span>
                     <p>Your account information (name, phone number, email) will be <strong>permanently deleted</strong>.</p>
@@ -301,11 +270,11 @@
                 </div>
                 <div class="data-item">
                     <span class="data-item-icon">✓</span>
-                    <p>After deletion, your data <strong>cannot be recovered</strong>. If you wish to use our services again, you will need to create a new account.</p>
+                    <p>After deletion, your data <strong>cannot be recovered</strong>.</p>
                 </div>
                 <div class="data-item">
                     <span class="data-item-icon">✓</span>
-                    <p>Deletion requests are typically processed within <strong>3-5 working days</strong>.</p>
+                    <p>Deletion requests are processed instantly and data removal takes <strong>3-5 working days</strong>.</p>
                 </div>
             </div>
         </div>
@@ -316,6 +285,55 @@
             <a href="/" class="text-decoration-none text-muted mx-2">Login</a>
         </footer>
     </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDelete() {
+            const mobileInput = document.getElementById('mobile').value;
+            if (!mobileInput || mobileInput.length !== 10 || isNaN(mobileInput)) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Invalid Input',
+                    text: 'Please enter a valid 10-digit mobile number.',
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "Your account will be permanently deleted and this action cannot be undone!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#ef4444',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: 'Yes, delete it!',
+                cancelButtonText: 'Cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('deleteForm').submit();
+                }
+            });
+        }
+
+        @if(session('success'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Deleted!',
+                text: "{{ session('success') }}",
+                confirmButtonColor: '#4f46e5'
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: "{{ session('error') }}",
+                confirmButtonColor: '#4f46e5'
+            });
+        @endif
+    </script>
 
 </body>
 </html>

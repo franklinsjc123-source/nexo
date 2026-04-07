@@ -86,4 +86,20 @@ class DashboardController extends Controller
     {
         return view('account-deletion');
     }
+
+    public function post_account_deletion(Request $request)
+    {
+        $request->validate([
+            'mobile' => 'required|numeric|digits:10',
+        ]);
+
+        $user = User::where('mobile', $request->mobile)->first();
+
+        if ($user) {
+            $user->delete();
+            return redirect()->back()->with('success', 'Your account and associated data have been permanently deleted successfully.');
+        } else {
+            return redirect()->back()->with('error', 'No account found with the provided mobile number.');
+        }
+    }
 }
