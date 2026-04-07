@@ -161,6 +161,24 @@ class OrderController extends Controller
             ->pluck('order_id')
             ->toArray();
 
+        $dispatchedShopIds = Invoice::where('order_id', $order->id)
+            ->where('is_dispatched', 1)
+            ->orderBy('id', 'ASC')
+            ->pluck('shop_id')
+            ->toArray();
+
+        $dispatchedNames = [];
+        foreach (array_unique($dispatchedShopIds) as $sid) {
+            $s = Shop::find($sid);
+            if ($s) {
+                $dispatchedNames[] = $s->shop_name;
+            }
+            if (count($dispatchedNames) >= 2) break;
+        }
+
+        $first_dispatched_shop = $dispatchedNames[0] ?? '';
+        $second_dispatched_shop = $dispatchedNames[1] ?? '';
+
         foreach ($order->items as $item) {
 
             $products[] = [
@@ -198,8 +216,10 @@ class OrderController extends Controller
             'shipped_date'       => $order->shipped_date ? date('d-m-Y h:i a', strtotime($order->shipped_date)) : null,
             'delivery_date'      => $order->delivery_date ? date('d-m-Y h:i a', strtotime($order->delivery_date)) : null,
             'cancel_date'        => $order->cancel_date? date('d-m-Y h:i a', strtotime($order->cancel_date)) : null,
-            'delivery_address'   => $address,
-            'products'           => $products
+            'first_dispatched_shop'  => $first_dispatched_shop,
+            'second_dispatched_shop' => $second_dispatched_shop,
+            'delivery_address'       => $address,
+            'products'               => $products
         ];
 
         return response()->json([
