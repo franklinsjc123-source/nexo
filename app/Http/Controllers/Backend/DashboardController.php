@@ -102,4 +102,35 @@ class DashboardController extends Controller
             return redirect()->back()->with('error', 'No account found with the provided mobile number.');
         }
     }
+
+    public function checkNewDirectOrders(Request $request)
+    {
+        $last_id = $request->input('last_id', 0);
+        
+        $query = DirectOrder::query();
+
+        if (Auth::user()->auth_level == 4) {
+            $user_id = auth()->id();
+            $shop_id = Shop::where('user_id', $user_id)->value('id');
+            $query->where('shop_id', $shop_id);
+        }
+
+        if ($last_id == -1) {
+            $max_id = $query->max('id') ?? 0;
+            return response()->json(['status' => 'init', 'latest_id' => $max_id]);
+        }
+
+        $query->where('id', '>', $last_id);
+        $new_orders = $query->get();
+
+        if ($new_orders->count() > 0) {
+            $latest_id = $new_orders->max('id');
+            return response()->json([
+                'status' => 'new', 
+                'latest_id' => $latest_id, 
+                'count' => $new_orders->count()
+            ]);
+        }
+        return response()->json(['status' => 'no_new']);
+    }
 }

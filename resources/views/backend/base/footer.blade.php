@@ -366,6 +366,51 @@ function commonCheckExist(element, table, column, value, id = null) {
 
 </script>
 
+<script>
+    let directOrderLastId = -1;
+    
+    function checkNewDirectOrders() {
+        $.ajax({
+            url: '{{ route("checkNewDirectOrders") }}',
+            type: 'POST',
+            data: {
+                last_id: directOrderLastId,
+                _token: '{{ csrf_token() }}'
+            },
+            success: function(response) {
+                if (response.status === 'init') {
+                    directOrderLastId = response.latest_id;
+                } else if (response.status === 'new') {
+                    directOrderLastId = response.latest_id;
+                    
+                    // Play sound
+                    var audio = new Audio("{{ asset('notification.ogg') }}");
+                    audio.play().catch(function(error) {
+                        console.log("Audio play failed: ", error);
+                    });
+                    
+                    // Show toast notification
+                    showToast('info', 'New Direct Order Placed!');
+                    
+                    // Update the counter
+                    let badge = $('#direct-order-badge');
+                    if(badge.length > 0) {
+                        badge.text(parseInt(badge.text() || 0) + response.count);
+                    }
+                }
+            }
+        });
+    }
+    
+    // Check every 10 seconds
+    setInterval(checkNewDirectOrders, 10000);
+    
+    // Initial check to get the latest ID
+    $(document).ready(function() {
+        checkNewDirectOrders();
+    });
+</script>
+
  @include('backend.alert')
  </body>
 
