@@ -40,7 +40,7 @@ $today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::toda
                 <div class="flex-shrink-0 d-flex align-items-center gap-1">
 
 
-                <span id="currentTime" style="font-size: 20px; font-weight: bold; margin-right:10px"></span>
+                <span id="currentTime" style="font-size: 18px; font-weight: bold; margin-right:10px"></span>
 
 
                     {{-- <div class="dark-mode-btn" id="toggleMode">
@@ -605,7 +605,7 @@ function updateTime() {
     let dateString = day + '-' + month + '-' + year;
 
     // Final output
-    document.getElementById('currentTime').innerText = timeString + ' | ' + dateString;
+    document.getElementById('currentTime').innerText =   dateString + timeString  ;
 }
 
 // Update every second
