@@ -411,9 +411,9 @@ function commonCheckExist(element, table, column, value, id = null) {
                     // Play sound continuously for 5 seconds
                     var audio = new Audio("{{ asset('order_notification.mp3') }}");
                     audio.loop = true;
-                    
+
                     var playPromise = audio.play();
-                    
+
                     if (playPromise !== undefined) {
                         playPromise.catch(function(error) {
                             // Fallback to existing sound if new one is missing
