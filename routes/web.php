@@ -41,7 +41,7 @@ Route::middleware('auth.request')->group(function () {
 
     Route::get("dashboard", [DashboardController::class, 'dashboard'])->name('dashboard');
     Route::get("logout", [AuthController::class, 'logout'])->name('logout');
-    Route::post('check-new-direct-orders', [DashboardController::class, 'checkNewDirectOrders'])->name('checkNewDirectOrders');
+    Route::post('check-new-orders', [DashboardController::class, 'checkNewOrders'])->name('checkNewOrders');
 
 
     Route::get('profile', [CommonController::class, 'profile'])->name('profile');

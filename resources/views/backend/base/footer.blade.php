@@ -368,46 +368,101 @@ function commonCheckExist(element, table, column, value, id = null) {
 
 <script>
     let directOrderLastId = -1;
+    let orderLastId = -1;
     
-    function checkNewDirectOrders() {
+    function requestNotificationPermission() {
+        if ("Notification" in window) {
+            Notification.requestPermission().then(function (permission) {
+                console.log("Notification permission:", permission);
+            });
+        }
+    }
+
+    function showPushNotification(title, body) {
+        if ("Notification" in window && Notification.permission === "granted") {
+            try {
+                new Notification(title, { 
+                    body: body,
+                    icon: "<?= asset('backend_assets/images/logo.jpg') ?>" // Using the logo if available
+                });
+            } catch (e) {
+                console.log("Error showing browser notification:", e);
+            }
+        }
+    }
+    
+    function checkNewOrders() {
         $.ajax({
-            url: '{{ route("checkNewDirectOrders") }}',
+            url: '{{ route("checkNewOrders") }}',
             type: 'POST',
             data: {
-                last_id: directOrderLastId,
+                last_direct_id: directOrderLastId,
+                last_order_id: orderLastId,
                 _token: '{{ csrf_token() }}'
             },
             success: function(response) {
                 if (response.status === 'init') {
-                    directOrderLastId = response.latest_id;
+                    directOrderLastId = response.latest_direct_id;
+                    orderLastId = response.latest_order_id;
                 } else if (response.status === 'new') {
-                    directOrderLastId = response.latest_id;
+                    directOrderLastId = response.latest_direct_id;
+                    orderLastId = response.latest_order_id;
                     
                     // Play sound
-                    var audio = new Audio("{{ asset('notification.ogg') }}");
+                    var audioPath = "{{ asset('notification.ogg') }}";
+                    var audio = new Audio(audioPath);
                     audio.play().catch(function(error) {
                         console.log("Audio play failed: ", error);
                     });
                     
+                    let msg = '';
+                    let count = 0;
+                    if (response.direct_count > 0 && response.order_count > 0) {
+                        msg = 'You have ' + response.direct_count + ' new Direct Orders and ' + response.order_count + ' new Orders!';
+                        count = response.direct_count + response.order_count;
+                    } else if (response.direct_count > 0) {
+                        msg = 'You have ' + response.direct_count + ' new Direct Orders!';
+                        count = response.direct_count;
+                    } else if (response.order_count > 0) {
+                        msg = 'You have ' + response.order_count + ' new Orders!';
+                        count = response.order_count;
+                    }
+
                     // Show toast notification
-                    showToast('info', 'New Direct Order Placed!');
+                    showToast('info', msg);
                     
-                    // Update the counter
-                    let badge = $('#direct-order-badge');
-                    if(badge.length > 0) {
-                        badge.text(parseInt(badge.text() || 0) + response.count);
+                    // Show Browser Push Notification
+                    showPushNotification('New Order Received!', msg);
+                    
+                    // Update the counters in the menu
+                    let directBadge = $('#direct-order-badge');
+                    if(directBadge.length > 0 && response.direct_count > 0) {
+                        let current = parseInt(directBadge.text() || 0);
+                        directBadge.text(current + response.direct_count);
+                    }
+                    
+                    let orderBadge = $('#order-badge');
+                    if(orderBadge.length > 0 && response.order_count > 0) {
+                        let current = parseInt(orderBadge.text() || 0);
+                        orderBadge.text(current + response.order_count);
                     }
                 }
+            },
+            error: function(xhr) {
+                console.log("Error checking for new orders");
             }
         });
     }
     
     // Check every 10 seconds
-    setInterval(checkNewDirectOrders, 10000);
+    setInterval(checkNewOrders, 10000);
     
-    // Initial check to get the latest ID
     $(document).ready(function() {
-        checkNewDirectOrders();
+        // Initial check to get the latest IDs
+        checkNewOrders();
+        
+        // Request permission for push notifications on first user interaction or load
+        requestNotificationPermission();
     });
 </script>
 

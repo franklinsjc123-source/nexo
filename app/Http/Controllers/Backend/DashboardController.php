@@ -103,32 +103,41 @@ class DashboardController extends Controller
         }
     }
 
-    public function checkNewDirectOrders(Request $request)
+    public function checkNewOrders(Request $request)
     {
-        $last_id = $request->input('last_id', 0);
+        $last_direct_id = $request->input('last_direct_id', 0);
+        $last_order_id = $request->input('last_order_id', 0);
         
-        $query = DirectOrder::query();
+        $direct_query = DirectOrder::query();
+        $order_query = Order::query();
 
         if (Auth::user()->auth_level == 4) {
             $user_id = auth()->id();
             $shop_id = Shop::where('user_id', $user_id)->value('id');
-            $query->where('shop_id', $shop_id);
+            $direct_query->where('shop_id', $shop_id);
+            $order_query->whereHas('items', function($q) use ($shop_id) {
+                $q->where('shop_id', $shop_id);
+            });
         }
 
-        if ($last_id == -1) {
-            $max_id = $query->max('id') ?? 0;
-            return response()->json(['status' => 'init', 'latest_id' => $max_id]);
+        if ($last_direct_id == -1 || $last_order_id == -1) {
+            return response()->json([
+                'status' => 'init', 
+                'latest_direct_id' => $direct_query->max('id') ?? 0,
+                'latest_order_id' => $order_query->max('id') ?? 0
+            ]);
         }
 
-        $query->where('id', '>', $last_id);
-        $new_orders = $query->get();
+        $new_direct = $direct_query->where('id', '>', $last_direct_id)->get();
+        $new_orders = $order_query->where('id', '>', $last_order_id)->get();
 
-        if ($new_orders->count() > 0) {
-            $latest_id = $new_orders->max('id');
+        if ($new_direct->count() > 0 || $new_orders->count() > 0) {
             return response()->json([
                 'status' => 'new', 
-                'latest_id' => $latest_id, 
-                'count' => $new_orders->count()
+                'latest_direct_id' => $new_direct->max('id') ?? $last_direct_id,
+                'latest_order_id' => $new_orders->max('id') ?? $last_order_id,
+                'direct_count' => $new_direct->count(),
+                'order_count' => $new_orders->count()
             ]);
         }
         return response()->json(['status' => 'no_new']);

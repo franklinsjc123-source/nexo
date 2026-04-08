@@ -71,7 +71,7 @@ $today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::toda
 
                                     <div>
                                         <a href="javascript:void(0)" class="stretched-link">
-                                            <h6 class="mb-1 text-muted"> Orders  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span class="badge bg-success rounded-circle align-middle ms-1"><?= $today_order_count ?></span> </h6>
+                                            <h6 class="mb-1 text-muted"> Orders  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span id="order-badge" class="badge bg-success rounded-circle align-middle ms-1"><?= $today_order_count ?></span> </h6>
                                         </a>
 
                                     </div>
