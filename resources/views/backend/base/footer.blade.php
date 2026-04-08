@@ -369,7 +369,7 @@ function commonCheckExist(element, table, column, value, id = null) {
 <script>
     let directOrderLastId = -1;
     let orderLastId = -1;
-    
+
     function requestNotificationPermission() {
         if ("Notification" in window) {
             Notification.requestPermission().then(function (permission) {
@@ -381,16 +381,16 @@ function commonCheckExist(element, table, column, value, id = null) {
     function showPushNotification(title, body) {
         if ("Notification" in window && Notification.permission === "granted") {
             try {
-                new Notification(title, { 
+                new Notification(title, {
                     body: body,
-                    icon: "<?= asset('backend_assets/images/logo.jpg') ?>" // Using the logo if available
+                    icon: "<?= asset('backend_assets/images/fevi_icon.png') ?>" // Using the logo if available
                 });
             } catch (e) {
                 console.log("Error showing browser notification:", e);
             }
         }
     }
-    
+
     function checkNewOrders() {
         $.ajax({
             url: '{{ route("checkNewOrders") }}',
@@ -407,14 +407,17 @@ function commonCheckExist(element, table, column, value, id = null) {
                 } else if (response.status === 'new') {
                     directOrderLastId = response.latest_direct_id;
                     orderLastId = response.latest_order_id;
-                    
+
                     // Play sound
-                    var audioPath = "{{ asset('notification.ogg') }}";
-                    var audio = new Audio(audioPath);
+                    var audio = new Audio("{{ asset('order_notification.mp3') }}");
                     audio.play().catch(function(error) {
-                        console.log("Audio play failed: ", error);
+                        // Fallback to existing sound if new one is missing
+                        var fallback = new Audio("{{ asset('notification.ogg') }}");
+                        fallback.play().catch(function(err) {
+                            console.log("Audio play failed: ", err);
+                        });
                     });
-                    
+
                     let msg = '';
                     let count = 0;
                     if (response.direct_count > 0 && response.order_count > 0) {
@@ -430,17 +433,17 @@ function commonCheckExist(element, table, column, value, id = null) {
 
                     // Show toast notification
                     showToast('info', msg);
-                    
+
                     // Show Browser Push Notification
                     showPushNotification('New Order Received!', msg);
-                    
+
                     // Update the counters in the menu
                     let directBadge = $('#direct-order-badge');
                     if(directBadge.length > 0 && response.direct_count > 0) {
                         let current = parseInt(directBadge.text() || 0);
                         directBadge.text(current + response.direct_count);
                     }
-                    
+
                     let orderBadge = $('#order-badge');
                     if(orderBadge.length > 0 && response.order_count > 0) {
                         let current = parseInt(orderBadge.text() || 0);
@@ -453,14 +456,14 @@ function commonCheckExist(element, table, column, value, id = null) {
             }
         });
     }
-    
+
     // Check every 10 seconds
     setInterval(checkNewOrders, 10000);
-    
+
     $(document).ready(function() {
         // Initial check to get the latest IDs
         checkNewOrders();
-        
+
         // Request permission for push notifications on first user interaction or load
         requestNotificationPermission();
     });
