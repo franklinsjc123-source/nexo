@@ -40,19 +40,19 @@ $today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::toda
                 <div class="flex-shrink-0 d-flex align-items-center gap-1">
 
 
-<span id="currentTime" style="font-size: 20px; font-weight: bold; margin-right:10px"></span>
+                <span id="currentTime" style="font-size: 20px; font-weight: bold; margin-right:10px"></span>
 
 
-                    <div class="dark-mode-btn" id="toggleMode">
+                    {{-- <div class="dark-mode-btn" id="toggleMode">
                         <button class="btn header-btn active" id="lightModeBtn">
                             <i class="bi bi-brightness-high"></i>
                         </button>
                         <button class="btn header-btn" id="darkModeBtn">
                             <i class="bi bi-moon-stars"></i>
                         </button>
-                    </div>
+                    </div> --}}
 
-                                <?php  if(Auth::user()->auth_level  != 4 ) {  ?>
+                    <?php  if(Auth::user()->auth_level  != 4 ) {  ?>
 
 
                     <div class="dropdown pe-dropdown-mega d-none d-md-block">
@@ -572,6 +572,8 @@ backdrop?.addEventListener("click", () => {
 });
 </script>
 
+
+
 <script>
 function updateTime() {
     const now = new Date();
@@ -583,16 +585,27 @@ function updateTime() {
     // AM/PM format
     let ampm = hours >= 12 ? 'PM' : 'AM';
     hours = hours % 12;
-    hours = hours ? hours : 12; // 0 becomes 12
+    hours = hours ? hours : 12;
 
     // Add leading zero
     hours = hours < 10 ? '0' + hours : hours;
     minutes = minutes < 10 ? '0' + minutes : minutes;
     seconds = seconds < 10 ? '0' + seconds : seconds;
 
-    let timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+    // Date
+    let day = now.getDate();
+    let month = now.getMonth() + 1;
+    let year = now.getFullYear();
 
-    document.getElementById('currentTime').innerText = timeString;
+    // Format: 08-04-2026
+    day = day < 10 ? '0' + day : day;
+    month = month < 10 ? '0' + month : month;
+
+    let timeString = hours + ':' + minutes + ':' + seconds + ' ' + ampm;
+    let dateString = day + '-' + month + '-' + year;
+
+    // Final output
+    document.getElementById('currentTime').innerText = timeString + ' | ' + dateString;
 }
 
 // Update every second
