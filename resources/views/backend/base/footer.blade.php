@@ -408,15 +408,26 @@ function commonCheckExist(element, table, column, value, id = null) {
                     directOrderLastId = response.latest_direct_id;
                     orderLastId = response.latest_order_id;
 
-                    // Play sound
+                    // Play sound continuously for 5 seconds
                     var audio = new Audio("{{ asset('order_notification.mp3') }}");
-                    audio.play().catch(function(error) {
-                        // Fallback to existing sound if new one is missing
-                        var fallback = new Audio("{{ asset('notification.ogg') }}");
-                        fallback.play().catch(function(err) {
-                            console.log("Audio play failed: ", err);
+                    audio.loop = true;
+                    
+                    var playPromise = audio.play();
+                    
+                    if (playPromise !== undefined) {
+                        playPromise.catch(function(error) {
+                            // Fallback to existing sound if new one is missing
+                            audio = new Audio("{{ asset('notification.ogg') }}");
+                            audio.loop = true;
+                            audio.play().catch(e => console.log("Audio failed", e));
                         });
-                    });
+                    }
+
+                    // Stop after 5 seconds
+                    setTimeout(function() {
+                        audio.pause();
+                        audio.currentTime = 0;
+                    }, 5000);
 
                     let msg = '';
                     let count = 0;
