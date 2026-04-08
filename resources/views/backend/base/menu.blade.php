@@ -605,7 +605,7 @@ function updateTime() {
     let dateString = day + '-' + month + '-' + year;
 
     // Final output
-    document.getElementById('currentTime').innerText =   dateString + ' | ' + timeString  ;
+    document.getElementById('currentTime').innerText =   dateString + '  ' + timeString  ;
 }
 
 // Update every second
