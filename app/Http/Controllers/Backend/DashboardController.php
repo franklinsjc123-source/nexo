@@ -105,20 +105,16 @@ class DashboardController extends Controller
 
     public function checkNewOrders(Request $request)
     {
+        // Only allow auth_level 1 (Super Admin) and 2 (presumably Admin/Manager)
+        if (!in_array(Auth::user()->auth_level, [1, 2])) {
+            return response()->json(['status' => 'no_access']);
+        }
+
         $last_direct_id = $request->input('last_direct_id', 0);
         $last_order_id = $request->input('last_order_id', 0);
         
         $direct_query = DirectOrder::query();
         $order_query = Order::query();
-
-        if (Auth::user()->auth_level == 4) {
-            $user_id = auth()->id();
-            $shop_id = Shop::where('user_id', $user_id)->value('id');
-            $direct_query->where('shop_id', $shop_id);
-            $order_query->whereHas('items', function($q) use ($shop_id) {
-                $q->where('shop_id', $shop_id);
-            });
-        }
 
         if ($last_direct_id == -1 || $last_order_id == -1) {
             return response()->json([

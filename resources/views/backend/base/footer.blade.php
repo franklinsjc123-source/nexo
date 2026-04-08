@@ -366,6 +366,7 @@ function commonCheckExist(element, table, column, value, id = null) {
 
 </script>
 
+@if(in_array(Auth::user()->auth_level, [1, 2]))
 <script>
     let directOrderLastId = -1;
     let orderLastId = -1;
@@ -479,6 +480,7 @@ function commonCheckExist(element, table, column, value, id = null) {
         requestNotificationPermission();
     });
 </script>
+@endif
 
  @include('backend.alert')
  </body>
