@@ -52,7 +52,7 @@
                             ?>
                             <tr>
                                 <td><?php echo $i + 1 ?></td>
-                                <td>{{ date('d-m-Y', strtotime($row->created_at)) }}</td>
+                                <td>{{ date('d-m-Y h:i A', strtotime($row->created_at)) }}</td>
                                 <td><?php echo $row->order_id ?></td>
                                 <td><?php echo $row->customerData->name ?? '-' ?></td>
                                 <td><?php echo $row->customerData->email ?? '-' ?></td>
