@@ -115,15 +115,15 @@
                                             @error('expiry_date') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
 
-                                        <div class="col-xl-6">
+                                        <div class="col-xl-4">
                                             <label for="offer_message" class="form-label">
                                                 Offer Message <span class="text-danger">*</span>
                                             </label>
-                                            <textarea class="form-control" id="offer_message" name="offer_message" placeholder="Enter Offer Message" rows="3"><?= old('offer_message', $offer_message) ?? '' ?></textarea>
+                                            <textarea class="form-control" id="offer_message" name="offer_message" placeholder="Enter Offer Message" rows="1"><?= old('offer_message', $offer_message) ?? '' ?></textarea>
                                             @error('offer_message') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
 
-                                        <div class="col-xl-6">
+                                        <div class="col-xl-4">
                                             <label for="offer_image" class="form-label">
                                                 Offer Image <span class="text-danger">*</span>
                                             </label>
@@ -173,7 +173,7 @@
                  discount_percentage: {
                     required: true
                 },
-                
+
                  offer_message: {
                     required: true
                 },
