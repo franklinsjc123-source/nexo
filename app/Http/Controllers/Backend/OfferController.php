@@ -78,7 +78,7 @@ class OfferController extends Controller
             'minimum_order_amount'  => $minimum_order_amount,
             'offer_message'         => $offer_message,
         ];
-        
+
         if ($offer_image) {
             $data['offer_image'] = $offer_image;
         }
@@ -90,11 +90,16 @@ class OfferController extends Controller
             $customers   =  User::where('auth_level', 3)->get();
 
 
-            $message = $offer_message;
-            $imageUrl = $offer_image ? asset('uploads/offers/' . $offer_image) : null;
-
             $shopName = Shop::where('id', $shop_id)->value('shop_name');
             $title    = "New Offer from " . ($shopName ?? 'Shop') . " - NexOcart";
+            
+            $message = "🎉 New Offer Available!\n";
+            $message .= "Use code: " . $offer_code . "\n";
+            $message .= "Get " . $discount_percentage . "% OFF on orders above ₹" . $minimum_order_amount . ".\n";
+            $message .= "Valid till: " . $expiry_date . ".\n";
+            $message .= $offer_message;
+
+            $imageUrl = $offer_image ? asset('uploads/offers/' . $offer_image) : null;
 
             foreach ($customers as  $c) {
                 if (!empty($c->token_id)) {
