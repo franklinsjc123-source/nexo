@@ -91,12 +91,11 @@ class OfferController extends Controller
 
 
             $shopName = Shop::where('id', $shop_id)->value('shop_name');
-            $title    = "New Offer from " . ($shopName ?? 'Shop') . " - NexOcart";
-
-            $message = "🎉 New Offer Available!\n";
-            $message .= "Use code: " . $offer_code . "\n";
-            $message .= "Get " . $discount_percentage . "% OFF on orders above ₹" . $minimum_order_amount . ".\n";
-            $message .= "Valid till: " . $expiry_date . ".\n";
+            $title    = ($shopName ?? 'Shop') . " - New Offer!";
+            
+            $message = "🎁 Get " . $discount_percentage . "% OFF! Use code: " . $offer_code . "\n";
+            $message .= "Min. Order: ₹" . $minimum_order_amount . " | Valid till: " . $expiry_date . "\n";
+            $message .= "--------------------------\n";
             $message .= $offer_message;
 
             $imageUrl = $offer_image ? asset('uploads/offers/' . $offer_image) : null;
@@ -144,7 +143,14 @@ class OfferController extends Controller
             'message' => [
                 'token' => $firebaseToken->token_id,
                 'notification' => $titles,
-                'data' => $NotificationData
+                'data' => $NotificationData,
+                'android' => [
+                    'priority' => 'high',
+                    'notification' => [
+                        'notification_priority' => 'PRIORITY_HIGH',
+                        'sound' => 'default',
+                    ]
+                ]
             ]
         ];
         $dataString = json_encode($data);
