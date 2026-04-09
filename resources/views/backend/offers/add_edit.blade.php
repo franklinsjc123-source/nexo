@@ -127,12 +127,11 @@
                                             <label for="offer_image" class="form-label">
                                                 Offer Image <span class="text-danger">*</span>
                                             </label>
-                                            <input type="file" class="form-control" id="offer_image" name="offer_image" accept="image/*">
-                                            @if($offer_image)
-                                                <div class="mt-2">
-                                                    <img src="{{ asset('uploads/offers/' . $offer_image) }}" alt="Offer Image" height="80">
-                                                </div>
-                                            @endif
+                                            <input type="file" class="form-control" id="offer_image" name="offer_image" accept="image/*" onchange="previewImage(this)">
+                                            <div id="image_preview_container" class="mt-2 text-center" style="{{ $offer_image ? '' : 'display:none;' }}">
+                                                <p class="small text-muted mb-1">{{ $offer_image ? 'Current Image' : 'Image Preview' }}</p>
+                                                <img id="offer_image_preview" src="{{ $offer_image ? asset('uploads/offers/' . $offer_image) : '#' }}" alt="Offer Image" height="100" class="img-thumbnail">
+                                            </div>
                                             @error('offer_image') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
                                  </div>
@@ -151,6 +150,18 @@
      </div>
  </main>
  <script>
+     function previewImage(input) {
+         if (input.files && input.files[0]) {
+             var reader = new FileReader();
+             reader.onload = function(e) {
+                 $('#offer_image_preview').attr('src', e.target.result);
+                 $('#image_preview_container').show();
+                 $('#image_preview_container p').text('Image Preview');
+             }
+             reader.readAsDataURL(input.files[0]);
+         }
+     }
+
      $(function() {
          $("#shopForm").validate({
              rules: {

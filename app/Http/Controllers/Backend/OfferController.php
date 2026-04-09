@@ -93,9 +93,12 @@ class OfferController extends Controller
             $message = $offer_message;
             $imageUrl = $offer_image ? asset('uploads/offers/' . $offer_image) : null;
 
+            $shopName = Shop::where('id', $shop_id)->value('shop_name');
+            $title    = "New Offer from " . ($shopName ?? 'Shop') . " - NexOcart";
+
             foreach ($customers as  $c) {
                 if (!empty($c->token_id)) {
-                    $this->sendNotification($c->id, 'New Offer - NexOcart', $message, $imageUrl);
+                    $this->sendNotification($c->id, $title, $message, $imageUrl);
                 }
             }
 
