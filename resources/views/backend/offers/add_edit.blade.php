@@ -10,6 +10,8 @@
     $minimum_order_amount   = isset($records->minimum_order_amount) ? $records->minimum_order_amount : '';
     $discount_percentage    = isset($records->discount_percentage) ? $records->discount_percentage : '';
     $expiry_date            = isset($records->expiry_date) ? $records->expiry_date:'';
+    $offer_message          = isset($records->offer_message) ? $records->offer_message : '';
+    $offer_image            = isset($records->offer_image) ? $records->offer_image : '';
     $status                 = isset($records->status) ? $records->status:'';
     $type                   = ($id == '')   ? 'Create' : 'Update';
 
@@ -112,6 +114,27 @@
                                             <input type="date" class="form-control" id="expiry_date" min="<?= date('Y-m-d') ?>"  name="expiry_date" placeholder="Enter Offer Code" value="<?= old('expiry_date',$expiry_date) ?? '' ?>" >
                                             @error('expiry_date') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
+
+                                        <div class="col-xl-6">
+                                            <label for="offer_message" class="form-label">
+                                                Offer Message <span class="text-danger">*</span>
+                                            </label>
+                                            <textarea class="form-control" id="offer_message" name="offer_message" placeholder="Enter Offer Message" rows="3"><?= old('offer_message', $offer_message) ?? '' ?></textarea>
+                                            @error('offer_message') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div class="col-xl-6">
+                                            <label for="offer_image" class="form-label">
+                                                Offer Image <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="file" class="form-control" id="offer_image" name="offer_image" accept="image/*">
+                                            @if($offer_image)
+                                                <div class="mt-2">
+                                                    <img src="{{ asset('uploads/offers/' . $offer_image) }}" alt="Offer Image" height="80">
+                                                </div>
+                                            @endif
+                                            @error('offer_image') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
                                  </div>
                              </div>
                          </div>
@@ -150,8 +173,14 @@
                  discount_percentage: {
                     required: true
                 },
+                
+                 offer_message: {
+                    required: true
+                },
 
-
+                 offer_image: {
+                    required: <?php echo ($id == '') ? 'true' : 'false'; ?>
+                },
              },
              messages: {
 
@@ -171,9 +200,16 @@
                 },
 
                  expiry_date: {
-                    required: "Please enter expiry "
+                    required: "Please enter expiry date"
                 },
 
+                offer_message: {
+                    required: "Please enter offer message"
+                },
+
+                offer_image: {
+                    required: "Please upload an offer image"
+                },
 
              },
             errorElement: "span",

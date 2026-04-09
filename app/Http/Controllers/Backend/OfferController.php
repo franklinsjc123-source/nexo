@@ -61,7 +61,14 @@ class OfferController extends Controller
         $expiry_date            = $request->expiry_date ?? '';
         $discount_percentage    = $request->discount_percentage ?? '';
         $minimum_order_amount   = $request->minimum_order_amount ?? '';
+        $offer_message          = $request->offer_message ?? '';
+        $offer_image            = '';
 
+        if ($request->hasFile('offer_image')) {
+            $imageName = time() . '.' . $request->offer_image->extension();
+            $request->offer_image->move(public_path('uploads/offers'), $imageName);
+            $offer_image = $imageName;
+        }
 
         $data = [
             'shop_id'               => $shop_id,
@@ -69,7 +76,12 @@ class OfferController extends Controller
             'expiry_date'           => $expiry_date,
             'discount_percentage'   => $discount_percentage,
             'minimum_order_amount'  => $minimum_order_amount,
+            'offer_message'         => $offer_message,
         ];
+        
+        if ($offer_image) {
+            $data['offer_image'] = $offer_image;
+        }
 
         if (empty($id)) {
 
@@ -78,16 +90,13 @@ class OfferController extends Controller
             $customers   =  User::where('auth_level', 3)->get();
 
 
-            $message = "🎉 New Offer Available!\n"
-                . "Use code: {$offer_code}\n"
-                . "Get {$discount_percentage}% OFF on orders above ₹{$minimum_order_amount}.\n"
-                . "Valid till: {$expiry_date}.\n"
-                . "Hurry up and grab the deal! 🛍️";
-
-
+            $message = $offer_message;
+            $imageUrl = $offer_image ? asset('uploads/offers/' . $offer_image) : null;
 
             foreach ($customers as  $c) {
-                $this->sendNotification($c->id, 'New Offer - NexOcart', $message);
+                if (!empty($c->token_id)) {
+                    $this->sendNotification($c->id, 'New Offer - NexOcart', $message, $imageUrl);
+                }
             }
 
 
@@ -106,16 +115,26 @@ class OfferController extends Controller
 
 
 
-    public function sendNotification($userid, $title, $msg)
+    public function sendNotification($userid, $title, $msg, $imageUrl = null)
     {
 
-        $firebaseToken = User::Where('id', $userid)->first('token_id');
+        $firebaseToken = User::Where('id', $userid)->first();
+
+        if (!$firebaseToken || empty($firebaseToken->token_id)) {
+            return response()->json(['error' => 'No token found']);
+        }
 
         $NotificationData = ['title' => $title, 'body'  => $msg];
         $titles           = ['title' => $title, 'body'  => $msg];
+
+        if ($imageUrl) {
+            $titles['image'] = $imageUrl;
+            $NotificationData['image'] = $imageUrl;
+        }
+
         $data             = [
             'message' => [
-                'token' => $firebaseToken['token_id'],
+                'token' => $firebaseToken->token_id,
                 'notification' => $titles,
                 'data' => $NotificationData
             ]
