@@ -154,15 +154,15 @@ class ProductUploadTemplateExport implements FromArray, WithHeadings, WithEvents
                         $taxValidation->setAllowBlank(true);
                         $taxValidation->setShowDropDown(true);
                         $taxValidation->setFormula1('=lists!$C$1:$C$' . count($taxes));
+                    } else {
+
+                        // Tax percentage dropdown (Column D)
+                        $taxValidation = $event->sheet->getCell("B{$row}")->getDataValidation();
+                        $taxValidation->setType(DataValidation::TYPE_LIST);
+                        $taxValidation->setAllowBlank(true);
+                        $taxValidation->setShowDropDown(true);
+                        $taxValidation->setFormula1('=lists!$B$1:$B$' . count($taxes));
                     }
-
-
-                    // Tax percentage dropdown (Column D)
-                    $taxValidation = $event->sheet->getCell("B{$row}")->getDataValidation();
-                    $taxValidation->setType(DataValidation::TYPE_LIST);
-                    $taxValidation->setAllowBlank(true);
-                    $taxValidation->setShowDropDown(true);
-                    $taxValidation->setFormula1('=lists!$B$1:$B$' . count($taxes));
                 }
             }
         ];
