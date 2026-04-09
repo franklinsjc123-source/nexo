@@ -92,11 +92,11 @@ class OfferController extends Controller
 
             $shopName = Shop::where('id', $shop_id)->value('shop_name');
             $title    = "New Offer from " . ($shopName ?? 'Shop') . " - NexOcart";
-            
-            $message = "🎉 New Offer Available!\n";
-            $message .= "Use code: " . $offer_code . "\n";
-            $message .= "Get " . $discount_percentage . "% OFF on orders above ₹" . $minimum_order_amount . ".\n";
-            $message .= "Valid till: " . $expiry_date . ".\n";
+
+            $message = "🎉 New Offer Available!<br>";
+            $message .= "Use code: " . $offer_code . "<br>";
+            $message .= "Get " . $discount_percentage . "% OFF on orders above ₹" . $minimum_order_amount . ".<br>";
+            $message .= "Valid till: " . $expiry_date . ".<br>";
             $message .= $offer_message;
 
             $imageUrl = $offer_image ? asset('uploads/offers/' . $offer_image) : null;
