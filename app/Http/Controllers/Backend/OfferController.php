@@ -92,7 +92,7 @@ class OfferController extends Controller
 
             $shopName = Shop::where('id', $shop_id)->value('shop_name');
             $title    = ($shopName ?? 'Shop') . " - New Offer!";
-            
+
             $message = "🎁 Get " . $discount_percentage . "% OFF! Use code: " . $offer_code . "\n";
             $message .= "Min. Order: ₹" . $minimum_order_amount . " | Valid till: " . $expiry_date . "\n";
             $message .= "--------------------------\n";
