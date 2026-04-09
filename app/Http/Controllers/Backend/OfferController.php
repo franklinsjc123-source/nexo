@@ -138,9 +138,9 @@ class OfferController extends Controller
             'body'  => substr($msg, 0, 100), // short preview
         ];
 
-        if ($imageUrl) {
-            $notification['image'] = $imageUrl;
-        }
+        // if ($imageUrl) {
+        //     $notification['image'] = $imageUrl;
+        // }
 
         $data = [
             'full_message' => $msg
