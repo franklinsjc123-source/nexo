@@ -124,56 +124,67 @@ class OfferController extends Controller
 
     public function sendNotification($userid, $title, $msg, $imageUrl = null)
     {
+        $user = User::where('id', $userid)->first();
 
-        $firebaseToken = User::Where('id', $userid)->first();
-
-        if (!$firebaseToken || empty($firebaseToken->token_id)) {
+        if (!$user || empty($user->token_id)) {
             return response()->json(['error' => 'No token found']);
         }
 
-        $NotificationData = ['title' => $title, 'body'  => $msg];
-        $titles           = ['title' => $title, 'body'  => $msg];
+        // Replace HTML line breaks with newline
+        $msg = str_replace(['<br>', '<br/>', '<br />'], "\n", $msg);
+
+        $notification = [
+            'title' => $title,
+            'body'  => substr($msg, 0, 100), // short preview
+        ];
 
         if ($imageUrl) {
-            $titles['image'] = $imageUrl;
-            $NotificationData['image'] = $imageUrl;
+            $notification['image'] = $imageUrl;
         }
 
-        $data             = [
+        $data = [
+            'full_message' => $msg
+        ];
+
+        $payload = [
             'message' => [
-                'token' => $firebaseToken->token_id,
-                'notification' => $titles,
-                'data' => $NotificationData,
+                'token' => $user->token_id,
+
+                'notification' => $notification,
+                'data' => $data,
+
                 'android' => [
                     'priority' => 'high',
                     'notification' => [
-                        'notification_priority' => 'PRIORITY_HIGH',
                         'sound' => 'default',
+
+                        // ✅ THIS IS THE MAIN FIX
+                        'default_vibrate_timings' => true,
+                        'default_sound' => true,
+
+                        // BIG TEXT SUPPORT
+                        'body' => $msg, // full message
                     ]
                 ]
             ]
         ];
-        $dataString = json_encode($data);
+
         $headers = [
             'Authorization: Bearer ' . $this->getAccessToken(),
             'Content-Type: application/json',
         ];
 
         $ch = curl_init();
-
         curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/v1/projects/nexocart-3f870/messages:send');
         curl_setopt($ch, CURLOPT_POST, true);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $dataString);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($payload));
 
         $response = curl_exec($ch);
-        $responseData = json_decode($response, true);
-        if (isset($responseData['error'])) {
-            return response()->json(['error' => $responseData['error']], 500);
-        }
-        return response()->json(['response' => $responseData]);
+        curl_close($ch);
+
+        return response()->json(['response' => json_decode($response, true)]);
     }
 
 
