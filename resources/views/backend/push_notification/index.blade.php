@@ -25,7 +25,7 @@
                             <div class="row g-4">
                                 <div class="col-xl-6">
                                     <label for="offer_message" class="form-label">
-                                        Offer Message <span class="text-danger">*</span>
+                                         Message <span class="text-danger">*</span>
                                     </label>
                                     <textarea class="form-control" id="offer_message" name="offer_message" placeholder="Enter Offer Message" rows="1">{{ old('offer_message') }}</textarea>
                                     @error('offer_message') <span class="text-danger">{{ $message }}</span> @enderror
@@ -33,7 +33,7 @@
 
                                 <div class="col-xl-6">
                                     <label for="offer_image" class="form-label">
-                                        Offer Image <span class="text-danger">*</span>
+                                         Image <span class="text-danger">*</span>
                                     </label>
                                     <input type="file" class="form-control" id="offer_image" name="offer_image" accept="image/*" onchange="previewImage(this)">
                                     <div id="image_preview_container" class="mt-2 text-center" style="display:none;">
