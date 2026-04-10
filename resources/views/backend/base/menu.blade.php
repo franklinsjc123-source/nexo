@@ -394,11 +394,11 @@ $today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::toda
 
                 @if(auth()->check() && in_array(Auth::user()->auth_level, [1, 2]))
                    <li class="pe-slide pe-has-sub">
-                    <a href="{{ route('push-notification') }}" class="pe-nav-link @if(request()->routeIs(['push-notification'])) active @endif">
-                        <i class="bi bi-bell-fill pe-nav-icon"></i>
-                        <span class="pe-nav-content">Push Notification </span>
-                    </a>
-                </li>
+                        <a href="{{ route('push-notification') }}" class="pe-nav-link @if(request()->routeIs(['push-notification'])) active @endif">
+                            <i class="bi bi-bell-fill pe-nav-icon"></i>
+                            <span class="pe-nav-content">Push Notification </span>
+                        </a>
+                    </li>
                 @endif
 
 
