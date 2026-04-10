@@ -21,6 +21,8 @@ use App\Http\Controllers\Backend\OfferController;
 use App\Http\Controllers\Backend\ReferralController;
 use App\Http\Controllers\Backend\ReportController;
 use App\Http\Controllers\Backend\TaxController;
+use App\Http\Controllers\Backend\PushNotificationController;
+
 
 
 use Illuminate\Support\Facades\Route;
@@ -152,6 +154,10 @@ Route::middleware('auth.request')->group(function () {
     Route::get('offers', [OfferController::class, 'offers'])->name('offers');
     Route::get('addOffer/{id?}', [OfferController::class, 'addOffer'])->name('addOffer');
     Route::post('storeUpdateOffer', [OfferController::class, 'storeUpdateOffer'])->name('storeUpdateOffer');
+
+    // Push Notification
+    Route::get('push-notification', [PushNotificationController::class, 'index'])->name('push-notification');
+    Route::post('send-push-notification', [PushNotificationController::class, 'sendPushNotification'])->name('send-push-notification');
 
     //Report Management
     Route::match(['get', 'post'], "orders-report", [ReportController::class, 'ordersReport'])->name('orders-report');
