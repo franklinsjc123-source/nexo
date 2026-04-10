@@ -10,8 +10,6 @@
     $minimum_order_amount   = isset($records->minimum_order_amount) ? $records->minimum_order_amount : '';
     $discount_percentage    = isset($records->discount_percentage) ? $records->discount_percentage : '';
     $expiry_date            = isset($records->expiry_date) ? $records->expiry_date:'';
-    $offer_message          = isset($records->offer_message) ? $records->offer_message : '';
-    $offer_image            = isset($records->offer_image) ? $records->offer_image : '';
     $status                 = isset($records->status) ? $records->status:'';
     $type                   = ($id == '')   ? 'Create' : 'Update';
 
@@ -115,25 +113,7 @@
                                             @error('expiry_date') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
 
-                                        <div class="col-xl-4">
-                                            <label for="offer_message" class="form-label">
-                                                Offer Message <span class="text-danger">*</span>
-                                            </label>
-                                            <textarea class="form-control" id="offer_message" name="offer_message" placeholder="Enter Offer Message" rows="1"><?= old('offer_message', $offer_message) ?? '' ?></textarea>
-                                            @error('offer_message') <span class="text-danger">{{ $message }}</span> @enderror
-                                        </div>
 
-                                        <div class="col-xl-4">
-                                            <label for="offer_image" class="form-label">
-                                                Offer Image <span class="text-danger">*</span>
-                                            </label>
-                                            <input type="file" class="form-control" id="offer_image" name="offer_image" accept="image/*" onchange="previewImage(this)">
-                                            <div id="image_preview_container" class="mt-2 text-center" style="{{ $offer_image ? '' : 'display:none;' }}">
-                                                <p class="small text-muted mb-1">{{ $offer_image ? 'Current Image' : 'Image Preview' }}</p>
-                                                <img id="offer_image_preview" src="{{ $offer_image ? asset('uploads/offers/' . $offer_image) : '#' }}" alt="Offer Image" height="100" class="img-thumbnail">
-                                            </div>
-                                            @error('offer_image') <span class="text-danger">{{ $message }}</span> @enderror
-                                        </div>
                                  </div>
                              </div>
                          </div>
@@ -149,19 +129,8 @@
          <!-- Submit Section -->
      </div>
  </main>
- <script>
-     function previewImage(input) {
-         if (input.files && input.files[0]) {
-             var reader = new FileReader();
-             reader.onload = function(e) {
-                 $('#offer_image_preview').attr('src', e.target.result);
-                 $('#image_preview_container').show();
-                 $('#image_preview_container p').text('Image Preview');
-             }
-             reader.readAsDataURL(input.files[0]);
-         }
-     }
 
+ <script>
      $(function() {
          $("#shopForm").validate({
              rules: {
@@ -185,13 +154,7 @@
                     required: true
                 },
 
-                 offer_message: {
-                    required: true
-                },
 
-                 offer_image: {
-                    required: <?php echo ($id == '') ? 'true' : 'false'; ?>
-                },
              },
              messages: {
 
@@ -214,13 +177,7 @@
                     required: "Please enter expiry date"
                 },
 
-                offer_message: {
-                    required: "Please enter offer message"
-                },
-
-                offer_image: {
-                    required: "Please upload an offer image"
-                },
+             
 
              },
             errorElement: "span",

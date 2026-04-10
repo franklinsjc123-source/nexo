@@ -61,27 +61,14 @@ class OfferController extends Controller
         $expiry_date            = $request->expiry_date ?? '';
         $discount_percentage    = $request->discount_percentage ?? '';
         $minimum_order_amount   = $request->minimum_order_amount ?? '';
-        $offer_message          = $request->offer_message ?? '';
-        $offer_image            = '';
-
-        if ($request->hasFile('offer_image')) {
-            $imageName = time() . '.' . $request->offer_image->extension();
-            $request->offer_image->move(public_path('uploads/offers'), $imageName);
-            $offer_image = $imageName;
-        }
-
         $data = [
             'shop_id'               => $shop_id,
             'offer_code'            => $offer_code,
             'expiry_date'           => $expiry_date,
             'discount_percentage'   => $discount_percentage,
             'minimum_order_amount'  => $minimum_order_amount,
-            'offer_message'         => $offer_message,
         ];
 
-        if ($offer_image) {
-            $data['offer_image'] = $offer_image;
-        }
 
         if (empty($id)) {
 
@@ -98,11 +85,9 @@ class OfferController extends Controller
             $message .= "Min.Order: ₹{$minimum_order_amount}\n";
             $message .= "Valid: {$expiry_date}";
 
-            $imageUrl = $offer_image ? asset('uploads/offers/' . $offer_image) : null;
-
             foreach ($customers as  $c) {
                 if (!empty($c->token_id)) {
-                    $this->sendNotification($c->id, $title, $message, $imageUrl);
+                    $this->sendNotification($c->id, $title, $message);
                 }
             }
 
