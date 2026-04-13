@@ -150,7 +150,7 @@ class CartController extends Controller
         return response()->json([
             'status'      => true,
             'message'     => 'Item added to cart successfully',
-            'cart_total'  => $cart->total_amount,
+            'cart_total'  => number_format($cart->total_amount, 2, '.', ''),
             'cart_count'  => $cart_count
         ]);
     }
@@ -278,14 +278,14 @@ class CartController extends Controller
                 $pincode_charge = PinCode::where('pincode', $delivery_address->pincode)->value('delivery_charge');
             }
 
-            $delivery_charge = round($delivery_charge + $pincode_charge);
+            $delivery_charge = number_format($delivery_charge + $pincode_charge, 2, '.', '');
 
-            $final_amount = $item_price + $delivery_charge - $discount;
+            $final_amount = number_format($item_price + (float)$delivery_charge - $discount, 2, '.', '');
 
             $response = [
                 'id'            => $cart->id,
                 'user_id'       => $cart->user_id,
-                'total_amount'  => $cart->total_amount,
+                'total_amount'  => number_format($cart->total_amount, 2, '.', ''),
                 'items'         => $cart->items->map(function ($item) {
                     return [
                         'id'            => $item->id,
@@ -296,9 +296,9 @@ class CartController extends Controller
                         'unit'          => $item->unit,
                         'unit_name'     => optional($item->unitData)->unit_name,
                         'quantity'      => $item->quantity,
-                        'price'         => $item->price,
-                        'discount_price' => $item->discount_price,
-                        'total_price'   => $item->total_price,
+                        'price'         => number_format($item->price, 2, '.', ''),
+                        'discount_price' => number_format($item->discount_price, 2, '.', ''),
+                        'total_price'   => number_format($item->total_price, 2, '.', ''),
                     ];
                 })
             ];
@@ -317,10 +317,10 @@ class CartController extends Controller
             return response()->json([
                 'status' => 'success',
                 'cart_count' => $cart_count,
-                'item_price' => $item_price,
+                'item_price' => number_format($item_price, 2, '.', ''),
                 'applied_offers' => $applied_offers,
                 'delivery_charge' => $delivery_charge,
-                'discount' => $discount,
+                'discount' => number_format($discount, 2, '.', ''),
                 'final_amount' => $final_amount,
                 'offers' => $offers,
                 'delivery_address' => $delivery_address,
@@ -375,7 +375,7 @@ class CartController extends Controller
         return response()->json([
             'status'      => true,
             'message'     => 'Cart updated successfully',
-            'cart_total'  => $cart ? $cart->total_amount : 0
+            'cart_total'  => $cart ? number_format($cart->total_amount, 2, '.', '') : '0.00'
         ]);
     }
 
@@ -475,7 +475,7 @@ class CartController extends Controller
                     'status' => 'success',
                     'message' => 'Data received successfully',
                     'cart_count'  => $cart_count,
-                    'cart_amount'  => $cart->total_amount ? $cart->total_amount  : 0,
+                    'cart_amount'  => $cart->total_amount ? number_format($cart->total_amount, 2, '.', '') : '0.00',
                 ], 200);
             } else {
                 return response()->json([
