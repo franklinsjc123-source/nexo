@@ -45,7 +45,7 @@ class CartController extends Controller
         }
 
         $shop_id = $product->shop;
-        $category_id = $product->category_id;
+        $category_id = $product->category;
 
 
         $attribute = ProductAttributes::where('product_id', $product_id)
