@@ -60,6 +60,7 @@ class HomeController extends Controller
                 'message' => 'Data received successfully',
                 'delivery' => !$checkPincodeExistence ? 'Not available' : 'Available',
                 'cart_count' => $cart_count,
+                'cart_amount' => $cart->total_amount ? $cart->total_amount : 0,
                 'data'    => [
                     'categories' => $category,
                     'shops'      => $shops,
@@ -79,7 +80,7 @@ class HomeController extends Controller
     {
         $category_id = $request->input('category_id');
         if ($category_id) {
-            
+
             $shops = Shop::whereRaw("FIND_IN_SET(?, category)", [$category_id])
                 ->where('status', 1)
                 ->get()
