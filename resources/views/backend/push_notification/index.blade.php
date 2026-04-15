@@ -33,7 +33,7 @@
 
                                 <div class="col-xl-6">
                                     <label for="offer_image" class="form-label">
-                                         Image <span class="text-danger">*</span>
+                                         Image <span class="text-danger"></span>
                                     </label>
                                     <input type="file" class="form-control" id="offer_image" name="offer_image" accept="image/*" onchange="previewImage(this)">
                                     <div id="image_preview_container" class="mt-2 text-center" style="display:none;">
@@ -72,17 +72,17 @@
                 offer_message: {
                     required: true
                 },
-                offer_image: {
-                    required: true
-                },
+                // offer_image: {
+                //     required: true
+                // },
             },
             messages: {
                 offer_message: {
                     required: "Please enter offer message"
                 },
-                offer_image: {
-                    required: "Please upload an image"
-                },
+                // offer_image: {
+                //     required: "Please upload an image"
+                // },
             },
             errorElement: "span",
             errorPlacement: function(error, element) {
