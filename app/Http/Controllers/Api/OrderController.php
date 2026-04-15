@@ -105,7 +105,7 @@ class OrderController extends Controller
                     'payment_type' => $order->payment_type,
                     'image_url' => '',
                     'order_type' => 'cart_order',
-                    'date' => $order->created_at ? date('d-m-Y h:i a', strtotime($order->created_at)) :'',
+                    'date' => $order->created_at ? date('d-m-Y h:i a', strtotime($order->created_at)) : '',
                 ];
             } else {
 
@@ -216,7 +216,7 @@ class OrderController extends Controller
             'date'               => $order->created_at ? date('d-m-Y h:i a', strtotime($order->created_at)) : null,
             'shipped_date'       => $order->shipped_date ? date('d-m-Y h:i a', strtotime($order->shipped_date)) : null,
             'delivery_date'      => $order->delivery_date ? date('d-m-Y h:i a', strtotime($order->delivery_date)) : null,
-            'cancel_date'        => $order->cancel_date? date('d-m-Y h:i a', strtotime($order->cancel_date)) : null,
+            'cancel_date'        => $order->cancel_date ? date('d-m-Y h:i a', strtotime($order->cancel_date)) : null,
             'first_dispatched_shop'  => $first_dispatched_shop,
             'second_dispatched_shop' => $second_dispatched_shop,
             'delivery_address'       => $address,
@@ -596,7 +596,7 @@ class OrderController extends Controller
 
         $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
 
-
+          $now = Carbon::now('Asia/Kolkata')->format('d-m-Y h:i A');
 
         if (!$cart || $cart->items->isEmpty()) {
             return response()->json([
@@ -707,7 +707,8 @@ class OrderController extends Controller
                     'offer_ids'             => $offer_applied_ids,
                     'is_coupon_applied'     => $discount  > 0 ? 1 : 0,
                     'coupon_applied_amount' => $discount ?  $discount : 0,
-                    'amount_in_words'       => $amount_in_words
+                    'amount_in_words'       => $amount_in_words,
+                    'created_at'            =>  $now,
 
                 ]);
 
