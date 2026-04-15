@@ -27,7 +27,7 @@ class PushNotificationController extends Controller
     {
         $request->validate([
             'offer_message' => 'required',
-            'offer_image'   => 'required|image'
+            // 'offer_image'   => 'required|image'
         ]);
 
         $offer_message = $request->offer_message ?? '';
