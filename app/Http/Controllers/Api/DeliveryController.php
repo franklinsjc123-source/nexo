@@ -123,7 +123,7 @@ class DeliveryController extends Controller
                 'order_id' => $order->order_id,
                 'shop_name' => $shopNames,
                 'total_quantity' => $total_product_count,
-                'amount' => (float)$order->amount + (float)($order->ship_amount ?? 0),
+                'amount' => number_format((float)$order->amount + (float)($order->ship_amount ?? 0), 2, '.', ''),
                 'order_status' => $order->order_status,
                 'payment_type' => $order->payment_type,
                 'image_url' => '',
