@@ -185,8 +185,8 @@ class OrderController extends Controller
                 'product_name' => $item->product->product_name ?? '',
                 'qty'          => $item->qty,
                 'unit'         =>  $item->unitData->unit_name ?? '',
-                'price'        => $item->product_price,
-                'total_amount' => $item->price
+                'price'        => number_format($item->product_price, 2, '.', ''),
+                'total_amount' => number_format($item->price, 2, '.', '')
             ];
 
             $total_qty += $item->qty;
@@ -207,12 +207,12 @@ class OrderController extends Controller
             'deliver_person_id'  => $order->deliver_person_id,
             'payment_mode'       => $order->payment_type,
             'order_status'       => $order->order_status,
-            'sub_total'          => $sub_total,
-            'discount'           => $order->coupon_applied_amount,
-            'delivery_fee'       => $order->ship_amount,
+            'sub_total'          => number_format($sub_total, 2, '.', ''),
+            'discount'           => number_format((float)$order->coupon_applied_amount, 2, '.', ''),
+            'delivery_fee'       => number_format((float)$order->ship_amount, 2, '.', ''),
             'invoice'            => $order->invoice,
             'total_quantity'     => $total_qty,
-            'total_amount'       => $order->amount + $order->ship_amount,
+            'total_amount'       => number_format((float)$order->amount + (float)$order->ship_amount, 2, '.', ''),
             'date'               => $order->created_at ? date('d-m-Y h:i a', strtotime($order->created_at)) : null,
             'shipped_date'       => $order->shipped_date ? date('d-m-Y h:i a', strtotime($order->shipped_date)) : null,
             'delivery_date'      => $order->delivery_date ? date('d-m-Y h:i a', strtotime($order->delivery_date)) : null,
