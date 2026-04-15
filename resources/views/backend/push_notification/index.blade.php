@@ -19,7 +19,7 @@
                     @csrf
                     <div class="card">
                         <div class="card-header">
-                            <h5 class="mb-0">Send Push Notification to All Customers</h5>
+                            <h5 class="mb-0"> Push Notification </h5>
                         </div>
                         <div class="card-body">
                             <div class="row g-4">
