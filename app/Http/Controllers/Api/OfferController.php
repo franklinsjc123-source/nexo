@@ -39,14 +39,10 @@ class OfferController extends Controller
 
         if ($user_id && $offer_ids) {
 
-         OffersUsed::where('cart_id', $cart_id)
-            ->where('user_id', $user_id)
-            ->delete();
-
             $offer_ids = explode(',', $offer_ids);
-
+            
+            // First loop: Validate all offers before making any changes
             foreach ($offer_ids as $offer_id) {
-
                 $offer = Offers::find($offer_id);
 
                 if (!$offer) {
@@ -70,7 +66,6 @@ class OfferController extends Controller
                     ->sum('total_price');
 
                 if ($shop_total < $offer->minimum_order_amount) {
-
                     $shop_name = Shop::where('id', $offer->shop_id)->value('shop_name');
 
                     return response()->json([
@@ -78,7 +73,14 @@ class OfferController extends Controller
                         'message' => 'Minimum order amount ₹' . $offer->minimum_order_amount . ' required for this offer from ' . $shop_name
                     ], 400);
                 }
+            }
 
+            // Once all validations pass, clean up old offers and insert the new ones
+            OffersUsed::where('cart_id', $cart_id)
+                ->where('user_id', $user_id)
+                ->delete();
+
+            foreach ($offer_ids as $offer_id) {
                 // ✅ Insert or update automatically
                 OffersUsed::updateOrCreate(
                     [
