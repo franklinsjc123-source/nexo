@@ -105,7 +105,7 @@ class OrderController extends Controller
                     'payment_type' => $order->payment_type,
                     'image_url' => '',
                     'order_type' => 'cart_order',
-                    'date' => date('d-m-Y', strtotime($order->created_at)),
+                    'date' => $order->created_at ? date('d-m-Y h:i a', strtotime($order->created_at)) :'',
                 ];
             } else {
 
@@ -120,7 +120,7 @@ class OrderController extends Controller
                     'payment_type' => 'Cash on Delivery',
                     'image_url' => $order->image_url,
                     'order_type' => 'direct_order',
-                    'date' => date('d-m-Y', strtotime($order->created_at)),
+                    'date' => $order->created_at ? date('d-m-Y h:i a', strtotime($order->created_at)) : '',
                 ];
             }
         });
@@ -210,7 +210,7 @@ class OrderController extends Controller
             'sub_total'          => number_format($sub_total, 2, '.', ''),
             'discount'           => number_format((float)$order->coupon_applied_amount, 2, '.', ''),
             'delivery_fee'       => number_format((float)$order->ship_amount, 2, '.', ''),
-            'invoice'            => $order->invoice,
+            'invoice'            => $order->order_status == 2 ? $order->invoice : '',
             'total_quantity'     => $total_qty,
             'total_amount'       => number_format((float)$order->amount + (float)$order->ship_amount, 2, '.', ''),
             'date'               => $order->created_at ? date('d-m-Y h:i a', strtotime($order->created_at)) : null,
