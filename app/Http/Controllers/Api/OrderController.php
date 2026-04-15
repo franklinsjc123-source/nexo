@@ -210,6 +210,7 @@ class OrderController extends Controller
             'sub_total'          => $sub_total,
             'discount'           => $order->coupon_applied_amount,
             'delivery_fee'       => $order->ship_amount,
+            'invoice'            => $order->invoice,
             'total_quantity'     => $total_qty,
             'total_amount'       => $order->amount + $order->ship_amount,
             'date'               => $order->created_at ? date('d-m-Y h:i a', strtotime($order->created_at)) : null,
