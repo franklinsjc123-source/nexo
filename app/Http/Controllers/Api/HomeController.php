@@ -47,10 +47,13 @@ class HomeController extends Controller
             $slider     = Slider::where('status', 1)->get();
 
             $cart_count = 0;
+            $total_amount = 0;
+
             if ($user_id) {
                 $cart = Cart::where('user_id', $user_id)->first();
 
                 if ($cart) {
+                    $total_amount =  $cart->total_amount;
                     $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
                 }
             }
@@ -60,7 +63,7 @@ class HomeController extends Controller
                 'message' => 'Data received successfully',
                 'delivery' => !$checkPincodeExistence ? 'Not available' : 'Available',
                 'cart_count' => $cart_count,
-                'cart_amount' => $cart->total_amount ? $cart->total_amount : 0,
+                'cart_amount' => $total_amount,
                 'data'    => [
                     'categories' => $category,
                     'shops'      => $shops,
