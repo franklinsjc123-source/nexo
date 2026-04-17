@@ -80,10 +80,12 @@ class OfferController extends Controller
             $shopName = Shop::where('id', $shop_id)->value('shop_name');
             $title    = ($shopName ?? 'Shop') . " - New Offer!";
 
-            $message = "🎁 Get {$discount_percentage}% OFF\n";
-            $message .= "<b>{$offer_code}</b>\n";
-            $message .= "Min.Order: ₹{$minimum_order_amount}\n";
-            $message .= "Valid: {$expiry_date}";
+            $message = "🎉 EXCLUSIVE OFFER! 🎉\n\n";
+            $message .= "🎁 Get {$discount_percentage}% OFF on your purchase!\n";
+            $message .= "🎟️ Coupon code: {$offer_code}\n";
+            $message .= "🛒 Minimum Order Amount: ₹{$minimum_order_amount}\n";
+            $message .= "⏳ Valid upto: {$expiry_date}\n\n";
+            $message .= "🏃‍♂️ Shop now to grab this amazing deal!";
 
             if ($customers->count() > 0) {
                 $this->sendBulkNotifications($customers, $title, $message);
