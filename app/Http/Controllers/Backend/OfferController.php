@@ -85,12 +85,9 @@ class OfferController extends Controller
             $message .= "Min.Order: ₹{$minimum_order_amount}\n";
             $message .= "Valid: {$expiry_date}";
 
-            foreach ($customers as  $c) {
-                if (!empty($c->token_id)) {
-                    $this->sendNotification($c->id, $title, $message);
-                }
+            if ($customers->count() > 0) {
+                $this->sendBulkNotifications($customers, $title, $message);
             }
-
 
             return redirect()
                 ->route('offers')
@@ -145,6 +142,67 @@ class OfferController extends Controller
             return response()->json(['error' => $responseData['error']], 500);
         }
         return response()->json(['response' => $responseData]);
+    }
+
+    public function sendBulkNotifications($customers, $title, $msg)
+    {
+        $accessToken = $this->getAccessToken();
+        $url = 'https://fcm.googleapis.com/v1/projects/nexocart-3f870/messages:send';
+        $headers = [
+            'Authorization: Bearer ' . $accessToken,
+            'Content-Type: application/json',
+        ];
+
+        $chunks = $customers->chunk(50);
+
+        foreach ($chunks as $chunk) {
+            $mh = curl_multi_init();
+            $handles = [];
+
+            foreach ($chunk as $c) {
+                if (empty($c->token_id)) {
+                    continue;
+                }
+
+                $NotificationData = ['title' => $title, 'body'  => $msg, 'shop_id' => (string)$c->id];
+                $titles           = ['title' => $title, 'body'  => $msg];
+                $data             = [
+                    'message' => [
+                        'token' => $c->token_id,
+                        'notification' => $titles,
+                        'data' => $NotificationData
+                    ]
+                ];
+
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $url);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+                curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+                curl_multi_add_handle($mh, $ch);
+                $handles[] = $ch;
+            }
+
+            if (empty($handles)) {
+                curl_multi_close($mh);
+                continue;
+            }
+
+            $running = null;
+            do {
+                curl_multi_exec($mh, $running);
+                curl_multi_select($mh);
+            } while ($running > 0);
+
+            foreach ($handles as $ch) {
+                curl_multi_remove_handle($mh, $ch);
+                curl_close($ch);
+            }
+            curl_multi_close($mh);
+        }
     }
 
 

@@ -128,7 +128,7 @@ class DeliveryController extends Controller
                 'payment_type' => $order->payment_type,
                 'image_url' => '',
                 'order_type' => 'cart_order',
-                'date' => date('d-m-Y', strtotime($order->created_at)),
+                'date' => $order->created_at ? date('d-m-Y h:i a', strtotime($order->created_at)) : '',
                 'is_declined' => $is_declined, // keep same structure
             ];
         })
