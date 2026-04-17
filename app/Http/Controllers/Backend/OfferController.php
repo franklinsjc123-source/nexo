@@ -84,7 +84,7 @@ class OfferController extends Controller
             $message .= "🎁 Get {$discount_percentage}% OFF on your purchase!\n";
             $message .= "🎟️ Coupon code: {$offer_code}\n";
             $message .= "🛒 Minimum Order Amount: ₹{$minimum_order_amount}\n";
-            $message .= "⏳ Valid upto: {$expiry_date}\n\n";
+            $message .= "⏳ Valid upto: " . date('d-m-Y', strtotime($expiry_date)) . "\n\n";
             $message .= "🏃‍♂️ Shop now to grab this amazing deal!";
 
             if ($customers->count() > 0) {
