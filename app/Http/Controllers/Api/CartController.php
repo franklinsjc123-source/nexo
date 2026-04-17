@@ -178,6 +178,12 @@ class CartController extends Controller
             $offers = Offers::where('status', 1)
                 ->whereDate('expiry_date', '>=', Carbon::today())
                 ->whereIn('shop_id', $shop_ids)
+                ->whereNotIn('id', function($query) use ($user_id, $cart) {
+                    $query->select('offer_id')
+                          ->from('offer_used')
+                          ->where('user_id', $user_id)
+                          ->where('cart_id', '!=', $cart->id);
+                })
                 ->get()
                 ->map(function ($offer) use ($cart, $user_id) {
 
