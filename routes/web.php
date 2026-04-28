@@ -41,7 +41,7 @@ Route::get('/razorpay-test', function() {
     $api = new \Razorpay\Api\Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
     $order = $api->order->create([
         'receipt' => 'test_receipt_' . time(),
-        'amount' => 100 * 100, // INR 100
+        'amount' => 1 * 100, // INR 1
         'currency' => 'INR'
     ]);
     
