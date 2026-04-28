@@ -37,7 +37,27 @@ Route::get("privacy-policy", [DashboardController::class, 'privacy_policy'])->na
 Route::get("account-deletion", [DashboardController::class, 'account_deletion'])->name('account-deletion');
 Route::post("post-account-deletion", [DashboardController::class, 'post_account_deletion'])->name('post-account-deletion');
 
+Route::get('/razorpay-test', function() {
+    $api = new \Razorpay\Api\Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+    $order = $api->order->create([
+        'receipt' => 'test_receipt_' . time(),
+        'amount' => 100 * 100, // INR 100
+        'currency' => 'INR'
+    ]);
+    
+    $rzp_id = $order['id'];
+    $key = env('RAZORPAY_KEY');
 
+    return view('razorpay-test', compact('rzp_id', 'key'));
+});
+
+Route::post('/razorpay-test-callback', function(\Illuminate\Http\Request $request) {
+    return response()->json([
+        'status' => 'success',
+        'message' => 'Payment received in test callback.',
+        'data' => $request->all()
+    ]);
+})->name('razorpay-test-callback')->withoutMiddleware([\App\Http\Middleware\VerifyCsrfToken::class]);
 
 Route::middleware('auth.request')->group(function () {
 

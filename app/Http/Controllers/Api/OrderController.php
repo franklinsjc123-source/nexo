@@ -595,26 +595,24 @@ class OrderController extends Controller
         $offer_applied_ids  = $request->offer_ids;
         $discount           = $request->discount ?  $request->discount : 0;
 
-
         $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
 
-          $now = Carbon::now('Asia/Kolkata')->format('d-m-Y h:i A');
+        $now = Carbon::now('Asia/Kolkata')->format('d-m-Y h:i A');
 
         if (!$cart || $cart->items->isEmpty()) {
+
             return response()->json([
                 'status' => false,
                 'message' => 'Cart is empty'
             ]);
+
         }
-
-
 
         $categoryTotals = [];
 
         foreach ($cart->items as $item) {
 
             $category_id = $item->product->category;
-
 
             if (!isset($categoryTotals[$category_id])) {
                 $categoryTotals[$category_id] = 0;

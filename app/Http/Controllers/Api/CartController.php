@@ -266,9 +266,10 @@ class CartController extends Controller
                             : ($total_price * 10) / 100;
                     } elseif ($category_id == 9) {
 
-                        $delivery_charge += ($total_price > 499)
-                            ? ($total_price * 8) / 100
-                            : 50;
+                        // $delivery_charge += ($total_price > 499)
+                        //     ? ($total_price * 8) / 100
+                        //     : 50;
+                        
                     } else {
 
                         $delivery_charge += 50;
