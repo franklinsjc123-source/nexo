@@ -14,7 +14,7 @@
     <script>
     var options = {
         "key": "{{ $key }}",
-        "amount": "100",
+        "amount": "1",
         "currency": "INR",
         "name": "Nexcart Test",
         "description": "Live Environment Test Transaction",
