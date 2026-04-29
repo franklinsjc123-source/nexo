@@ -589,10 +589,13 @@ class OrderController extends Controller
 
     public function placeOrder(Request $request)
     {
+
+
+
+
         $user_id            = $request->user_id;
         $delivery_id        = $request->delivery_id;
         $payment_type       = $request->payment_type;
-        $offer_applied_ids  = $request->offer_ids;
         $discount           = $request->discount ?  $request->discount : 0;
 
         $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
@@ -605,7 +608,6 @@ class OrderController extends Controller
                 'status' => false,
                 'message' => 'Cart is empty'
             ]);
-
         }
 
         $categoryTotals = [];
@@ -684,221 +686,28 @@ class OrderController extends Controller
 
         $amount = $cart->total_amount - $discount;
 
-        $amount_in_words =  $this->amountToWords($amount);
 
 
-        if ($payment_type == 'cod') {
 
-            DB::beginTransaction();
 
-            try {
-
-                $order_number = 'ORD' . time();
-
-                $order = Order::create([
-                    'order_id'              => $order_number,
-                    'customer_id'           => $user_id,
-                    'delivery_id'           => $delivery_id,
-                    'order_status'          => 1,
-                    'payment_type'          => 'cod',
-                    'amount'                => $amount,
-                    'ship_amount'           => $delivery_charge,
-                    'payment_status'        => 0,
-                    'offer_ids'             => $offer_applied_ids,
-                    'is_coupon_applied'     => $discount  > 0 ? 1 : 0,
-                    'coupon_applied_amount' => $discount ?  $discount : 0,
-                    'amount_in_words'       => $amount_in_words,
-                    'created_at'            =>  $now,
-
-                ]);
-
-
-                foreach ($cart->items as $item) {
-
-                    OrderItems::create([
-                        'order_id'      => $order->id,
-                        'shop_id'       => $item->shop_id,
-                        'product_id'    => $item->product_id,
-                        'qty'           => $item->quantity,
-                        'unit'          => $item->unit,
-                        'product_price' => $item->price,
-                        'price'         => $item->total_price
-                    ]);
-                }
-
-                $order_items = OrderItems::with('product')
-                    ->where('order_id', $order->id)
-                    ->get();
-
-
-                $company = Company::first();
-
-
-                $currentInvoice = $company->invoice_no ?? 'NCO-0000';
-
-                $number = (int) str_replace('NCO-', '', $currentInvoice);
-
-                $nextNumber = $number + 1;
-
-                $nextInvoice = 'NCO-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
-
-                $company->update([
-                    'invoice_no' => $nextInvoice
-                ]);
-
-
-
-                $delivery_address = Address::find($delivery_id);
-
-
-                $adminInvoiceName = 'Order_' . $order_number . date('Ymd_His') . '.pdf';
-
-                $adminInvoicePath = public_path('uploads/order_invoice/' . $adminInvoiceName);
-
-                $pdf = Pdf::loadView(
-                    'backend.invoice.generate_order_invoice',
-                    [
-                        'order_items' => $order_items,
-                        'order_details' => $order,
-                        'company' => $company,
-                        'delivery_address' => $delivery_address
-                    ]
-                )->setPaper('A4', 'portrait');
-
-                $pdf->save($adminInvoicePath);
-
-                $order->update([
-                    'invoice' => URL::to('/') . '/uploads/order_invoice/' . $adminInvoiceName
-                ]);
-
-
-                $shopItems = $order_items->groupBy('shop_id');
-
-                foreach ($shopItems as $shop_id => $items) {
-
-                    $shop = Shop::find($shop_id);
-
-                    $shop_user_id = $shop->user_id;
-
-
-
-                    $message = "New order received from Order #" . $order_number;
-
-                    $this->sendNotificationForShops($shop_user_id, 'New Order - NexoCart', $message);
-
-                    $shop_total = $items->sum('price');
-
-                    $discount_amount = 0;
-
-                    $offer_used = OffersUsed::where('cart_id', $cart->id)->get();
-
-                    // print_r( $offer_used);exit;
-
-                    if ($offer_used->isNotEmpty()) {
-
-                        $offer_ids_array = $offer_used->pluck('offer_id')->toArray();
-
-                        $offers = Offers::whereIn('id', $offer_ids_array)->get()->keyBy('id');
-
-                        foreach ($offer_used as $offer) {
-
-                            $offerDetails = $offers[$offer->offer_id] ?? null;
-
-                            if (!$offerDetails) {
-                                continue;
-                            }
-
-                            if ($offerDetails->shop_id == $shop_id) {
-
-                                if ($shop_total >= $offerDetails->minimum_order_amount) {
-
-                                    $discount_percentage = $offerDetails->discount_percentage ?? 0;
-
-                                    $discount_amount += ($shop_total * $discount_percentage) / 100;
-                                }
-                            }
-                        }
-                    }
-
-                    $final_shop_total = $shop_total - $discount_amount;
-
-
-                    $shop_amount_words = $this->amountToWords($final_shop_total);
-
-                    $shopInvoiceName = 'Shop_' . $order_number . '_shop_' . $shop_id . date('Ymd_His') . '.pdf';
-
-                    $shopInvoicePath = public_path('uploads/shop_order_invoice/' . $shopInvoiceName);
-
-                    $pdf = Pdf::loadView(
-                        'backend.invoice.generate_shop_invoice',
-                        [
-                            'order_items' => $items,
-                            'order_details' => $order,
-                            'shop_details' => $shop,
-                            'company' => $company,
-                            'delivery_address' => $delivery_address,
-                            'shop_amount_words' => $shop_amount_words,
-                            'discount_amount' => $discount_amount,
-                        ]
-                    )->setPaper('A4', 'portrait');
-
-                    $pdf->save($shopInvoicePath);
-
-                    Invoice::create([
-                        'order_id'              => $order->id,
-                        'shop_id'               => $shop_id,
-                        'final_shop_total'      => $final_shop_total,
-                        'shop_discount'         => $discount_amount,
-                        'invoice_path'          => URL::to('/') . '/uploads/shop_order_invoice/' . $shopInvoiceName
-                    ]);
-                }
-
-
-                CartItems::where('cart_id', $cart->id)->delete();
-                $cart->delete();
-
-                DB::commit();
-
-                $deliery_persons = DeliveryPerson::whereNotNull('device_id')->get();
-                $message = "New order ready for pickup and delivery.";
-
-                foreach ($deliery_persons as $delivery_person) {
-
-                    $this->sendNotificationforDeliveryPersons($delivery_person->device_id, 'New Order - NexoCart', $message);
-                }
-
-
-                return response()->json([
-                    'status' => true,
-                    'message' => 'Order placed successfully',
-                    'order_id' => $order_number
-                ]);
-            } catch (\Exception $e) {
-
-                DB::rollback();
-
-                return response()->json([
-                    'status' => false,
-                    'message' => $e->getMessage()
-                ]);
-            }
-        }
 
 
         if ($payment_type == 'razorpay') {
 
             $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
 
+            $total_payable = $amount + $delivery_charge;
+
             $razorpayOrder = $api->order->create([
                 'receipt' => Str::random(10),
-                'amount' => $amount * 100,
+                'amount' => $total_payable * 100,
                 'currency' => 'INR'
             ]);
 
             return response()->json([
                 'status' => true,
                 'razorpay_order_id' => $razorpayOrder['id'],
-                'amount' => $amount,
+                'amount' => $total_payable,
                 'key' => env('RAZORPAY_KEY')
             ]);
         }
@@ -929,53 +738,35 @@ class OrderController extends Controller
             ]);
         }
 
-        $user_id     = $request->user_id;
-        $delivery_id = $request->delivery_id;
-        $discount    = $request->discount ?? 0;
-        $offer_ids   = $request->offer_ids;
+        $user_id        = $request->user_id;
+        $delivery_id    = $request->delivery_id;
+        $discount       = $request->discount ?? 0;
+        $offer_ids      = $request->offer_ids;
+        $payment_mode   = $request->payment_mode;
+        $payment_type   = $request->payment_type;
 
         $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
 
         if (!$cart || $cart->items->isEmpty()) {
             return response()->json([
-                'status' => false,
-                'message' => 'Cart is empty'
+                'status' => true,
+                'message' => 'Order placed successfully'
             ]);
         }
-
-
 
         $categoryTotals = [];
 
         foreach ($cart->items as $item) {
             $category_id = $item->product->category;
-
             if (!isset($categoryTotals[$category_id])) {
                 $categoryTotals[$category_id] = 0;
             }
-
             $categoryTotals[$category_id] += $item->total_price;
         }
-
-        foreach ($categoryTotals as $category_id => $total) {
-
-            $category = Category::find($category_id);
-
-            if ($category && $total < $category->min_order_value) {
-                return response()->json([
-                    'status' => false,
-                    'message' => $category->category_name .
-                        " minimum order amount is ₹" . $category->min_order_value
-                ], 400);
-            }
-        }
-
-
 
         $delivery_charge = 0;
 
         foreach ($categoryTotals as $category_id => $total) {
-
             $category = Category::find($category_id);
             if (!$category) continue;
 
@@ -1015,7 +806,8 @@ class OrderController extends Controller
                 'customer_id'           => $user_id,
                 'delivery_id'           => $delivery_id,
                 'order_status'          => 1,
-                'payment_type'          => 'razorpay',
+                'payment_type'          => $payment_type,
+                'payment_mode'          => $payment_mode,
                 'amount'                => $amount,
                 'ship_amount'           => $delivery_charge,
                 'payment_status'        => 1, // ✅ PAID
@@ -1046,27 +838,105 @@ class OrderController extends Controller
 
             $company = Company::first();
 
+            $currentInvoice = $company->invoice_no ?? 'NCO-0000';
+            $number = (int) str_replace('NCO-', '', $currentInvoice);
+            $nextNumber = $number + 1;
+            $nextInvoice = 'NCO-' . str_pad($nextNumber, 4, '0', STR_PAD_LEFT);
+            $company->update(['invoice_no' => $nextInvoice]);
+
             $delivery_address = Address::find($delivery_id);
 
-            $invoiceName = 'Order_' . $order_number . date('Ymd_His') . '.pdf';
+            $adminInvoiceName = 'Order_' . $order_number . date('Ymd_His') . '.pdf';
+            $adminInvoicePath = public_path('uploads/order_invoice/' . $adminInvoiceName);
 
             $pdf = Pdf::loadView(
                 'backend.invoice.generate_order_invoice',
-                compact('order_items', 'order', 'company', 'delivery_address')
+                [
+                    'order_items' => $order_items,
+                    'order_details' => $order,
+                    'company' => $company,
+                    'delivery_address' => $delivery_address
+                ]
             )->setPaper('A4', 'portrait');
 
-            $pdf->save(public_path('uploads/order_invoice/' . $invoiceName));
+            $pdf->save($adminInvoicePath);
 
             $order->update([
-                'invoice' => URL::to('/') . '/uploads/order_invoice/' . $invoiceName
+                'invoice' => URL::to('/') . '/uploads/order_invoice/' . $adminInvoiceName
             ]);
 
+            $shopItems = $order_items->groupBy('shop_id');
 
+            foreach ($shopItems as $shop_id => $items) {
+
+                $shop = Shop::find($shop_id);
+                $shop_user_id = $shop->user_id;
+
+                $message = "New order received from Order #" . $order_number;
+                $this->sendNotificationForShops($shop_user_id, 'New Order - NexoCart', $message);
+
+                $shop_total = $items->sum('price');
+                $discount_amount = 0;
+                $offer_used = OffersUsed::where('cart_id', $cart->id)->get();
+
+                if ($offer_used->isNotEmpty()) {
+                    $offer_ids_array = $offer_used->pluck('offer_id')->toArray();
+                    $offers = Offers::whereIn('id', $offer_ids_array)->get()->keyBy('id');
+
+                    foreach ($offer_used as $offer) {
+                        $offerDetails = $offers[$offer->offer_id] ?? null;
+                        if (!$offerDetails) continue;
+
+                        if ($offerDetails->shop_id == $shop_id) {
+                            if ($shop_total >= $offerDetails->minimum_order_amount) {
+                                $discount_percentage = $offerDetails->discount_percentage ?? 0;
+                                $discount_amount += ($shop_total * $discount_percentage) / 100;
+                            }
+                        }
+                    }
+                }
+
+                $final_shop_total = $shop_total - $discount_amount;
+                $shop_amount_words = $this->amountToWords($final_shop_total);
+
+                $shopInvoiceName = 'Shop_' . $order_number . '_shop_' . $shop_id . date('Ymd_His') . '.pdf';
+                $shopInvoicePath = public_path('uploads/shop_order_invoice/' . $shopInvoiceName);
+
+                $pdf = Pdf::loadView(
+                    'backend.invoice.generate_shop_invoice',
+                    [
+                        'order_items' => $items,
+                        'order_details' => $order,
+                        'shop_details' => $shop,
+                        'company' => $company,
+                        'delivery_address' => $delivery_address,
+                        'shop_amount_words' => $shop_amount_words,
+                        'discount_amount' => $discount_amount,
+                    ]
+                )->setPaper('A4', 'portrait');
+
+                $pdf->save($shopInvoicePath);
+
+                Invoice::create([
+                    'order_id'              => $order->id,
+                    'shop_id'               => $shop_id,
+                    'final_shop_total'      => $final_shop_total,
+                    'shop_discount'         => $discount_amount,
+                    'invoice_path'          => URL::to('/') . '/uploads/shop_order_invoice/' . $shopInvoiceName
+                ]);
+            }
 
             CartItems::where('cart_id', $cart->id)->delete();
             $cart->delete();
 
             DB::commit();
+
+            $deliery_persons = DeliveryPerson::whereNotNull('device_id')->get();
+            $message = "New order ready for pickup and delivery.";
+
+            foreach ($deliery_persons as $delivery_person) {
+                $this->sendNotificationforDeliveryPersons($delivery_person->device_id, 'New Order - NexoCart', $message);
+            }
 
             return response()->json([
                 'status' => true,
