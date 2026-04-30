@@ -21,6 +21,7 @@
     $direct_invoice_no      = isset($record->direct_invoice_no) ? $record->direct_invoice_no : '';
     $free_delivery_checkbox = isset($record->free_delivery_checkbox) ? $record->free_delivery_checkbox : '';
     $free_delivery_reason   = isset($record->free_delivery_reason) ? $record->free_delivery_reason : '';
+    $message                = isset($record->message) ? $record->message : '';
 
     $bank_name              = isset($record->bank_name) ? $record->bank_name : '';
     $branch_name            = isset($record->branch_name) ? $record->branch_name : '';
@@ -122,7 +123,12 @@
                                             <label for="terms" class="form-label">Terms & conditions  <span class="text-danger"> </span> </label>
                                             <textarea class="form-control" id="terms" name="terms">  <?php echo $terms ?></textarea>
                                             @error('terms') <span class="text-danger">{{$message}}</span> @enderror
+                                        </div>
 
+                                        <div class="col-xl-4">
+                                            <label for="message" class="form-label">Message  <span class="text-danger"> </span> </label>
+                                            <textarea class="form-control" id="message" name="message">  <?php echo $message ?></textarea>
+                                            @error('message') <span class="text-danger">{{$message}}</span> @enderror
                                         </div>
 
                                       <div class="col-xl-4 mt-3">
@@ -363,6 +369,9 @@ $(document).ready(function(){
                   upi_id: {
                      required: true
                  },
+                 message: {
+                     required: true
+                 },
 
 
 
@@ -426,6 +435,9 @@ $(document).ready(function(){
 
                 upi_id: {
                      required: "Please enter UPI ID "
+                 },
+                 message: {
+                     required: "Please enter message "
                  },
 
              },

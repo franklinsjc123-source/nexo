@@ -94,7 +94,7 @@ class CompanyController extends Controller
             'upi_id'                  => isset($input['upi_id'])    ?  $input['upi_id']    : '',
             'logo'                    => $imageUrl    ?  $imageUrl   : '',
             'qr_code'                 => $qrImageUrl    ?  $qrImageUrl   : '',
-
+            'message'                 => isset($input['message'])    ?  $input['message']    : '',
         );
 
         $update = Company::Where('id', $id)->update($updateArray);
