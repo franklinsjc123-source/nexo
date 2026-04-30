@@ -67,6 +67,7 @@ Route::get('/getAllOrders',[OrderController::class,"getAllOrders"])->name('getAl
 Route::get('/getOrderDetails',[OrderController::class,"getOrderDetails"])->name('getOrderDetails');
 Route::get('/getAllShopOrders',[OrderController::class,"getAllShopOrders"])->name('getAllShopOrders');
 Route::get('/getShopOrderDetails',[OrderController::class,"getShopOrderDetails"])->name('getShopOrderDetails');
+Route::get('/getShopDetails',[HomeController::class,"getShopDetails"])->name('getShopDetails');
 
 Route::get('/changeOrderStatus',[OrderController::class,"changeOrderStatus"])->name('changeOrderStatus');
 Route::get('/OrderCancel',[OrderController::class,"OrderCancel"])->name('OrderCancel');

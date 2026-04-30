@@ -312,4 +312,36 @@ class HomeController extends Controller
             'data' => $data
         ], 200);
     }
+
+    public function getShopDetails(Request $request)
+    {
+        $shop_id = $request->input('shop_id');
+
+        if (!$shop_id) {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Shop ID is required'
+            ], 400);
+        }
+
+        $shop = Shop::where('id', $shop_id)->first();
+
+        if ($shop) {
+            $data = [
+                'address'    => $shop->address,
+                'license_no' => $shop->license_no,
+                'disclaimer' => $shop->disclaimer,
+            ];
+            return response()->json([
+                'status'  => 'success',
+                'message' => 'Data received successfully',
+                'data'    => $data
+            ], 200);
+        } else {
+            return response()->json([
+                'status'  => 'error',
+                'message' => 'Shop not found'
+            ], 400);
+        }
+    }
 }
