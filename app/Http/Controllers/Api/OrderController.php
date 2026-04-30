@@ -700,15 +700,15 @@ class OrderController extends Controller
 
             $razorpayOrder = $api->order->create([
                 'receipt' => Str::random(10),
-                // 'amount' => $total_payable * 100,
-                'amount' => 100,
+                'amount' => $total_payable * 100,
                 'currency' => 'INR'
             ]);
 
             return response()->json([
                 'status' => true,
                 'razorpay_order_id' => $razorpayOrder['id'],
-                'amount' => $total_payable,
+                // 'amount' => $total_payable,
+                'amount' => 100,
                 'key' => env('RAZORPAY_KEY')
             ]);
         }
