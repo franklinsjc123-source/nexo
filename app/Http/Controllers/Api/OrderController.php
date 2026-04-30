@@ -696,8 +696,8 @@ class OrderController extends Controller
 
             $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
 
-            // $total_payable = $amount + $delivery_charge;
-            $total_payable = 1;
+            $total_payable = $amount + $delivery_charge;
+            // $total_payable = 1;
 
             $razorpayOrder = $api->order->create([
                 'receipt' => Str::random(10),
@@ -708,8 +708,8 @@ class OrderController extends Controller
             return response()->json([
                 'status' => true,
                 'razorpay_order_id' => $razorpayOrder['id'],
-                // 'amount' => $total_payable,
-                'amount' => 1,
+                'amount' => $total_payable,
+                // 'amount' => 1,
                 'key' => env('RAZORPAY_KEY')
             ]);
         }
