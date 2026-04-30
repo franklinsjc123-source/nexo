@@ -28,6 +28,7 @@
                         <th>S.No</th>
                         <th>Category</th>
                         <th>Shop</th>
+                        <th>License No</th>
                         <th>Ratings</th>
                         <th>Start Time</th>
                         <th>End Time</th>
@@ -45,6 +46,7 @@
                                 <td><?php echo $i + 1 ?></td>
                                 <td>{{ $row->category_names }}</td>
                                 <td><?= $row->shop_name ?></td>
+                                <td><?= $row->license_no ?></td>
                                 <td><?= $row->rating ?></td>
                                 <td><?= date('h:i A', strtotime($row->start_time)) ?></td>
                                 <td><?= date('h:i A', strtotime($row->end_time)) ?></td>

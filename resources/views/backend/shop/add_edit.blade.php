@@ -20,6 +20,8 @@
     $photo_path             = isset($records->file_path) ? $records->file_path:'';
     $status                 = isset($records->status) ? $records->status:'';
     $rating                 = isset($records->rating) ? $records->rating:'';
+    $disclaimer             = isset($records->disclaimer) ? $records->disclaimer:'';
+    $license_no             = isset($records->license_no) ? $records->license_no:'';
 
     $type                   = ($id == '')   ? 'Create' : 'Update';
 
@@ -144,10 +146,37 @@
 
                                           <div class="col-xl-4">
                                             <label for="gst_no" class="form-label">
-                                                GST Number <span class="text-danger"></span>
+                                                GST Number
                                             </label>
                                             <input type="text" class="form-control" id="gst_no" name="gst_no" placeholder="Enter GST Number" value="<?= old('gst_no',$gst_no) ?? '' ?>">
                                             @error('gst_no') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+
+                                        <div class="col-xl-4">
+                                            <label for="license_no" class="form-label">
+                                                License Number <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="text" class="form-control" id="license_no" name="license_no" placeholder="Enter License Number" value="<?= old('license_no',$license_no) ?? '' ?>">
+                                            @error('license_no') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
+
+                                         <div class="col-xl-4">
+                                            <label class="form-label">Rating <span class="text-danger">*</span></label>
+                                            <select class="form-control select2" id="rating" name="rating"  data-placeholder="Select">
+
+                                                <option value="">--Select--</option>
+                                                <option value="0.5" {{ $rating == 0.5 ? 'selected' : '' }}>0.5</option>
+                                                <option value="1.0" {{ $rating == 1.0 ? 'selected' : '' }}>1.0</option>
+                                                <option value="1.5" {{ $rating == 1.5 ? 'selected' : '' }}>1.5</option>
+                                                <option value="2.0" {{ $rating == 2.0 ? 'selected' : '' }}>2.0</option>
+                                                <option value="2.5" {{ $rating == 2.5 ? 'selected' : '' }}>2.5</option>
+                                                <option value="3.0" {{ $rating == 3.0 ? 'selected' : '' }}>3.0</option>
+                                                <option value="3.5" {{ $rating == 3.5 ? 'selected' : '' }}>3.5</option>
+                                                <option value="4.0" {{ $rating == 4.0 ? 'selected' : '' }}>4.0</option>
+                                                <option value="4.5" {{ $rating == 4.5 ? 'selected' : '' }}>4.5</option>
+                                                <option value="5.0" {{ $rating == 5.0 ? 'selected' : '' }}>5.0</option>
+                                            </select>
+
                                         </div>
 
                                         <div class="col-xl-4">
@@ -158,6 +187,8 @@
                                             ><?= old('address',$address) ?? '' ?></textarea>
                                             @error('address') <span class="text-danger">{{ $message }}</span> @enderror
                                         </div>
+
+
 
                                         <div class="col-xl-4">
 
@@ -215,24 +246,16 @@
                                         </div>
 
 
-                                          <div class="col-xl-4">
-                                            <label class="form-label">Rating <span class="text-danger">*</span></label>
-                                            <select class="form-control select2" id="rating" name="rating"  data-placeholder="Select">
 
-                                                <option value="">--Select--</option>
-                                                <option value="0.5" {{ $rating == 0.5 ? 'selected' : '' }}>0.5</option>
-                                                <option value="1.0" {{ $rating == 1.0 ? 'selected' : '' }}>1.0</option>
-                                                <option value="1.5" {{ $rating == 1.5 ? 'selected' : '' }}>1.5</option>
-                                                <option value="2.0" {{ $rating == 2.0 ? 'selected' : '' }}>2.0</option>
-                                                <option value="2.5" {{ $rating == 2.5 ? 'selected' : '' }}>2.5</option>
-                                                <option value="3.0" {{ $rating == 3.0 ? 'selected' : '' }}>3.0</option>
-                                                <option value="3.5" {{ $rating == 3.5 ? 'selected' : '' }}>3.5</option>
-                                                <option value="4.0" {{ $rating == 4.0 ? 'selected' : '' }}>4.0</option>
-                                                <option value="4.5" {{ $rating == 4.5 ? 'selected' : '' }}>4.5</option>
-                                                <option value="5.0" {{ $rating == 5.0 ? 'selected' : '' }}>5.0</option>
-                                            </select>
 
-                                    </div>
+                                     <div class="col-xl-12">
+                                            <label for="disclaimer" class="form-label">
+                                                Disclaimer <span class="text-danger">*</span>
+                                            </label>
+                                            <textarea class="form-control" id="disclaimer" name="disclaimer" rows="3" placeholder="Enter Disclaimer"
+                                            ><?= old('disclaimer',$disclaimer) ?? '' ?></textarea>
+                                            @error('disclaimer') <span class="text-danger">{{ $message }}</span> @enderror
+                                        </div>
 
 
 
@@ -251,7 +274,19 @@
          <!-- Submit Section -->
      </div>
  </main>
+ <style>
+    .cke_notification_warning, .cke_notification, .cke_notifications_area {
+        display: none !important;
+    }
+ </style>
+  <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
  <script>
+    $(document).ready(function() {
+        if (typeof CKEDITOR !== 'undefined' && $('#disclaimer').length) {
+            CKEDITOR.config.versionCheck = false;
+            CKEDITOR.replace('disclaimer');
+        }
+    });
 
     function togglePassword() {
         const password = document.getElementById('password');
@@ -270,6 +305,7 @@
 
      $(function() {
          $("#shopForm").validate({
+             ignore: [],
              rules: {
 
                 category: {
@@ -294,7 +330,17 @@
                  address: {
                     required: true
                 },
-
+                license_no: {
+                    required: true
+                },
+                disclaimer: {
+                    required: function() {
+                        if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances.disclaimer) {
+                            CKEDITOR.instances.disclaimer.updateElement();
+                        }
+                        return true;
+                    }
+                },
                  rating: {
                     required: true
                 },
@@ -332,11 +378,17 @@
                 address: {
                     required: "Please enter address"
                 },
+                license_no: {
+                    required: "Please enter license no"
+                },
+                disclaimer: {
+                    required: "Please enter disclaimer"
+                },
                 rating: {
                     required: "Please select rating"
                 },
 
-                  slider_photo_path: {
+                   slider_photo_path: {
                     required: "Please upload Shop image"
                 }
 
@@ -346,9 +398,17 @@
                 error.addClass("text-danger small");
                 if (element.hasClass("select2-hidden-accessible")) {
                     error.insertAfter(element.next('.select2'));
+                } else if (element.attr("id") == "disclaimer") {
+                    error.insertAfter(element.next('.cke'));
                 } else {
                     error.insertAfter(element);
                 }
+            },
+            submitHandler: function(form) {
+                if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances.disclaimer) {
+                    CKEDITOR.instances.disclaimer.updateElement();
+                }
+                form.submit();
             }
          });
      });

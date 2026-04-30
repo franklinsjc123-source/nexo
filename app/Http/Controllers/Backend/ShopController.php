@@ -43,7 +43,9 @@ class ShopController extends Controller
     {
         $request->validate([
             'photo_path' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'id' => 'nullable|integer'
+            'id' => 'nullable|integer',
+            'license_no' => 'required',
+            'disclaimer' => 'required',
         ]);
 
         $id         = $request->id ?? 0;
@@ -53,11 +55,13 @@ class ShopController extends Controller
         $contact_no = $request->contact_no ?? '';
         $start_time = $request->start_time ?? '';
         $end_time   = $request->end_time ?? '';
-        $gst_no     = $request->gst_no ?? '';
-        $is_hotel   = $request->is_hotel ?? '';
-        $address    = $request->address ?? '';
-        $rating     = $request->rating ?? '';
-        $imageUrl   = $request->old_photo_path ?? '';
+        $gst_no      = $request->gst_no ?? '';
+        $is_hotel    = $request->is_hotel ?? '';
+        $address     = $request->address ?? '';
+        $rating      = $request->rating ?? '';
+        $disclaimer  = $request->disclaimer ?? '';
+        $license_no  = $request->license_no ?? '';
+        $imageUrl    = $request->old_photo_path ?? '';
 
         if (is_array($request->category)) {
             $category = implode(',', $request->category);
@@ -99,7 +103,6 @@ class ShopController extends Controller
             'user_id'       => $user_id,
             'shop_name'     => $shop_name,
             'contact_no'    => $contact_no,
-            'contact_no'    => $contact_no,
             'start_time'    => $start_time,
             'end_time'      => $end_time,
             'gst_no'        => $gst_no,
@@ -107,6 +110,8 @@ class ShopController extends Controller
             'rating'        => $rating,
             'is_hotel'      => $is_hotel,
             'file_path'     => $imageUrl,
+            'disclaimer'    => $disclaimer,
+            'license_no'    => $license_no,
         ];
 
         if (empty($id)) {
