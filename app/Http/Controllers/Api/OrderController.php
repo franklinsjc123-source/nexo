@@ -697,7 +697,7 @@ class OrderController extends Controller
             $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
 
             // $total_payable = $amount + $delivery_charge;
-            $total_payable =1;
+            $total_payable = 1;
 
             $razorpayOrder = $api->order->create([
                 'receipt' => Str::random(10),
@@ -726,7 +726,7 @@ class OrderController extends Controller
     public function verifyPayment(Request $request)
     {
         $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
-
+        $now = Carbon::now('Asia/Kolkata')->format('d-m-Y h:i A');
         try {
             if ($request->has('razorpay_payment_id') && $request->razorpay_payment_id != '') {
                 $api->utility->verifyPaymentSignature([
@@ -821,7 +821,8 @@ class OrderController extends Controller
                 'offer_ids'             => $offer_ids,
                 'is_coupon_applied'     => $discount > 0 ? 1 : 0,
                 'coupon_applied_amount' => $discount,
-                'amount_in_words'       => $amount_words
+                'amount_in_words'       => $amount_words,
+                'created_at'            =>  $now,
             ]);
 
             foreach ($cart->items as $item) {
