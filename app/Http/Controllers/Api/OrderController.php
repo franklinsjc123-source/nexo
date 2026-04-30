@@ -708,7 +708,7 @@ class OrderController extends Controller
                 'status' => true,
                 'razorpay_order_id' => $razorpayOrder['id'],
                 // 'amount' => $total_payable,
-                'amount' => 100,
+                'amount' => 1,
                 'key' => env('RAZORPAY_KEY')
             ]);
         }
