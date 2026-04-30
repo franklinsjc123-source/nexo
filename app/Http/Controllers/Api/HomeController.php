@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Shop;
+use App\Models\Company;
 use App\Models\Slider;
 use App\Models\Product;
 use App\Models\PinCode;
@@ -45,6 +46,7 @@ class HomeController extends Controller
             $category   = Category::where('status', 1)->get();
             $shops      = Shop::where('status', 1)->whereRaw("category NOT LIKE '%,%'")->inRandomOrder()->get();
             $slider     = Slider::where('status', 1)->get();
+            $company_message = Company::value('message') ?? '';
 
             $cart_count = 0;
             $total_amount = 0;
@@ -64,6 +66,7 @@ class HomeController extends Controller
                 'delivery' => !$checkPincodeExistence ? 'Not available' : 'Available',
                 'cart_count' => $cart_count,
                 'cart_amount' => $total_amount,
+                'company_message' => $company_message,
                 'data'    => [
                     'categories' => $category,
                     'shops'      => $shops,
