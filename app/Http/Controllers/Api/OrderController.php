@@ -696,12 +696,12 @@ class OrderController extends Controller
 
             $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
 
-            $total_payable = $amount + $delivery_charge;
+            // $total_payable = $amount + $delivery_charge;
+            $total_payable =1;
 
             $razorpayOrder = $api->order->create([
                 'receipt' => Str::random(10),
-                // 'amount' => $total_payable * 100,
-                'amount' => 1,
+                'amount' => $total_payable * 100,
                 'currency' => 'INR'
             ]);
 
