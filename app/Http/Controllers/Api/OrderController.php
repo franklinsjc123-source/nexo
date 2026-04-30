@@ -595,7 +595,7 @@ class OrderController extends Controller
 
         $user_id            = $request->user_id;
         $delivery_id        = $request->delivery_id;
-        $payment_type       = $request->payment_type;
+        $payment_type       = 'razorpay';
         $discount           = $request->discount ?  $request->discount : 0;
 
         $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
