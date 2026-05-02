@@ -21,6 +21,7 @@ use App\Models\User;
 use App\Models\OffersUsed;
 use App\Models\Offers;
 use App\Models\DeclineOrder;
+use Illuminate\Support\Str;
 
 use Carbon\Carbon;
 
@@ -682,21 +683,23 @@ class OrderController extends Controller
 
 
 
-        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
+        // $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
 
-        $total_payable = $amount;
+        $total_payable = $request->amount;
 
         if ($payment_type == 'razorpay') {
 
-            $razorpayOrder = $api->order->create([
-                'receipt' => Str::random(10),
-                'amount' => $total_payable * 100,
-                'currency' => 'INR'
-            ]);
+           $randomOrderId = 'order_' . Str::upper(Str::random(14));
+
+            // $razorpayOrder = $api->order->create([
+            //     'receipt' => Str::random(10),
+            //     'amount' => $total_payable * 100,
+            //     'currency' => 'INR'
+            // ]);
 
             return response()->json([
                 'status' => true,
-                'razorpay_order_id' => $razorpayOrder['id'],
+                'razorpay_order_id' =>  $randomOrderId,
                 'amount' => $total_payable,
                 'key' => env('RAZORPAY_KEY')
             ]);
