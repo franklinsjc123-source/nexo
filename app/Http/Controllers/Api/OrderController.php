@@ -595,8 +595,9 @@ class OrderController extends Controller
 
         $user_id            = $request->user_id;
         $delivery_id        = $request->delivery_id;
-        $payment_type       = 'razorpay';
+        $payment_type       =  $request->payment_type;
         $discount           = $request->discount ?  $request->discount : 0;
+        $payment_mode       = $request->payment_mode;
 
         $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
 
@@ -682,42 +683,39 @@ class OrderController extends Controller
         }
         $delivery_charge = round($delivery_charge + $pincode_charge);
 
-
-
         $amount = $cart->total_amount - $discount;
 
 
 
+        $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
 
+        if ($payment_mode == 'razorpay') {
 
-
-
-        if ($payment_type == 'razorpay') {
-
-            $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
-
-            $total_payable = $amount + $delivery_charge;
-            // $total_payable = 1;
-
-            $razorpayOrder = $api->order->create([
-                'receipt' => Str::random(10),
-                'amount' => $total_payable * 100,
-                'currency' => 'INR'
-            ]);
-
-            return response()->json([
-                'status' => true,
-                'razorpay_order_id' => $razorpayOrder['id'],
-                'amount' => $total_payable,
-                // 'amount' => 1,
-                'key' => env('RAZORPAY_KEY')
-            ]);
+            if ($payment_type == 'FULL') {
+                $total_payable = $amount + $delivery_charge;
+            } else {
+                $total_payable = ($amount + $delivery_charge) / 2;
+            }
+        } else {
+            $total_payable = ($amount + $delivery_charge) / 2;
         }
 
-        return response()->json([
-            'status' => false,
-            'message' => 'Invalid payment type'
+        // $total_payable = 1;
+
+        $razorpayOrder = $api->order->create([
+            'receipt' => Str::random(10),
+            'amount' => $total_payable * 100,
+            'currency' => 'INR'
         ]);
+
+        return response()->json([
+            'status' => true,
+            'razorpay_order_id' => $razorpayOrder['id'],
+            'amount' => $total_payable,
+            // 'amount' => 1,
+            'key' => env('RAZORPAY_KEY')
+        ]);
+
     }
 
 
