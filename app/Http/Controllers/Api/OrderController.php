@@ -685,32 +685,28 @@ class OrderController extends Controller
 
         $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
 
+        $total_payable = $amount;
+
         if ($payment_mode == 'razorpay') {
 
-            if ($payment_type == 'FULL') {
-                $total_payable = $amount + $delivery_charge;
-            } else {
-                $total_payable = ($amount + $delivery_charge) / 2;
-            }
+            $razorpayOrder = $api->order->create([
+                'receipt' => Str::random(10),
+                'amount' => $total_payable * 100,
+                'currency' => 'INR'
+            ]);
+
+            return response()->json([
+                'status' => true,
+                'razorpay_order_id' => $razorpayOrder['id'],
+                'amount' => $total_payable,
+                'key' => env('RAZORPAY_KEY')
+            ]);
         } else {
-            $total_payable = ($amount + $delivery_charge) / 2;
+            return response()->json([
+                'status' => true,
+                'amount' => $total_payable,
+            ]);
         }
-
-        // $total_payable = 1;
-
-        $razorpayOrder = $api->order->create([
-            'receipt' => Str::random(10),
-            'amount' => $total_payable * 100,
-            'currency' => 'INR'
-        ]);
-
-        return response()->json([
-            'status' => true,
-            'razorpay_order_id' => $razorpayOrder['id'],
-            'amount' => $total_payable,
-            // 'amount' => 1,
-            'key' => env('RAZORPAY_KEY')
-        ]);
     }
 
 
@@ -790,8 +786,9 @@ class OrderController extends Controller
 
         $delivery_charge = round($delivery_charge + $pincode_charge);
 
-        $amount = $cart->total_amount - $discount;
-        $amount_words = $this->amountToWords($amount);
+        $amount = $request->amount;
+        $delivery_charge = $request->delivery_charge ?? 0;
+        $amount_words = $this->amountToWords($amount + $delivery_charge);
 
 
 
