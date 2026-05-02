@@ -590,9 +590,6 @@ class OrderController extends Controller
     public function placeOrder(Request $request)
     {
 
-
-
-
         $user_id            = $request->user_id;
         $delivery_id        = $request->delivery_id;
         $payment_type       =  $request->payment_type;
@@ -715,7 +712,6 @@ class OrderController extends Controller
             // 'amount' => 1,
             'key' => env('RAZORPAY_KEY')
         ]);
-
     }
 
 
