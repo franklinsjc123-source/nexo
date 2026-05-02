@@ -137,7 +137,7 @@ class OrderController extends Controller
         $order_id = $request->order_id;
         $deliver_person_id = $request->deliver_person_id;
 
-        $order = Order::with(['items.product'])
+        $order = Order::with(['items.product', 'items.unitData', 'items.shopData'])
             ->where('id', $order_id)
             ->first();
 
@@ -183,8 +183,9 @@ class OrderController extends Controller
 
             $products[] = [
                 'product_name' => $item->product->product_name ?? '',
+                'shop_name'    => $item->shopData->shop_name ?? '',
                 'qty'          => $item->qty,
-                'unit'         =>  $item->unitData->unit_name ?? '',
+                'unit'         => $item->unitData->unit_name ?? '',
                 'price'        => number_format($item->product_price, 2, '.', ''),
                 'total_amount' => number_format($item->price, 2, '.', '')
             ];
@@ -192,9 +193,8 @@ class OrderController extends Controller
             $total_qty += $item->qty;
             $sub_total +=  $item->price;
 
-            $shop = Shop::find($item->shop_id);
-            if ($shop) {
-                $shop_names[] = $shop->shop_name;
+            if ($item->shopData) {
+                $shop_names[] = $item->shopData->shop_name;
             }
         }
 
@@ -297,7 +297,7 @@ class OrderController extends Controller
         $user_id    = $request->input('user_id');
         $shop_id    = Shop::where('user_id', $user_id)->value('id');
 
-        $order = Order::with(['items.product'])
+        $order = Order::with(['items.product', 'items.unitData', 'items.shopData'])
             ->where('id', $order_id)
             ->first();
 
@@ -325,6 +325,7 @@ class OrderController extends Controller
 
             $products[] = [
                 'product_name' => optional($item->product)->product_name,
+                'shop_name'    => $item->shopData->shop_name ?? '',
                 'qty'          => $item->qty,
                 'unit'         => $item->unitData->unit_name ?? '',
                 'price'        => $item->product_price,
@@ -334,10 +335,8 @@ class OrderController extends Controller
             $total_qty += $item->qty;
             $total_amount += $item->price;
 
-
-            $shop = Shop::find($item->shop_id);
-            if ($shop) {
-                $shop_names[] = $shop->shop_name;
+            if ($item->shopData) {
+                $shop_names[] = $item->shopData->shop_name;
             }
         }
 
