@@ -684,7 +684,7 @@ class OrderController extends Controller
 
         // $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
 
-        $total_payable = $request->amount;
+        // $total_payable = $request->amount;
 
         if ($payment_type == 'razorpay') {
 
@@ -699,7 +699,7 @@ class OrderController extends Controller
             return response()->json([
                 'status' => true,
                 'razorpay_order_id' =>  $randomOrderId,
-                'amount' => $total_payable,
+                'amount' => $amount,
                 'key' => env('RAZORPAY_KEY')
             ]);
         } else {
