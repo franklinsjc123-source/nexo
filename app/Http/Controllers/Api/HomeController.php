@@ -94,7 +94,6 @@ class HomeController extends Controller
                     $shop->category = (string)$category_id;
                     return $shop;
                 });
-
         } else {
             $shops = Shop::where('status', 1)->get();
         }
@@ -204,10 +203,14 @@ class HomeController extends Controller
         });
 
         $cart_count = 0;
+        $total_amount = 0;
         if ($user_id) {
             $cart = Cart::where('user_id', $user_id)->first();
+            $total_amount =  $cart->total_amount;
+
 
             if ($cart) {
+                $total_amount =  $cart->total_amount;
                 $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
             }
         }
@@ -219,6 +222,8 @@ class HomeController extends Controller
             'status'  => 'success',
             'message' => 'Data received successfully',
             'cart_count'  => $cart_count,
+            'cart_amount' => $total_amount,
+
             'data'    => $data
         ], 200);
     }
@@ -298,11 +303,13 @@ class HomeController extends Controller
 
 
         $cart_count = 0;
+        $total_amount = 0;
 
         if ($user_id) {
             $cart = Cart::where('user_id', $user_id)->first();
 
             if ($cart) {
+                $total_amount =  $cart->total_amount;
                 $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
             }
         }
@@ -312,6 +319,7 @@ class HomeController extends Controller
             'status' => 'success',
             'message' => 'Data received successfully',
             'cart_count'  => $cart_count,
+            'cart_amount' => $total_amount,
             'data' => $data
         ], 200);
     }
