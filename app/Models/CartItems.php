@@ -34,6 +34,11 @@ class CartItems extends Model
         return $this->belongsTo(Unit::class, 'unit', 'id');
     }
 
+    public function shopData()
+    {
+        return $this->belongsTo(Shop::class, 'shop_id');
+    }
+
 
 
 }

@@ -161,7 +161,7 @@ class CartController extends Controller
 
         if ($user_id != '') {
 
-            $cart = Cart::with(['items.product:id,product_name,product_image'])
+            $cart = Cart::with(['items.product:id,product_name,product_image', 'items.shopData'])
                 ->where('user_id', $user_id)
                 ->first();
 
@@ -240,7 +240,7 @@ class CartController extends Controller
 
             $delivery_charge = 0;
 
-            $cart = Cart::with('items.product')->where('user_id', $user_id)->first();
+            $cart = Cart::with(['items.product', 'items.shopData'])->where('user_id', $user_id)->first();
 
             $delivery_charge = 0;
 
@@ -300,6 +300,7 @@ class CartController extends Controller
                         'product_id'    => $item->product_id,
                         'product_name'  => optional($item->product)->product_name,
                         'product_image' => optional($item->product)->product_image,
+                        'shop_name'     => optional($item->shopData)->shop_name,
                         'unit'          => $item->unit,
                         'unit_name'     => optional($item->unitData)->unit_name,
                         'quantity'      => $item->quantity,
