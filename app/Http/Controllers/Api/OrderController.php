@@ -685,6 +685,7 @@ class OrderController extends Controller
 
         $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
 
+
         if ($payment_mode == 'razorpay') {
 
             if ($payment_type == 'FULL') {
@@ -696,21 +697,49 @@ class OrderController extends Controller
             $total_payable = ($amount + $delivery_charge) / 2;
         }
 
-        // $total_payable = 1;
+        // Convert to paise (important)
+        $amountInPaise = round($total_payable * 100);
 
         $razorpayOrder = $api->order->create([
-            'receipt' => Str::random(10),
-            'amount' => $total_payable * 100,
+            'receipt'  => Str::random(10),
+            'amount'   => $amountInPaise, // ✅ correct
             'currency' => 'INR'
         ]);
 
         return response()->json([
             'status' => true,
             'razorpay_order_id' => $razorpayOrder['id'],
-            'amount' => number_format($total_payable, 2, '.', ''),
-            // 'amount' => 1,
+            'amount' => $amountInPaise, // ✅ return in paise
+            'amount_rupees' => number_format($total_payable, 2, '.', ''), // optional
             'key' => env('RAZORPAY_KEY')
         ]);
+
+        // if ($payment_mode == 'razorpay') {
+
+        //     if ($payment_type == 'FULL') {
+        //         $total_payable = $amount + $delivery_charge;
+        //     } else {
+        //         $total_payable = ($amount + $delivery_charge) / 2;
+        //     }
+        // } else {
+        //     $total_payable = ($amount + $delivery_charge) / 2;
+        // }
+
+        // // $total_payable = 1;
+
+        // $razorpayOrder = $api->order->create([
+        //     'receipt' => Str::random(10),
+        //     'amount' => $total_payable * 100,
+        //     'currency' => 'INR'
+        // ]);
+
+        // return response()->json([
+        //     'status' => true,
+        //     'razorpay_order_id' => $razorpayOrder['id'],
+        //     'amount' => number_format($total_payable, 2, '.', ''),
+        //     // 'amount' => 1,
+        //     'key' => env('RAZORPAY_KEY')
+        // ]);
     }
 
 
