@@ -707,7 +707,7 @@ class OrderController extends Controller
         return response()->json([
             'status' => true,
             'razorpay_order_id' => $razorpayOrder['id'],
-            'amount' => $total_payable,
+            'amount' => number_format($total_payable, 2, '.', ''),
             // 'amount' => 1,
             'key' => env('RAZORPAY_KEY')
         ]);
