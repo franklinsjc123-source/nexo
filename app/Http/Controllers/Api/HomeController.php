@@ -204,18 +204,18 @@ class HomeController extends Controller
 
         $cart_count = 0;
         $total_amount = 0;
-        if ($user_id) {
-            $cart = Cart::where('user_id', $user_id)->first();
-            $total_amount =  $cart->total_amount;
 
+        if ($user_id) {
+
+            $cart = Cart::where('user_id', $user_id)->first();
 
             if ($cart) {
-                $total_amount =  $cart->total_amount;
-                $cart_count = count(CartItems::where('cart_id', $cart->id)->get());
+
+                $total_amount = $cart->total_amount ?? 0;
+
+                $cart_count = CartItems::where('cart_id', $cart->id)->count();
             }
         }
-
-
 
 
         return response()->json([
