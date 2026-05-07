@@ -38,7 +38,6 @@
                         <th>Order Date </th>
                         <th>Order ID </th>
                         <th>Name</th>
-                        <th>Email</th>
                         <th>Order Amount</th>
                         <?php if (Auth::user()->auth_level != 4) { ?>
                             <th>Payment Mode</th>
@@ -58,8 +57,20 @@
                                 <td><?php echo $i + 1 ?></td>
                                 <td>{{ date('d-m-Y h:i A', strtotime($row->created_at)) }}</td>
                                 <td><?php echo $row->order_id ?></td>
-                                <td><?php echo $row->customerData->name ?? '-' ?></td>
-                                <td><?php echo $row->customerData->email ?? '-' ?></td>
+                                <td>
+                                    <?php if ($row->customerData) { ?>
+                                        <?php if (Auth::user()->auth_level != 4) { ?>
+                                            <a href="javascript:void(0)" class="viewCustomerDetails" 
+                                               data-name="<?= $row->customerData->name ?>" 
+                                               data-email="<?= $row->customerData->email ?>" 
+                                               data-mobile="<?= $row->customerData->mobile ?>">
+                                                <?= $row->customerData->name ?>
+                                            </a>
+                                        <?php } else { ?>
+                                            <?= $row->customerData->name ?>
+                                        <?php } ?>
+                                    <?php } else { echo '-'; } ?>
+                                </td>
                                 <td>
                                     <?php
                                       if (Auth::user()->auth_level == 4) {
@@ -183,6 +194,34 @@
 
                   <button class="btn btn-danger" id="close-modal" >Cancel</button>
                 <button class="btn btn-primary" id="saveStatus">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="customerDetailsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Customer Details</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-2">
+                    <div class="col-md-4"><strong>Name:</strong></div>
+                    <div class="col-md-8"><span id="customer_name"></span></div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-4"><strong>Email:</strong></div>
+                    <div class="col-md-8"><span id="customer_email"></span></div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-4"><strong>Mobile:</strong></div>
+                    <div class="col-md-8"><span id="customer_mobile"></span></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -371,6 +410,19 @@ $(document).on("click", ".viewDeliveryDetails", function () {
     $("#delivery_mobile").text(mobile);
 
     $("#deliveryDetailsModal").modal("show");
+});
+
+
+$(document).on("click", ".viewCustomerDetails", function () {
+    let name = $(this).data("name");
+    let email = $(this).data("email");
+    let mobile = $(this).data("mobile");
+
+    $("#customer_name").text(name);
+    $("#customer_email").text(email);
+    $("#customer_mobile").text(mobile);
+
+    $("#customerDetailsModal").modal("show");
 });
 
 
