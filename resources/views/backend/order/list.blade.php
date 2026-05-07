@@ -40,8 +40,10 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Order Amount</th>
-                        <th>Payment Mode</th>
-                        <th>Payment Type</th>
+                        <?php if (Auth::user()->auth_level != 4) { ?>
+                            <th>Payment Mode</th>
+                            <th>Payment Type</th>
+                        <?php } ?>
                         <th>Delivered By</th>
                          <th>Status</th>
                         <th>Action</th>
@@ -67,16 +69,18 @@
                                         }
                                     ?>
                                 </td>
-                                <td>
-                                    <?php
-                                        if (strtolower($row->payment_mode) == 'razorpay') {
-                                            echo 'ONLINE';
-                                        } else {
-                                            echo 'COD';
-                                        }
-                                    ?>
-                                </td>
-                                <td><?php echo $row->payment_type ?? '-' ?></td>
+                                <?php if (Auth::user()->auth_level != 4) { ?>
+                                    <td>
+                                        <?php
+                                            if (strtolower($row->payment_mode) == 'razorpay') {
+                                                echo 'ONLINE';
+                                            } else {
+                                                echo 'COD';
+                                            }
+                                        ?>
+                                    </td>
+                                    <td><?php echo $row->payment_type ?? '-' ?></td>
+                                <?php } ?>
 
                                 <td>
                                     <?php if ($row->deliveryPerson) { ?>
