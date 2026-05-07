@@ -286,7 +286,7 @@ class CartController extends Controller
                 $pincode_charge = PinCode::where('pincode', $delivery_address->pincode)->value('delivery_charge');
             }
 
-            $delivery_charge = number_format($delivery_charge + $pincode_charge, 2, '.', '');
+            $delivery_charge = number_format(round($delivery_charge + $pincode_charge), 2, '.', '');
 
             // Check if free delivery is enabled in company settings
             $company = Company::first();
