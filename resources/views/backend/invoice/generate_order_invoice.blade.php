@@ -527,15 +527,39 @@
                       <td colspan="3" >{{ $order_details->amount_in_words }}</td>
                     </tr>
 
+                    <?php 
+                        $total_order_amount = $order_details->amount + $order_details->ship_amount;
+                        $is_half = ($order_details->payment_type == 'HALF' || $order_details->payment_mode == 'COD');
+                        $advance_paid = $is_half ? ($total_order_amount / 2) : $total_order_amount;
+                        $balance_due = $is_half ? ($total_order_amount / 2) : 0;
+                    ?>
                     <tr>
-                        <td >Advance</td>
+                        <td>Total Amount</td>
                         <td class="rb-colon">:</td>
-                        <td class="rb-val text-right" ><span style="font-family:  DejaVu Sans, sans-serif;">₹</span> <b style="color:blue">{{ number_format ( ($order_details->amount) * 0.30,2) }} </b> </td>
+                        <td class="rb-val text-right"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($total_order_amount, 2) }}</td>
+                    </tr>
+                    <?php if ($is_half) { ?>
+                    <tr>
+                        <td>Advance Paid</td>
+                        <td class="rb-colon">:</td>
+                        <td class="rb-val text-right"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($advance_paid, 2) }}</td>
                     </tr>
                     <tr>
-                        <td  style="white-space: nowrap;" >Delivery Charges</td>
-                        <td  class="rb-colon" >:</td>
-                        <td  class="rb-val text-right" ><span style="font-family: DejaVu Sans, sans-serif;">₹</span>  <b style="color:blue">{{ number_format($order_details->ship_amount,2)}}  </b> </td>
+                        <td>Balance Amount</td>
+                        <td class="rb-colon">:</td>
+                        <td class="rb-val text-right"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> <strong>{{ number_format($balance_due, 2) }}</strong></td>
+                    </tr>
+                    <?php } else { ?>
+                    <tr>
+                        <td>Payment Mode</td>
+                        <td class="rb-colon">:</td>
+                        <td class="rb-val text-right"><strong>{{ $order_details->payment_mode == 'razorpay' ? 'ONLINE' : $order_details->payment_mode }}</strong></td>
+                    </tr>
+                    <?php } ?>
+                    <tr>
+                        <td style="white-space: nowrap;">Delivery Charges</td>
+                        <td class="rb-colon">:</td>
+                        <td class="rb-val text-right"><span style="font-family: DejaVu Sans, sans-serif;">₹</span> {{ number_format($order_details->ship_amount, 2) }}</td>
                     </tr>
 
                 </table>

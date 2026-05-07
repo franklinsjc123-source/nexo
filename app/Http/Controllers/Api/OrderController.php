@@ -103,7 +103,7 @@ class OrderController extends Controller
                     'amount' => number_format($order->amount + $order->ship_amount, 2, '.', ''),
                     'order_status' => $order->order_status,
                     'is_dispatched' => $is_dispatched,
-                    'payment_type' => $order->payment_mode == 'razorpay'? 'ONLINE' : 'COD',
+                    'payment_type' => $order->payment_mode == 'razorpay' ? 'ONLINE' : 'COD',
                     'image_url' => '',
                     'order_type' => 'cart_order',
                     'date' => $order->created_at ? date('d-m-Y h:i a', strtotime($order->created_at)) : '',
@@ -206,7 +206,7 @@ class OrderController extends Controller
             'is_declined'            => $order->deliver_person_id == $deliver_person_id ? 2 : (in_array($order->id, $declinedOrderIds) ? 1 : 0),
             'shop_names'             => $shop_names,
             'deliver_person_id'      => $order->deliver_person_id,
-            'payment_mode'           => $order->payment_mode == 'razorpay'? 'ONLINE' : 'COD',
+            'payment_mode'           => $order->payment_mode == 'razorpay' ? 'ONLINE' : 'COD',
             'customer_name'          => $order->customerData->name,
             'customer_mobile'        => $order->customerData->mobile,
             'order_status'           => $order->order_status,
@@ -278,7 +278,7 @@ class OrderController extends Controller
                 'order_id'       => $order->order_id,
                 'total_quantity' => $total_product_count ? $total_product_count : $total_qty,
                 'order_status'   => $order->order_status,
-                'payment_type'   =>  $order->payment_mode == 'razorpay'? 'ONLINE' : 'COD',
+                'payment_type'   =>  $order->payment_mode == 'razorpay' ? 'ONLINE' : 'COD',
                 'amount'         => $total_amount,
                 'date'           => date('d-m-Y', strtotime($order->created_at))
             ];
@@ -388,7 +388,7 @@ class OrderController extends Controller
         $data = [
             'order_id'        => $order->order_id,
             'shop_names'      => $shop_names,
-            'payment_mode'    =>  $order->payment_mode == 'razorpay'? 'ONLINE' : 'COD',
+            'payment_mode'    =>  $order->payment_mode == 'razorpay' ? 'ONLINE' : 'COD',
             'delivery_person' => $order->deliver_person_id,
             'order_status'    => $order->order_status,
             'is_dispatched'   => $is_dispatched,
@@ -692,10 +692,10 @@ class OrderController extends Controller
             if ($payment_type == 'FULL') {
                 $total_payable = $amount + $delivery_charge;
             } else {
-                $total_payable = ($amount + $delivery_charge) / 2;
+                $total_payable = ($amount * 0.30) + $delivery_charge;
             }
         } else {
-            $total_payable = ($amount + $delivery_charge) / 2;
+            $total_payable = ($amount * 0.30) + $delivery_charge;
         }
 
         // Convert to paise (important)
