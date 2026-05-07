@@ -79,7 +79,15 @@
                                             }
                                         ?>
                                     </td>
-                                    <td><?php echo $row->payment_type ?? '-' ?></td>
+                                    <td>
+                                        <?php 
+                                            if ($row->order_status == 2) {
+                                                echo 'FULL';
+                                            } else {
+                                                echo $row->payment_type ?? '-';
+                                            }
+                                        ?>
+                                    </td>
                                 <?php } ?>
 
                                 <td>
