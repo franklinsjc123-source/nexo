@@ -687,16 +687,10 @@ class OrderController extends Controller
         $api = new Api(env('RAZORPAY_KEY'), env('RAZORPAY_SECRET'));
 
 
-        if ($payment_mode == 'razorpay') {
-
-            if ($payment_type == 'FULL') {
-                $total_payable = $amount + $delivery_charge;
-            } else {
-                $total_payable = ($amount * 0.30) + $delivery_charge;
-            }
-        } else {
-            $total_payable = ($amount * 0.30) + $delivery_charge;
-        }
+        $total_order = $amount + $delivery_charge;
+        $is_partial = ($payment_type == 'PARTIAL' || strtolower($payment_mode) == 'cod');
+        $total_payable = $is_partial ? ($total_order * 0.30) : $total_order;
+        $total_payable = round($total_payable);
 
         // Convert to paise (important)
         $amountInPaise = round($total_payable * 100);
@@ -849,7 +843,10 @@ class OrderController extends Controller
                 'created_at'            =>  $now,
             ]);
 
-            $paid_amount = ($payment_type == 'FULL') ? ($amount + $delivery_charge) : (($amount + $delivery_charge) / 2);
+            $total_order = $amount + $delivery_charge;
+            $is_partial = ($payment_type == 'PARTIAL' || strtolower($payment_mode) == 'cod');
+            $paid_amount = $is_partial ? ($total_order * 0.30) : $total_order;
+            $paid_amount = round($paid_amount);
 
             Payment::create([
                 'order_id'          => $order->order_id,
