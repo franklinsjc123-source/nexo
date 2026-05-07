@@ -55,8 +55,18 @@ class OrderController extends Controller
 
     public function updateOrderStatus(Request $request)
     {
-        Order::where('id', $request->order_id)
-            ->update(['order_status' => $request->status]);
+        $order = Order::find($request->order_id);
+
+        if (Auth::user()->auth_level == 4) {
+            if ($order->order_status == 2 || $order->order_status == 3) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Cannot update status of a delivered or cancelled order.'
+                ]);
+            }
+        }
+
+        $order->update(['order_status' => $request->status]);
 
         return response()->json([
             'status' => true,
@@ -70,7 +80,7 @@ class OrderController extends Controller
 
         $auth_level = Auth::user()->auth_level;
 
-        $query = OrderItems::with(['product', 'unitData'])
+        $query = OrderItems::with(['product', 'unitData', 'shopData'])
             ->where('order_id', $order_id);
 
         if ($auth_level == 4) {

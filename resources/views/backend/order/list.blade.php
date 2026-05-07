@@ -40,6 +40,8 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Order Amount</th>
+                        <th>Payment Mode</th>
+                        <th>Payment Type</th>
                         <th>Delivered By</th>
                          <th>Status</th>
                         <th>Action</th>
@@ -65,6 +67,16 @@
                                         }
                                     ?>
                                 </td>
+                                <td>
+                                    <?php 
+                                        if (strtolower($row->payment_mode) == 'razorpay') {
+                                            echo 'ONLINE';
+                                        } else {
+                                            echo $row->payment_mode ?? '-';
+                                        }
+                                    ?>
+                                </td>
+                                <td><?php echo $row->payment_type ?? '-' ?></td>
 
                                 <td>
                                     <?php if ($row->deliveryPerson) { ?>
@@ -100,9 +112,13 @@
                                         }
                                     ?>
 
-                                    <a href="javascript:void(0)"
-                                        class="badge bg-<?php echo $class; ?> editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>"> <?php echo $text; ?>
-                                    </a>
+                                    <?php if (Auth::user()->auth_level == 4 && ($row->order_status == 2 || $row->order_status == 3)) { ?>
+                                        <span class="badge bg-<?php echo $class; ?>"> <?php echo $text; ?> </span>
+                                    <?php } else { ?>
+                                        <a href="javascript:void(0)"
+                                            class="badge bg-<?php echo $class; ?> editOrderStatus" data-id="<?= $row->id ?>" data-status="<?= $row->order_status ?>"> <?php echo $text; ?>
+                                        </a>
+                                    <?php } ?>
 
                                 </td>
 
@@ -203,6 +219,7 @@
                     <thead>
                         <tr>
                             <th>S.No</th>
+                            <th>Shop</th>
                             <th>Product</th>
                             <th>Unit</th>
                             <th>Product Price</th>
@@ -307,6 +324,7 @@ $(document).on("click", ".viewOrderItems", function () {
                 html += `
                 <tr>
                     <td>${i}</td>
+                    <td>${item.shop_data ? item.shop_data.shop_name : '-'}</td>
                     <td>${item.product ? item.product.product_name : ''}</td>
                     <td>${item.unit_data ? item.unit_data.unit_name : ''}</td>
                     <td>${item.product_price}</td>
