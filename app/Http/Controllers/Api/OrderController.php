@@ -138,7 +138,7 @@ class OrderController extends Controller
         $order_id = $request->order_id;
         $deliver_person_id = $request->deliver_person_id;
 
-        $order = Order::with(['items.product', 'items.unitData', 'items.shopData'])
+        $order = Order::with(['items.product', 'items.unitData', 'items.shopData', 'deliveryPerson'])
             ->where('id', $order_id)
             ->first();
 
@@ -223,6 +223,8 @@ class OrderController extends Controller
             'first_dispatched_shop'  => $first_dispatched_shop,
             'second_dispatched_shop' => $second_dispatched_shop,
             'delivery_address'       => $address,
+            'delivery_person_name'   => $order->deliveryPerson->name ?? '',
+            'delivery_person_mobile' => $order->deliveryPerson->mobile ?? '',
             'products'               => $products
         ];
 
