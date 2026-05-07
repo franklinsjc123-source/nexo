@@ -219,7 +219,9 @@
                     <thead>
                         <tr>
                             <th>S.No</th>
-                            <th>Shop</th>
+                            <?php if (Auth::user()->auth_level != 4) { ?>
+                                <th>Shop</th>
+                            <?php } ?>
                             <th>Product</th>
                             <th>Unit</th>
                             <th>Product Price</th>
@@ -319,12 +321,13 @@ $(document).on("click", ".viewOrderItems", function () {
             let html = "";
             let i = 1;
 
+            var auth_level = "{{ Auth::user()->auth_level }}";
             response.data.forEach(function(item){
 
                 html += `
                 <tr>
                     <td>${i}</td>
-                    <td>${item.shop_data ? item.shop_data.shop_name : '-'}</td>
+                    ${auth_level != 4 ? `<td>${item.shop_data ? item.shop_data.shop_name : '-'}</td>` : ''}
                     <td>${item.product ? item.product.product_name : ''}</td>
                     <td>${item.unit_data ? item.unit_data.unit_name : ''}</td>
                     <td>${item.product_price}</td>
