@@ -699,8 +699,8 @@ class OrderController extends Controller
         }
 
         // Convert to paise (important)
-        // $amountInPaise = round($total_payable * 100);
-        $amountInPaise = round(1 * 100);
+        $amountInPaise = round($total_payable * 100);
+        // $amountInPaise = round(1 * 100);
 
         $razorpayOrder = $api->order->create([
             'receipt'  => Str::random(10),
