@@ -68,11 +68,11 @@
                                     ?>
                                 </td>
                                 <td>
-                                    <?php 
+                                    <?php
                                         if (strtolower($row->payment_mode) == 'razorpay') {
                                             echo 'ONLINE';
                                         } else {
-                                            echo $row->payment_mode ?? '-';
+                                            echo 'COD';
                                         }
                                     ?>
                                 </td>
@@ -80,9 +80,9 @@
 
                                 <td>
                                     <?php if ($row->deliveryPerson) { ?>
-                                        <a href="javascript:void(0)" class="viewDeliveryDetails" 
-                                           data-name="<?= $row->deliveryPerson->name ?>" 
-                                           data-email="<?= $row->deliveryPerson->email ?>" 
+                                        <a href="javascript:void(0)" class="viewDeliveryDetails"
+                                           data-name="<?= $row->deliveryPerson->name ?>"
+                                           data-email="<?= $row->deliveryPerson->email ?>"
                                            data-mobile="<?= $row->deliveryPerson->mobile ?>">
                                             <?= $row->deliveryPerson->name ?>
                                         </a>
