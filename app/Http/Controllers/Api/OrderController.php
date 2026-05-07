@@ -21,6 +21,7 @@ use App\Models\User;
 use App\Models\OffersUsed;
 use App\Models\Offers;
 use App\Models\DeclineOrder;
+use App\Models\Payment;
 
 use Carbon\Carbon;
 
@@ -846,6 +847,22 @@ class OrderController extends Controller
                 'coupon_applied_amount' => $discount,
                 'amount_in_words'       => $amount_words,
                 'created_at'            =>  $now,
+            ]);
+
+            $paid_amount = ($payment_type == 'FULL') ? ($amount + $delivery_charge) : (($amount + $delivery_charge) / 2);
+
+            Payment::create([
+                'order_id'          => $order->order_id,
+                'user_id'           => $user_id,
+                'payment_id'        => $request->razorpay_payment_id,
+                'razorpay_order_id' => $request->razorpay_order_id,
+                'amount'            => $paid_amount,
+                'transaction_id'    => $request->razorpay_payment_id,
+                'payment_status'    => 'Success',
+                'payment_method'    => $payment_mode,
+                'date'              => date('Y-m-d'),
+                'time'              => date('H:i:s'),
+                'basic_details'     => json_encode($request->all())
             ]);
 
             foreach ($cart->items as $item) {
