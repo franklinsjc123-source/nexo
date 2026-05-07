@@ -10,6 +10,7 @@ use App\Models\Offers;
 use App\Models\OffersUsed;
 use App\Models\Address;
 use App\Models\PinCode;
+use App\Models\Company;
 
 use App\Models\ProductAttributes;
 use Carbon\Carbon;
@@ -269,7 +270,7 @@ class CartController extends Controller
                         // $delivery_charge += ($total_price > 499)
                         //     ? ($total_price * 8) / 100
                         //     : 50;
-                        
+
                     } else {
 
                         $delivery_charge += 50;
@@ -286,6 +287,20 @@ class CartController extends Controller
             }
 
             $delivery_charge = number_format($delivery_charge + $pincode_charge, 2, '.', '');
+
+            // Check if free delivery is enabled in company settings
+            $company = Company::first();
+            $free_delivery_enabled = 0;
+            $free_delivery_reason = '';
+
+            if ($company) {
+                $free_delivery_enabled = (int) $company->free_delivery_checkbox;
+                $free_delivery_reason = $company->free_delivery_reason ?? '';
+
+                if ($free_delivery_enabled == 1) {
+                    $delivery_charge = '0.00';
+                }
+            }
 
             $final_amount = number_format($item_price + (float)$delivery_charge - $discount, 2, '.', '');
 
@@ -330,6 +345,8 @@ class CartController extends Controller
                 'delivery_charge' => $delivery_charge,
                 'discount' => number_format($discount, 2, '.', ''),
                 'final_amount' => $final_amount,
+                'free_delivery_enabled' => $free_delivery_enabled,
+                'free_delivery_reason' => $free_delivery_reason,
                 'offers' => $offers,
                 'delivery_address' => $delivery_address,
                 'data' => $response
