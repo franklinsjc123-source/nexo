@@ -28,7 +28,7 @@ class OrderController extends Controller
 
             $shop_id = Shop::where('user_id', auth()->id())->value('id');
 
-            $records = Order::select(
+            $records = Order::with(['customerData', 'deliveryPerson'])->select(
                 'orders.*',
                 'shop_invoice.invoice_path', 'shop_invoice.final_shop_total','shop_invoice.is_dispatched',
                 DB::raw('SUM(order_items.price) as shop_total')
@@ -43,7 +43,7 @@ class OrderController extends Controller
                 ->orderBy('orders.id', 'DESC')
                 ->get();
         } else {
-            $records   =  Order::orderBy('id', 'DESC')->get();
+            $records   =  Order::with(['customerData', 'deliveryPerson'])->orderBy('id', 'DESC')->get();
         }
 
 

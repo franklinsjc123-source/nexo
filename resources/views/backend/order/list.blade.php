@@ -66,7 +66,16 @@
                                     ?>
                                 </td>
 
-                                <td><?php echo $row->deliveryPerson->name ?? '-' ?></td>
+                                <td>
+                                    <?php if ($row->deliveryPerson) { ?>
+                                        <a href="javascript:void(0)" class="viewDeliveryDetails" 
+                                           data-name="<?= $row->deliveryPerson->name ?>" 
+                                           data-email="<?= $row->deliveryPerson->email ?>" 
+                                           data-mobile="<?= $row->deliveryPerson->mobile ?>">
+                                            <?= $row->deliveryPerson->name ?>
+                                        </a>
+                                    <?php } else { echo '-'; } ?>
+                                </td>
 
                                 <td>
                                     <?php
@@ -146,6 +155,34 @@
 
                   <button class="btn btn-danger" id="close-modal" >Cancel</button>
                 <button class="btn btn-primary" id="saveStatus">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="deliveryDetailsModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Delivery Person Details</h5>
+            </div>
+            <div class="modal-body">
+                <div class="row mb-2">
+                    <div class="col-md-4"><strong>Name:</strong></div>
+                    <div class="col-md-8"><span id="delivery_name"></span></div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-4"><strong>Email:</strong></div>
+                    <div class="col-md-8"><span id="delivery_email"></span></div>
+                </div>
+                <div class="row mb-2">
+                    <div class="col-md-4"><strong>Mobile:</strong></div>
+                    <div class="col-md-8"><span id="delivery_mobile"></span></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
@@ -288,6 +325,19 @@ $(document).on("click", ".viewOrderItems", function () {
         }
     });
 
+});
+
+
+$(document).on("click", ".viewDeliveryDetails", function () {
+    let name = $(this).data("name");
+    let email = $(this).data("email");
+    let mobile = $(this).data("mobile");
+
+    $("#delivery_name").text(name);
+    $("#delivery_email").text(email);
+    $("#delivery_mobile").text(mobile);
+
+    $("#deliveryDetailsModal").modal("show");
 });
 
 
