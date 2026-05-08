@@ -78,6 +78,7 @@ class DeliveryController extends Controller
                 'amount',
                 'ship_amount',
                 'order_status',
+                'payment_type',
                 'payment_mode',
                 'deliver_person_id',
                 'created_at'
@@ -125,7 +126,8 @@ class DeliveryController extends Controller
                 'total_quantity' => $total_product_count,
                 'amount' => number_format((float)$order->amount + (float)($order->ship_amount ?? 0), 2, '.', ''),
                 'order_status' => $order->order_status,
-                'payment_type' =>  $order->payment_mode == 'razorpay'? 'ONLINE' : 'COD',
+                'payment_mode' => $order->payment_mode == 'razorpay' ? 'ONLINE' : 'COD',
+                'payment_type' => $order->payment_type,
                 'image_url' => '',
                 'order_type' => 'cart_order',
                 'date' => $order->created_at ? date('d-m-Y h:i a', strtotime($order->created_at)) : '',
