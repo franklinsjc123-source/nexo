@@ -201,6 +201,11 @@ class OrderController extends Controller
 
         $shop_names = implode(', ', array_unique($shop_names));
 
+        $total_order_amount = (float)$order->amount + (float)$order->ship_amount;
+        $is_partial = ($order->payment_type == 'PARTIAL' || strtolower($order->payment_mode) == 'cod');
+        $paid_amount = $is_partial ? round($total_order_amount * 0.30) : $total_order_amount;
+        $balance_amount = $total_order_amount - $paid_amount;
+
         $data = [
             'order_id'               => $order->order_id,
             'is_declined'            => $order->deliver_person_id == $deliver_person_id ? 2 : (in_array($order->id, $declinedOrderIds) ? 1 : 0),
@@ -215,7 +220,9 @@ class OrderController extends Controller
             'delivery_fee'           => number_format((float)$order->ship_amount, 2, '.', ''),
             'invoice'                => $order->order_status == 2 ? $order->invoice : '',
             'total_quantity'         => $total_qty,
-            'total_amount'           => number_format((float)$order->amount + (float)$order->ship_amount, 2, '.', ''),
+            'total_amount'           => number_format($total_order_amount, 2, '.', ''),
+            'paid_amount'            => number_format($paid_amount, 2, '.', ''),
+            'balance_amount'         => number_format($balance_amount, 2, '.', ''),
             'date'                   => $order->created_at ? date('d-m-Y h:i a', strtotime($order->created_at)) : null,
             'shipped_date'           => $order->shipped_date ? date('d-m-Y h:i a', strtotime($order->shipped_date)) : null,
             'delivery_date'          => $order->delivery_date ? date('d-m-Y h:i a', strtotime($order->delivery_date)) : null,
