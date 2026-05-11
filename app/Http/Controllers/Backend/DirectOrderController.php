@@ -110,7 +110,18 @@ class DirectOrderController extends Controller
         $order_items = DirectOrderItems::where('order_id', $id)->get();
 
         $company = Company::orderBy('id', 'asc')->first();
-        $delivery_address = Address::where('id', $order_details->delivery_id)->first();
+        if ($order_details->delivery_name) {
+            $delivery_address = (object) [
+                'name'     => $order_details->delivery_name,
+                'mobile'   => $order_details->delivery_mobile,
+                'address'  => $order_details->delivery_address,
+                'pincode'  => $order_details->delivery_pincode,
+                'landmark' => $order_details->delivery_landmark,
+                'type'     => $order_details->delivery_type,
+            ];
+        } else {
+            $delivery_address = Address::where('id', $order_details->delivery_id)->first();
+        }
 
 
 

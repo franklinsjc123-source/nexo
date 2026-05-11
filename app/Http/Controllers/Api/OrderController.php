@@ -149,9 +149,20 @@ class OrderController extends Controller
             ], 404);
         }
 
-        $address = Address::where('id', $order->delivery_id)
-            ->select('name', 'mobile', 'address', 'pincode', 'landmark', 'type')
-            ->first();
+        if ($order->delivery_name) {
+            $address = (object) [
+                'name'     => $order->delivery_name,
+                'mobile'   => $order->delivery_mobile,
+                'address'  => $order->delivery_address,
+                'pincode'  => $order->delivery_pincode,
+                'landmark' => $order->delivery_landmark,
+                'type'     => $order->delivery_type,
+            ];
+        } else {
+            $address = Address::where('id', $order->delivery_id)
+                ->select('name', 'mobile', 'address', 'pincode', 'landmark', 'type')
+                ->first();
+        }
 
         $products = [];
         $shop_names = [];
@@ -318,9 +329,20 @@ class OrderController extends Controller
             ], 404);
         }
 
-        $address = Address::where('id', $order->delivery_id)
-            ->select('name', 'mobile', 'address', 'pincode', 'landmark', 'type')
-            ->first();
+        if ($order->delivery_name) {
+            $address = (object) [
+                'name'     => $order->delivery_name,
+                'mobile'   => $order->delivery_mobile,
+                'address'  => $order->delivery_address,
+                'pincode'  => $order->delivery_pincode,
+                'landmark' => $order->delivery_landmark,
+                'type'     => $order->delivery_type,
+            ];
+        } else {
+            $address = Address::where('id', $order->delivery_id)
+                ->select('name', 'mobile', 'address', 'pincode', 'landmark', 'type')
+                ->first();
+        }
 
         $products = [];
         $shop_names = [];
@@ -553,10 +575,18 @@ class OrderController extends Controller
             $company_details =  Company::orderBy('id', 'asc')->first();
             $currentInvoice = $company_details->direct_invoice_no;
 
+            $address = Address::find($delivery_id);
+
             $insertArray = array(
                 'shop_id'          => $shop_id,
                 'customer_id'      => $customer_id,
                 'delivery_id'      => $delivery_id,
+                'delivery_name'    => $address->name ?? null,
+                'delivery_mobile'  => $address->mobile ?? null,
+                'delivery_address' => $address->address ?? null,
+                'delivery_pincode' => $address->pincode ?? null,
+                'delivery_landmark' => $address->landmark ?? null,
+                'delivery_type'    => $address->type ?? null,
                 'invoice_no'       => $currentInvoice,
                 'image_url'        => $imageUrl,
                 'created_at'       =>  $now,
@@ -839,6 +869,12 @@ class OrderController extends Controller
                 'order_id'              => $order_number,
                 'customer_id'           => $user_id,
                 'delivery_id'           => $delivery_id,
+                'delivery_name'         => $address->name ?? null,
+                'delivery_mobile'       => $address->mobile ?? null,
+                'delivery_address'      => $address->address ?? null,
+                'delivery_pincode'      => $address->pincode ?? null,
+                'delivery_landmark'     => $address->landmark ?? null,
+                'delivery_type'         => $address->type ?? null,
                 'order_status'          => 1,
                 'payment_type'          => $payment_type,
                 'payment_mode'          => $payment_mode,
