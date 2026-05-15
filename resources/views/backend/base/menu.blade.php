@@ -539,6 +539,13 @@ $today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::toda
                                 </a>
                             </li>
 
+                            <li class="pe-slide-item">
+                                <a href="<?= route('delivery-report') ?>" class="pe-nav-link
+                                        @if(request()->routeIs(['delivery-report'])) active @endif">
+                                    Delivery Report
+                                </a>
+                            </li>
+
 
                     </ul>
                 </li>
