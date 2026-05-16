@@ -29,7 +29,8 @@
                         <th>Name</th>
                         <th>Email</th>
                         <th>Mobile</th>
-                         <th>Status</th>
+                        <th class="text-center">Total Deliveries</th>
+                        <th>Status</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -43,6 +44,7 @@
                                 <td><?php echo $row->name ?></td>
                                 <td><?php echo $row->email ?></td>
                                 <td><?php echo $row->mobile ?></td>
+                                <td class="text-center"><?php echo $row->orders_count ?></td>
                                 <td><a data-placement="top" title="Status" data-original-title="Status" href="javascript:void(0)" onclick="changeStatus('<?php echo $row->id ?>','<?php echo ($row->status == 1) ? 0 : 1 ?>','DeliveryPerson')" class="badge bg-pill bg-<?php echo ($row->status == 1) ? 'success' : 'danger' ?>">
                                             <?php echo ($row->status == 1) ? 'Active' : 'In-Active' ?></a>
                                         </td>

@@ -16,7 +16,7 @@ class ReportController extends Controller
 
     public function ordersReport(Request $request)
     {
-        $query = Order::query();
+        $query = Order::with(['customerData', 'deliveryPerson']);
 
         if ($request->filled('from_date')) {
             $query->whereDate('created_at', '>=', $request->from_date);
@@ -48,7 +48,7 @@ class ReportController extends Controller
 
     public function deliveryReport(Request $request)
     {
-        $query = Order::query()->where('order_status', 2);
+        $query = Order::with(['customerData', 'deliveryPerson'])->where('order_status', 2);
         $query->whereYear('created_at', date('Y'));
 
         $month = $request->has('month') ? $request->month : date('m');

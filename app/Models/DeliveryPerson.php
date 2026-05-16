@@ -11,4 +11,8 @@ class DeliveryPerson extends Model
     protected $table   = 'delivery_person';
     protected $guarded = ['id'];
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class, 'deliver_person_id', 'id');
+    }
 }

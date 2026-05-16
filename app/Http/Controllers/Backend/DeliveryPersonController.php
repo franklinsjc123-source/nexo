@@ -19,7 +19,9 @@ class DeliveryPersonController extends Controller
             return view('unauthorized');
         }
 
-        $records = DeliveryPerson::get();
+        $records = DeliveryPerson::withCount(['orders' => function($query) {
+            $query->where('order_status', 2);
+        }])->get();
         return view('backend.delivery_person.list', compact('records'));
     }
 

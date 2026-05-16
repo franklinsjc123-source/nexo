@@ -80,6 +80,7 @@
                         <th>Order ID </th>
                         <th>Name</th>
                         <th>Email</th>
+                        <th>Delivery Person</th>
                         <th>Payment Type</th>
                         <th>Order Amount</th>
                         <th>Status</th>
@@ -97,6 +98,7 @@
                                 <td><?php echo $row->order_id ?></td>
                                 <td><?php echo $row->customerData->name ?? '-' ?></td>
                                 <td><?php echo $row->customerData->email ?? '-' ?></td>
+                                <td><?php echo $row->deliveryPerson->name ?? '-' ?></td>
                                 <td><?php echo $row->payment_type ?></td>
                                 <td><?php echo $row->amount ?></td>
                                 <td>
