@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Models\OrderItems;
 use App\Models\Shop;
+use App\Models\Invoice;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
@@ -57,6 +59,13 @@ class OrderController extends Controller
     {
         $order = Order::find($request->order_id);
 
+        if (!$order) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Order not found'
+            ]);
+        }
+
         if (Auth::user()->auth_level == 4) {
             if ($order->order_status == 2 || $order->order_status == 3) {
                 return response()->json([
@@ -64,9 +73,38 @@ class OrderController extends Controller
                     'message' => 'Cannot update status of a delivered or cancelled order.'
                 ]);
             }
-        }
 
-        $order->update(['order_status' => $request->status]);
+            $shop_id = Shop::where('user_id', Auth::user()->id)->value('id');
+            $now = Carbon::now('Asia/Kolkata');
+            $status = $request->status;
+
+            if ($status == 2) {
+                $order->order_status = 2;
+                $order->delivery_date = $now;
+            } elseif ($status == 3) {
+                $order->order_status = 3;
+                $order->cancel_date = $now;
+            } elseif ($status == 4) {
+                Invoice::where('order_id', $order->id)
+                    ->where('shop_id', $shop_id)
+                    ->update(['is_dispatched' => 1]);
+
+                $total_shops = Invoice::where('order_id', $order->id)->count();
+
+                $dispatched_shops = Invoice::where('order_id', $order->id)
+                    ->where('is_dispatched', 1)
+                    ->count();
+
+                if ($total_shops == $dispatched_shops) {
+                    $order->order_status = 4;
+                    $order->shipped_date = $now;
+                }
+            }
+
+            $order->save();
+        } else {
+            $order->update(['order_status' => $request->status]);
+        }
 
         return response()->json([
             'status' => true,
