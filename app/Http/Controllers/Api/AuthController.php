@@ -32,9 +32,15 @@ class AuthController extends Controller
             if (!$user) {
                 return response()->json(['status' => 'User not found'], 400);
             } else {
-                
+
+                if ($user->status == 0) {
+
+                  return response()->json(['status' => 'Please contact support team'], 400);
+        
+                }
+
                 if ($user->id  == 87) {
-                     $otp = 1234;
+                    $otp = 1234;
                 } else {
                     $otp = rand(1000, 9999);
                 }
