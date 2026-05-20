@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderItems;
 use App\Models\Shop;
 use App\Models\Invoice;
+use App\Models\DeliveryPerson;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -48,9 +49,9 @@ class OrderController extends Controller
             $records   =  Order::with(['customerData', 'deliveryPerson'])->orderBy('id', 'DESC')->get();
         }
 
+        $deliveryPersons = DeliveryPerson::orderBy('name', 'ASC')->get();
 
-
-        return view('backend.order.list', compact('records'));
+        return view('backend.order.list', compact('records', 'deliveryPersons'));
     }
 
 
@@ -132,5 +133,22 @@ class OrderController extends Controller
             'status' => true,
             'data'   => $items
         ]);
+    }
+
+    public function assignDeliveryPerson(Request $request)
+    {
+        if (!in_array(Auth::user()->auth_level, [1, 2])) {
+            return response()->json(['status' => false, 'message' => 'Unauthorized']);
+        }
+
+        $order = Order::find($request->order_id);
+        if (!$order) {
+            return response()->json(['status' => false, 'message' => 'Order not found']);
+        }
+
+        $order->deliver_person_id = $request->delivery_person_id;
+        $order->save();
+
+        return response()->json(['status' => true, 'message' => 'Delivery person assigned successfully']);
     }
 }

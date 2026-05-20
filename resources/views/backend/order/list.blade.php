@@ -109,7 +109,11 @@
                                            data-mobile="<?= $row->deliveryPerson->mobile ?>">
                                             <?= $row->deliveryPerson->name ?>
                                         </a>
-                                    <?php } else { echo '-'; } ?>
+                                    <?php } else { ?>
+                                        <?php if (in_array(Auth::user()->auth_level, [1, 2])) { ?>
+                                            <button class="btn btn-sm btn-primary assignDeliveryBtn" data-id="<?= $row->id ?>">Assign</button>
+                                        <?php } else { echo '-'; } ?>
+                                    <?php } ?>
                                 </td>
 
                                 <td>
@@ -255,6 +259,35 @@
     </div>
 </div>
 
+
+<div class="modal fade" id="assignDeliveryModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Assign Delivery Person</h5>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="assign_order_id">
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-8">
+                        <label class="mb-2">Select Delivery Person</label>
+                        <select class="form-control select2" id="delivery_person_id" name="delivery_person_id">
+                            <option value="">-- Select --</option>
+                            <?php foreach ($deliveryPersons as $dp) { ?>
+                                <option value="<?= $dp->id ?>"><?= $dp->name ?> (<?= $dp->mobile ?>)</option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer mt-5">
+                <button class="btn btn-danger" data-bs-dismiss="modal">Cancel</button>
+                <button class="btn btn-primary" id="saveDeliveryPerson">Assign</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <div class="modal fade" id="orderItemsModal" tabindex="-1">
     <div class="modal-dialog modal-lg">
@@ -426,6 +459,40 @@ $(document).on("click", ".viewCustomerDetails", function () {
 });
 
 
+$(document).on("click", ".assignDeliveryBtn", function () {
+    let order_id = $(this).data("id");
+    $("#assign_order_id").val(order_id);
+    $("#delivery_person_id").val("").trigger("change");
+    $("#assignDeliveryModal").modal("show");
+});
+
+$("#saveDeliveryPerson").click(function () {
+    let order_id = $("#assign_order_id").val();
+    let delivery_person_id = $("#delivery_person_id").val();
+
+    if (!delivery_person_id) {
+        alert("Please select a delivery person");
+        return;
+    }
+
+    $.ajax({
+        url: "<?= route('assign-delivery-person') ?>",
+        type: "POST",
+        data: {
+            _token: "<?= csrf_token() ?>",
+            order_id: order_id,
+            delivery_person_id: delivery_person_id
+        },
+        success: function (res) {
+            if (res.status) {
+                $("#assignDeliveryModal").modal("hide");
+                location.reload();
+            } else {
+                alert(res.message);
+            }
+        }
+    });
+});
 
 </script>
 @endsection

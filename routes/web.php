@@ -132,6 +132,7 @@ Route::middleware('auth.request')->group(function () {
     Route::get("orders", [OrderController::class, 'orders'])->name('orders');
     Route::post('orders-status-update', [OrderController::class, 'updateOrderStatus'])->name('orders-status-update');
     Route::post('/get-order-items', [OrderController::class, 'getOrderItems']);
+    Route::post('assign-delivery-person', [OrderController::class, 'assignDeliveryPerson'])->name('assign-delivery-person');
 
 
     //direct orders Management
