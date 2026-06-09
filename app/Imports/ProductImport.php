@@ -41,11 +41,19 @@ class ProductImport implements ToCollection, WithHeadingRow
             }
 
             $category           = Category::where('category_name', $row['category'])->first();
-            $tax_percentage     = Tax::where('tax_percentage', $row['tax_percentage'])->first();
 
             if (!$category) {
                 $this->skipped++;
                 continue;
+            }
+
+            $tax_id = 0;
+            if (!empty($row['tax_percentage'])) {
+                $cleaned_tax = trim(str_replace('%', '', $row['tax_percentage']));
+                $tax = Tax::where('tax_percentage', $cleaned_tax)->first();
+                if ($tax) {
+                    $tax_id = $tax->id;
+                }
             }
 
             if (Auth::user()->auth_level != 4) {
@@ -66,7 +74,7 @@ class ProductImport implements ToCollection, WithHeadingRow
             Product::create([
                 'category'            => $category->id,
                 'shop'                => $final_shop_id,
-                'tax_percentage'      => $tax_percentage->tax_percentage,
+                'tax_percentage'      => $tax_id,
                 // 'unit'                => isset($unit->id) ? $unit->id : null,
                 'product_name'        => $row['product_name'],
                 'hsn_code'            => $row['hsn_code'],
