@@ -145,7 +145,6 @@ class HomeController extends Controller
             'attributes.unitData:id,unit_name'
         ])
             ->where('shop', $shop_id)
-            ->where('status', 1)
             ->whereHas('attributes', function ($q) {
                 $q->where('original_price', '>', 0);
             });

@@ -17,7 +17,7 @@ $today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::toda
         <div class="container-fluid w-100">
             <div class="d-flex align-items-center">
                 <div class="me-auto">
-                    <div class="d-inline-flex align-items-center gap-5">
+                    <div class="d-inline-flex align-items-center ">
                         <a href="<?= route('dashboard') ?>" class="fs-18 fw-semibold">
                             <img height="60" class="header-sidebar-logo-default d-none" alt="Logo"
                                 src="<?= asset('backend_assets') ?>/images/logo.jpg">
@@ -35,8 +35,29 @@ $today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::toda
                             <i class="ri-menu-2-line header-icon"></i>
                         </button>
 
+                        <?php
+                            $header_title = '';
+                            if (Auth::check()) {
+                                if (Auth::user()->auth_level == 4) {
+                                    $header_title = \App\Models\Shop::where('user_id', Auth::id())->value('shop_name');
+                                } elseif (Auth::user()->auth_level == 2) {
+                                    $header_title =  Auth::user()->name - 'SUB ADMIN' ;
+                                }
+                                else {
+                                    $header_title = 'SUPER ADMIN' ;
+                                }
+                            }
+                        ?>
+                        <?php if (!empty($header_title)) { ?>
+                            <span class="text-dark" style="font-size: 22px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px;">
+                                <?= htmlspecialchars($header_title) ?>
+                            </span>
+                        <?php } ?>
+
                     </div>
                 </div>
+
+
                 <div class="flex-shrink-0 d-flex align-items-center gap-1">
 
 
