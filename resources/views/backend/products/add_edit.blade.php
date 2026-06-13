@@ -57,10 +57,11 @@
                              <div class="card-header">
                                  <h5 class="mb-0"><?= $type ?> Product </h5>
                                  <div class="float-end">
-                                     <a href="<?= route('product') ?>" class="btn btn-primary">Back</a>
+                                     <a href="<?= route('product') ?>{{ request('page') ? '?page=' . request('page') : '' }}" class="btn btn-primary">Back</a>
                                  </div>
                              </div>
                              <input type="hidden" name="id" value="<?= $id ?>" />
+                             <input type="hidden" name="page" value="{{ request('page', 0) }}" />
                              <div class="card-body">
                                  <div class="row g-4">
 

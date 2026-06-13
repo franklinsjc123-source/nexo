@@ -117,7 +117,7 @@
                                 </td>
                                 <td>
                                     @if(auth()->user()->hasPermission('Product-Edit'))
-                                        <a data-toggle="tooltip" data-placement="top" title="Edit" href="<?php echo route('addProduct',[$row->id]) ?>" class="btn btn-sm btn-warning"><i class="bi bi-pencil-fill"></i></a>
+                                        <a data-toggle="tooltip" data-placement="top" title="Edit" href="<?php echo route('addProduct',[$row->id]) ?>" class="btn btn-sm btn-warning edit-product-btn"><i class="bi bi-pencil-fill"></i></a>
                                     @endif
                                     @if(auth()->user()->hasPermission('Product-Delete'))
                                     <a data-toggle="tooltip" data-placement="top" title="Delete" data-original-title="Delete" href="javascript:void(0)" onclick="commonDelete('<?php echo $row->id ?>','Product')" class="btn btn-sm btn-danger"><i class="bi bi-trash-fill"></i></a>
@@ -135,4 +135,29 @@
         <!-- Submit Section -->
     </div>
 </main>
+<script>
+$(document).ready(function () {
+    // Restore DataTable page after redirect (wait for DataTable to be initialized from footer)
+    var urlParams = new URLSearchParams(window.location.search);
+    var savedPage = urlParams.get('page');
+    if (savedPage) {
+        var checkInterval = setInterval(function () {
+            if (typeof dataTables !== 'undefined' && dataTables['datatables']) {
+                dataTables['datatables'].page(parseInt(savedPage)).draw('page');
+                clearInterval(checkInterval);
+            }
+        }, 100);
+        // Safety: stop checking after 5 seconds
+        setTimeout(function () { clearInterval(checkInterval); }, 5000);
+    }
+
+    // Append current DataTable page to edit links on click
+    $(document).on('click', '.edit-product-btn', function (e) {
+        e.preventDefault();
+        var currentPage = (typeof dataTables !== 'undefined' && dataTables['datatables']) ? dataTables['datatables'].page() : 0;
+        var href = $(this).attr('href');
+        window.location.href = href + '?page=' + currentPage;
+    });
+});
+</script>
 @endsection

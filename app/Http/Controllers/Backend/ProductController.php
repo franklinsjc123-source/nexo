@@ -135,7 +135,7 @@ class ProductController extends Controller
                 }
             }
 
-            return redirect()->route('product')
+            return redirect()->route('product', ['page' => $request->page ?? 0])
                 ->with('success', 'Product Saved Successfully');
         }
 
@@ -185,7 +185,7 @@ class ProductController extends Controller
             }
         }
 
-        return redirect()->route('product')
+        return redirect()->route('product', ['page' => $request->page ?? 0])
             ->with('success', 'Product Updated Successfully');
     }
 
