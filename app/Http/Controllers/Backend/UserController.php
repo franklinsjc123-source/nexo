@@ -72,15 +72,14 @@ class UserController extends Controller
                 return redirect()->route('users')->with('error', 'Something went wrong!');
             }
         } else {
-
-            if ($input['password']) {
-                $updateArray = ['password'     => Hash::make($input['password'])];
-            }
             $updateArray = array(
                 // 'mobile'         => isset($input['mobile'])    ?  $input['mobile']    : '',
                 'email'         => isset($input['email'])    ?  $input['email']    : '',
                 'name'         => isset($input['name'])    ?  $input['name']    : '',
             );
+            if (!empty($input['password'])) {
+                $updateArray['password'] = Hash::make($input['password']);
+            }
             $update = User::Where('id', $id)->update($updateArray);
             return redirect()->route('users')->with('success', 'User Updated Successfully');
         }

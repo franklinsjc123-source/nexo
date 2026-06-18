@@ -41,7 +41,7 @@ $today_direct_order_count   = DirectOrder::whereDate('created_at',  Carbon::toda
                                 if (Auth::user()->auth_level == 4) {
                                     $header_title = \App\Models\Shop::where('user_id', Auth::id())->value('shop_name');
                                 } elseif (Auth::user()->auth_level == 2) {
-                                    $header_title =  Auth::user()->name - 'SUB ADMIN' ;
+                                    $header_title =  Auth::user()->name . ' - SUB ADMIN' ;
                                 }
                                 else {
                                     $header_title = 'SUPER ADMIN' ;

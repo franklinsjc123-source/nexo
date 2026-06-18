@@ -72,7 +72,7 @@
 
                                     <div class="col-xl-4">
                                         <label for="password" class="form-label">
-                                            Password <span class="text-danger">*</span>
+                                            Password <?= ($id == '') ? '<span class="text-danger">*</span>' : '' ?>
                                         </label>
 
                                         <div class="position-relative">
@@ -148,6 +148,9 @@
                   name: {
                      required: true
                  },
+                  password: {
+                      required: <?= ($id == '') ? 'true' : 'false' ?>
+                  },
 
              },
              messages: {
@@ -160,6 +163,9 @@
                  },
                  mobile: {
                      required: "Please enter mobile no"
+                 },
+                 password: {
+                     required: "Please enter password"
                  },
 
              },
